@@ -1,0 +1,24 @@
+PODS:
+  - Bolts/Tasks (1.6.0)
+  - Parse (1.12.0):
+    - Bolts/Tasks (~> 1.5)
+  - SDWebImage (3.7.4):
+    - SDWebImage/Core (= 3.7.4)
+  - SDWebImage/Core (3.7.4)
+  - SwiftyJSON (2.3.2)
+  - youtube-ios-player-helper (0.1.5)
+
+DEPENDENCIES:
+  - Parse
+  - SDWebImage (~> 3.7)
+  - SwiftyJSON
+  - youtube-ios-player-helper (~> 0.1)
+
+SPEC CHECKSUMS:
+  Bolts: f52a250053bb517ca874523c3913776359ab3def
+  Parse: de2c52a9a1421b91ae7594ab8ce191afd184f19b
+  SDWebImage: 247edd7dd80dd6124197b0d6a17846fe9d1df968
+  SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
+  youtube-ios-player-helper: 8706bb155ffee74fbe5f2f5cf41c2dafe60dc155
+
+COCOAPODS: 0.39.0

@@ -1,21 +1,20 @@
-var express = require('express');
+var express = require('express'),
+    playlist = require('./routes/playlists');
+var body_parser = require('body-parser');
+var logger = require('morgan');
+
 var app = express();
+app.use(logger('dev'));
+app.use(body_parser.json());
+app.use(body_parser.urlencoded({
+    extended: true
+}));
 
-app.get('/users', function(req, res) {
-
-}
-
-app.get('/users:id', function (req, res) {
-
-}
-
-app.post('/users', function (req, res) {
-
-}
-
-app.delete('/users:id', function (req, res) {
-
-}
+app.get('/playlists', playlist.findAll);
+app.get('/playlists/:id', playlist.findById);
+app.post('/playlists', playlist.addPlaylist);
+app.put('/playlists/:id', playlist.updatePlaylist);
+app.delete('/playlists/:id', playlist.deletePlaylist);
 
 app.listen(3000);
 console.log('Listening on port 3000...');

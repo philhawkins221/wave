@@ -100,7 +100,94 @@ exports.updatePlaylistSong = function(req, res) {
 
     });
 }
+exports.addSong = function(req, res) {
+    var id = req.params.id;
+    var song = req.body;
+    console.log(song);
+    console.log('Adding song: ' song);
+    db.collection('playlists', function(err, collection) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {songList: {song} } }, playlist, function(err, result) {
+            if (err) {
+                console.log('Error updating playlist: ' + err);
+                res.send({'err': 'An error has occurred'});
+            } else {
+                console.log('' + result + ' documents(s) updated');
+                res.send(playlist);
+            }
+        
+        });
+    });
+}
+exports.loadSongs = function(req, res) {
+    var id = req.params.id;
+    var songList = req.body.songList;
+    console.log(req.body.songList);
+    db.collection('playlists', function(err, collection) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {songList: songList}, songList, function(err, result) {
+            if (err) {
+                console.log('Error loading songs: ' + err);
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('' + result + ' songs loaded');
+                res.send(songList);
+            }
+        });
+    });
+}
 
+exports.upvote = function(req, res) {
+    var id = req.params.id;
+    var song = req.body.song;
+    db.collection('playlists', function(err, collection) {
+        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, result) {
+            if (err) {
+                console.log('Error upvoting song: ' + err);
+                res.send(err);
+            } else {
+                result.songList.forEach(function(item) {
+                    if (item.name == song.name && item.artist == song.artist) {
+                        console.log("Found " + item.name);
+                        if (item.votes === undefined) {
+                            item.votes = 0;
+                        }
+                        item.votes += 1;
+                        collection.save(result);
+                        res.send(result);
+                    }
+
+                }
+                res.send(404);
+            }
+        });
+    });
+}
+
+exports.downvote = function(req, res) {
+    var id = req.params.id;
+    var song = req.body.song;
+    db.collection('playlists', function(err, collection) {
+        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, result) {
+            if (err) {
+                console.log('Error upvoting song: ' + err);
+                res.send(err);
+            } else {
+                result.songList.forEach(function(item) {
+                    if (item.name == song.name && item.artist == song.artist) {
+                        console.log("Found " + item.name);
+                        if (item.votes === undefined) {
+                            item.votes = 0;
+                        }
+                        item.votes -= 1;
+                        collection.save(result);
+                        res.send(result);
+                    }
+
+                }
+                res.send(404);
+            }
+        });
+    });
+}
 exports.deletePlaylist = function(req, res) {
     var id = req.params.id;
     console.log('Deleting playlist: ' + id);
@@ -125,7 +212,20 @@ var populateDB = function() {
         artist: "Ra Ra Riot",
         creator: "Taylor",
         connectedUsers: "userlist",
-        passcode: "hunter2"
+        passcode: "hunter2",
+        songList: [
+            {
+                name: "Step",
+                artist: "Vampire Weekend",
+                votes: 0
+            }
+            {
+                name: "Ultra Light Beam",
+                artist: "Kanye West",
+                votes: 0
+            }
+            
+            ]
     },
     {
         name: "Phillip's playlist",

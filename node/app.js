@@ -1,5 +1,6 @@
 var express = require('express'),
     playlist = require('./routes/playlists');
+    //song = require('./routes/songs');
 var body_parser = require('body-parser');
 var logger = require('morgan');
 
@@ -13,8 +14,12 @@ app.use(body_parser.urlencoded({
 app.get('/playlists', playlist.findAll);
 app.get('/playlists/:id', playlist.findById);
 app.post('/playlists', playlist.addPlaylist);
+app.put('/playlists/:id/changeSong', playlist.updatePlaylistSong);
 app.put('/playlists/:id', playlist.updatePlaylist);
 app.delete('/playlists/:id', playlist.deletePlaylist);
+
+
+
 
 app.listen(3000);
 console.log('Listening on port 3000...');

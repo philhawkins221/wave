@@ -63,7 +63,7 @@ exports.addPlaylist = function(req, res) {
 exports.updatePlaylist = function(req, res) {
     var id = req.params.id;
     var playlist = req.body;
-    console.log('Updating plalist: ' + id);
+    console.log('Updating playlist: ' + id);
     console.log(JSON.stringify(playlist));
     db.collection('playlists', function(err, collection) {
         collection.update({'_id':new BSON.ObjectID(id)}, playlist, {safe: true}, function(err, result) {
@@ -76,6 +76,28 @@ exports.updatePlaylist = function(req, res) {
             }
 
         });
+    });
+}
+
+exports.updatePlaylistSong = function(req, res) {
+    var id = req.params.id;
+    var playlist = req.body;
+    var newName = req.body.song;
+    var newArtist = req.body.artist;
+    console.log(newName);
+    console.log('Updating playlist song: ' + id);
+    console.log(JSON.stringify(playlist));
+    db.collection('playlists', function(err, collection) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {currentSong: newName, artist: newArtist} }, playlist, function(err, result) {
+            if (err) {
+                console.log('Error updating playlist: ' + err);
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('' + result + ' documents(s) updated');
+                res.send(playlist);
+            }
+        });
+
     });
 }
 

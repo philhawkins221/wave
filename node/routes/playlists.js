@@ -104,15 +104,15 @@ exports.addSong = function(req, res) {
     var id = req.params.id;
     var song = req.body;
     console.log(song);
-    console.log('Adding song: ' song);
+    console.log('Adding song: ' + song);
     db.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {songList: {song} } }, playlist, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {songList: song} }, function(err, result) {
             if (err) {
                 console.log('Error updating playlist: ' + err);
                 res.send({'err': 'An error has occurred'});
             } else {
                 console.log('' + result + ' documents(s) updated');
-                res.send(playlist);
+                res.send(song);
             }
         
         });
@@ -120,24 +120,36 @@ exports.addSong = function(req, res) {
 }
 exports.loadSongs = function(req, res) {
     var id = req.params.id;
-    var songList = req.body.songList;
+    var newList = req.body.songList;
     console.log(req.body.songList);
     db.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {songList: songList}, songList, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {songList: newList} }, function(err, result) {
             if (err) {
                 console.log('Error loading songs: ' + err);
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('' + result + ' songs loaded');
-                res.send(songList);
+                res.send(newList);
             }
         });
     });
 }
+//Array in json looks like : {"songList":[
+//    {
+//        "name": "Step",
+//        "artist": "Vampire Weekend"
+//    },
+//    {
+//        "name": "Stressed Out",
+//        "artist": "Twenty One Pilots"
+//    }
+//    ]
+//    }
 
 exports.upvote = function(req, res) {
     var id = req.params.id;
-    var song = req.body.song;
+    var song = req.body;
+    var found = false;
     db.collection('playlists', function(err, collection) {
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, result) {
             if (err) {
@@ -153,10 +165,13 @@ exports.upvote = function(req, res) {
                         item.votes += 1;
                         collection.save(result);
                         res.send(result);
+                        found = true;
                     }
 
+                });
+                if (found == false) {
+                    res.send(404);
                 }
-                res.send(404);
             }
         });
     });
@@ -164,7 +179,8 @@ exports.upvote = function(req, res) {
 
 exports.downvote = function(req, res) {
     var id = req.params.id;
-    var song = req.body.song;
+    var song = req.body;
+    var found = false;
     db.collection('playlists', function(err, collection) {
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, result) {
             if (err) {
@@ -177,13 +193,16 @@ exports.downvote = function(req, res) {
                         if (item.votes === undefined) {
                             item.votes = 0;
                         }
-                        item.votes -= 1;
+                        item.votes = item.votes - 1;
                         collection.save(result);
                         res.send(result);
+                        found = true;
                     }
 
+                });
+                if (found == false) {
+                    res.send(404);
                 }
-                res.send(404);
             }
         });
     });
@@ -218,13 +237,12 @@ var populateDB = function() {
                 name: "Step",
                 artist: "Vampire Weekend",
                 votes: 0
-            }
+            },
             {
                 name: "Ultra Light Beam",
                 artist: "Kanye West",
                 votes: 0
             }
-            
             ]
     },
     {

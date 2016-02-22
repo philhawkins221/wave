@@ -19,7 +19,7 @@ app.put('/playlists/:id', playlist.updatePlaylist);
 app.put('/playlists/:id/loadSongs', playlist.loadSongs);
 app.put('/playlists/:id/addSong', playlist.addSong);
 app.put('/playlists/:id/upvote', playlist.upvote);
-app.put('/playlists/:id/downvote', playlist.upvote);
+app.put('/playlists/:id/downvote', playlist.downvote);
 app.delete('/playlists/:id', playlist.deletePlaylist);
 
 

@@ -1,0 +1,16 @@
+{
+  "name": "Playlist-maker",
+  "description": "Playlist maker with voting",
+  "version": "0.0.1",
+  "private": true,
+  "dependencies": {
+    "body-parser": "^1.14.2",
+    "bson": "^0.4.21",
+    "express": "^4.13.4",
+    "morgan": "^1.6.1",
+    "multer": "^1.1.0"
+  },
+  "engines": {
+	"node": "4.4.0"
+  }
+}

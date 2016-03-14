@@ -11,16 +11,16 @@ app.use(body_parser.urlencoded({
     extended: true
 }));
 
-app.get('/playlists', playlist.findAll);
-app.get('/playlists/:id', playlist.findById);
-app.post('/playlists', playlist.addPlaylist);
-app.put('/playlists/:id/changeSong', playlist.updatePlaylistSong);
-app.put('/playlists/:id', playlist.updatePlaylist);
-app.put('/playlists/:id/loadSongs', playlist.loadSongs);
-app.put('/playlists/:id/addSong', playlist.addSong);
-app.put('/playlists/:id/upvote', playlist.upvote);
-app.put('/playlists/:id/downvote', playlist.downvote);
-app.delete('/playlists/:id', playlist.deletePlaylist);
+app.get('/routes/routes/playlists', playlist.findAll);
+app.get('/routes/playlists/:id', playlist.findById);
+app.post('/routes/playlists', playlist.addPlaylist);
+app.put('/routes/playlists/:id/changeSong', playlist.updatePlaylistSong);
+app.put('/routes/playlists/:id', playlist.updatePlaylist);
+app.put('/routes/playlists/:id/loadSongs', playlist.loadSongs);
+app.put('/routes/playlists/:id/addSong', playlist.addSong);
+app.put('/routes/playlists/:id/upvote', playlist.upvote);
+app.put('/routes/playlists/:id/downvote', playlist.downvote);
+app.delete('/routes/playlists/:id', playlist.deletePlaylist);
 
 
 

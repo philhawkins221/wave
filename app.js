@@ -11,7 +11,7 @@ app.use(body_parser.urlencoded({
     extended: true
 }));
 
-app.get('/routes/routes/playlists', playlist.findAll);
+app.get('/routes/playlists', playlist.findAll);
 app.get('/routes/playlists/:id', playlist.findById);
 app.post('/routes/playlists', playlist.addPlaylist);
 app.put('/routes/playlists/:id/changeSong', playlist.updatePlaylistSong);

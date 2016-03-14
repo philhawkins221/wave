@@ -28,6 +28,5 @@ app.delete('/playlists/:id', playlist.deletePlaylist);
 //app.listen(3000);
 //console.log('Listening on port 3000...');
 
-app.listen(app.get('port'), function() {
-    console.log('Node app is running on port', app.get('port'));
-});
+app.listen(58635);
+console.log('Listening on port 3000...');

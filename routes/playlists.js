@@ -4,25 +4,44 @@ var BSON = require('bson').BSONPure;
 var Server = mongo.Server,
     Db = mongo.Db
 
-var server = new Server('localhost', 27017, {auto_reconnect: true});
-db = new Db('playlistdb', server);
+var database;
+var uri = 'mongodb://heroku_71lpgxj4:udtrdpud8ppp7ohr160r00gqnt@ds015289.mlab.com:15289/heroku_71lpgxj4';
+mongo.MongoClient.connect(uri, function(err, db) {
+    if (err) throw err;
+    db.open(function(err, dbase) {
+        if (!err) {
+            database = db;
+            console.log("Connected to CS279 project database");
+            dbase.collection('playlists', {strict:true}, function(err, collection) {
+                if (err) {
+                    console.log("The playlists collection doesn't exist. Creating it from simple data...");
+                    populateDB();
+                }
+            });
+        }
+    });
 
-db.open(function(err, db) {
-    if (!err) {
-        console.log("Connected to CS279 project database");
-        db.collection('playlists', {strict:true}, function(err, collection) {
-            if (err) {
-                console.log("The playlists collection doesn't exist. Creating it with simple data...");
-                populateDB();
-            }
-        });
-    }
 });
+
+//var server = new Server('localhost', 27017, {auto_reconnect: true});
+//db = new Db('playlistdb', server);
+
+//db.open(function(err, db) {
+   // if (!err) {
+     //   console.log("Connected to CS279 project database");
+       // db.collection('playlists', {strict:true}, function(err, collection) {
+         //   if (err) {
+           //     console.log("The playlists collection doesn't exist. Creating it with simple data...");
+             //   populateDB();
+           // }
+       // });
+   // }
+//});
 
 exports.findById = function(req, res) {
     var id = req.params.id;
     console.log('Retrieving playlist: ' + id);
-    db.collection('playlists', {strict: true}, function(err, collection) {
+    database.collection('playlists', {strict: true}, function(err, collection) {
         if (err) {
             throw err;
         } else {
@@ -38,7 +57,7 @@ exports.findById = function(req, res) {
 };
 
 exports.findAll = function(req, res) {
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.find().toArray(function(err, items) {
             res.send(items);
         });
@@ -48,7 +67,7 @@ exports.findAll = function(req, res) {
 exports.addPlaylist = function(req, res) {
     var playlist = req.body;
     console.log('Adding playlist: ' + JSON.stringify(playlist));
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.insert(playlist, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error': 'An error has occurred'});
@@ -65,7 +84,7 @@ exports.updatePlaylist = function(req, res) {
     var playlist = req.body;
     console.log('Updating playlist: ' + id);
     console.log(JSON.stringify(playlist));
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.update({'_id':new BSON.ObjectID(id)}, playlist, {safe: true}, function(err, result) {
             if (err) {
                 console.log('Error updating playlist: ' + err);
@@ -87,7 +106,7 @@ exports.updatePlaylistSong = function(req, res) {
     console.log(newName);
     console.log('Updating playlist song: ' + id);
     console.log(JSON.stringify(playlist));
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {currentSong: newName, artist: newArtist} }, playlist, function(err, result) {
             if (err) {
                 console.log('Error updating playlist: ' + err);
@@ -105,7 +124,7 @@ exports.addSong = function(req, res) {
     var song = req.body;
     console.log(song);
     console.log('Adding song: ' + song);
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {songList: song} }, function(err, result) {
             if (err) {
                 console.log('Error updating playlist: ' + err);
@@ -122,7 +141,7 @@ exports.loadSongs = function(req, res) {
     var id = req.params.id;
     var newList = req.body.songList;
     console.log(req.body.songList);
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {songList: newList} }, function(err, result) {
             if (err) {
                 console.log('Error loading songs: ' + err);
@@ -150,7 +169,7 @@ exports.upvote = function(req, res) {
     var id = req.params.id;
     var song = req.body;
     var found = false;
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, result) {
             if (err) {
                 console.log('Error upvoting song: ' + err);
@@ -181,7 +200,7 @@ exports.downvote = function(req, res) {
     var id = req.params.id;
     var song = req.body;
     var found = false;
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, result) {
             if (err) {
                 console.log('Error upvoting song: ' + err);
@@ -210,7 +229,7 @@ exports.downvote = function(req, res) {
 exports.deletePlaylist = function(req, res) {
     var id = req.params.id;
     console.log('Deleting playlist: ' + id);
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.remove({'_id':new BSON.ObjectID(id)}, {safe:true}, function(err, result) {
             if (err) {
                 res.send({'error':'An error has occurred - ' + err});
@@ -253,7 +272,7 @@ var populateDB = function() {
         connectedUsers: "userlist",
         passcode: "hunter3"
     }];
-    db.collection('playlists', function(err, collection) {
+    database.collection('playlists', function(err, collection) {
         collection.insert(playlists, {safe:true}, function(err, result) {});
     });
 };

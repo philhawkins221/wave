@@ -20,7 +20,6 @@ db.open(function(err, db) {
 });
 
 exports.findById = function(req, res) {
-    console.log("WOAHHHHHHHHHHHHH")
     var id = req.params.id;
     console.log('Retrieving playlist: ' + id);
     db.collection('playlists', {strict: true}, function(err, collection) {

@@ -142,7 +142,7 @@ exports.loadSongs = function(req, res) {
     var newList = req.body.songList;
     console.log(req.body.songList);
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {songList: newList} }, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {library: newList} }, function(err, result) {
             if (err) {
                 console.log('Error loading songs: ' + err);
                 res.send({'error':'An error has occurred'});
@@ -164,6 +164,31 @@ exports.loadSongs = function(req, res) {
 //    }
 //    ]
 //    }
+
+exports.markSongAsPlayed = function(req, res) {
+    var id = req.params.id;
+    var song = req.body;
+    var found = false;
+    database.collection('playlists', function(err, collection) {
+        collection.findOne({'_id': new BSON.ObjectID(id)}, function(err, result){
+            if (err) {
+                console.log('Error finding playlist');
+                res.send(err);
+            } else {
+                result.songList.forEach(function(item) {
+                    if (item.name == song.name && item.artist == song.artist) {
+                        item.played = true;
+                        res.send(item);
+                        found = true;
+                    }
+                });
+                if (found == false) {
+                    res.send(404);
+                }
+            }
+        });
+    });
+}
 
 exports.upvote = function(req, res) {
     var id = req.params.id;

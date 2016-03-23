@@ -1,0 +1,79 @@
+GET http://clique2016.herokuapp.com/playlists/
+
+gets all playlists
+
+GET http://clique2016.herokuapp.com/playlists/56e78abf3cd0360300a44077/
+
+finds playlist with id 56e78abf3cd0360300a44077
+
+POST http://clique2016.herokuapp.com/playlists/
+
+creates new playlist
+
+PUT http://clique2016.herokuapp.com/playlists/id/markSongAsPlayed
+
+searches through songList field and marks the 'played' field to true
+
+json:
+
+{
+"name": "string",
+"artist": "string"
+
+}
+
+PUT http://clique2016.herokuapp.com/playlists/id/changeSong
+
+change current song and artist field in playlist
+
+{
+"song": "string",
+"artist": "string
+}
+
+
+PUT http://clique2016.herokuapp.com/playlists/id/loadSongs
+
+load a whole bunch of songs into the library field at once
+
+{"songList": [
+	{
+		"name": "String",
+		"artist": "String"
+	},
+	{
+		"name": "Stressed Out",
+		"artist": "Twenty One Pilots"
+	}
+]}
+
+PUT http://clique2016.herokuapp.com/playlists/id/addSong
+
+adds song to songList field
+
+{
+"name": "Planes",
+"artist": "J. Cole"
+}
+
+PUT http://clique2016.herokuapp.com/playlists/id/upvote
+
+upvotes the song sent in json
+
+{
+"name": "Planes",
+"artist": "J. Cole"
+}
+
+PUT http://clique2016.herokuapp.com/playlists/id/downvote
+
+downvotes the song sent in json
+
+{
+"name": "Planes",
+"artist": "J. Cole"
+}
+
+DELETE http://clique2016.herokuapp.com/playlists/id
+
+deletes playlist using id

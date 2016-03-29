@@ -14,6 +14,7 @@ app.use(body_parser.urlencoded({
 app.get('/playlists', playlist.findAll);
 app.get('/playlists/:id', playlist.findById);
 app.post('/playlists', playlist.addPlaylist);
+app.put('/playlists/:id/markSongAsPlayed', playlist.markSongAsPlayed);
 app.put('/playlists/:id/changeSong', playlist.updatePlaylistSong);
 app.put('/playlists/:id', playlist.updatePlaylist);
 app.put('/playlists/:id/loadSongs', playlist.loadSongs);

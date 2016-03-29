@@ -178,6 +178,7 @@ exports.markSongAsPlayed = function(req, res) {
                 result.songList.forEach(function(item) {
                     if (item.name == song.name && item.artist == song.artist) {
                         item.played = true;
+                        collection.save(result);
                         res.send(item);
                         found = true;
                     }

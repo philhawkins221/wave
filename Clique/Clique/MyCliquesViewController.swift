@@ -23,28 +23,62 @@ extension String {
     }
 }
 
+var scClientID = "2c9d9d500b26f5a1ae7661215c5b4e1c"
+var scClientSecret = "1745f37d41a47591147470a84acda2c5"
+
 import UIKit
+import CoreData
+import StoreKit
+import MediaPlayer
 
 var nowplaying = false
-var currentsong: (song: String, artist: String, artwork: String?) = ("", "", nil)
+var currentsong: (song: String, artist: String, album: String, artwork: String?, time: Double) = ("", "", "", nil, 0) 
 
 class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    var cliques = [NSManagedObject]()
     @IBOutlet weak var table: UITableView!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         
-        table.reloadData()
+        table.delegate = self
+        table.dataSource = self
+        table.hidden = true
+        
+        fetch()
+        
+        //test()
+        
+        //table.reloadData()
     }
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
         // Do any additional setup after loading the view.
-        table.delegate = self
-        table.dataSource = self
+        //table.delegate = self
+        //table.dataSource = self
         
+        //fetch()
+    }
+    
+    func fetch() {
+        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+        let managedContext = appDelegate.managedObjectContext
+        
+        //2
+        let cliqueRequest = NSFetchRequest(entityName:"Clique")
+        
+        //3
+        do {
+            cliques = try managedContext.executeFetchRequest(cliqueRequest) as! [NSManagedObject]
+        } catch {
+            print(error)
+        }
+        
+        table.reloadData()
+        table.hidden = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -52,24 +86,64 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         // Dispose of any resources that can be recreated.
     }
     
+    func test() {
+        if #available(iOS 9.3, *) {
+            print("hello???")
+            SKCloudServiceController.requestAuthorization({
+                if $0 == SKCloudServiceAuthorizationStatus.Authorized {
+                    SKCloudServiceController().requestCapabilitiesWithCompletionHandler({ [unowned self](status, error) in
+                        if status.contains(.MusicCatalogPlayback) {
+                            if let error = error {
+                                print(error)
+                                return
+                            }
+                            
+                            let trackID = "302053341"
+                            let controller = MPMusicPlayerController.applicationMusicPlayer()
+                            controller.setQueueWithStoreIDs([trackID])
+                            controller.play()
+                            
+                            self.presentViewController(UIAlertController(title: "RICK ROLL", message: "LOLOLOLOLOLOLOL", preferredStyle: .Alert), animated: true, completion: nil)
+                        } else {
+                            print("skcloudservicecapability status was not the good one")
+                        }
+                    })
+                } else {
+                    print("skcloudauthorizationstatus was not the good one")
+                }
+            })
+        } else {
+            // Fallback on earlier versions
+            print("you shithead")
+        }
+    }
+    
     //MARK: - TableView Stack
     
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if nowplaying {
-            return 4
+            return 2
         }
-        return 3
+        return 1
     }
     
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if section == 0 {
             return 1
         }
-        return 2
+        return cliques.count
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("song")
+        
+        if cliques.isEmpty {
+            cell?.textLabel?.text = "You're not in any Cliques"
+            cell?.detailTextLabel?.text = "Join a Clique or start a new one of your own!"
+            
+            return cell!
+        }
+        
         if indexPath.section == 0 && nowplaying {
             cell?.textLabel?.text = currentsong.song
             cell?.detailTextLabel?.text = currentsong.artist
@@ -79,19 +153,41 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
                 cell?.imageView?.image = UIImage(named: "genericart.png")
             }
             //cell?.imageView?.decreaseSize(self)
-            let widthScale = 40/(cell?.imageView?.image!.size.width)!;
-            let heightScale = 40/(cell?.imageView?.image!.size.height)!;
-            cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale);
-            
+            let widthScale = 40/(cell?.imageView?.image!.size.width)!
+            let heightScale = 40/(cell?.imageView?.image!.size.height)!
+            cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
+        
         } else {
-            cell?.textLabel?.text = "Clique"
-            cell?.detailTextLabel?.text = "0 Members"
+            cell?.textLabel?.text = cliques[indexPath.row].valueForKey("name") as? String
+            if cliques[indexPath.row].valueForKey("isLeader") as! Bool {
+                cell?.detailTextLabel?.text = "Leader"
+                cell?.detailTextLabel?.textColor = UIColor.orangeColor()
+            } else {
+                cell?.detailTextLabel?.text = "Member"
+                cell?.detailTextLabel?.textColor = UIColor.lightGrayColor()
+            }
         }
         
         return cell!
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+        if cliques.isEmpty {
+            return
+        }
+        
+        currentclique.id = cliques[indexPath.row].valueForKey("id") as! String
+        currentclique.leader = cliques[indexPath.row].valueForKey("isLeader") as! Bool
+        currentclique.name = cliques[indexPath.row].valueForKey("name") as! String
+        currentclique.passcode = cliques[indexPath.row].valueForKey("passcode") as! String
+        currentclique.spotify = cliques[indexPath.row].valueForKey("spotify") as! Bool
+        currentclique.applemusic = cliques[indexPath.row].valueForKey("applemusic") as! Bool
+        currentclique.voting = cliques[indexPath.row].valueForKey("voting") as! Bool
+        
+        //testing purposes only
+        //currentclique.id = "56e78abf3cd0360300a44076"
+        currentclique.leader = true
+        
         let vc = storyboard?.instantiateViewControllerWithIdentifier("clique")
         showViewController(vc!, sender: self)
     }
@@ -101,23 +197,11 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             if section == 0 {
                 return "Now Playing"
             } else if section == 1 {
-                return "Leader"
-            } else if section == 2 {
-                return "Active"
-            } else if section == 3 {
-                return "Inactive"
-            }
-        } else {
-            if section == 0 {
-                return "Leader"
-            } else if section == 1 {
-                return "Active"
-            } else if section == 2 {
-                return "Inactive"
+                return "Cliques"
             }
         }
         
-        return nil
+        return "Cliques"
     }
     
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {

@@ -8,16 +8,44 @@
 
 import UIKit
 import CoreData
+import MediaPlayer
+
+var spotifysession: SPTSession?
+let kClientId = "f1cd061f0eef478d9fb478d2da3340c2"
+let kCallbackURL = "clique-login://callback"
+let kTokenSwapURL = "http://localhost:1234/swap"
 
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
-
-
+    
     func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MusicPlayerNotification), name: MPMusicPlayerControllerPlaybackStateDidChangeNotification, object: PlayerManager.sharedInstance().system)
+        
         return true
+    }
+    
+    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+        // Ask SPTAuth if the URL given is a Spotify authentication callback
+        if (SPTAuth.defaultInstance().canHandleURL(url)) {
+            SPTAuth.defaultInstance().handleAuthCallbackWithTriggeredAuthURL(url, callback: { (error, session) -> Void in
+                print("spot")
+                if (error != nil) {
+                    print("appdelegate: *** Auth error: \(error)")
+                    return
+                }
+                print("appdelegate: spotify authenticated successfully")
+                spotifysession = session
+                //self.playUsingSession(session)
+            })
+            
+            return true
+        }
+        
+        return false
     }
 
     func applicationWillResignActive(application: UIApplication) {
@@ -42,6 +70,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         self.saveContext()
+    }
+    
+    //MARK: - Responding to Music Player Notification
+    
+    func MusicPlayerNotification() {
+        if PlayerManager.sharedInstance().system.playbackState == .Stopped {
+            PlayerManager.sharedInstance().fetch()
+        }
     }
 
     // MARK: - Core Data stack

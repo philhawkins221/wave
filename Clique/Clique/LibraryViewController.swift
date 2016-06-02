@@ -7,14 +7,16 @@
 //
 
 import UIKit
+import SwiftyJSON
 import MediaPlayer
+import Alamofire
 
-class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating {
+class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewDataSource, UISearchResultsUpdating, MPMediaPickerControllerDelegate {
     
-    var list = [[(song: String, artist: String, artwork: MPMediaItemArtwork?)]](count: 27, repeatedValue: [])
+    var list = [[(song: String, artist: String, mpid: String)]](count: 27, repeatedValue: [])
     
     let search = UISearchController(searchResultsController: nil)
-    var results = [(song: String, artist: String, artwork: MPMediaItemArtwork?)]()
+    var results = [(song: String, artist: String, mpid: String)]()
     
     enum sortstyle {
         case song
@@ -24,16 +26,19 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     var sort = sortstyle.artist
     
-    var songs = [MPMediaItem]()
+    let viewer = MPMediaPickerController()
+    
+    //var songs = [MPMediaItem]()
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var sortbutton: UIBarButtonItem!
+    @IBOutlet weak var updatebutton: UIBarButtonItem!
     
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
         search.searchResultsUpdater = self
-        search.hidesNavigationBarDuringPresentation = true
+        search.hidesNavigationBarDuringPresentation = false
         search.dimsBackgroundDuringPresentation = false
         search.searchBar.sizeToFit()
         table.tableHeaderView = search.searchBar
@@ -43,43 +48,68 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
         
         table.sectionIndexBackgroundColor = UIColor.clearColor()
         
+        viewer.delegate = self
+        viewer.allowsPickingMultipleItems = true
+        
+        if currentclique.leader {
+            updatebutton.enabled = true
+        } else {
+            updatebutton.enabled = false
+        }
+        
         fetch()
     }
     
-    func fetch() {
-        songs = MPMediaQuery.songsQuery().items!
-        list = [[(song: String, artist: String, artwork: MPMediaItemArtwork?)]](count: 27, repeatedValue: [])
+    func fetch() {        
+        list = [[(song: String, artist: String, mpid: String)]](count: 27, repeatedValue: [])
         
-        for song in songs {
-            var sortname = String()
-            let title = song.valueForProperty(MPMediaItemPropertyTitle) as? String ?? "No Title"
-            let artist = song.valueForProperty(MPMediaItemPropertyArtist) as? String ?? "No Artist"
-            let artwork = song.valueForProperty(MPMediaItemPropertyArtwork) as? MPMediaItemArtwork
-            
-            if sort == .artist {
-                sortname = artist
-            } else if sort == .song {
-                sortname = title
+        Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON {response in
+            switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        //print("JSON: \(json)")
+                        
+                        for song in json["library"].arrayValue {
+                            var sortname = String()
+                            
+                            let title = song["name"].string ?? ""
+                            let artist = song["artist"].string ?? ""
+                            let mpid = song["mpid"].string ?? ""
+                            
+                            if self.sort == .artist && artist != "" {
+                                sortname = artist
+                            } else if self.sort == .song && artist != "" {
+                                sortname = title
+                            } else {
+                                continue
+                            }
+                            
+                            let firstletter = (sortname[0] as String).lowercaseString
+                            var index = Int(firstletter.unicodeScalars[firstletter.unicodeScalars.startIndex].value) - 97
+                            if index < 0 || index > 25 {
+                                index = 26
+                            }
+                            
+                            self.list[index].append((title, artist, mpid))
+                        }
+                        
+                        for i in 0..<self.list.count {
+                            if self.sort == .artist {
+                                self.list[i] = self.list[i].sort({ $0.artist < $1.artist })
+                            } else if self.sort == .song {
+                                self.list[i] = self.list[i].sort({ $0.song < $1.song })
+                            }
+                        }
+                        
+                        dispatch_async(dispatch_get_main_queue(), {
+                            self.table.reloadData()
+                        })
+                    }
+                case .Failure(let error):
+                    print(error)
             }
-            
-            let firstletter = (sortname[0] as String).lowercaseString
-            var index = Int(firstletter.unicodeScalars[firstletter.unicodeScalars.startIndex].value) - 97
-            if index < 0 || index > 25 {
-                index = 26
-            }
-            
-            list[index].append((title, artist, artwork))
         }
-        
-        for var i = 0; i < list.count; i++ {
-            if sort == .artist {
-                list[i] = list[i].sort({ $0.artist < $1.artist })
-            } else if sort == .song {
-                list[i] = list[i].sort({ $0.song < $1.song })
-            }
-        }
-        
-        table.reloadData()
     }
     
 
@@ -113,33 +143,69 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell?.textLabel?.text = results[indexPath.row].song
             cell?.detailTextLabel?.text = results[indexPath.row].artist
             
-            if let pic = results[indexPath.row].artwork {
+            /*if let pic = results[indexPath.row].artwork {
                 cell?.imageView?.image = pic.imageWithSize(CGSize(width: 40, height: 40))
             } else {
                 cell?.imageView?.image = UIImage(named: "genericart.png")
-            }
+            }*/
         } else {
             cell?.textLabel?.text = list[indexPath.section][indexPath.row].song
             cell?.detailTextLabel?.text = list[indexPath.section][indexPath.row].artist
             
-            if let pic = list[indexPath.section][indexPath.row].artwork {
+            /*if let pic = list[indexPath.section][indexPath.row].artwork {
                 cell?.imageView?.image = pic.imageWithSize(CGSize(width: 40, height: 40))
             } else {
                 cell?.imageView?.image = UIImage(named: "genericart.png")
-            }
+            }*/
         }
         
-        let widthScale = 50/(cell?.imageView?.image!.size.width)!;
-        let heightScale = 50/(cell?.imageView?.image!.size.height)!
-        cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
+        //let widthScale = 50/(cell?.imageView?.image!.size.width)!;
+        //let heightScale = 50/(cell?.imageView?.image!.size.height)!
+        //cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
         
-        cell?.accessoryType = .None
+        cell?.accessoryType = .DisclosureIndicator
         
         return cell!
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        let add = UIAlertController(title: "Add Song", message: "Add this song to clique?", preferredStyle: .Alert)
+        add.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: {action in }))
+        add.addAction(UIAlertAction(title: "Add", style: .Default, handler: {action in
+            var parameters = [String : AnyObject]()
+            if self.search.active {
+                parameters = [
+                    "name": self.results[indexPath.row].song,
+                    "artist": self.results[indexPath.row].artist,
+                    "mpid": self.results[indexPath.row].mpid,
+                    "ytid": "",
+                    "spid": "",
+                    "scid": "",
+                    "amid": "",
+                    "votes": 0,
+                    "played": false
+                ]
+            } else {
+                parameters = [
+                    "name": self.list[indexPath.section][indexPath.row].song,
+                    "artist": self.list[indexPath.section][indexPath.row].artist,
+                    "mpid": self.list[indexPath.section][indexPath.row].mpid,
+                    "ytid": "",
+                    "spid": "",
+                    "scid": "",
+                    "amid": "",
+                    "votes": 0,
+                    "played": false
+                ]
+            }
+            
+            Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: parameters as [String : AnyObject], encoding: .JSON)
+        }))
+        if search.active {
+            search.presentViewController(add, animated: true, completion: nil)
+        } else {
+            self.presentViewController(add, animated: true, completion: nil)
+        }
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -170,6 +236,8 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
         return Int(title.lowercaseString.unicodeScalars[title.lowercaseString.unicodeScalars.startIndex].value) - 97
     }
     
+    //MARK: - Search Controller Stack
+    
     func updateSearchResultsForSearchController(searchController: UISearchController) {
         results.removeAll()
         
@@ -180,6 +248,83 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
         }
         
         table.reloadData()
+    }
+    
+    //MARK: - Media Picker Stack
+    
+    func mediaPicker(mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
+        let warning = UIAlertController(title: "Warning", message: "This selection will replace the entire library.", preferredStyle: .Alert)
+        warning.addAction(UIAlertAction(title: "Continue", style: UIAlertActionStyle.Default, handler: {action in
+            self.dismissViewControllerAnimated(true, completion: { [unowned pm = PlayerManager.sharedInstance()] in
+                
+                var newlib = [
+                    "songList": [
+                        [
+                            "name": "",
+                            "artist": "",
+                            "mpid": ""
+                        ]
+                    ]
+                ]
+                
+                var mpids = [String]()
+                newlib["songList"]?.removeAll()
+                
+                for song in mediaItemCollection.items {
+                    if mpids.contains(song.persistentID.description) {
+                        continue
+                    }
+                    
+                    newlib["songList"]?.append([
+                        "name": song.title ?? "",
+                        "artist": song.artist ?? "",
+                        "mpid": song.persistentID.description
+                    ])
+                    
+                    mpids.append(song.persistentID.description)
+                    
+                    pm.library.removeAll()
+                    let newlibentry: [String : AnyObject] = [
+                        "name": song.title ?? "",
+                        "artist": song.artist ?? "",
+                        "mpid": song.persistentID.description,
+                        "ytid": "",
+                        "spid": "",
+                        "scid": "",
+                        "amid": "",
+                        "votes": 0,
+                        "played": false
+                    ]
+                    pm.library.append((newlibentry, false))
+                }
+                
+                Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/loadSongs", parameters: newlib, encoding: .JSON).responseJSON { response in
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.table.reloadData()
+                    })
+                }
+                
+                self.table.reloadData()
+                mediaPicker.dismissViewControllerAnimated(true, completion: nil)
+            })
+        }))
+        warning.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: {action in }))
+        mediaPicker.showViewController(warning, sender: self)
+        
+        
+        
+    }
+    
+    func mediaPickerDidCancel(mediaPicker: MPMediaPickerController) {
+        mediaPicker.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
+    @IBAction func update(sender: AnyObject) {
+        presentViewController(viewer, animated: true, completion: nil)
+    }
+    
+    @IBAction func done(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
     }
     
     @IBAction func sortby(sender: AnyObject) {

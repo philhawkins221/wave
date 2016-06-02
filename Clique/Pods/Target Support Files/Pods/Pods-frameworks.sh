@@ -84,16 +84,22 @@ strip_invalid_archs() {
 
 
 if [[ "$CONFIGURATION" == "Debug" ]]; then
-  install_framework "Pods/Bolts.framework"
-  install_framework "Pods/Parse.framework"
+  install_framework "Pods/OnePasswordExtension.framework"
+  install_framework "Pods/Alamofire.framework"
   install_framework "Pods/SDWebImage.framework"
+  install_framework "Pods/SVGPlayButton.framework"
+  install_framework "Pods/Soundcloud.framework"
   install_framework "Pods/SwiftyJSON.framework"
-  install_framework "Pods/youtube_ios_player_helper.framework"
+  install_framework "Pods/UICKeyChainStore.framework"
+  install_framework "Pods/XCDYouTubeKit.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
-  install_framework "Pods/Bolts.framework"
-  install_framework "Pods/Parse.framework"
+  install_framework "Pods/OnePasswordExtension.framework"
+  install_framework "Pods/Alamofire.framework"
   install_framework "Pods/SDWebImage.framework"
+  install_framework "Pods/SVGPlayButton.framework"
+  install_framework "Pods/Soundcloud.framework"
   install_framework "Pods/SwiftyJSON.framework"
-  install_framework "Pods/youtube_ios_player_helper.framework"
+  install_framework "Pods/UICKeyChainStore.framework"
+  install_framework "Pods/XCDYouTubeKit.framework"
 fi

@@ -34,6 +34,7 @@ class PlayerManager {
     var spotmanager: NSObject
     var tracktype: tracktypes
     var library: [(song: [String : AnyObject], played: Bool)]
+    var autoplaying: Bool
     
     var ytid: String
     var mpid: String
@@ -48,6 +49,7 @@ class PlayerManager {
         spotmanager = SpotifyManager()
         tracktype = tracktypes.isinactive
         library = [(song: [String : AnyObject], played: Bool)]()
+        autoplaying = false
         
         ytid = String()
         mpid = String()
@@ -200,10 +202,12 @@ class PlayerManager {
         //step 3: prepare the proper player - may need work
         switch tracktype {
         case .isyoutube:
-            if !(UIApplication.sharedApplication().keyWindow?.rootViewController is PlayerViewController) {
-                UIApplication.sharedApplication().keyWindow?.rootViewController?.presentViewController(PlayerViewController(), animated: true, completion: nil)
+            if !(UIApplication.topViewController() is PlayerViewController) {
+                PlayerViewController.youtubewaiting = true
+                
+                let ytalert = UIAlertController(title: "YouTube Link in \"" + currentclique.name + "\"", message: "The Player must be open to play a selection from YouTube.", preferredStyle: .Alert)
+                ytalert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in }))
             }
-            (UIApplication.sharedApplication().keyWindow?.rootViewController as! PlayerViewController).ytprepare(ytid)
         case .isspotify:
             print("preparing spotify player")
             spot.stop(nil)
@@ -249,7 +253,7 @@ class PlayerManager {
             print(scClientID, scClientSecret)
             Track.track(Int(scid)!, completion: {info in }) //use completion handler to update nowplayinginfo?
         default:
-            return
+            break
         }
         
         //update nowplayinginfocenter
@@ -260,6 +264,10 @@ class PlayerManager {
     
     func finishup() {
         print("finishup")
+        //tell the player that the song changed
+        NSNotificationCenter.defaultCenter().postNotificationName("PlayerManagerDidChangeSong", object: self)
+            //player should check if isyoutube and get PlayerManager.sharedInstance().ytid
+        
         //change song played field
         let p1 = [
             "name": currentsong.song,
@@ -296,6 +304,7 @@ class PlayerManager {
             ]
             Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/changeSong", parameters: parameters, encoding: .JSON)
             
+            NSNotificationCenter.defaultCenter().postNotificationName("PlayerManagerDidChangeSong", object: self)
             nowplaying = false
         case .library:
             print("empty directive: selecting song from library")

@@ -16,6 +16,8 @@ import SVGPlayButton
 
 class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate {
     
+    static var youtubewaiting = false
+    
     var metadata: (song: String, artist: String, album: String, artwork: String?, time: Double) {
         get {
             return currentsong
@@ -23,62 +25,6 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
             fetch()
         }
     }
-    
-    /*static var tracktype = tracktypes.isinactive {
-        didSet {
-            if tracktype == .isinactive {
-                if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
-                    while let presentedViewController = topController.presentedViewController {
-                        topController = presentedViewController
-                    }
-                    
-                    // topController should now be your topmost view controller
-                    if topController is PlayerViewController {
-                        (topController as! PlayerViewController).empty()
-                    }
-                }
-            }
-        }
-    }
-    static var toggle = false
-    static var library = [(song: [String : AnyObject], played: Bool)]()
-    static var songwatcher: Int = -1 {
-        didSet {
-            print("songwatcher:", songwatcher)
-            if songwatcher == 0 {
-                print("song has ended")
-                if var topController = UIApplication.sharedApplication().keyWindow?.rootViewController {
-                    while let presentedViewController = topController.presentedViewController {
-                        topController = presentedViewController
-                    }
-                    
-                    // topController should now be your topmost view controller
-                    if topController is PlayerViewController {
-                        //switcher = false
-                        (topController as! PlayerViewController).fetch()
-                    }
-                }
-            }
-        }
-    }
-    
-    let system = MPMusicPlayerController.systemMusicPlayer()
-    let video = XCDYouTubeVideoPlayerViewController()
-    var videostate: MPMoviePlaybackState = .Stopped {
-        didSet {
-            fetch()
-        }
-    }
-    
-    static var spot = SPTAudioStreamingController(clientId: kClientId)
-
-    var ytid = String()
-    var mpid = String()
-    var spid = String()
-    var amid = String()
-    var scid = String()
-    var picurl = String()
-    //static var switcher = true*/
     
     let video = XCDYouTubeVideoPlayerViewController()
     @IBOutlet weak var image: UIImageView!
@@ -90,27 +36,33 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     @IBOutlet weak var albumlabel: UILabel!
     
     @IBOutlet weak var videobutton: UIBarButtonItem!
+    @IBOutlet weak var bottombar: UIToolbar!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
         
         UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
         fetch()
+        
+        if PlayerViewController.youtubewaiting && PlayerManager.sharedInstance().tracktype == .isyoutube {
+            ytprepare()
+        }
     }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PlayerViewController.fetch), name: "PlayerManagerDidChangeSong", object: nil)
         playbutton.willPlay = { self.play() }
         playbutton.willPause = { self.pause() }
         
-        //addObserver(<#T##observer: NSObject##NSObject#>, forKeyPath: <#T##String#>, options: <#T##NSKeyValueObservingOptions#>, context: <#T##UnsafeMutablePointer<Void>#>)
     }
     
     override func viewWillDisappear(animated: Bool) {
         super.viewWillDisappear(true)
         
+        PlayerViewController.youtubewaiting = false
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Slide)
         if PlayerManager.sharedInstance().tracktype == .isyoutube {
             currentsong.time = video.moviePlayer.currentPlaybackTime
@@ -119,385 +71,77 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     }
     
     func fetch() {
-        songlabel.text = metadata.song
-        artistlabel.text = metadata.artist
-        albumlabel.text = metadata.album
+        dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+            self.songlabel.text = self.metadata.song
+            self.artistlabel.text = self.metadata.artist
+            self.albumlabel.text = self.metadata.album
         
-        if metadata.artwork != nil {image.sd_setImageWithURL(NSURL(string: metadata.artwork!))} else {image.image = UIImage(named: "genericart.png")}
+            if self.metadata.artwork != nil {self.image.sd_setImageWithURL(NSURL(string: self.metadata.artwork!))} else {self.image.image = UIImage(named: "genericart.png")}
         
-        if PlayerManager.sharedInstance().tracktype == .isyoutube {
-            videobutton.title = "Show Video"
-            videobutton.enabled = true
-            video.moviePlayer.currentPlaybackTime = metadata.time
-        } else {
-            videobutton.title = ""
-            videobutton.enabled = false
-            image.hidden = false
-            player.hidden = true
-        }
+            self.videobutton.title = ""
+            self.videobutton.enabled = false
+            self.image.hidden = false
+            self.player.hidden = true
         
-        if PlayerManager.sharedInstance().tracktype == .isinactive {
-            playbutton.playing = false
-        } else {
-            playbutton.playing = true
-        }
-    }
-    
-    func ytprepare(ytid: String) {
-        video.moviePlayer.fullscreen = false
-        video.videoIdentifier = ytid
-        video.presentInView(player)
-        video.moviePlayer.currentPlaybackTime = currentsong.time
-        video.moviePlayer.prepareToPlay()
-        video.moviePlayer.play()
-    }
-    
-    /*func fetch() {
-        print("fetching")
-        system.endGeneratingPlaybackNotifications()
-        system.stop()
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-    
-        var plussong = String()
-        var plusartist = String()
-        print(plussong, plusartist)
-        
-        mpid = ""
-        amid = ""
-        spid = ""
-        ytid = ""
-        scid = ""
-        
-        //step 1: pull the next song - get the stored artist and song name
-        session.dataTaskWithURL(NSURL(string: "https://clique2016.herokuapp.com/playlists/" + currentclique.id)!, completionHandler: {[unowned self] (data, response, error) in
-            if data == nil {
-                print("no data")
-                return
-            }
-            var json = JSON(data: data!)
-            print("collected data")
-            
-            let list = json["songList"].array ?? []
-            //print(list)
-            
-            var song = ""
-            var artist = ""
-            var i = -1
-            
-            for item in list {
-                i += 1
-                
-                if item["played"].boolValue {
-                    //print("this song has already been played")
-                    continue
-                }
-                
-                print(item)
-                
-                if item["name"].string == "~terminate" {
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.image.image = UIImage(named: "genericart.png")
-                        self.songlabel.text = ""
-                        self.artistlabel.text = ""
-                        self.albumlabel.text = ""
-                        self.videobutton.title = ""
-                    })
-                    
-                    return
-                }
-                
-                song = item["name"].string ?? ""
-                artist = item["artist"].string ?? ""
-                self.ytid = item["ytid"].string ?? ""
-                self.mpid = item["mpid"].string ?? ""
-                self.spid = item["spid"].string ?? ""
-                self.amid = item["amid"].string ?? ""
-                self.scid = item["scid"].string ?? ""
-                
-                break
-                
-                //json["songList"][i]["played"].boolValue = true
-            }
-            
-            //check if the queue is empty
-            if self.ytid != "" {
-                PlayerViewController.tracktype = .isyoutube
-                print("isyoutube")
-            } else if self.mpid != "" {
-                PlayerViewController.tracktype = .islocal
-                print("islocal")
-            } else if self.amid != "" {
-                PlayerViewController.tracktype = .isapplemusic
-                print("isapplemusic")
-            } else if self.spid != "" {
-                PlayerViewController.tracktype = .isspotify
-                print("isspotify")
-            } else if self.scid != "" {
-                PlayerViewController.tracktype = .issoundcloud
-                print("issoundcloud")
+            if PlayerManager.sharedInstance().tracktype == .isinactive {
+                self.playbutton.playing = false
             } else {
-                PlayerViewController.tracktype = .isinactive
-                print("isinactive")
-                currentsong = ("", "", "", "", 0)
-                
-                let parameters = [
-                    "song": "",
-                    "artist": ""
-                ]
-                Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/changeSong", parameters: parameters, encoding: .JSON)
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.songlabel.text = ""
-                    self.artistlabel.text = ""
-                    self.albumlabel.text = ""
-                    self.image.image = UIImage(named: "genericart.png")
-                    self.videobutton.title = ""
-                    self.videobutton.enabled = false
-                    self.player.hidden = true
-                })
-                
-                nowplaying = false
-                return
+                self.playbutton.playing = true
             }
             
-            func plus(string: String) -> String {
-                var result = ""
-                
-                for c in string.characters {
-                    if c == " " {
-                        result += "+"
-                    } else {
-                        result.append(c)
-                    }
-                }
-                
-                result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) ?? ""
-                return result
-            }
-            
-            plussong = plus(song)
-            plusartist = plus(artist)
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                if PlayerViewController.tracktype == .isyoutube {
-                    self.videobutton.title = "Show Video"
-                    self.videobutton.enabled = true
+            switch PlayerManager.sharedInstance().tracktype {
+            case .islocal:
+                if PlayerManager.sharedInstance().autoplaying {
+                    self.videobutton.title = "Autoplay"
                 } else {
                     self.videobutton.title = ""
-                    self.videobutton.enabled = false
-                    self.image.hidden = false
-                    self.player.hidden = true
                 }
-                
-                self.spotifetch(plussong, plusartist: plusartist, usersong: song, userartist: artist)
-            })
-        }).resume()
-    }
-    
-    func spotifetch(plussong: String, plusartist: String, usersong: String, userartist: String) {
-        print("spotifetch")
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        
-        print(plussong, plusartist)
-
-        //step 2: verify names and find album+artwork - spotify api
-        session.dataTaskWithURL(NSURL(string: "https://api.spotify.com/v1/search?q=track:" + plussong + "%20artist:" + plusartist + "&type=track&limit=1")!, completionHandler: {(data, response, error) in
-            if data == nil {
-                print("no data")
-                return
+                self.bottombar.barTintColor = UIColor.lightGrayColor()
+            case .isapplemusic:
+                self.videobutton.title = "Apple Music"
+                self.bottombar.barTintColor = UIColor(red: 100/255, green: 69/255, blue: 250/255, alpha: 0.75)
+            case .isspotify:
+                self.videobutton.title = "Spotify"
+                self.bottombar.barTintColor = UIColor(red: 25/255, green: 214/255, blue: 72/255, alpha: 0.75)
+            case .isyoutube:
+                self.videobutton.title = "Show Video"
+                self.bottombar.barTintColor = UIColor(red: 208/255, green: 10/255, blue: 20/255, alpha: 0.75)
+            
+                self.videobutton.enabled = true
+                self.ytprepare()
+            case .issoundcloud:
+                self.videobutton.title = "Soundcloud"
+                self.bottombar.barTintColor = UIColor(red: 251/255, green: 113/255, blue: 0/255, alpha: 0.75)
+            case .isinactive:
+                self.videobutton.title = ""
+                self.bottombar.barTintColor = UIColor.lightGrayColor()
             }
-            let json = JSON(data: data!)
-            
-            var song = String?()
-            var artist = String?()
-            var album = String?()
-            var cover = String?()
-            
-            song = json["tracks"]["items"][0]["name"].string
-            artist = json["tracks"]["items"][0]["artists"][0]["name"].string
-            album = json["tracks"]["items"][0]["album"]["name"].string
-            cover = json["tracks"]["items"][0]["album"]["images"][0]["url"].string
-            
-            dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-                if song != nil {self.songlabel.text = song} else {self.songlabel.text = usersong}
-                if artist != nil {self.artistlabel.text = artist} else {self.artistlabel.text = userartist}
-                if album != nil {self.albumlabel.text = album} else {self.albumlabel.text = ""}
-                
-                if cover != nil {self.image.sd_setImageWithURL(NSURL(string: cover!))} else {self.image.image = UIImage(named: "genericart.png")}
-                
-                currentsong = (self.songlabel.text!, self.artistlabel.text!, self.albumlabel.text!, cover, 0)//currentsong.time)
-                print(self.ytid)
-                
-                self.prepare()
-            })
-            
-        }).resume()
+        })
     }
     
-    func prepare() {
-        //step 3: prepare the proper player - may need work
-        switch PlayerViewController.tracktype {
-        case .isyoutube:
-            print("preparing youtube player")
-            video.moviePlayer.fullscreen = false
-            video.videoIdentifier = ytid
-            video.presentInView(player)
-            video.moviePlayer.currentPlaybackTime = currentsong.time
-            video.moviePlayer.prepareToPlay()
-            video.moviePlayer.play()
-        case .isspotify:
-            print("preparing spotify player")
-            PlayerViewController.spot.stop(nil)
-            if PlayerViewController.spot.loggedIn {
-                PlayerViewController.spot.playURI(NSURL(string: self.spid), callback: nil)
-            } else {
-                PlayerViewController.spot.loginWithSession(spotifysession, callback: { (error) -> Void in
-                    if (error != nil) {
-                        print("*** Enabling playback got error: \(error)")
-                        return
-                    } else {
-                        print("PlayerViewController prepare(): spid = " + self.spid)
-                        PlayerViewController.spot.playURI(NSURL(string: self.spid), callback: nil)
-                    }
-                })
-            }
-        case .islocal:
-            print("preparing system player")
-            system.stop()
-            let searcher = MPMediaQuery.songsQuery()
-            //searcher.addFilterPredicate(MPMediaPropertyPredicate(value: currentsong.artist, forProperty: MPMediaItemPropertyArtist))
-            //searcher.addFilterPredicate(MPMediaPropertyPredicate(value: currentsong.song, forProperty: MPMediaItemPropertyTitle))
-            searcher.addFilterPredicate(MPMediaPropertyPredicate(value: Int(mpid), forProperty: MPMediaItemPropertyPersistentID))
-            print(searcher.items)
-            print(currentsong)
-            //system.setQueueWithQuery(searcher)
-            system.setQueueWithItemCollection(MPMediaItemCollection(items: searcher.items!))
-            system.prepareToPlay()
-            system.play()
-        case .isapplemusic:
-            print("preparing for apple music")
-            system.stop()
-            if #available(iOS 9.3, *) {
-                system.setQueueWithStoreIDs([amid])
-                system.prepareToPlay()
-                system.play()
-            } else {
-                // Fallback on earlier versions
-                print("gotta have 9.3")
-            }
-        case .issoundcloud:
-            print(scClientID, scClientSecret)
-            Track.track(Int(scid)!, completion: {info in }) //use completion handler to update nowplayinginfo?
-        default:
-            return
-        }
+    func ytprepare() {
+        video.moviePlayer.fullscreen = false
+        video.videoIdentifier = PlayerManager.sharedInstance().ytid
+        video.presentInView(player)
+        video.moviePlayer.currentPlaybackTime = metadata.time
+        video.moviePlayer.prepareToPlay()
+        video.moviePlayer.play()
         
-        //update nowplayinginfocenter
-        
-        nowplaying = true
-        finishup()
+        PlayerViewController.youtubewaiting = false
     }
     
-    func finishup() {
-        print("finishup")
-        //PlayerViewController.switcher = true
-        PlayerViewController.songwatcher = -1
+    func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
         
-        //change song played field
-        let p1 = [
-            "name": currentsong.song,
-            "artist": currentsong.artist
-        ]
+        //let scale = newWidth / image.size.width
+        //let newHeight = image.size.height * scale
+        let newHeight = newWidth
+        UIGraphicsBeginImageContext(CGSizeMake(newWidth, newHeight))
+        image.drawInRect(CGRectMake(0, 0, newWidth, newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
         
-        Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/markSongAsPlayed", parameters: p1, encoding: .JSON)
-        
-        let p2 = [
-            "song": currentsong.song,
-            "artist": currentsong.artist
-        ]
-        
-        //update current song
-        Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/changeSong", parameters: p2, encoding: .JSON)
-        
-        //reset gatekeeper
-        //PlayerViewController.tracktype = .isinactive
-        
-        //must wait until song has already started to restart notifications - busy wait
-        //while system.playbackState != .Playing {}
-        system.beginGeneratingPlaybackNotifications()
+        return newImage
     }
-    
-    func empty() {
-        switch emptydirective {
-        case .nothing:
-            return
-        case .library:
-            print("empty directive: selecting song from library")
-            if PlayerViewController.library.isEmpty {
-                return
-            }
-            
-            var random = Int(arc4random_uniform(UInt32(PlayerViewController.library.count)))
-            
-            var counter = 0
-            while PlayerViewController.library[random].played {
-                random = Int(arc4random_uniform(UInt32(PlayerViewController.library.count)))
-                counter += 1
-                if counter >= PlayerViewController.library.count {
-                    for i in 0..<PlayerViewController.library.count {
-                        PlayerViewController.library[i].played = false
-                    }
-                }
-            }
-            print("empty has selected:", PlayerViewController.library[random])
-            let newsong = PlayerViewController.library[random].song
-            PlayerViewController.library[random].played = true
-            
-            Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: newsong, encoding: .JSON).responseJSON { [unowned self] response in
-                self.fetch()
-            }
-        case .magic:
-            break
-            //use the clique's currentsong field (or maybe even the local currentsong field) to make magic
-            //pod "SwiftJavascriptBridge"
-            
-            //bridge.bridgeLoadScriptFromURL("https://raw.githubusercontent.com/loverajoel/magicplaylist/master/app/js/core/Magic.js")
-            
-            
-        }
-    }
-    
-    
-    
-    /*static func playerChanged() {
-        if !switcher {
-            //return
-        }
-        
-        switch tracktype {
-        case .isyoutube: return
-        case .islocal, .isapplemusic where MPMusicPlayerController.systemMusicPlayer().playbackState != .Stopped: return
-        default: PlayerViewController.songwatcher = 0 ; print("playerChanged: attempting to trigger songwatcher didSet")
-        }
-    }*/
-    
-    func audioStreamingDidBecomeInactivePlaybackDevice(audioStreaming: SPTAudioStreamingController!) {
-        //fetch()
-    }
-    
-    func audioStreaming(audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: NSURL!) {
-        if trackUri == spid {
-            //PlayerViewController.playerChanged()
-            //fetch()
-        }
-        //spot = SPTAudioStreamingController(clientId: kClientId)
-    }
-    
-    func audioStreaming(audioStreaming: SPTAudioStreamingController!, didChangePlaybackStatus isPlaying: Bool) {
-        if !isPlaying {
-            fetch()
-        }
-    }*/
     
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -505,6 +149,10 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     }
     
     @IBAction func videoButton(sender: AnyObject) {
+        if PlayerManager.sharedInstance().tracktype == .isyoutube {
+            return
+        }
+        
         if videobutton.title == "Show Video" {
             player.hidden = false
             videobutton.title = "Hide Video"
@@ -557,47 +205,6 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         case .isinactive: return
         }
     }
-    
-    /*@IBAction func playpause(sender: AnyObject) {
-        if PlayerViewController.tracktype == .isyoutube {
-            if video.moviePlayer.playbackState == .Playing {
-                video.moviePlayer.pause()
-                playbutton = UIBarButtonItem(barButtonSystemItem: .Play, target: self, action: #selector(PlayerViewController.playpause(_:)))
-                //controlbar.setItems([controlbar.items![0], playbutton, controlbar.items![2]], animated: false)
-                //controlbar.items?[1] = playbutton
-            } else if video.moviePlayer.playbackState == .Paused {
-                video.moviePlayer.play()
-                playbutton = UIBarButtonItem(barButtonSystemItem: .Pause, target: self, action: #selector(PlayerViewController.playpause(_:)))
-                //controlbar.setItems([controlbar.items![0], playbutton, controlbar.items![2]], animated: false)
-                //controlbar.items?[1] = playbutton
-            }
-        } else {
-            if spid != "" {
-                PlayerViewController.spot.setIsPlaying(!PlayerViewController.spot.isPlaying, callback: nil)
-                
-                if PlayerViewController.spot.isPlaying {
-                    playbutton = UIBarButtonItem(barButtonSystemItem: .Play, target: self, action: #selector(PlayerViewController.playpause(_:)))
-                } else {
-                    playbutton = UIBarButtonItem(barButtonSystemItem: .Pause, target: self, action: #selector(PlayerViewController.playpause(_:)))
-                }
-                
-                //controlbar.setItems([controlbar.items![0], playbutton, controlbar.items![2]], animated: false)
-                //controlbar.items?[1] = playbutton
-                return
-            }
-            if system.playbackState == .Playing {
-                system.pause()
-                playbutton = UIBarButtonItem(barButtonSystemItem: .Play, target: self, action: #selector(PlayerViewController.playpause(_:)))
-                //controlbar.setItems([controlbar.items![0], playbutton, controlbar.items![2]], animated: false)
-                //controlbar.items?[1] = playbutton
-            } else if system.playbackState == .Paused {
-                system.play()
-                playbutton = UIBarButtonItem(barButtonSystemItem: .Pause, target: self, action: #selector(PlayerViewController.playpause(_:)))
-                //controlbar.setItems([controlbar.items![0], playbutton, controlbar.items![2]], animated: false)
-                //controlbar.items?[1] = playbutton
-            }
-        }
-    }*/
     
     @IBAction func fastforward(sender: AnyObject) {
         PlayerManager.sharedInstance().fetch()

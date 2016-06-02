@@ -17,7 +17,11 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var clique = [(song: String, artist: String, artwork: String?, votes: Int, voting_available: Bool)]()
     //var library = [(song: String, artist: String)]()
-    var currentSong: (name: String, artist: String) = ("", "")
+    var currentSong: (name: String, artist: String) = ("", "") {
+        didSet {
+            table.reloadData()
+        }
+    }
     var timer = NSTimer()
 
     @IBOutlet weak var table: UITableView!
@@ -45,7 +49,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         clique.removeAll()
         fetch()
         
-        timer = NSTimer.scheduledTimerWithTimeInterval(15, target: self, selector: #selector(CliqueViewController.fetch), userInfo: nil, repeats: true)
+        timer = NSTimer.scheduledTimerWithTimeInterval(15, target: self, selector: #selector(fetch), userInfo: nil, repeats: true)
     }
     
     override func viewWillDisappear(animated: Bool) {

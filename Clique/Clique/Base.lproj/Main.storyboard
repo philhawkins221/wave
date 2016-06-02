@@ -215,6 +215,8 @@
                                         </connections>
                                     </barButtonItem>
                                 </items>
+                                <color key="tintColor" red="1" green="1" blue="1" alpha="1" colorSpace="calibratedRGB"/>
+                                <color key="barTintColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="EP2-as-7lj" customClass="MPVolumeView">
                                 <rect key="frame" x="20" y="496" width="560" height="47"/>
@@ -302,6 +304,7 @@
                     <connections>
                         <outlet property="albumlabel" destination="ksp-kX-Zpe" id="UFd-LG-qjf"/>
                         <outlet property="artistlabel" destination="Wee-1D-oqk" id="JdT-9j-YIi"/>
+                        <outlet property="bottombar" destination="4Y6-uL-FUm" id="K7x-QJ-lE7"/>
                         <outlet property="image" destination="P3r-gw-eXZ" id="L7B-X2-LbX"/>
                         <outlet property="playbutton" destination="adI-i8-Y4J" id="1Lz-bx-FTc"/>
                         <outlet property="player" destination="xZ7-j0-wFq" id="679-3S-Fq1"/>
@@ -1013,7 +1016,7 @@
                                                     <rect key="frame" x="15" y="0.0" width="570" height="34.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="13"/>
-                                                    <color key="textColor" cocoaTouchSystemColor="darkTextColor"/>
+                                                    <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
                                             </subviews>

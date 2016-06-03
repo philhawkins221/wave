@@ -289,12 +289,9 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let votes = UITableViewRowAction(style: .Default, title: clique[indexPath.row].votes.description, handler: {(action, indexpath) in })
         
         upvote.backgroundColor = UIColor.greenColor()
-        upvote.backgroundEffect = .None
         votes.backgroundColor = UIColor.grayColor()
-        votes.backgroundEffect = .None
         downvote.backgroundColor = UIColor.redColor()
-        downvote.backgroundEffect = .None
-                
+        
         return [upvote, votes, downvote]
     }
     

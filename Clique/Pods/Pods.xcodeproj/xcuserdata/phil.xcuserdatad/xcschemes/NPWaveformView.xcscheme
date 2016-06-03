@@ -14,10 +14,10 @@
             buildForArchiving = "YES">
             <BuildableReference
                BuildableIdentifier = 'primary'
-               BlueprintIdentifier = '635A9D8DA996EDA9E06867E8'
-               BlueprintName = '1PasswordExtension-OnePasswordExtensionResources'
+               BlueprintIdentifier = 'AFAB595196884B5946D3C041'
+               BlueprintName = 'NPWaveformView'
                ReferencedContainer = 'container:Pods.xcodeproj'
-               BuildableName = 'OnePasswordExtensionResources.bundle'>
+               BuildableName = 'NPWaveformView.framework'>
             </BuildableReference>
          </BuildActionEntry>
       </BuildActionEntries>

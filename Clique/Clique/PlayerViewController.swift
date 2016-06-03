@@ -10,6 +10,7 @@ import UIKit
 import XCDYouTubeKit
 import SDWebImage
 import SVGPlayButton
+import NPWaveformView
 
 //var tracktype: tracktypes = .isinactive
 
@@ -44,7 +45,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
         fetch()
         
-        if PlayerViewController.youtubewaiting && PlayerManager.sharedInstance().tracktype == .isyoutube {
+        if PlayerViewController.youtubewaiting && video.moviePlayer.playbackState != .Playing {
             ytprepare()
         }
     }
@@ -56,6 +57,13 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PlayerViewController.fetch), name: "PlayerManagerDidChangeSong", object: nil)
         playbutton.willPlay = { self.play() }
         playbutton.willPause = { self.pause() }
+        
+        /*waves.idleAmplitude = 0.9
+        waves.numberOfWaves = 3
+        waves.frequency = 0.6
+        waves.density = 0.6
+        waves.primaryWaveLineWidth = 0.5
+        waves.secondaryWaveLineWidth = 0.2*/
         
     }
     
@@ -94,7 +102,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
                 if PlayerManager.sharedInstance().autoplaying {
                     self.videobutton.title = "Autoplay"
                 } else {
-                    self.videobutton.title = ""
+                    self.videobutton.title = "Clique"
                 }
                 self.bottombar.barTintColor = UIColor.lightGrayColor()
             case .isapplemusic:

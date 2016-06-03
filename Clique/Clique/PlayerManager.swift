@@ -72,6 +72,8 @@ class PlayerManager {
         print("fetching")
         system.endGeneratingPlaybackNotifications()
         system.stop()
+        PlayerManager.sharedInstance().spot.stop(nil)
+        
         let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         
         var plussong = String()

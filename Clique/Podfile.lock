@@ -1,6 +1,7 @@
 PODS:
   - 1PasswordExtension (1.8.1)
   - Alamofire (3.2.1)
+  - NPWaveformView (0.1.1)
   - SDWebImage (3.7.4):
     - SDWebImage/Core (= 3.7.4)
   - SDWebImage/Core (3.7.4)
@@ -14,6 +15,7 @@ PODS:
 
 DEPENDENCIES:
   - Alamofire
+  - NPWaveformView
   - SDWebImage (~> 3.7)
   - Soundcloud
   - SVGPlayButton (~> 0.4)
@@ -23,6 +25,7 @@ DEPENDENCIES:
 SPEC CHECKSUMS:
   1PasswordExtension: 00d6f4caae77c19ba33045b8569fbeb9689f0d1d
   Alamofire: f11d8624a05f5d39e0c99309b3e600a3ba64298a
+  NPWaveformView: 78886d37b06815e3cc46210af3b278a94f12d920
   SDWebImage: 247edd7dd80dd6124197b0d6a17846fe9d1df968
   Soundcloud: 372ac38762a29949302bd52f5cbd2839af2aa930
   SVGPlayButton: 434e4bf97799c206ed283bd1951507f678328766

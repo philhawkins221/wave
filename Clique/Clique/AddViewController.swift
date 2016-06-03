@@ -67,7 +67,8 @@ class AddViewController: UIViewController {
             case .Failure(let error):
                 print(error)
             }
-        }    }
+        }
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()

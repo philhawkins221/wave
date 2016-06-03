@@ -122,8 +122,8 @@ class SpotifyViewController: UIViewController, UITableViewDelegate, UITableViewD
         add.addAction(UIAlertAction(title: "Add", style: .Default, handler: {action in
             var parameters = [String : AnyObject]()
             parameters = [
-                "name": searchsong,
-                "artist": searchartist,
+                "name": self.results[indexPath.row].song,
+                "artist": self.results[indexPath.row].artist,
                 "mpid": "",
                 "ytid": "",
                 "spid": self.results[indexPath.row].spid,

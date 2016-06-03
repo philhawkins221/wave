@@ -30,7 +30,9 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     let video = XCDYouTubeVideoPlayerViewController()
     @IBOutlet weak var image: UIImageView!
     @IBOutlet weak var player: UIView!
+    @IBOutlet weak var rewindbutton: UIButton!
     @IBOutlet weak var playbutton: SVGPlayButton!
+    @IBOutlet weak var fastforwardbutton: UIButton!
     
     @IBOutlet weak var songlabel: UILabel!
     @IBOutlet weak var artistlabel: UILabel!
@@ -125,6 +127,10 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
                 self.bottombar.barTintColor = UIColor.lightGrayColor()
             }
         })
+        
+        rewindbutton.enabled = true
+        playbutton.enabled = true
+        fastforwardbutton.enabled = true
     }
     
     func ytprepare() {
@@ -157,7 +163,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     }
     
     @IBAction func videoButton(sender: AnyObject) {
-        if PlayerManager.sharedInstance().tracktype == .isyoutube {
+        if PlayerManager.sharedInstance().tracktype != .isyoutube {
             return
         }
         
@@ -216,6 +222,10 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     
     @IBAction func fastforward(sender: AnyObject) {
         PlayerManager.sharedInstance().fetch()
+        
+        rewindbutton.enabled = false
+        playbutton.enabled = false
+        fastforwardbutton.enabled = false
     }
     
     /*

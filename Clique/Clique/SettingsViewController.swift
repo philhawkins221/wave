@@ -39,6 +39,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var emptytable: UITableView!
     @IBOutlet weak var tabledescription: UILabel!
 
+    @IBOutlet weak var newclosebutton: UIBarButtonItem!
+    @IBOutlet weak var donebutton: UIBarButtonItem!
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -77,6 +80,20 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
         cliquename.text = currentclique.name
         passcode.text = currentclique.passcode
+        
+        if creatingnewclique {
+            newclosebutton.title = "Cancel"
+            newclosebutton.enabled = true
+            donebutton.title = "Create"
+            
+            self.title = "New Clique Settings"
+        }
+        
+        switch emptydirective {
+        case .nothing: emptytable.selectRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), animated: true, scrollPosition: .None)
+        case .library: emptytable.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), animated: true, scrollPosition: .None)
+        case .magic: emptytable.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), animated: true, scrollPosition: .None)
+        }
     }
 
     //MARK: - SPTAuthView Stack
@@ -145,7 +162,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 return
             }
         } else {
-            //set spotify member to false locally, in server, and in data store
+            //TODO: set spotify member to false locally, in server, and in data store
         }
 
 
@@ -158,7 +175,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return 3
+        return 2
     }
 
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
@@ -196,7 +213,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     @IBAction func soundcloudChanged(sender: AnyObject) { //actually apple music
-        //TODO: - needs to remember that apple music has been enabled/disabled
+        //TODO: needs to remember that apple music has been enabled/disabled
         if soundcloudswitch.on {
             if #available(iOS 9.3, *) {
                 SKCloudServiceController.requestAuthorization({
@@ -242,9 +259,88 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     @IBAction func done(sender: AnyObject) {
+        if donebutton.title == "Create" {
+            Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/").responseJSON { [unowned self] response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        
+                        var ids = [String]()
+                        
+                        for clique in json.array ?? [] {
+                            ids.append(clique["name"].stringValue)
+                        }
+                        
+                        let chars = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"]
+                        var newid = ""
+                        
+                        repeat {
+                            newid = ""
+                            for _ in 0..<24 {
+                                newid += chars[Int(arc4random_uniform(16))]
+                            }
+                        } while ids.contains(newid)
+                        
+                        currentclique.id = newid
+                        
+                        let newclique: [String : AnyObject] = [
+                            "_id": currentclique.id,
+                            "name": currentclique.name,
+                            "passcode": currentclique.passcode,
+                            "currentSong": "",
+                            "artist": "",
+                            "voting": currentclique.voting,
+                            "applemusic": currentclique.applemusic,
+                            "spotify": currentclique.spotify,
+                            "library": [],
+                            "songList": []
+                        ]
+                        
+                        Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/", parameters: newclique, encoding: .JSON).responseJSON { response in
+                            //save new clique
+                            //1
+                            let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
+                            let managedContext = appDelegate.managedObjectContext
+                            
+                            //2
+                            let entity =  NSEntityDescription.entityForName("Clique", inManagedObjectContext: managedContext)
+                            let newclique = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+                            
+                            //3
+                            newclique.setValue(currentclique.id, forKey: "id")
+                            newclique.setValue(currentclique.name, forKey: "name")
+                            newclique.setValue(currentclique.passcode, forKey: "passcode")
+                            newclique.setValue(true, forKey: "isLeader")
+                            newclique.setValue(currentclique.applemusic, forKey: "applemusic")
+                            newclique.setValue(currentclique.spotify, forKey: "spotify")
+                            newclique.setValue(true, forKey: "voting")
+                            
+                            //finish up
+                            print(newclique)
+                            print(currentclique)
+                            appDelegate.saveContext()
+                            creatingnewclique = false
+                            self.presentingViewController?.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+                            //self.dismissViewControllerAnimated(true, completion: { [unowned self] in self.dismissViewControllerAnimated(true, completion: nil) })
+                        }
+                    }
+                case .Failure(let error):
+                    print(error)
+                    
+                    return
+                }
+                
+            }
+        }
+        
         self.dismissViewControllerAnimated(true, completion: nil)
     }
 
+    @IBAction func newclose(sender: AnyObject) {
+        self.dismissViewControllerAnimated(true, completion: nil)
+    }
+    
     /*
     // MARK: - Navigation
 

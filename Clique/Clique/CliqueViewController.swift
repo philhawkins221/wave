@@ -62,6 +62,8 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         print("fetching")
         clique.removeAll()
         
+        //TODO: check "voting" status in clique
+        
         Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { response in
             switch response.result {
             case .Success:

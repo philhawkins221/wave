@@ -117,11 +117,11 @@ class AppleMusicViewController: UIViewController, UITableViewDelegate, UITableVi
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         let add = UIAlertController(title: "Add Song", message: "Add this song to clique?", preferredStyle: .Alert)
         add.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: {action in }))
-        add.addAction(UIAlertAction(title: "Add", style: .Default, handler: {action in
+        add.addAction(UIAlertAction(title: "Add", style: .Default, handler: {[unowned self] action in
             var parameters = [String : AnyObject]()
             parameters = [
-                "name": searchsong,
-                "artist": searchartist,
+                "name": self.results[indexPath.row].song,
+                "artist": self.results[indexPath.row].artist,
                 "mpid": "",
                 "ytid": "",
                 "amid": self.results[indexPath.row].amid,

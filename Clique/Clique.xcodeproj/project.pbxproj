@@ -23,6 +23,7 @@
 		4A7D6C971CDFB22300ADDDA1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */; };
 		4A86D4851CFB6A8200E298AB /* DummyPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A86D4841CFB6A8200E298AB /* DummyPlayerViewController.swift */; };
 		4A86D4871CFD11E200E298AB /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A86D4861CFD11E200E298AB /* PlayerManager.swift */; };
+		4AA5AA581D01F28D004B30FA /* NewCliqueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA5AA571D01F28D004B30FA /* NewCliqueViewController.swift */; };
 		4AA798191C56ECBA00E211E7 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA798181C56ECBA00E211E7 /* LibraryViewController.swift */; };
 		4AB53C9F1CE289C2000E47A2 /* SpotifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB53C9E1CE289C2000E47A2 /* SpotifyViewController.swift */; };
 		4AB840D11CD70640005FDB47 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB840D01CD70640005FDB47 /* MediaPlayer.framework */; };
@@ -62,6 +63,7 @@
 		4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4A86D4841CFB6A8200E298AB /* DummyPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyPlayerViewController.swift; sourceTree = "<group>"; };
 		4A86D4861CFD11E200E298AB /* PlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
+		4AA5AA571D01F28D004B30FA /* NewCliqueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewCliqueViewController.swift; sourceTree = "<group>"; };
 		4AA798181C56ECBA00E211E7 /* LibraryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		4AB53C9E1CE289C2000E47A2 /* SpotifyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyViewController.swift; sourceTree = "<group>"; };
 		4AB840D01CD70640005FDB47 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
@@ -127,6 +129,7 @@
 				4AC3C9F11C4ACCB700D5BCCA /* AppDelegate.swift */,
 				4AC3C9F31C4ACCB700D5BCCA /* ViewController.swift */,
 				4AC3C9F51C4ACCB700D5BCCA /* Main.storyboard */,
+				4AA5AA571D01F28D004B30FA /* NewCliqueViewController.swift */,
 				4A86D4841CFB6A8200E298AB /* DummyPlayerViewController.swift */,
 				4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */,
 				4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */,
@@ -312,6 +315,7 @@
 				4AC3C9FA1C4ACCB700D5BCCA /* Clique.xcdatamodeld in Sources */,
 				4A3EBFE21C4F4E2D001BAA33 /* CliqueViewController.swift in Sources */,
 				4AFCD3541CEFB17D00E5E9B1 /* SoundcloudViewController.swift in Sources */,
+				4AA5AA581D01F28D004B30FA /* NewCliqueViewController.swift in Sources */,
 				4AB53C9F1CE289C2000E47A2 /* SpotifyViewController.swift in Sources */,
 				4AA798191C56ECBA00E211E7 /* LibraryViewController.swift in Sources */,
 				4AC3CA091C4ACE7400D5BCCA /* MyCliquesViewController.swift in Sources */,

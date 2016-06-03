@@ -219,6 +219,11 @@ class PlayerManager {
                 spot.loginWithSession(spotifysession, callback: { (error) -> Void in
                     if (error != nil) {
                         print("*** Enabling playback got error: \(error)")
+                        currentclique.spotify = false
+                        let stopify = UIAlertController(title: "Spotify Authorization Needed", message: "Re-enable Spotify in the Clique settings to resume playback of Spotify content.", preferredStyle: .Alert)
+                        stopify.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+                        
+                        dispatch_async(dispatch_get_main_queue(), { UIApplication.topViewController()?.presentViewController(stopify, animated: true, completion: nil) })
                         return
                     } else {
                         print("PlayerManager prepare(): spid = " + self.spid)
@@ -285,10 +290,6 @@ class PlayerManager {
         
         //update current song
         Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/changeSong", parameters: p2, encoding: .JSON)
-        
-        if UIApplication.sharedApplication().keyWindow?.rootViewController is PlayerViewController {
-            (UIApplication.sharedApplication().keyWindow?.rootViewController as! PlayerViewController).fetch()
-        }
         
         system.beginGeneratingPlaybackNotifications()
     }

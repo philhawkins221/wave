@@ -7,16 +7,16 @@
 //
 
 extension String {
-    
+
     subscript (i: Int) -> Character {
         //return self[advance(self.startIndex, i)]
         return self[self.startIndex.advancedBy(i)]
     }
-    
+
     subscript (i: Int) -> String {
         return String(self[i] as Character)
     }
-    
+
     subscript (r: Range<Int>) -> String {
         //return substringWithRange(Range(start: advance(startIndex, r.startIndex), end: advance(startIndex, r.endIndex)))
         return substringWithRange(Range(start: self.startIndex.advancedBy(r.startIndex), end: self.startIndex.advancedBy(r.endIndex)))
@@ -32,51 +32,51 @@ import StoreKit
 import MediaPlayer
 
 var nowplaying = false
-var currentsong: (song: String, artist: String, album: String, artwork: String?, time: Double) = ("", "", "", nil, 0) 
+var currentsong: (song: String, artist: String, album: String, artwork: String?, time: Double) = ("", "", "", nil, 0)
 
 class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
     var cliques = [NSManagedObject]()
     @IBOutlet weak var table: UITableView!
-    
+
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
-        
+
         table.delegate = self
         table.dataSource = self
         table.hidden = true
-        
+
         fetch()
-        
+
         //test()
-        
+
         //table.reloadData()
     }
-    
+
     override func viewDidLoad() {
         super.viewDidLoad()
-        
+
         // Do any additional setup after loading the view.
         //table.delegate = self
         //table.dataSource = self
-        
+
         //fetch()
     }
-    
+
     func fetch() {
         let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
         let managedContext = appDelegate.managedObjectContext
-        
+
         //2
         let cliqueRequest = NSFetchRequest(entityName:"Clique")
-        
+
         //3
         do {
             cliques = try managedContext.executeFetchRequest(cliqueRequest) as! [NSManagedObject]
         } catch {
             print(error)
         }
-        
+
         table.reloadData()
         table.hidden = false
     }
@@ -85,7 +85,7 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
-    
+
     func test() {
         if #available(iOS 9.3, *) {
             print("hello???")
@@ -97,12 +97,12 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
                                 print(error)
                                 return
                             }
-                            
+
                             let trackID = "302053341"
                             let controller = MPMusicPlayerController.applicationMusicPlayer()
                             controller.setQueueWithStoreIDs([trackID])
                             controller.play()
-                            
+
                             self.presentViewController(UIAlertController(title: "RICK ROLL", message: "LOLOLOLOLOLOLOL", preferredStyle: .Alert), animated: true, completion: nil)
                         } else {
                             print("skcloudservicecapability status was not the good one")
@@ -117,33 +117,35 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             print("you shithead")
         }
     }
-    
+
     //MARK: - TableView Stack
-    
+
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
         if nowplaying {
             return 2
         }
         return 1
     }
-    
+
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
+        if nowplaying {
+            if section == 0 {
+                return 1
+            }
         }
-        return cliques.count
+        return cliques.isEmpty ? 1 : cliques.count
     }
-    
+
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("song")
-        
+
         if cliques.isEmpty {
             cell?.textLabel?.text = "You're not in any Cliques"
             cell?.detailTextLabel?.text = "Join a Clique or start a new one of your own!"
-            
+
             return cell!
         }
-        
+
         if indexPath.section == 0 && nowplaying {
             cell?.textLabel?.text = currentsong.song
             cell?.detailTextLabel?.text = currentsong.artist
@@ -156,7 +158,7 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             let widthScale = 40/(cell?.imageView?.image!.size.width)!
             let heightScale = 40/(cell?.imageView?.image!.size.height)!
             cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
-        
+
         } else {
             cell?.textLabel?.text = cliques[indexPath.row].valueForKey("name") as? String
             if cliques[indexPath.row].valueForKey("isLeader") as! Bool {
@@ -167,15 +169,15 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
                 cell?.detailTextLabel?.textColor = UIColor.lightGrayColor()
             }
         }
-        
+
         return cell!
     }
-    
+
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if cliques.isEmpty {
             return
         }
-        
+
         currentclique.id = cliques[indexPath.row].valueForKey("id") as! String
         currentclique.leader = cliques[indexPath.row].valueForKey("isLeader") as! Bool
         currentclique.name = cliques[indexPath.row].valueForKey("name") as! String
@@ -183,15 +185,15 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         currentclique.spotify = cliques[indexPath.row].valueForKey("spotify") as! Bool
         currentclique.applemusic = cliques[indexPath.row].valueForKey("applemusic") as! Bool
         currentclique.voting = cliques[indexPath.row].valueForKey("voting") as! Bool
-        
+
         //testing purposes only
         //currentclique.id = "56e78abf3cd0360300a44076"
-        currentclique.leader = true
-        
+        //currentclique.leader = true
+
         let vc = storyboard?.instantiateViewControllerWithIdentifier("clique")
         showViewController(vc!, sender: self)
     }
-    
+
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
         if nowplaying {
             if section == 0 {
@@ -200,15 +202,15 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
                 return "Cliques"
             }
         }
-        
+
         return "Cliques"
     }
-    
+
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
         let leaveAction = UITableViewRowAction(style: .Default, title: "Leave", handler: {(action, indexpath) in })
         leaveAction.backgroundColor = UIColor.redColor()
         leaveAction.backgroundEffect = .None
-        
+
         return [leaveAction]
     }
 

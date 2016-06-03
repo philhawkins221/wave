@@ -57,9 +57,10 @@ class JoinViewController: UIViewController {
                             newclique.setValue(false, forKey: "applemusic")
                             newclique.setValue(false, forKey: "spotify")
                             newclique.setValue(true, forKey: "voting")
-
+                            
                             //finish up
                             passed = true
+                            appDelegate.saveContext()
                             self.dismissViewControllerAnimated(true, completion: nil)
 
                             break

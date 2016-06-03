@@ -325,6 +325,7 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
     
     @IBAction func done(sender: AnyObject) {
         self.dismissViewControllerAnimated(true, completion: nil)
+        fetch()
     }
     
     @IBAction func sortby(sender: AnyObject) {

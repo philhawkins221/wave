@@ -92,7 +92,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 return
             }
             let json = JSON(data: data!)
-            self.title = json["name"].stringValue
+            dispatch_async(dispatch_get_main_queue(), { self.title = json["name"].stringValue })
             
             let list = json["songList"].array ?? []
             
@@ -135,7 +135,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
             }
             
-            result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) ?? ""
+            result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
             return result
         }
         
@@ -199,29 +199,32 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("song")
+        let cell = tableView.dequeueReusableCellWithIdentifier("song") as? CliqueSongTableViewCell
         
         if indexPath.section != 0 {
             
             if clique.isEmpty {
                 cell?.textLabel?.text = "Clique is Empty"
                 cell?.detailTextLabel?.text = "Press the add button below to start listening"
+                cell?.voteslabel.text = ""
                 
                 return cell!
             }
             
             cell?.textLabel?.text = clique[indexPath.row].song
             cell?.detailTextLabel?.text = clique[indexPath.row].artist
+            cell?.voteslabel.text = clique[indexPath.row].votes.description
             if clique[indexPath.row].artwork != nil {
-                cell?.imageView?.sd_setImageWithURL(NSURL(string: clique[indexPath.row].artwork!))
+                cell?.imageView?.sd_setImageWithURL(NSURL(string: clique[indexPath.row].artwork!), placeholderImage: UIImage(named: "genericart.png")!)
             } else {
                 cell?.imageView?.image = UIImage(named: "genericart.png")
             }
         } else { //TODO: - get current song, maybe do this in fetch()
             cell?.textLabel?.text = currentSong.name
             cell?.detailTextLabel?.text = currentSong.artist
+            cell?.voteslabel.text = ""
             if currentsong.artwork != nil {
-                cell?.imageView?.sd_setImageWithURL(NSURL(string: currentsong.artwork!))
+                cell?.imageView?.sd_setImageWithURL(NSURL(string: currentsong.artwork!), placeholderImage: UIImage(named: "genericart.png")!)
             } else {
                 cell?.imageView?.image = UIImage(named: "genericart.png")
             }
@@ -240,11 +243,20 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
             cell?.accessoryType = .DisclosureIndicator
         }
         
+        if privatelistening {
+            cell?.voteslabel.text = ""
+        }
+        
         return cell!
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        
+        if indexPath.section == 0 {
+            if currentclique.leader {
+                let player = storyboard?.instantiateViewControllerWithIdentifier("player")
+                presentViewController(player!, animated: true, completion: nil)
+            }
+        }
     }
     
     func tableView(tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -258,7 +270,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        if indexPath.section == 0 {
+        if indexPath.section == 0 || privatelistening {
             return nil
         }
         
@@ -272,6 +284,9 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/upvote", parameters: p, encoding: .JSON)
                 
                 self.clique[indexPath.row].voting_available = false
+                self.clique[indexPath.row].votes += 1
+                self.table.setEditing(false, animated: false)
+                self.table.reloadData()
             }
         })
         
@@ -285,16 +300,19 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/downvote", parameters: p, encoding: .JSON)
                 
                 self.clique[indexPath.row].voting_available = false
+                self.clique[indexPath.row].votes -= 1
+                self.table.setEditing(false, animated: true)
+                self.table.reloadData()
             }
         })
         
         let votes = UITableViewRowAction(style: .Default, title: clique[indexPath.row].votes.description, handler: {(action, indexpath) in })
         
-        upvote.backgroundColor = UIColor.greenColor()
+        upvote.backgroundColor = UIColor(red: 0, green: 147/255, blue: 0, alpha: 1)
         votes.backgroundColor = UIColor.grayColor()
         downvote.backgroundColor = UIColor.redColor()
         
-        return [upvote, votes, downvote]
+        return [upvote, downvote]
     }
     
     @IBAction func addTouched(sender: AnyObject) {

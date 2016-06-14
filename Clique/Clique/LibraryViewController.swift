@@ -47,7 +47,7 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
         table.dataSource = self
         
         table.sectionIndexBackgroundColor = UIColor.clearColor()
-        search.searchBar.tintColor = UIColor.orangeColor()
+        search.searchBar.tintColor = self.view.window?.tintColor
         
         viewer.delegate = self
         viewer.allowsPickingMultipleItems = true
@@ -325,6 +325,10 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
     }
     
     @IBAction func done(sender: AnyObject) {
+        if search.active {
+            search.dismissViewControllerAnimated(true, completion: nil)
+        }
+        
         self.dismissViewControllerAnimated(true, completion: nil)
         fetch()
     }

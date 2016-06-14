@@ -14,6 +14,12 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
 
     var clique = [(song: String, artist: String, artwork: String?, votes: Int, voting_available: Bool)]()
     @IBOutlet weak var table: UITableView!
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        fetch()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -48,53 +54,40 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         print("fetching")
         clique.removeAll()
         
+        var prime = [(song: String, artist: String, artwork: String?, votes: Int)]()
+        var song = ""
+        var artist = ""
+        var votes = 0
+        
         Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { response in
             switch response.result {
             case .Success:
                 if let value = response.result.value {
-                    _ = JSON(value)
+                    let json = JSON(value)
+                    
+                    let list = json["songList"].array ?? []
+                    
+                    for item in list {
+                        if !item["played"].boolValue {
+                            continue
+                        }
+                        
+                        song = item["name"].string ?? "No Title"
+                        artist = item["artist"].string ?? "No Artist"
+                        votes = item["votes"].int ?? 0
+                        
+                        prime.append((song, artist, nil, votes))
+                    }
+                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.spotifetch(prime)
+                    })
                 }
             case .Failure(let error):
                 print(error)
             }
         }
         
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        var prime = [(song: String, artist: String, artwork: String?, votes: Int)]()
-        var song = ""
-        var artist = ""
-        var votes = 0
-        
-        //step 1: pull the next song - get the stored artist and song name
-        session.dataTaskWithURL(NSURL(string: "https://clique2016.herokuapp.com/playlists/" + currentclique.id)!, completionHandler: {(data, response, error) in
-            if data == nil {
-                print("no data")
-                return
-            }
-            let json = JSON(data: data!)
-            
-            let list = json["songList"].array ?? []
-            
-            for item in list {
-                if !item["played"].boolValue {
-                    continue
-                }
-                
-                song = item["name"].string ?? "No Title"
-                artist = item["artist"].string ?? "No Artist"
-                votes = item["votes"].int ?? 0
-                
-                prime.append((song, artist, nil, votes))
-                
-                if prime.count >= 20 {
-                    break
-                }
-            }
-            
-            dispatch_async(dispatch_get_main_queue(), {
-                self.spotifetch(prime)
-            })
-        }).resume()
     }
     
     func spotifetch(prime: [(song: String, artist: String, artwork: String?, votes: Int)]) {
@@ -109,7 +102,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 }
             }
             
-            result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) ?? ""
+            result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
             return result
         }
         
@@ -180,7 +173,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             cell?.textLabel?.text = clique[indexPath.row].song
             cell?.detailTextLabel?.text = clique[indexPath.row].artist
             if clique[indexPath.row].artwork != nil {
-                cell?.imageView?.sd_setImageWithURL(NSURL(string: clique[indexPath.row].artwork!))
+                cell?.imageView?.sd_setImageWithURL(NSURL(string: clique[indexPath.row].artwork!), placeholderImage: UIImage(named: "genericart.png")!)
             } else {
                 cell?.imageView?.image = UIImage(named: "genericart.png")
             }

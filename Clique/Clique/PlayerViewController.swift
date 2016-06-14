@@ -128,11 +128,11 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         })
         
         rewindbutton.enabled = true
-        rewindbutton.tintColor = view.window?.tintColor
+        //rewindbutton.tintColor = view.window?.tintColor
         playbutton.enabled = true
-        playbutton.tintColor = view.window?.tintColor
+        //playbutton.tintColor = view.window?.tintColor
         fastforwardbutton.enabled = true
-        fastforwardbutton.tintColor = view.window?.tintColor
+        //fastforwardbutton.tintColor = view.window?.tintColor
     }
     
     func ytprepare() {

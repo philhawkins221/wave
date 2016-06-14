@@ -41,7 +41,7 @@ class AppleMusicViewController: UIViewController, UITableViewDelegate, UITableVi
             }
         }
         
-        result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) ?? ""
+        result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
         return result
     }
     
@@ -103,7 +103,7 @@ class AppleMusicViewController: UIViewController, UITableViewDelegate, UITableVi
         
         cell?.textLabel?.text = results[indexPath.row].song
         cell?.detailTextLabel?.text = results[indexPath.row].artist
-        cell?.imageView?.sd_setImageWithURL(NSURL(string: results[indexPath.row].album))
+        cell?.imageView?.sd_setImageWithURL(NSURL(string: results[indexPath.row].album), placeholderImage: UIImage(named: "genericart.png")!)
         
         if cell?.imageView?.image != nil {
             let widthScale = 50/(cell?.imageView?.image!.size.width)!

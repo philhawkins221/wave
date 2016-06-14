@@ -97,9 +97,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
         }
         
         switch emptydirective {
-        case .nothing: emptytable.selectRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), animated: true, scrollPosition: .None)
-        case .library: emptytable.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), animated: true, scrollPosition: .None)
-        case .magic: emptytable.selectRowAtIndexPath(NSIndexPath(forRow: 1, inSection: 0), animated: true, scrollPosition: .None)
+        case .nothing: tableView(emptytable, didSelectRowAtIndexPath: NSIndexPath(forRow: 0, inSection: 0))
+        case .library: tableView(emptytable, didSelectRowAtIndexPath: NSIndexPath(forRow: 1, inSection: 0))
+        case .magic: tableView(emptytable, didSelectRowAtIndexPath: NSIndexPath(forRow: 2, inSection: 0))
         }
     }
 

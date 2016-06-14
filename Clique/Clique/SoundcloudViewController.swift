@@ -39,7 +39,7 @@ class SoundcloudViewController: UIViewController, UITableViewDataSource, UITable
             }
         }
         
-        result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) ?? ""
+        result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
         return result
     }
     

@@ -201,8 +201,9 @@ exports.upvote = function(req, res) {
                 console.log('Error upvoting song: ' + err);
                 res.send(err);
             } else {
-                result.songList.forEach(function(item) {
-                    if ((item.name == song.name && item.artist == song.artist) && !item.played) {
+                //result.songList.forEach(function(item) {
+                for (item in result.songList) {
+                    if ((item.name == song.name.toLowerCase() && item.artist.toLowerCase() == song.artist.toLowerCase()) && !item.played) {
                         console.log("Found " + item.name);
                         if (item.votes === undefined) {
                             item.votes = 0;
@@ -233,8 +234,9 @@ exports.downvote = function(req, res) {
                 console.log('Error upvoting song: ' + err);
                 res.send(err);
             } else {
-                result.songList.forEach(function(item) {
-                    if ((item.name == song.name && item.artist == song.artist) && !item.played) {
+                //result.songList.forEach(function(item) {
+                for (item in result.songList) {
+                    if ((item.name.toLowerCase() == song.name.toLowerCase() && item.artist.toLowerCase() == song.artist.toLowerCase()) && !item.played) {
                         console.log("Found " + item.name);
                         if (item.votes === undefined) {
                             item.votes = 0;

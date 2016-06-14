@@ -215,7 +215,7 @@ exports.upvote = function(req, res) {
                         break;
                     }
 
-                });
+                }
                 if (found == false) {
                     res.send(404);
                 }
@@ -248,7 +248,7 @@ exports.downvote = function(req, res) {
                         break;
                     }
 
-                });
+                }
                 if (found == false) {
                     res.send(404);
                 }

@@ -203,7 +203,7 @@ exports.upvote = function(req, res) {
             } else {
                 result.songList.forEach(function(item) {
                 //for (item in result.songList) {
-                    if ((item.name == song.name.toLowerCase() && item.artist.toLowerCase() == song.artist.toLowerCase()) && (!item.played && !found)) {
+                    if ((item.name.toLowerCase() == song.name.toLowerCase() && item.artist.toLowerCase() == song.artist.toLowerCase()) && (!item.played && !found)) {
                         console.log("Found " + item.name);
                         if (item.votes === undefined) {
                             item.votes = 0;

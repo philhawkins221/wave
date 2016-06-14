@@ -1,6 +1,0 @@
-framework module NPWaveformView {
-  umbrella header "NPWaveformView-umbrella.h"
-
-  export *
-  module * { export * }
-}

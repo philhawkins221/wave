@@ -10,7 +10,6 @@ import UIKit
 import XCDYouTubeKit
 import SDWebImage
 import SVGPlayButton
-import NPWaveformView
 
 //var tracktype: tracktypes = .isinactive
 
@@ -129,8 +128,11 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         })
         
         rewindbutton.enabled = true
+        rewindbutton.tintColor = view.window?.tintColor
         playbutton.enabled = true
+        playbutton.tintColor = view.window?.tintColor
         fastforwardbutton.enabled = true
+        fastforwardbutton.tintColor = view.window?.tintColor
     }
     
     func ytprepare() {
@@ -178,7 +180,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     
     @IBAction func backButton(sender: AnyObject) {
         if PlayerManager.sharedInstance().tracktype == .isyoutube {
-            let warning = UIAlertController(title: "Warning", message: "Leaving the Player while a YouTube link is playing will stop playback", preferredStyle: .ActionSheet)
+            let warning = UIAlertController(title: "Warning", message: "Leaving the Player while a YouTube link is playing may stop playback", preferredStyle: .ActionSheet)
             warning.addAction(UIAlertAction(title: "Leave Anyways", style: UIAlertActionStyle.Destructive, handler: {action in self.dismissViewControllerAnimated(true, completion: nil)}))
             warning.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: {action in }))
             self.showViewController(warning, sender: self)

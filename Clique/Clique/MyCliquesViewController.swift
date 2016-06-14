@@ -26,6 +26,10 @@ extension String {
 var scClientID = "2c9d9d500b26f5a1ae7661215c5b4e1c"
 var scClientSecret = "1745f37d41a47591147470a84acda2c5"
 
+var privatelistening = false
+
+let blue = UIColor(red: 20/255, green: 154/255, blue: 233/255, alpha: 1)
+
 import UIKit
 import CoreData
 import StoreKit
@@ -38,6 +42,8 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
 
     var cliques = [NSManagedObject]()
     @IBOutlet weak var table: UITableView!
+    @IBOutlet weak var listeningbutton: UIButton!
+    @IBOutlet weak var joinbutton: UIBarButtonItem!
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
@@ -45,6 +51,24 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         table.delegate = self
         table.dataSource = self
         table.hidden = true
+        
+        if privatelistening {
+            joinbutton.title = ""
+            joinbutton.enabled = false
+            
+            listeningbutton.setTitle("Public Listening", forState: .Normal)
+            listeningbutton.backgroundColor = UIColor.orangeColor()
+            
+            title = "My Playlists"
+        } else {
+            joinbutton.title = "Join"
+            joinbutton.enabled = true
+            
+            listeningbutton.setTitle("Private Listening", forState: .Normal)
+            listeningbutton.backgroundColor = blue
+            
+            title = "My Cliques"
+        }
 
         fetch()
 
@@ -68,8 +92,13 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         let managedContext = appDelegate.managedObjectContext
 
         //2
-        let cliqueRequest = NSFetchRequest(entityName:"Clique")
-
+        let cliqueRequest: NSFetchRequest
+        if privatelistening {
+            cliqueRequest = NSFetchRequest(entityName: "Playlist")
+        } else {
+            cliqueRequest = NSFetchRequest(entityName:"Clique")
+        }
+        
         //3
         do {
             cliques = try managedContext.executeFetchRequest(cliqueRequest) as! [NSManagedObject]
@@ -79,6 +108,13 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
 
         table.reloadData()
         table.hidden = false
+        
+        if cliques.isEmpty && privatelistening {
+            let help = UIAlertController(title: "Me, Myself, and I...", message: "In Private Listening, only you can see songs that are playing and add to Up Next.", preferredStyle: .Alert)
+            help.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+            
+            presentViewController(help, animated: true, completion: nil)
+        }
     }
 
     override func didReceiveMemoryWarning() {
@@ -140,9 +176,16 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         let cell = tableView.dequeueReusableCellWithIdentifier("song")
 
         if cliques.isEmpty {
-            cell?.textLabel?.text = "You're not in any Cliques"
-            cell?.detailTextLabel?.text = "Join a Clique or start a new one of your own!"
-
+            if privatelistening {
+                cell?.textLabel?.text = "You don't have any playlists"
+                cell?.detailTextLabel?.text = "Tap the New button to make a playlist"
+            } else {
+                cell?.textLabel?.text = "You're not in any Cliques"
+                cell?.detailTextLabel?.text = "Join a Clique or start a new one of your own!"
+            }
+            
+            cell?.detailTextLabel?.textColor = UIColor.blackColor()
+            
             return cell!
         }
 
@@ -163,11 +206,12 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             cell?.textLabel?.text = cliques[indexPath.row].valueForKey("name") as? String
             if cliques[indexPath.row].valueForKey("isLeader") as! Bool {
                 cell?.detailTextLabel?.text = "Leader"
-                cell?.detailTextLabel?.textColor = UIColor.orangeColor()
+                cell?.detailTextLabel?.textColor = view.window?.tintColor
             } else {
                 cell?.detailTextLabel?.text = "Member"
                 cell?.detailTextLabel?.textColor = UIColor.lightGrayColor()
             }
+            cell?.imageView?.image = nil
         }
 
         return cell!
@@ -185,6 +229,8 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         currentclique.spotify = cliques[indexPath.row].valueForKey("spotify") as! Bool
         currentclique.applemusic = cliques[indexPath.row].valueForKey("applemusic") as! Bool
         currentclique.voting = cliques[indexPath.row].valueForKey("voting") as! Bool
+        
+        PlayerManager.sharedInstance().library.removeAll()
 
         //testing purposes only
         //currentclique.id = "56e78abf3cd0360300a44076"
@@ -207,12 +253,42 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let leaveAction = UITableViewRowAction(style: .Default, title: "Leave", handler: {(action, indexpath) in })
+        let leaveAction = UITableViewRowAction(style: .Default, title: "Leave", handler: {[unowned self](action, indexpath) in
+            
+            //delete from store
+            (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext.deleteObject(self.cliques[indexPath.row])
+            
+            
+            //remove from table
+            //self.table.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            
+            //remove from array
+            self.cliques.removeAtIndex(indexPath.row)
+            
+            self.fetch()
+            
+            
+        })
         leaveAction.backgroundColor = UIColor.redColor()
         leaveAction.backgroundEffect = .None
 
         return [leaveAction]
     }
+    
+    @IBAction func listeningchange(sender: AnyObject) {
+        privatelistening = !privatelistening
+        
+        if privatelistening {
+            //UIApplication.sharedApplication().keyWindow?.tintColor = blue
+            self.view.window?.tintColor = blue
+        } else {
+            //UIApplication.sharedApplication().keyWindow?.tintColor = UIColor.orangeColor()
+            self.view.window?.tintColor = UIColor.orangeColor()
+        }
+        
+        viewWillAppear(true)
+    }
+    
 
     /*
     // MARK: - Navigation

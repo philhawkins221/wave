@@ -9,6 +9,7 @@
 import UIKit
 import Alamofire
 import SwiftyJSON
+import CoreData
 
 var creatingnewclique = false
 
@@ -16,6 +17,14 @@ class NewCliqueViewController: UIViewController {
 
     @IBOutlet weak var namefield: UITextField!
     @IBOutlet weak var passcodefield: UITextField!
+    
+    override func viewWillAppear(animated: Bool) {
+        if privatelistening {
+            passcodefield.enabled = false
+            passcodefield.hidden = true
+            passcodefield.text = "none"
+        }
+    }
     
     override func viewDidLoad() {
         super.viewDidLoad()
@@ -30,6 +39,41 @@ class NewCliqueViewController: UIViewController {
     }
     
     @IBAction func create(sender: AnyObject) {
+        if privatelistening {
+            if namefield.text == "" || passcodefield.text == "" {
+                let nope = UIAlertController(title: "Entry Required", message: "The fields cannot be left empty.", preferredStyle: .Alert)
+                nope.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+                
+                presentViewController(nope, animated: true, completion: nil)
+                return
+            }
+            
+            var playlists = [NSManagedObject]()
+            do {
+                playlists = try (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext.executeFetchRequest(NSFetchRequest(entityName: "Playlist")) as! [NSManagedObject]
+            } catch {
+                print(error)
+            }
+            
+            let playlistnames = playlists.map({ $0.valueForKey("name") as! String })
+            
+            if playlistnames.contains(self.namefield.text!) {
+                let nope = UIAlertController(title: "Playlist Already Exists", message: "Please choose a new name for your playlist and try again.", preferredStyle: .Alert)
+                nope.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+                
+                dispatch_async(dispatch_get_main_queue(), { self.presentViewController(nope, animated: true, completion: nil) })
+                return
+            } else {
+                currentclique = ("", true, self.namefield.text!, self.passcodefield.text!, false, false, true)
+                
+                creatingnewclique = true
+                let settings = self.storyboard?.instantiateViewControllerWithIdentifier("settingsnav")
+                dispatch_async(dispatch_get_main_queue(), { self.presentViewController(settings!, animated: true, completion: nil) })
+            }
+            
+            return
+        }
+        
         if namefield.text == "" || passcodefield.text == "" {
             let nope = UIAlertController(title: "Entry Required", message: "The Clique name and passcode fields cannot be left empty.", preferredStyle: .Alert)
             nope.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))

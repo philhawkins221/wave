@@ -19,16 +19,6 @@
 			<key>isShown</key>
 			<false/>
 		</dict>
-		<key>NPWaveformView-NPWaveformView.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
-		<key>NPWaveformView.xcscheme</key>
-		<dict>
-			<key>isShown</key>
-			<false/>
-		</dict>
 		<key>Pods.xcscheme</key>
 		<dict>
 			<key>isShown</key>
@@ -72,22 +62,32 @@
 	</dict>
 	<key>SuppressBuildableAutocreation</key>
 	<dict>
-		<key>297F676E248550343F991A0C951E7841</key>
+		<key>135825F446FA2A233272CA0A47E0C725</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>329DBCE20A9C4421254D7239FBB18E68</key>
+		<key>150ACEBAB80AD25B98ECD579617B529C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>60ADAB28239B775A69EF6DBF23D92603</key>
+		<key>249C8528DC4B2811344B13ED9792377E</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>6D57316CBA55CEE2101CB588EEFC0A38</key>
+		<key>271C817AF80419E3CABFF19DE86CB3C8</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3221D9ACE24351E58210C667EAF458A2</key>
+		<dict>
+			<key>primary</key>
+			<true/>
+		</dict>
+		<key>3597F381A72360F51DA01332CF70622F</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -97,12 +97,7 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>7E1339680285DA86DA1943C8B6490BF9</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>8EBE88A8CC2CDAD06F3F6505456D74CC</key>
+		<key>7A615E42BCC871955CDB9722E8B67D5C</key>
 		<dict>
 			<key>primary</key>
 			<true/>
@@ -112,27 +107,12 @@
 			<key>primary</key>
 			<true/>
 		</dict>
-		<key>B37442D687CFF0BAE7A2FD48C81ABCEE</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C062526D9F2C9E732AB1CB0B65B4A5B3</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>C06A37439165C88CD7FEF16C2D2F385D</key>
+		<key>BF34C8F7F9663433A2A6F1BEA376F730</key>
 		<dict>
 			<key>primary</key>
 			<true/>
 		</dict>
 		<key>E0DDE27ED43A087CB3CBFA5C2860125A</key>
-		<dict>
-			<key>primary</key>
-			<true/>
-		</dict>
-		<key>E816562A9177BBDE2A0F04CDFF5FCEAA</key>
 		<dict>
 			<key>primary</key>
 			<true/>

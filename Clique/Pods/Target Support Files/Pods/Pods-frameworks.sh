@@ -86,7 +86,6 @@ strip_invalid_archs() {
 if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/OnePasswordExtension.framework"
   install_framework "Pods/Alamofire.framework"
-  install_framework "Pods/NPWaveformView.framework"
   install_framework "Pods/SDWebImage.framework"
   install_framework "Pods/SVGPlayButton.framework"
   install_framework "Pods/Soundcloud.framework"
@@ -97,7 +96,6 @@ fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/OnePasswordExtension.framework"
   install_framework "Pods/Alamofire.framework"
-  install_framework "Pods/NPWaveformView.framework"
   install_framework "Pods/SDWebImage.framework"
   install_framework "Pods/SVGPlayButton.framework"
   install_framework "Pods/Soundcloud.framework"

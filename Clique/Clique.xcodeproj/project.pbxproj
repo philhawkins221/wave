@@ -37,6 +37,8 @@
 		4AC3EF391C7E65800013EEFF /* player with youtube helper in Resources */ = {isa = PBXBuildFile; fileRef = 4AC3EF381C7E65800013EEFF /* player with youtube helper */; };
 		4AC3EF3B1C7E95970013EEFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC3EF3A1C7E95970013EEFF /* AVFoundation.framework */; };
 		4ACEF1F11CC7E82D0066EBFD /* JoinViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4ACEF1F01CC7E82D0066EBFD /* JoinViewController.swift */; };
+		4ADF95E51D026D6800E0CD19 /* clique 120.png in Resources */ = {isa = PBXBuildFile; fileRef = 4ADF95E31D026D6800E0CD19 /* clique 120.png */; };
+		4ADF95E61D026D6800E0CD19 /* clique 180.png in Resources */ = {isa = PBXBuildFile; fileRef = 4ADF95E41D026D6800E0CD19 /* clique 180.png */; };
 		4AFCD3521CEFB09600E5E9B1 /* AppleMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */; };
 		4AFCD3541CEFB17D00E5E9B1 /* SoundcloudViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */; };
 		6206BB4708092D4AC7A802A8 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04BB775530468DBA34B218CB /* Pods.framework */; };
@@ -79,6 +81,9 @@
 		4AC3EF381C7E65800013EEFF /* player with youtube helper */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = text; path = "player with youtube helper"; sourceTree = "<group>"; };
 		4AC3EF3A1C7E95970013EEFF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
 		4ACEF1F01CC7E82D0066EBFD /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
+		4ADF95E31D026D6800E0CD19 /* clique 120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 120.png"; sourceTree = "<group>"; };
+		4ADF95E41D026D6800E0CD19 /* clique 180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 180.png"; sourceTree = "<group>"; };
+		4ADF95E71D0278B100E0CD19 /* NPWaveformView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NPWaveformView.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Clique-fnnueyevesucevdvxxjsesornipt/Build/Products/Debug-iphoneos/NPWaveformView.framework"; sourceTree = "<group>"; };
 		4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicViewController.swift; sourceTree = "<group>"; };
 		4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundcloudViewController.swift; sourceTree = "<group>"; };
 /* End PBXFileReference section */
@@ -146,6 +151,8 @@
 				4AC3CA081C4ACE7400D5BCCA /* MyCliquesViewController.swift */,
 				4AC3C9FB1C4ACCB700D5BCCA /* Assets.xcassets */,
 				4AC3C9FD1C4ACCB700D5BCCA /* LaunchScreen.storyboard */,
+				4ADF95E31D026D6800E0CD19 /* clique 120.png */,
+				4ADF95E41D026D6800E0CD19 /* clique 180.png */,
 				4AC3CA001C4ACCB700D5BCCA /* Info.plist */,
 				4AC3C9F81C4ACCB700D5BCCA /* Clique.xcdatamodeld */,
 				4AC3EF381C7E65800013EEFF /* player with youtube helper */,
@@ -166,6 +173,7 @@
 		E984A4FC6EC0F95028B54D07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
+				4ADF95E71D0278B100E0CD19 /* NPWaveformView.framework */,
 				4A67C2A01CFE750B00C1D331 /* SVGPlayButton.framework */,
 				4A5A5B671CE1685A00BD2F5F /* Spotify.framework */,
 				4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */,
@@ -240,11 +248,13 @@
 			files = (
 				4AC3C9FF1C4ACCB700D5BCCA /* LaunchScreen.storyboard in Resources */,
 				4A2B670C1C501AB700681F70 /* genericart.png in Resources */,
+				4ADF95E61D026D6800E0CD19 /* clique 180.png in Resources */,
 				4A179AFF1D00C64100B6EE20 /* youtube logo.png in Resources */,
 				4A179AFD1D00C64100B6EE20 /* soundcloud logo.gif in Resources */,
 				4AC3C9FC1C4ACCB700D5BCCA /* Assets.xcassets in Resources */,
 				4A179AFC1D00C64100B6EE20 /* apple music logo.jpg in Resources */,
 				4AC3EF391C7E65800013EEFF /* player with youtube helper in Resources */,
+				4ADF95E51D026D6800E0CD19 /* clique 120.png in Resources */,
 				4A179AFE1D00C64100B6EE20 /* spotify logo.jpg in Resources */,
 				4AC3C9F71C4ACCB700D5BCCA /* Main.storyboard in Resources */,
 			);
@@ -472,10 +482,11 @@
 					"\"XCDYouTubeKit\"",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = phil.Clique;
+				PRODUCT_BUNDLE_IDENTIFIER = com.phil.Clique;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Clique/Clique-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Debug;
 		};
@@ -511,10 +522,11 @@
 					"\"XCDYouTubeKit\"",
 					"-ObjC",
 				);
-				PRODUCT_BUNDLE_IDENTIFIER = phil.Clique;
+				PRODUCT_BUNDLE_IDENTIFIER = com.phil.Clique;
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE = "";
 				SWIFT_OBJC_BRIDGING_HEADER = "$(SRCROOT)/Clique/Clique-Bridging-Header.h";
+				TARGETED_DEVICE_FAMILY = 1;
 			};
 			name = Release;
 		};

@@ -117,15 +117,15 @@
                             </tableView>
                             <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTh-xV-5Z9">
                                 <rect key="frame" x="172" y="562" width="256" height="30"/>
-                                <color key="backgroundColor" white="0.66666666666666663" alpha="1" colorSpace="calibratedWhite"/>
+                                <color key="backgroundColor" red="0.078431372550000003" green="0.60392156860000001" blue="0.91372549020000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
                                     <constraint firstAttribute="width" constant="256" id="Kd4-sp-IC1"/>
                                 </constraints>
-                                <state key="normal" title="Join">
+                                <state key="normal" title="Private Listening">
                                     <color key="titleColor" red="0.93725490199999995" green="0.93725490199999995" blue="0.95686274510000002" alpha="1" colorSpace="calibratedRGB"/>
                                 </state>
                                 <connections>
-                                    <segue destination="tHn-C8-gVj" kind="presentation" modalTransitionStyle="coverVertical" id="e9e-He-N6C"/>
+                                    <action selector="listeningchange:" destination="BYZ-38-t0r" eventType="touchUpInside" id="dUL-Bs-lIo"/>
                                 </connections>
                             </button>
                         </subviews>
@@ -140,7 +140,12 @@
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="My Cliques" id="WkN-jW-eE1">
-                        <barButtonItem key="backBarButtonItem" title="My Cliques" id="Uzu-EA-9qE"/>
+                        <barButtonItem key="backBarButtonItem" title="Back" id="Uzu-EA-9qE"/>
+                        <barButtonItem key="leftBarButtonItem" title="Join" id="z1D-Si-Iac">
+                            <connections>
+                                <segue destination="tHn-C8-gVj" kind="presentation" modalTransitionStyle="coverVertical" id="U2H-Bh-K3e"/>
+                            </connections>
+                        </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="gIT-ft-BWX">
                             <connections>
                                 <segue destination="qXf-CU-1Nc" kind="presentation" modalTransitionStyle="coverVertical" id="gBW-IN-QAm"/>
@@ -148,6 +153,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="joinbutton" destination="z1D-Si-Iac" id="YhU-jF-Oge"/>
+                        <outlet property="listeningbutton" destination="FTh-xV-5Z9" id="Yb2-xq-2p8"/>
                         <outlet property="table" destination="amT-2p-d8g" id="bNx-XO-qA0"/>
                     </connections>
                 </viewController>
@@ -235,9 +242,6 @@
                                 <userDefinedRuntimeAttributes>
                                     <userDefinedRuntimeAttribute type="boolean" keyPath="playing" value="YES"/>
                                     <userDefinedRuntimeAttribute type="color" keyPath="progressColor">
-                                        <color key="value" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
-                                    </userDefinedRuntimeAttribute>
-                                    <userDefinedRuntimeAttribute type="color" keyPath="playColor">
                                         <color key="value" red="0.0" green="0.47843137250000001" blue="1" alpha="1" colorSpace="calibratedRGB"/>
                                     </userDefinedRuntimeAttribute>
                                     <userDefinedRuntimeAttribute type="color" keyPath="pauseColor">
@@ -952,8 +956,9 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="Allow Clique members to upvote or downvote upcoming songs in the Clique. Songs with the most votes will be played first." lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ttg-Wm-6Xi">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="Ttg-Wm-6Xi">
                                 <rect key="frame" x="20" y="211" width="560" height="24"/>
+                                <string key="text">Allow Clique members to upvote or downvote upcoming songs in the Clique. A song's vote count can be seen in the Up Next section.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="10"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
@@ -1417,7 +1422,6 @@
                             </toolbar>
                             <view contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="0bF-JH-Bdm" customClass="MPVolumeView">
                                 <rect key="frame" x="20" y="496" width="560" height="47"/>
-                                <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="calibratedWhite"/>
                             </view>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>

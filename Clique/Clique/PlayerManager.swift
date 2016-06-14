@@ -31,7 +31,7 @@ class PlayerManager {
     
     var system: MPMusicPlayerController
     var spot: SPTAudioStreamingController
-    var spotmanager: NSObject
+    var spotmanager: SPTAudioStreamingPlaybackDelegate
     var tracktype: tracktypes
     var library: [(song: [String : AnyObject], played: Bool)]
     var autoplaying: Bool
@@ -57,7 +57,7 @@ class PlayerManager {
         amid = String()
         scid = String()
         
-        spot.playbackDelegate = spotmanager as! SPTAudioStreamingPlaybackDelegate
+        spot.playbackDelegate = spotmanager
     }
     
     static func sharedInstance() -> PlayerManager {
@@ -294,7 +294,7 @@ class PlayerManager {
         system.beginGeneratingPlaybackNotifications()
     }
     
-    func empty() {
+    private func empty() {
         switch emptydirective {
         case .nothing:
             self.tracktype = .isinactive
@@ -392,9 +392,15 @@ class SpotifyManager: NSObject, SPTAudioStreamingPlaybackDelegate {
     //MARK: - Spotify Player Stack
     
     func audioStreaming(audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: NSURL!) {
-        if trackUri == PlayerManager.sharedInstance().spid {
+        print("did stop playing:", trackUri)
+        //if trackUri == PlayerManager.sharedInstance().spid {
             PlayerManager.sharedInstance().fetch()
-        }
+        //}
+    }
+    
+    func audioStreamingDidBecomeInactivePlaybackDevice(audioStreaming: SPTAudioStreamingController!) {
+        print("spotify did become inactive")
+        PlayerManager.sharedInstance().fetch()
     }
 
 }

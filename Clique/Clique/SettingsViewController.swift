@@ -86,7 +86,14 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             newclosebutton.enabled = true
             donebutton.title = "Create"
             
-            self.title = "New Clique Settings"
+            self.title = currentclique.name + " Settings"
+            
+            let type = privatelistening ? "Playlist" : "Clique"
+            
+            let newalert = UIAlertController(title: "New " + type + " Settings", message: "Review and adjust these settings appropriately before creating the " + type + ".", preferredStyle: .Alert)
+            newalert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+            
+            presentViewController(newalert, animated: true, completion: nil)
         }
         
         switch emptydirective {
@@ -260,52 +267,53 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
 
     @IBAction func done(sender: AnyObject) {
         if donebutton.title == "Create" {
-            Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/").responseJSON { [unowned self] response in
-                switch response.result {
-                case .Success:
-                    if let value = response.result.value {
-                        let json = JSON(value)
-                        
-                        var ids = [String]()
-                        
-                        for clique in json.array ?? [] {
-                            ids.append(clique["name"].stringValue)
-                        }
-                        
-                        let chars = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9", "a", "b", "c", "d", "e", "f"]
-                        var newid = ""
-                        
-                        repeat {
-                            newid = ""
-                            for _ in 0..<24 {
-                                newid += chars[Int(arc4random_uniform(16))]
+            
+            let newclique: [String : AnyObject] = [
+                "name": currentclique.name,
+                "passcode": currentclique.passcode,
+                "currentSong": "",
+                "artist": "",
+                "voting": currentclique.voting,
+                "applemusic": currentclique.applemusic,
+                "spotify": currentclique.spotify,
+                "library": [],
+                "songList": []
+            ]
+            
+            Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/", parameters: newclique, encoding: .JSON).response { (request, response, data, error) in
+                
+                Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/").responseJSON { [weak self] response in
+                    
+                    switch response.result {
+                    case .Success:
+                        if let value = response.result.value {
+                            let json = JSON(value)
+                            
+                            //get new clique id
+                            for clique in json.array ?? [] {
+                                if clique["name"].string ?? "" == currentclique.name {
+                                    currentclique.id = clique["_id"].stringValue
+                                    print("new id:", currentclique.id)
+                                    
+                                    break
+                                }
                             }
-                        } while ids.contains(newid)
-                        
-                        currentclique.id = newid
-                        
-                        let newclique: [String : AnyObject] = [
-                            "_id": currentclique.id,
-                            "name": currentclique.name,
-                            "passcode": currentclique.passcode,
-                            "currentSong": "",
-                            "artist": "",
-                            "voting": currentclique.voting,
-                            "applemusic": currentclique.applemusic,
-                            "spotify": currentclique.spotify,
-                            "library": [],
-                            "songList": []
-                        ]
-                        
-                        Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/", parameters: newclique, encoding: .JSON).responseJSON { response in
+                            
                             //save new clique
                             //1
                             let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
                             let managedContext = appDelegate.managedObjectContext
                             
                             //2
-                            let entity =  NSEntityDescription.entityForName("Clique", inManagedObjectContext: managedContext)
-                            let newclique = NSManagedObject(entity: entity!, insertIntoManagedObjectContext:managedContext)
+                            var entity = NSEntityDescription()
+                            
+                            if privatelistening {
+                                entity = NSEntityDescription.entityForName("Playlist", inManagedObjectContext: managedContext)!
+                            } else {
+                                entity = NSEntityDescription.entityForName("Clique", inManagedObjectContext: managedContext)!
+                            }
+                            
+                            let newclique = NSManagedObject(entity: entity, insertIntoManagedObjectContext:managedContext)
                             
                             //3
                             newclique.setValue(currentclique.id, forKey: "id")
@@ -321,16 +329,18 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                             print(currentclique)
                             appDelegate.saveContext()
                             creatingnewclique = false
-                            self.presentingViewController?.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
-                            //self.dismissViewControllerAnimated(true, completion: { [unowned self] in self.dismissViewControllerAnimated(true, completion: nil) })
+                            dispatch_async(dispatch_get_main_queue(), {
+                                if let settings = self {
+                                    settings.presentingViewController?.presentingViewController?.dismissViewControllerAnimated(true, completion: nil)
+                                }
+                            })
                         }
+                    case .Failure(let error):
+                        print("2:", error)
+                        
+                        return
                     }
-                case .Failure(let error):
-                    print(error)
-                    
-                    return
                 }
-                
             }
         }
         

@@ -47,6 +47,7 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
         table.dataSource = self
         
         table.sectionIndexBackgroundColor = UIColor.clearColor()
+        search.searchBar.tintColor = UIColor.orangeColor()
         
         viewer.delegate = self
         viewer.allowsPickingMultipleItems = true
@@ -304,7 +305,7 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
                     })
                 }
                 
-                self.table.reloadData()
+                self.fetch()
                 mediaPicker.dismissViewControllerAnimated(true, completion: nil)
             })
         }))

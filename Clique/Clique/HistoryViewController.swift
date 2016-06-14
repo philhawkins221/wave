@@ -85,6 +85,10 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 votes = item["votes"].int ?? 0
                 
                 prime.append((song, artist, nil, votes))
+                
+                if prime.count >= 20 {
+                    break
+                }
             }
             
             dispatch_async(dispatch_get_main_queue(), {

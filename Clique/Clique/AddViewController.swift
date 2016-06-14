@@ -101,7 +101,7 @@ class AddViewController: UIViewController {
     }
     
     @IBAction func spotifypressed(sender: AnyObject) {
-        if !currentclique.applemusic {
+        if !currentclique.spotify {
             let nope = UIAlertController(title: "", message: "", preferredStyle: .Alert)
             nope.title = "Spotify Not Available"
             

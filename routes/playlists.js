@@ -133,7 +133,7 @@ exports.addSong = function(req, res) {
                 console.log('' + result + ' documents(s) updated');
                 res.send(song);
             }
-        
+
         });
     });
 }
@@ -202,7 +202,7 @@ exports.upvote = function(req, res) {
                 res.send(err);
             } else {
                 result.songList.forEach(function(item) {
-                    if (item.name == song.name && item.artist == song.artist) {
+                    if ((item.name == song.name && item.artist == song.artist) && !item.played) {
                         console.log("Found " + item.name);
                         if (item.votes === undefined) {
                             item.votes = 0;
@@ -211,6 +211,7 @@ exports.upvote = function(req, res) {
                         collection.save(result);
                         res.send(result);
                         found = true;
+                        break;
                     }
 
                 });
@@ -233,7 +234,7 @@ exports.downvote = function(req, res) {
                 res.send(err);
             } else {
                 result.songList.forEach(function(item) {
-                    if (item.name == song.name && item.artist == song.artist) {
+                    if ((item.name == song.name && item.artist == song.artist) && !item.played) {
                         console.log("Found " + item.name);
                         if (item.votes === undefined) {
                             item.votes = 0;
@@ -242,6 +243,7 @@ exports.downvote = function(req, res) {
                         collection.save(result);
                         res.send(result);
                         found = true;
+                        break;
                     }
 
                 });
@@ -302,4 +304,3 @@ var populateDB = function() {
         collection.insert(playlists, {safe:true}, function(err, result) {});
     });
 };
-

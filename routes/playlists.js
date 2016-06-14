@@ -201,8 +201,8 @@ exports.upvote = function(req, res) {
                 console.log('Error upvoting song: ' + err);
                 res.send(err);
             } else {
-                //result.songList.forEach(function(item) {
-                for (item in result.songList) {
+                result.songList.forEach(function(item) {
+                //for (item in result.songList) {
                     if ((item.name == song.name.toLowerCase() && item.artist.toLowerCase() == song.artist.toLowerCase()) && !item.played) {
                         console.log("Found " + item.name);
                         if (item.votes === undefined) {
@@ -215,7 +215,7 @@ exports.upvote = function(req, res) {
                         break;
                     }
 
-                }
+                });
                 if (found == false) {
                     res.send(404);
                 }
@@ -234,21 +234,21 @@ exports.downvote = function(req, res) {
                 console.log('Error upvoting song: ' + err);
                 res.send(err);
             } else {
-                //result.songList.forEach(function(item) {
-                for (item in result.songList) {
-                    if ((item.name.toLowerCase() == song.name.toLowerCase() && item.artist.toLowerCase() == song.artist.toLowerCase()) && !item.played) {
+                result.songList.forEach(function(item) {
+                //for (item in result.songList) {
+                    if ((item.name.toLowerCase() == song.name.toLowerCase() && item.artist.toLowerCase() == song.artist.toLowerCase()) && (!item.played && !found)) {
                         console.log("Found " + item.name);
                         if (item.votes === undefined) {
                             item.votes = 0;
                         }
-                        item.votes = item.votes - 1;
+                        item.votes -= 1;
                         collection.save(result);
                         res.send(result);
                         found = true;
                         break;
                     }
 
-                }
+                });
                 if (found == false) {
                     res.send(404);
                 }

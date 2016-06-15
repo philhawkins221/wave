@@ -39,7 +39,7 @@ class SpotifyViewController: UIViewController, UITableViewDelegate, UITableViewD
             }
         }
         
-        result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
+        result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) ?? ""
         return result
     }
     

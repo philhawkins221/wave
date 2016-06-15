@@ -41,7 +41,7 @@ class AppleMusicViewController: UIViewController, UITableViewDelegate, UITableVi
             }
         }
         
-        result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
+        result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) ?? ""
         return result
     }
     

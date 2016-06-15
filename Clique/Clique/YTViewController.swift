@@ -45,7 +45,7 @@ class YTViewController: UIViewController, WKNavigationDelegate {
                 }
             }
             
-            result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
+            result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.URLQueryAllowedCharacterSet()) ?? ""
             return result
         }
         

@@ -32,7 +32,7 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             ]
         }
         
-        fetch()
+        //fetch()
     }
 
     override func viewDidLoad() {

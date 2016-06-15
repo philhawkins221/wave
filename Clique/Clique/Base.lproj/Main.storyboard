@@ -606,7 +606,7 @@
                         <rightBarButtonItems>
                             <barButtonItem systemItem="refresh" id="QQQ-H2-wRJ">
                                 <connections>
-                                    <segue destination="zeq-kd-jno" kind="presentation" id="i2M-dn-qi5"/>
+                                    <action selector="showPlayer:" destination="eIF-kN-T0X" id="ceh-PJ-J9F"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem systemItem="bookmarks" id="IiO-Hk-Dot">
@@ -1365,10 +1365,10 @@
             </objects>
             <point key="canvasLocation" x="4421" y="1775"/>
         </scene>
-        <!--Player View Controller-->
+        <!--Dummy Player View Controller-->
         <scene sceneID="6bi-q4-Elo">
             <objects>
-                <viewController modalTransitionStyle="flipHorizontal" id="nX7-YG-FWU" customClass="PlayerViewController" customModule="Clique" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="dummy" modalTransitionStyle="flipHorizontal" id="nX7-YG-FWU" customClass="DummyPlayerViewController" customModule="Clique" customModuleProvider="target" sceneMemberID="viewController">
                     <layoutGuides>
                         <viewControllerLayoutGuide type="top" id="aig-8L-P1y"/>
                         <viewControllerLayoutGuide type="bottom" id="4hD-8l-9zH"/>
@@ -1419,13 +1419,7 @@
                                 <items>
                                     <barButtonItem title="&lt; Back" id="M3T-iS-CcA">
                                         <connections>
-                                            <action selector="backButton:" destination="nX7-YG-FWU" id="uUk-58-nUu"/>
-                                        </connections>
-                                    </barButtonItem>
-                                    <barButtonItem style="plain" systemItem="flexibleSpace" id="Kbh-Xu-dJb"/>
-                                    <barButtonItem title="Show Video" id="H5d-fL-gV5">
-                                        <connections>
-                                            <action selector="videoButton:" destination="nX7-YG-FWU" id="0zP-Xw-hox"/>
+                                            <action selector="back:" destination="nX7-YG-FWU" id="kEZ-av-BAK"/>
                                         </connections>
                                     </barButtonItem>
                                 </items>
@@ -1464,13 +1458,10 @@
                         </constraints>
                     </view>
                     <connections>
-                        <outlet property="albumlabel" destination="yQo-Nc-Xon" id="fuw-KB-lKF"/>
-                        <outlet property="artistlabel" destination="CDX-zn-ohZ" id="d22-fe-sC1"/>
-                        <outlet property="bottombar" destination="MXX-9a-Rnn" id="Jf7-zE-MYt"/>
-                        <outlet property="image" destination="EMZ-37-9AU" id="Lif-eX-Bde"/>
-                        <outlet property="player" destination="GW4-Nj-Gek" id="WvW-Mb-wPK"/>
-                        <outlet property="songlabel" destination="eIb-fv-AeH" id="TsM-gz-1Tv"/>
-                        <outlet property="videobutton" destination="H5d-fL-gV5" id="IIK-Wh-kLD"/>
+                        <outlet property="albumlabel" destination="yQo-Nc-Xon" id="YZx-0H-SNq"/>
+                        <outlet property="artistlabel" destination="CDX-zn-ohZ" id="jde-lg-A6E"/>
+                        <outlet property="artwork" destination="EMZ-37-9AU" id="wDV-ZV-mId"/>
+                        <outlet property="titlelabel" destination="eIb-fv-AeH" id="4rI-xR-oqM"/>
                     </connections>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="UGE-Xf-QPs" userLabel="First Responder" sceneMemberID="firstResponder"/>

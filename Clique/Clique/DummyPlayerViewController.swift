@@ -7,74 +7,120 @@
 //
 
 import UIKit
+import Alamofire
+import SwiftyJSON
+import SDWebImage
 
 class DummyPlayerViewController: UIViewController {
+    
+    var dummysong: (name: String, artist: String, album: String, artwork: String) = ("", "", "", "")
+    var timer = NSTimer()
+    
+    @IBOutlet weak var titlelabel: UILabel!
+    @IBOutlet weak var artistlabel: UILabel!
+    @IBOutlet weak var albumlabel: UILabel!
+    @IBOutlet weak var artwork: UIImageView!
+    
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
+        fetch()
+    }
 
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        timer = NSTimer.scheduledTimerWithTimeInterval(15, target: self, selector: #selector(fetch), userInfo: nil, repeats: true)
     }
     
-//    func fetch() {
-//        //needs to get most info in metadata
-//        //also needs to get type
-//    }
-//    
-//    func prepare() {
-//        dispatch_async(dispatch_get_main_queue(), { [unowned self] in
-//            self.songlabel.text = self.metadata.song
-//            self.artistlabel.text = self.metadata.artist
-//            self.albumlabel.text = self.metadata.album
-//            
-//            if self.metadata.artwork != nil {self.image.sd_setImageWithURL(NSURL(string: self.metadata.artwork!))} else {self.image.image = UIImage(named: "genericart.png")}
-//            
-//            self.videobutton.title = ""
-//            self.videobutton.enabled = false
-//            self.image.hidden = false
-//            self.player.hidden = true
-//            
-//            if PlayerManager.sharedInstance().tracktype == .isinactive {
-//                self.playbutton.playing = false
-//            } else {
-//                self.playbutton.playing = true
-//            }
-//            
-//            switch PlayerManager.sharedInstance().tracktype {
-//            case .islocal:
-//                if PlayerManager.sharedInstance().autoplaying {
-//                    self.videobutton.title = "Autoplay"
-//                } else {
-//                    self.videobutton.title = ""
-//                }
-//                self.bottombar.barTintColor = UIColor.lightGrayColor()
-//            case .isapplemusic:
-//                self.videobutton.title = "Apple Music"
-//                self.bottombar.barTintColor = UIColor(red: 100/255, green: 69/255, blue: 250/255, alpha: 0.75)
-//            case .isspotify:
-//                self.videobutton.title = "Spotify"
-//                self.bottombar.barTintColor = UIColor(red: 25/255, green: 214/255, blue: 72/255, alpha: 0.75)
-//            case .isyoutube:
-//                self.videobutton.title = "Show Video"
-//                self.bottombar.barTintColor = UIColor(red: 208/255, green: 10/255, blue: 20/255, alpha: 0.75)
-//                
-//                self.videobutton.enabled = true
-//                self.ytprepare()
-//            case .issoundcloud:
-//                self.videobutton.title = "Soundcloud"
-//                self.bottombar.barTintColor = UIColor(red: 251/255, green: 113/255, blue: 0/255, alpha: 0.75)
-//            case .isinactive:
-//                self.videobutton.title = ""
-//                self.bottombar.barTintColor = UIColor.whiteColor()
-//            }
-//        })
-//    }
+    override func viewWillDisappear(animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Slide)
+
+    }
+    
+    func fetch() {
+        Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { [unowned self] response in
+            switch response.result {
+            case .Success:
+                if let value = response.result.value {
+                    let json = JSON(value)
+                    
+                    dispatch_async(dispatch_get_main_queue(), {
+                        self.dummysong = (json["currentSong"].string ?? "", json["artist"].string ?? "", "", "")
+                        
+                        if self.dummysong == ("", "", "", "") {
+                            self.artwork.image = UIImage(named: "genericart.png")
+                            self.titlelabel.text = ""
+                            self.artistlabel.text = ""
+                            self.albumlabel.text = ""
+                            
+                            return
+                        }
+                        
+                        self.spotifetch()
+                    })
+                }
+            case .Failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func spotifetch() {
+        func plus(string: String) -> String {
+            var result = ""
+            
+            for c in string.characters {
+                if c == " " {
+                    result += "+"
+                } else {
+                    result.append(c)
+                }
+            }
+            
+            result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
+            return result
+        }
+        
+        Alamofire.request(.GET, "https://api.spotify.com/v1/search?q=track:" + plus(dummysong.name) + "%20artist:" + plus(dummysong.artist) + "&type=track&limit=1").responseJSON { [unowned self] response in
+            switch response.result {
+            case .Success:
+                if let value = response.result.value where self.dummysong.name != "" {
+                    let json = JSON(value)
+                    
+                    self.dummysong.album = json["tracks"]["items"][0]["album"]["name"].string ?? ""
+                    self.dummysong.artwork = json["tracks"]["items"][0]["album"]["images"][0]["url"].string ?? ""
+                    
+                    self.finishup()
+                }
+            case .Failure(let error):
+                print(error)
+            }
+        }
+    }
+    
+    func finishup() {
+        dispatch_async(dispatch_get_main_queue(), { [unowned self] in
+            self.titlelabel.text = self.dummysong.name
+            self.artistlabel.text = self.dummysong.artist
+            self.albumlabel.text = self.dummysong.album
+            
+            self.artwork.sd_setImageWithURL(NSURL(string: self.dummysong.artwork), placeholderImage: UIImage(named: "genericart.png"))
+        })
+    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
         // Dispose of any resources that can be recreated.
     }
     
+    @IBAction func back(sender: AnyObject) {
+        dismissViewControllerAnimated(true, completion: nil)
+    }
 
     /*
     // MARK: - Navigation

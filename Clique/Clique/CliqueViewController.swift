@@ -17,7 +17,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     var clique = [(song: String, artist: String, artwork: String?, votes: Int, voting_available: Bool)]()
     //var library = [(song: String, artist: String)]()
-    var currentSong: (name: String, artist: String) = ("", "") {
+    var currentSong: (name: String, artist: String, artwork: String) = ("", "", "") {
         didSet {
             table.reloadData()
         }
@@ -35,11 +35,11 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         table.dataSource = self
         table.hidden = true
         
-        if currentclique.leader {
-            player.enabled = true
-        } else {
-            player.enabled = false
-        }
+//        if currentclique.leader {
+//            player.enabled = true
+//        } else {
+//            player.enabled = false
+//        }
         
     }
     
@@ -71,7 +71,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     let json = JSON(value)
                     
                     dispatch_async(dispatch_get_main_queue(), {
-                        self.currentSong = (json["currentSong"].string ?? "", json["artist"].string ?? "")
+                        self.currentSong = (json["currentSong"].string ?? "", json["artist"].string ?? "", "")
                     })
                 }
             case .Failure(let error):
@@ -177,6 +177,19 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                     self.table.hidden = false
                 })
             }).resume()
+            
+            Alamofire.request(.GET, "https://api.spotify.com/v1/search?q=track:" + plus(currentSong.name) + "%20artist:" + plus(currentSong.artist) + "&type=track&limit=1").responseJSON { [unowned self] response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value where self.currentSong.name != "" {
+                        let json = JSON(value)
+                        
+                        self.currentSong.artwork = json["tracks"]["items"][0]["album"]["images"][0]["url"].string ?? ""
+                    }
+                case .Failure(let error):
+                    print(error)
+                }
+            }
         }
     }
 
@@ -223,11 +236,8 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
             cell?.textLabel?.text = currentSong.name
             cell?.detailTextLabel?.text = currentSong.artist
             cell?.voteslabel.text = ""
-            if currentsong.artwork != nil {
-                cell?.imageView?.sd_setImageWithURL(NSURL(string: currentsong.artwork!), placeholderImage: UIImage(named: "genericart.png")!)
-            } else {
-                cell?.imageView?.image = UIImage(named: "genericart.png")
-            }
+            cell?.imageView?.sd_setImageWithURL(NSURL(string: currentSong.artwork), placeholderImage: UIImage(named: "genericart.png")!)
+
         }
         
         if cell?.imageView?.image != nil {
@@ -336,6 +346,16 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         let add = storyboard?.instantiateViewControllerWithIdentifier("add")
         showViewController(add!, sender: self)
         //presentViewController(add!, animated: true, completion: nil)
+    }
+    
+    @IBAction func showPlayer(sender: AnyObject) {
+        if currentclique.leader {
+            let player = storyboard?.instantiateViewControllerWithIdentifier("player")
+            presentViewController(player!, animated: true, completion: nil)
+        } else {
+            let dummy = storyboard?.instantiateViewControllerWithIdentifier("dummy")
+            presentViewController(dummy!, animated: true, completion: nil)
+        }
     }
     
     @IBAction func settingsButton(sender: AnyObject) {

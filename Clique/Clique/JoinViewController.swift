@@ -16,6 +16,24 @@ class JoinViewController: UIViewController {
     @IBOutlet weak var nametext: UITextField!
     @IBOutlet weak var passcode: UITextField!
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.barTintColor = privatelistening ? blue : UIColor.orangeColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        
+        if #available(iOS 8.2, *) {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor(),
+                NSFontAttributeName: UIFont.systemFontOfSize(20, weight: UIFontWeightLight)
+            ]
+        } else {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor()
+            ]
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 

@@ -33,6 +33,24 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
     @IBOutlet weak var sortbutton: UIBarButtonItem!
     @IBOutlet weak var updatebutton: UIBarButtonItem!
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.barTintColor = privatelistening ? blue : UIColor.orangeColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        
+        if #available(iOS 8.2, *) {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor(),
+                NSFontAttributeName: UIFont.systemFontOfSize(20, weight: UIFontWeightLight)
+            ]
+        } else {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor()
+            ]
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -237,6 +255,21 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
         return Int(title.lowercaseString.unicodeScalars[title.lowercaseString.unicodeScalars.startIndex].value) - 97
     }
     
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let title = UILabel()
+        if #available(iOS 8.2, *) {
+            title.font = UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
+        } else {
+            // Fallback on earlier versions
+        }
+        title.textColor = UIColor.whiteColor()
+        
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.font=title.font
+        header.textLabel?.textColor=title.textColor
+        header.contentView.backgroundColor = UIColor.lightGrayColor()
+    }
+    
     //MARK: - Search Controller Stack
     
     func updateSearchResultsForSearchController(searchController: UISearchController) {
@@ -320,13 +353,16 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
         mediaPicker.dismissViewControllerAnimated(true, completion: nil)
     }
     
+    // MARK: - IBActions
+    
     @IBAction func update(sender: AnyObject) {
         presentViewController(viewer, animated: true, completion: nil)
     }
     
     @IBAction func done(sender: AnyObject) {
         if search.active {
-            search.dismissViewControllerAnimated(true, completion: nil)
+            search.active = false
+            return
         }
         
         self.dismissViewControllerAnimated(true, completion: nil)

@@ -315,6 +315,23 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return [upvote, downvote]
     }
     
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let title = UILabel()
+        if #available(iOS 8.2, *) {
+            title.font = UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
+        } else {
+            // Fallback on earlier versions
+        }
+        title.textColor = UIColor.whiteColor()
+        
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.font=title.font
+        header.textLabel?.textColor=title.textColor
+        header.contentView.backgroundColor = UIColor.lightGrayColor()
+    }
+    
+    // MARK: - IBActions
+    
     @IBAction func addTouched(sender: AnyObject) {
         let add = storyboard?.instantiateViewControllerWithIdentifier("add")
         showViewController(add!, sender: self)

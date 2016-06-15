@@ -42,6 +42,24 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     @IBOutlet weak var newclosebutton: UIBarButtonItem!
     @IBOutlet weak var donebutton: UIBarButtonItem!
     
+    override func viewWillAppear(animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        self.navigationController?.navigationBar.barTintColor = privatelistening ? blue : UIColor.orangeColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        
+        if #available(iOS 8.2, *) {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor(),
+                NSFontAttributeName: UIFont.systemFontOfSize(20, weight: UIFontWeightLight)
+            ]
+        } else {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor()
+            ]
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
@@ -94,6 +112,9 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             newalert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
             
             presentViewController(newalert, animated: true, completion: nil)
+        } else {
+            soundcloudswitch.enabled = false
+            spotifyswitch.enabled = false
         }
         
         switch emptydirective {

@@ -51,6 +51,20 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         table.delegate = self
         table.dataSource = self
         table.hidden = true
+    
+        self.navigationController?.navigationBar.barTintColor = privatelistening ? blue : UIColor.orangeColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        
+        if #available(iOS 8.2, *) {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor(),
+                NSFontAttributeName: UIFont.systemFontOfSize(20, weight: UIFontWeightLight)
+            ]
+        } else {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor()
+            ]
+        }
         
         if privatelistening {
             joinbutton.title = ""
@@ -273,6 +287,21 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         leaveAction.backgroundEffect = .None
 
         return [leaveAction]
+    }
+
+    func tableView(tableView: UITableView, willDisplayHeaderView view: UIView, forSection section: Int) {
+        let title = UILabel()
+        if #available(iOS 8.2, *) {
+            title.font = UIFont.systemFontOfSize(15, weight: UIFontWeightLight)
+        } else {
+            // Fallback on earlier versions
+        }
+        title.textColor = UIColor.whiteColor()
+        
+        let header = view as! UITableViewHeaderFooterView
+        header.textLabel?.font=title.font
+        header.textLabel?.textColor=title.textColor
+        header.contentView.backgroundColor = UIColor.lightGrayColor()
     }
     
     @IBAction func listeningchange(sender: AnyObject) {

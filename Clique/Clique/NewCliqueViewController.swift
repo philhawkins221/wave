@@ -24,6 +24,20 @@ class NewCliqueViewController: UIViewController {
             passcodefield.hidden = true
             passcodefield.text = "none"
         }
+        
+        self.navigationController?.navigationBar.barTintColor = privatelistening ? blue : UIColor.orangeColor()
+        self.navigationController?.navigationBar.tintColor = UIColor.whiteColor()
+        
+        if #available(iOS 8.2, *) {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor(),
+                NSFontAttributeName: UIFont.systemFontOfSize(20, weight: UIFontWeightLight)
+            ]
+        } else {
+            self.navigationController?.navigationBar.titleTextAttributes = [
+                NSForegroundColorAttributeName: UIColor.whiteColor()
+            ]
+        }
     }
     
     override func viewDidLoad() {

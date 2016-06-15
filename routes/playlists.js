@@ -176,7 +176,7 @@ exports.markSongAsPlayed = function(req, res) {
                 res.send(err);
             } else {
                 result.songList.forEach(function(item) {
-                    if (item.name == song.name && item.artist == song.artist) {
+                    if (!item.played && !found) { //}(item.name == song.name && item.artist == song.artist) {
                         item.played = true;
                         collection.save(result);
                         res.send(item);

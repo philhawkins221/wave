@@ -39,6 +39,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     
     @IBOutlet weak var videobutton: UIBarButtonItem!
     @IBOutlet weak var bottombar: UIToolbar!
+    @IBOutlet weak var savebutton: UIBarButtonItem!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
@@ -94,8 +95,11 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         
             if PlayerManager.sharedInstance().tracktype == .isinactive {
                 self.playbutton.playing = false
+                self.savebutton.enabled = false
+
             } else {
                 self.playbutton.playing = true
+                self.savebutton.enabled = true
             }
             
             switch PlayerManager.sharedInstance().tracktype {
@@ -180,7 +184,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     
     @IBAction func backButton(sender: AnyObject) {
         if PlayerManager.sharedInstance().tracktype == .isyoutube {
-            let warning = UIAlertController(title: "Warning", message: "Leaving the Player while a YouTube link is playing may stop playback", preferredStyle: .ActionSheet)
+            let warning = UIAlertController(title: "Warning", message: "Leaving the Player while a YouTube link is playing will stop playback", preferredStyle: .ActionSheet)
             warning.addAction(UIAlertAction(title: "Leave Anyways", style: UIAlertActionStyle.Destructive, handler: {action in self.dismissViewControllerAnimated(true, completion: nil)}))
             warning.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: {action in }))
             self.showViewController(warning, sender: self)
@@ -228,6 +232,19 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         rewindbutton.enabled = false
         playbutton.enabled = false
         fastforwardbutton.enabled = false
+    }
+    
+    @IBAction func save(sender: AnyObject) {
+        let save = UIAlertController(title: "Add Song to Saved?", message: "Your saved songs can be viewed at any time in Private Listening mode.", preferredStyle: .ActionSheet)
+        save.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: nil))
+        save.addAction(UIAlertAction(title: "Save", style: .Default, handler: { action in
+            var saves = NSUserDefaults.standardUserDefaults().objectForKey("Saved") as? [[String]] ?? []
+            saves.append([self.metadata.song, self.metadata.artist, self.metadata.artwork ?? ""])
+            print(saves)
+            NSUserDefaults.standardUserDefaults().setObject(saves, forKey: "Saved")
+        }))
+        
+        presentViewController(save, animated: true, completion: nil)
     }
     
     /*

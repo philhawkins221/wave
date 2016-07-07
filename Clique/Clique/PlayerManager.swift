@@ -204,11 +204,12 @@ class PlayerManager {
         //step 3: prepare the proper player - may need work
         switch tracktype {
         case .isyoutube:
-            if !(UIApplication.topViewController() is PlayerViewController) {
-                PlayerViewController.youtubewaiting = true
-                
-                let ytalert = UIAlertController(title: "YouTube Link in \"" + currentclique.name + "\"", message: "The Player must be open to play a selection from YouTube.", preferredStyle: .Alert)
+            PlayerViewController.youtubewaiting = true
+
+            if (UIApplication.topViewController()?.isKindOfClass(PlayerViewController)) == false {
+                let ytalert = UIAlertController(title: "YouTube Link in " + currentclique.name, message: "Open the Clique Player to play this selection from YouTube.", preferredStyle: .Alert)
                 ytalert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in }))
+                UIApplication.topViewController()?.presentViewController(ytalert, animated: true, completion: nil)
             }
         case .isspotify:
             print("preparing spotify player")

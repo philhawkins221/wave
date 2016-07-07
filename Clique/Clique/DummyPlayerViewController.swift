@@ -20,6 +20,7 @@ class DummyPlayerViewController: UIViewController {
     @IBOutlet weak var artistlabel: UILabel!
     @IBOutlet weak var albumlabel: UILabel!
     @IBOutlet weak var artwork: UIImageView!
+    @IBOutlet weak var savebutton: UIBarButtonItem!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -57,10 +58,11 @@ class DummyPlayerViewController: UIViewController {
                             self.titlelabel.text = ""
                             self.artistlabel.text = ""
                             self.albumlabel.text = ""
-                            
+                            self.savebutton.enabled = false
                             return
                         }
                         
+                        self.savebutton.enabled = true
                         self.spotifetch()
                     })
                 }
@@ -122,6 +124,18 @@ class DummyPlayerViewController: UIViewController {
         dismissViewControllerAnimated(true, completion: nil)
     }
 
+    @IBAction func save(sender: AnyObject) {
+        let save = UIAlertController(title: "Add Song to Saved", message: "Your saved songs can be viewed at any time in Private Listening mode", preferredStyle: .ActionSheet)
+        save.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: nil))
+        save.addAction(UIAlertAction(title: "Save", style: .Default, handler: { action in
+            var saves = NSUserDefaults.standardUserDefaults().objectForKey("Saved") as? [(song: String, artist: String, album: String)] ?? []
+            saves.append((self.dummysong.name, self.dummysong.artist, self.dummysong.artwork ?? ""))
+            NSUserDefaults.standardUserDefaults().setObject(saves as? AnyObject, forKey: "Saved")
+        }))
+        
+        presentViewController(save, animated: true, completion: nil)
+    }
+    
     /*
     // MARK: - Navigation
 

@@ -50,6 +50,10 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         fetch()
         
         timer = NSTimer.scheduledTimerWithTimeInterval(15, target: self, selector: #selector(fetch), userInfo: nil, repeats: true)
+        
+        if let selected = table.indexPathForSelectedRow {
+            table.deselectRowAtIndexPath(selected, animated: true)
+        }
     }
     
     override func viewWillDisappear(animated: Bool) {
@@ -211,8 +215,22 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         return clique.count
     }
     
+    func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
+        if indexPath.section == 0 {
+            return 150
+        } else {
+            return 60
+        }
+    }
+    
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
-        let cell = tableView.dequeueReusableCellWithIdentifier("song") as? CliqueSongTableViewCell
+        let cell: CliqueSongTableViewCell?
+        
+        if indexPath.section == 0 {
+            cell = tableView.dequeueReusableCellWithIdentifier("nowplaying") as? CliqueSongTableViewCell
+        } else {
+            cell = tableView.dequeueReusableCellWithIdentifier("song") as? CliqueSongTableViewCell
+        }
         
         if indexPath.section != 0 {
             
@@ -232,20 +250,24 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
             } else {
                 cell?.imageView?.image = UIImage(named: "genericart.png")
             }
+            
+            if cell?.imageView?.image != nil {
+                let widthScale = 50/(cell?.imageView?.image!.size.width)!
+                let heightScale = 50/(cell?.imageView?.image!.size.height)!
+                cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
+            }
         } else { //TODO: - get current song, maybe do this in fetch()
             cell?.textLabel?.text = currentSong.name
             cell?.detailTextLabel?.text = currentSong.artist
-            cell?.voteslabel.text = ""
             cell?.imageView?.sd_setImageWithURL(NSURL(string: currentSong.artwork), placeholderImage: UIImage(named: "genericart.png")!)
+            //cell?.backgroundColor = UIColor.lightTextColor()
 
+            if cell?.imageView?.image != nil {
+                let widthScale = 100/(cell?.imageView?.image!.size.width)!
+                let heightScale = 100/(cell?.imageView?.image!.size.height)!
+                cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
+            }
         }
-        
-        if cell?.imageView?.image != nil {
-            let widthScale = 50/(cell?.imageView?.image!.size.width)!
-            let heightScale = 50/(cell?.imageView?.image!.size.height)!
-            cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
-        }
-        
         
         if indexPath.section == 1 {
             cell?.accessoryType = .None
@@ -262,10 +284,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
         if indexPath.section == 0 {
-            if currentclique.leader {
-                let player = storyboard?.instantiateViewControllerWithIdentifier("player")
-                presentViewController(player!, animated: true, completion: nil)
-            }
+            showPlayer(UIView())
         }
     }
     

@@ -114,7 +114,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             presentViewController(newalert, animated: true, completion: nil)
         } else {
             soundcloudswitch.enabled = false
-            spotifyswitch.enabled = false
+            //spotifyswitch.enabled = false
         }
         
         switch emptydirective {

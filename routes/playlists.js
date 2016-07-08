@@ -195,8 +195,8 @@ exports.updateAppleMusicStatus = function(req, res) {
                 result.applemusic = set;
                 collection.save(result);
             }
-        })
-    })
+        });
+    });
 }
 
 exports.updateSpotifyStatus = function(req, res) {
@@ -212,8 +212,25 @@ exports.updateSpotifyStatus = function(req, res) {
                 result.spotify = set;
                 collection.save(result);
             }
-        })
-    })
+        });
+    });
+}
+
+exports.updateVotingStatus = function(req, res) {
+    var id = req.params.id;
+    var set = req.body.value;
+    console.log('changing voting status of ' + id + ' to ' + set);
+    database.collection('playlists', function (err, collection) {
+        collection.findOne({'_id': new BSON.ObjectID(id)}, function(err, result) {
+            if (err) {
+                console.log('Error updating voting status');
+                res.send(err);
+            } else {
+                result.voting = set;
+                collection.save(result);
+            }
+        });
+    });
 }
 
 exports.markSongAsPlayed = function(req, res) {

@@ -26,6 +26,7 @@ app.delete('/playlists/:id', playlist.deletePlaylist);
 app.post('/playlists/:id/updateClique', playlist.updateClique);
 app.post('/playlists/:id/updateAppleMusicStatus', playlist.updateAppleMusicStatus);
 app.post('/playlists/:id/updateSpotifyStatus', playlist.updateSpotifyStatus);
+app.post('/playlists/:id/updateVotingStatus', playlist.updateVotingStatus);
 
 
 var port = process.env.PORT || 8080;

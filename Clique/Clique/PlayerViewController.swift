@@ -126,7 +126,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
                 self.videobutton.title = "Soundcloud"
                 self.bottombar.barTintColor = UIColor(red: 251/255, green: 113/255, blue: 0/255, alpha: 0.75)
             case .isinactive:
-                self.videobutton.title = ""
+                self.videobutton.title = "Clique"
                 self.bottombar.barTintColor = UIColor.lightGrayColor()
             }
         })

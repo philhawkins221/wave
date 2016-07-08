@@ -17,6 +17,7 @@ class NewCliqueViewController: UIViewController {
 
     @IBOutlet weak var namefield: UITextField!
     @IBOutlet weak var passcodefield: UITextField!
+    @IBOutlet weak var nextbutton: UIButton!
     
     override func viewWillAppear(animated: Bool) {
         if privatelistening {
@@ -53,8 +54,11 @@ class NewCliqueViewController: UIViewController {
     }
     
     @IBAction func create(sender: AnyObject) {
+        nextbutton.enabled = false
+        
         if privatelistening {
             if namefield.text == "" || passcodefield.text == "" {
+                nextbutton.enabled = true
                 let nope = UIAlertController(title: "Entry Required", message: "The fields cannot be left empty.", preferredStyle: .Alert)
                 nope.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
                 
@@ -72,6 +76,7 @@ class NewCliqueViewController: UIViewController {
             let playlistnames = playlists.map({ $0.valueForKey("name") as! String })
             
             if playlistnames.contains(self.namefield.text!) {
+                nextbutton.enabled = true
                 let nope = UIAlertController(title: "Playlist Already Exists", message: "Please choose a new name for your playlist and try again.", preferredStyle: .Alert)
                 nope.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
                 
@@ -89,6 +94,7 @@ class NewCliqueViewController: UIViewController {
         }
         
         if namefield.text == "" || passcodefield.text == "" {
+            nextbutton.enabled = true
             let nope = UIAlertController(title: "Entry Required", message: "The Clique name and passcode fields cannot be left empty.", preferredStyle: .Alert)
             nope.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
             
@@ -109,6 +115,7 @@ class NewCliqueViewController: UIViewController {
                     }
                     
                     if names.contains(self.namefield.text!) {
+                        self.nextbutton.enabled = true
                         let nope = UIAlertController(title: "Clique Name Taken", message: "This name is already in use. Please choose a new name and try again.", preferredStyle: .Alert)
                         nope.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
                         
@@ -124,6 +131,7 @@ class NewCliqueViewController: UIViewController {
                 }
             case .Failure(let error):
                 print(error)
+                self.nextbutton.enabled = true
             }
         }
     }

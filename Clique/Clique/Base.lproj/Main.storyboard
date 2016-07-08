@@ -65,6 +65,7 @@
                         </barButtonItem>
                     </navigationItem>
                     <connections>
+                        <outlet property="joinbutton" destination="pEZ-9w-fhZ" id="Ly2-Jx-wAt"/>
                         <outlet property="nametext" destination="yG8-6x-h0K" id="HGq-H0-egq"/>
                         <outlet property="passcode" destination="otd-zU-3Y7" id="aSI-be-iRD"/>
                     </connections>
@@ -1628,6 +1629,7 @@
                     </navigationItem>
                     <connections>
                         <outlet property="namefield" destination="D2y-i6-MdM" id="S3u-iT-oeq"/>
+                        <outlet property="nextbutton" destination="tZh-ro-jvD" id="io2-S8-2On"/>
                         <outlet property="passcodefield" destination="C54-aL-mgY" id="QmY-jZ-dGM"/>
                     </connections>
                 </viewController>

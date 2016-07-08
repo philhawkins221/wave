@@ -45,6 +45,7 @@ class SavedViewController: UIViewController, UITableViewDelegate, UITableViewDat
     
     func fetch() {
         saves = NSUserDefaults.standardUserDefaults().objectForKey("Saved") as? [[String]] ?? []
+        saves = saves.reverse()
         print(saves)
     }
 

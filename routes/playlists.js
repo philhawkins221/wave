@@ -165,6 +165,57 @@ exports.loadSongs = function(req, res) {
 //    ]
 //    }
 
+exports.updateClique = function(req, res) {
+    var id = req.params.id;
+    var newList = req.body.songList;
+    console.log('Updating playlist ' + id);
+    database.collection('playlists', function(err, collection) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {songList: newList} }, function(err, result) {
+            if (err) {
+                console.log('Error updating Clique: ' + err);
+                res.send({'error':'An error has occured'});
+            } else {
+                console.log('Clique ' + id + ' updated');
+                res.send(newList);
+            }
+        });
+    });
+}
+
+exports.updateAppleMusicStatus = function(req, res) {
+    var id = req.params.id;
+    var set = req.body.value;
+    console.log('changing Apple Music status of ' + id + ' to ' + set);
+    database.collection('playlists', function (err, collection) {
+        collection.findOne({'_id': new BSON.ObjectID(id)}, function(err, result) {
+            if (err) {
+                console.log('Error updating Apple Music status');
+                res.send(err);
+            } else {
+                result.applemusic = set;
+                collection.save(result);
+            }
+        })
+    })
+}
+
+exports.updateSpotifyStatus = function(req, res) {
+    var id = req.params.id;
+    var set = req.body.value;
+    console.log('changing Spotify status of ' + id + ' to ' + set);
+    database.collection('playlists', function (err, collection) {
+        collection.findOne({'_id': new BSON.ObjectID(id)}, function(err, result) {
+            if (err) {
+                console.log('Error updating Apple Music status');
+                res.send(err);
+            } else {
+                result.spotify = set;
+                collection.save(result);
+            }
+        })
+    })
+}
+
 exports.markSongAsPlayed = function(req, res) {
     var id = req.params.id;
     var song = req.body;

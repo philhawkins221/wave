@@ -23,6 +23,10 @@ app.put('/playlists/:id/upvote', playlist.upvote);
 app.put('/playlists/:id/downvote', playlist.downvote);
 app.delete('/playlists/:id', playlist.deletePlaylist);
 
+app.post('/playlists/:id/updateClique', playlist.updateClique);
+app.post('/playlists/:id/updateAppleMusicStatus', playlist.updateAppleMusicStatus);
+app.post('/playlists/:id/updateSpotifyStatus', playlist.updateSpotifyStatus);
+
 
 var port = process.env.PORT || 8080;
 

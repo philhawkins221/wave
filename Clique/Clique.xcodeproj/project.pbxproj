@@ -25,6 +25,7 @@
 		4A7D6C971CDFB22300ADDDA1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */; };
 		4A86D4851CFB6A8200E298AB /* DummyPlayerViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A86D4841CFB6A8200E298AB /* DummyPlayerViewController.swift */; };
 		4A86D4871CFD11E200E298AB /* PlayerManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A86D4861CFD11E200E298AB /* PlayerManager.swift */; };
+		4A92CD181D3028C300D1C488 /* CliqueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A92CD171D3028C300D1C488 /* CliqueManager.swift */; };
 		4AA5AA581D01F28D004B30FA /* NewCliqueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA5AA571D01F28D004B30FA /* NewCliqueViewController.swift */; };
 		4AA798191C56ECBA00E211E7 /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AA798181C56ECBA00E211E7 /* LibraryViewController.swift */; };
 		4AB53C9F1CE289C2000E47A2 /* SpotifyViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AB53C9E1CE289C2000E47A2 /* SpotifyViewController.swift */; };
@@ -69,6 +70,7 @@
 		4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4A86D4841CFB6A8200E298AB /* DummyPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyPlayerViewController.swift; sourceTree = "<group>"; };
 		4A86D4861CFD11E200E298AB /* PlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
+		4A92CD171D3028C300D1C488 /* CliqueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqueManager.swift; sourceTree = "<group>"; };
 		4AA5AA571D01F28D004B30FA /* NewCliqueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewCliqueViewController.swift; sourceTree = "<group>"; };
 		4AA798181C56ECBA00E211E7 /* LibraryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		4AB53C9E1CE289C2000E47A2 /* SpotifyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyViewController.swift; sourceTree = "<group>"; };
@@ -153,6 +155,7 @@
 				4A3EBFE31C500CF9001BAA33 /* PlayerViewController.swift */,
 				4A86D4861CFD11E200E298AB /* PlayerManager.swift */,
 				4A3EBFE11C4F4E2D001BAA33 /* CliqueViewController.swift */,
+				4A92CD171D3028C300D1C488 /* CliqueManager.swift */,
 				4AC3CA081C4ACE7400D5BCCA /* MyCliquesViewController.swift */,
 				4A4D60631D2EDF80009B6375 /* SavedViewController.swift */,
 				4AC3C9FB1C4ACCB700D5BCCA /* Assets.xcassets */,
@@ -338,6 +341,7 @@
 				4AC3CA091C4ACE7400D5BCCA /* MyCliquesViewController.swift in Sources */,
 				4A16BEDF1CAC3BD40089997F /* YTViewController.swift in Sources */,
 				4A86D4871CFD11E200E298AB /* PlayerManager.swift in Sources */,
+				4A92CD181D3028C300D1C488 /* CliqueManager.swift in Sources */,
 				4A3EBFE41C500CF9001BAA33 /* PlayerViewController.swift in Sources */,
 				4A4D60641D2EDF80009B6375 /* SavedViewController.swift in Sources */,
 				4A5A5B6B1CE2434E00BD2F5F /* SettingsViewController.swift in Sources */,

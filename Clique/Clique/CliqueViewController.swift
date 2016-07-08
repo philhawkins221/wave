@@ -8,68 +8,17 @@
 
 import UIKit
 import SwiftyJSON
-import MediaPlayer
 import Alamofire
-import CoreData
-
-var currentclique: (id: String, leader: Bool, name: String, passcode: String, applemusic: Bool, spotify: Bool, voting: Bool) = ("", false, "", "", false, false, true) {
-    didSet {
-        if currentclique.applemusic != oldValue.applemusic {
-            Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateAppleMusicStatus", parameters: ["value": currentclique.applemusic], encoding: .JSON)
-        }
-
-        if currentclique.spotify != oldValue.spotify {
-            Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateSpotifyStatus", parameters: ["value": currentclique.spotify], encoding: .JSON)
-        }
-
-        if currentclique.voting != oldValue.voting {
-            Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateVotingStatus", parameters: ["value": currentclique.voting], encoding: .JSON)
-        }
-
-        let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
-        let managedContext = appDelegate.managedObjectContext
-
-        //2
-        let cliqueRequest: NSFetchRequest
-        if privatelistening {
-            cliqueRequest = NSFetchRequest(entityName: "Playlist")
-        } else {
-            cliqueRequest = NSFetchRequest(entityName:"Clique")
-        }
-
-        //3
-        do {
-            let cliques = try managedContext.executeFetchRequest(cliqueRequest) as! [NSManagedObject]
-
-            for clique in cliques {
-                if clique.valueForKey("id") as! String == currentclique.id {
-                    clique.setValue(currentclique.name, forKey: "name")
-                    clique.setValue(currentclique.passcode, forKey: "passcode")
-                    clique.setValue(currentclique.leader, forKey: "isLeader")
-                    clique.setValue(currentclique.applemusic, forKey: "applemusic")
-                    clique.setValue(currentclique.spotify, forKey: "spotify")
-                    clique.setValue(currentclique.voting, forKey: "voting")
-
-                    appDelegate.saveContext()
-
-                    break
-                }
-            }
-        } catch {
-            print(error)
-        }
-    }
-}
 
 class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
-    var clique = [(song: String, artist: String, artwork: String?, votes: Int, voting_available: Bool)]()
+    //var clique = [(song: String, artist: String, artwork: String?, votes: Int, voting_available: Bool)]()
     //var library = [(song: String, artist: String)]()
-    var currentSong: (name: String, artist: String, artwork: String) = ("", "", "") {
-        didSet {
-            table.reloadData()
-        }
-    }
+    //var currentSong: (name: String, artist: String, artwork: String) = ("", "", "") {
+        //didSet {
+            //table.reloadData()
+        //}
+    //}
     var timer = NSTimer()
 
     @IBOutlet weak var table: UITableView!
@@ -93,8 +42,11 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(true)
+        
+        self.title = currentclique.name
+        
+        NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(refresh), name: "CliqueUpdated", object: nil)
 
-        clique.removeAll()
         fetch()
 
         timer = NSTimer.scheduledTimerWithTimeInterval(15, target: self, selector: #selector(fetch), userInfo: nil, repeats: true)
@@ -109,141 +61,152 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         timer.invalidate()
     }
-
+    
     func fetch() {
-        print("fetching")
-        clique.removeAll()
-
-        //TODO: check "voting" status in clique
-
-        Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { response in
-            switch response.result {
-            case .Success:
-                if let value = response.result.value {
-                    let json = JSON(value)
-
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.currentSong = (json["currentSong"].string ?? "", json["artist"].string ?? "", "")
-                    })
-                }
-            case .Failure(let error):
-                print(error)
-            }
-        }
-
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-        var prime = [(song: String, artist: String, artwork: String?, votes: Int)]()
-        var song = ""
-        var artist = ""
-        var votes = 0
-
-        //step 1: pull the next song - get the stored artist and song name
-        session.dataTaskWithURL(NSURL(string: "https://clique2016.herokuapp.com/playlists/" + currentclique.id)!, completionHandler: {(data, response, error) in
-            if data == nil {
-                print("no data")
-                return
-            }
-            let json = JSON(data: data!)
-            dispatch_async(dispatch_get_main_queue(), { self.title = json["name"].stringValue })
-
-            let list = json["songList"].array ?? []
-
-            for item in list {
-                if item["played"].boolValue {
-                    continue
-                }
-
-                song = item["name"].string ?? "No Title"
-                artist = item["artist"].string ?? "No Artist"
-                votes = item["votes"].int ?? 0
-
-                prime.append((song, artist, nil, votes))
-            }
-
-            //check if the fetch came back empty
-            if song == "" && artist == "" {
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.table.hidden = false
-                })
-
-                return
-            }
-
-            dispatch_async(dispatch_get_main_queue(), {
-                self.spotifetch(prime)
-            })
-        }).resume()
+        CliqueManager.sharedInstance().fetch()
+    }
+    
+    func refresh() {
+        dispatch_async(dispatch_get_main_queue(), {
+            self.table.reloadData()
+            self.table.hidden = false
+        })
     }
 
-    func spotifetch(prime: [(song: String, artist: String, artwork: String?, votes: Int)]) {
-        func plus(string: String) -> String {
-            var result = ""
-
-            for c in string.characters {
-                if c == " " {
-                    result += "+"
-                } else {
-                    result.append(c)
-                }
-            }
-
-            result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
-            return result
-        }
-
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
-
-        //step 2: verify names and find album+artwork - spotify api
-        for song in prime {
-
-            let plussong = plus(song.song)
-            let plusartist = plus(song.artist)
-
-            session.dataTaskWithURL(NSURL(string: "https://api.spotify.com/v1/search?q=track:" + plussong + "%20artist:" + plusartist + "&type=track&limit=1")!, completionHandler: {(data, response, error) in
-                if data == nil {
-                    print("no data")
-                    return
-                }
-                let json = JSON(data: data!)
-
-                var title = String?()
-                var artist = String?()
-                var cover = String?()
-
-                var newentry: (song: String, artist: String, artwork: String?, votes: Int, voting_available: Bool) = ("", "", nil, song.votes, true)
-
-                title = json["tracks"]["items"][0]["name"].string
-                artist = json["tracks"]["items"][0]["artists"][0]["name"].string
-                cover = json["tracks"]["items"][0]["album"]["images"][0]["url"].string
-
-                if title != nil {newentry.song = title!} else {newentry.song = song.song}
-                if artist != nil {newentry.artist = artist!} else {newentry.artist = song.artist}
-
-                if cover != nil {newentry.artwork = cover!}
-
-                self.clique.append(newentry)
-
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.table.reloadData()
-                    self.table.setNeedsDisplay()
-                    self.table.hidden = false
-                })
-            }).resume()
-
-            Alamofire.request(.GET, "https://api.spotify.com/v1/search?q=track:" + plus(currentSong.name) + "%20artist:" + plus(currentSong.artist) + "&type=track&limit=1").responseJSON { [unowned self] response in
-                switch response.result {
-                case .Success:
-                    if let value = response.result.value where self.currentSong.name != "" {
-                        let json = JSON(value)
-
-                        self.currentSong.artwork = json["tracks"]["items"][0]["album"]["images"][0]["url"].string ?? ""
-                    }
-                case .Failure(let error):
-                    print(error)
-                }
-            }
-        }
-    }
+//    func fetch() {
+//        print("fetching")
+//        clique.removeAll()
+//
+//        //TODO: check "voting" status in clique
+//
+//        Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { response in
+//            switch response.result {
+//            case .Success:
+//                if let value = response.result.value {
+//                    let json = JSON(value)
+//
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        self.currentSong = (json["currentSong"].string ?? "", json["artist"].string ?? "", "")
+//                    })
+//                }
+//            case .Failure(let error):
+//                print(error)
+//            }
+//        }
+//
+//        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+//        var prime = [(song: String, artist: String, artwork: String?, votes: Int)]()
+//        var song = ""
+//        var artist = ""
+//        var votes = 0
+//
+//        //step 1: pull the next song - get the stored artist and song name
+//        session.dataTaskWithURL(NSURL(string: "https://clique2016.herokuapp.com/playlists/" + currentclique.id)!, completionHandler: {(data, response, error) in
+//            if data == nil {
+//                print("no data")
+//                return
+//            }
+//            let json = JSON(data: data!)
+//            dispatch_async(dispatch_get_main_queue(), { self.title = json["name"].stringValue })
+//
+//            let list = json["songList"].array ?? []
+//
+//            for item in list {
+//                if item["played"].boolValue {
+//                    continue
+//                }
+//
+//                song = item["name"].string ?? "No Title"
+//                artist = item["artist"].string ?? "No Artist"
+//                votes = item["votes"].int ?? 0
+//
+//                prime.append((song, artist, nil, votes))
+//            }
+//
+//            //check if the fetch came back empty
+//            if song == "" && artist == "" {
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    self.table.hidden = false
+//                })
+//
+//                return
+//            }
+//
+//            dispatch_async(dispatch_get_main_queue(), {
+//                self.spotifetch(prime)
+//            })
+//        }).resume()
+//    }
+//
+//    func spotifetch(prime: [(song: String, artist: String, artwork: String?, votes: Int)]) {
+//        func plus(string: String) -> String {
+//            var result = ""
+//
+//            for c in string.characters {
+//                if c == " " {
+//                    result += "+"
+//                } else {
+//                    result.append(c)
+//                }
+//            }
+//
+//            result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
+//            return result
+//        }
+//
+//        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
+//
+//        //step 2: verify names and find album+artwork - spotify api
+//        for song in prime {
+//
+//            let plussong = plus(song.song)
+//            let plusartist = plus(song.artist)
+//
+//            session.dataTaskWithURL(NSURL(string: "https://api.spotify.com/v1/search?q=track:" + plussong + "%20artist:" + plusartist + "&type=track&limit=1")!, completionHandler: {(data, response, error) in
+//                if data == nil {
+//                    print("no data")
+//                    return
+//                }
+//                let json = JSON(data: data!)
+//
+//                var title = String?()
+//                var artist = String?()
+//                var cover = String?()
+//
+//                var newentry: (song: String, artist: String, artwork: String?, votes: Int, voting_available: Bool) = ("", "", nil, song.votes, true)
+//
+//                title = json["tracks"]["items"][0]["name"].string
+//                artist = json["tracks"]["items"][0]["artists"][0]["name"].string
+//                cover = json["tracks"]["items"][0]["album"]["images"][0]["url"].string
+//
+//                if title != nil {newentry.song = title!} else {newentry.song = song.song}
+//                if artist != nil {newentry.artist = artist!} else {newentry.artist = song.artist}
+//
+//                if cover != nil {newentry.artwork = cover!}
+//
+//                self.clique.append(newentry)
+//
+//                dispatch_async(dispatch_get_main_queue(), {
+//                    self.table.reloadData()
+//                    self.table.setNeedsDisplay()
+//                    self.table.hidden = false
+//                })
+//            }).resume()
+//
+//            Alamofire.request(.GET, "https://api.spotify.com/v1/search?q=track:" + plus(currentSong.name) + "%20artist:" + plus(currentSong.artist) + "&type=track&limit=1").responseJSON { [unowned self] response in
+//                switch response.result {
+//                case .Success:
+//                    if let value = response.result.value where self.currentSong.name != "" {
+//                        let json = JSON(value)
+//
+//                        self.currentSong.artwork = json["tracks"]["items"][0]["album"]["images"][0]["url"].string ?? ""
+//                    }
+//                case .Failure(let error):
+//                    print(error)
+//                }
+//            }
+//        }
+//    }
 
     override func didReceiveMemoryWarning() {
         super.didReceiveMemoryWarning()
@@ -260,7 +223,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if section == 0 {
             return 1
         }
-        return clique.count
+        return CliqueManager.sharedInstance().clique.count
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -282,7 +245,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
         if indexPath.section != 0 {
 
-            if clique.isEmpty {
+            if CliqueManager.sharedInstance().clique.isEmpty {
                 cell?.textLabel?.text = "Clique is Empty"
                 cell?.detailTextLabel?.text = "Press the add button below to start listening"
                 cell?.voteslabel.text = ""
@@ -290,11 +253,11 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 return cell!
             }
 
-            cell?.textLabel?.text = clique[indexPath.row].song
-            cell?.detailTextLabel?.text = clique[indexPath.row].artist
-            cell?.voteslabel.text = clique[indexPath.row].votes.description
-            if clique[indexPath.row].artwork != nil {
-                cell?.imageView?.sd_setImageWithURL(NSURL(string: clique[indexPath.row].artwork!), placeholderImage: UIImage(named: "genericart.png")!)
+            cell?.textLabel?.text = CliqueManager.sharedInstance().clique[indexPath.row].song
+            cell?.detailTextLabel?.text = CliqueManager.sharedInstance().clique[indexPath.row].artist
+            cell?.voteslabel.text = CliqueManager.sharedInstance().clique[indexPath.row].votes.description
+            if CliqueManager.sharedInstance().clique[indexPath.row].artwork != nil {
+                cell?.imageView?.sd_setImageWithURL(NSURL(string: CliqueManager.sharedInstance().clique[indexPath.row].artwork!), placeholderImage: UIImage(named: "genericart.png")!)
             } else {
                 cell?.imageView?.image = UIImage(named: "genericart.png")
             }
@@ -305,9 +268,9 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
             }
         } else { //TODO: - get current song, maybe do this in fetch()
-            cell?.textLabel?.text = currentSong.name
-            cell?.detailTextLabel?.text = currentSong.artist
-            cell?.imageView?.sd_setImageWithURL(NSURL(string: currentSong.artwork), placeholderImage: UIImage(named: "genericart.png")!)
+            cell?.textLabel?.text = CliqueManager.sharedInstance().currentSong.name
+            cell?.detailTextLabel?.text = CliqueManager.sharedInstance().currentSong.artist
+            cell?.imageView?.sd_setImageWithURL(NSURL(string: CliqueManager.sharedInstance().currentSong.artwork), placeholderImage: UIImage(named: "genericart.png")!)
             //cell?.backgroundColor = UIColor.lightTextColor()
 
             if cell?.imageView?.image != nil {
@@ -352,38 +315,38 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
 
         let upvote = UITableViewRowAction(style: .Default, title: "+", handler: {(action, indexpath) in
-            if self.clique[indexPath.row].voting_available {
+            if CliqueManager.sharedInstance().clique[indexPath.row].voting_available {
                 let p = [
-                    "name": self.clique[indexPath.row].song,
-                    "artist": self.clique[indexPath.row].artist
+                    "name": CliqueManager.sharedInstance().clique[indexPath.row].song,
+                    "artist": CliqueManager.sharedInstance().clique[indexPath.row].artist
                 ]
 
                 Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/upvote", parameters: p, encoding: .JSON)
 
-                self.clique[indexPath.row].voting_available = false
-                self.clique[indexPath.row].votes += 1
+                CliqueManager.sharedInstance().clique[indexPath.row].voting_available = false
+                CliqueManager.sharedInstance().clique[indexPath.row].votes += 1
                 self.table.setEditing(false, animated: false)
                 self.table.reloadData()
             }
         })
 
         let downvote = UITableViewRowAction(style: .Default, title: "-", handler: {(action, indexpath) in
-            if self.clique[indexPath.row].voting_available {
+            if CliqueManager.sharedInstance().clique[indexPath.row].voting_available {
                 let p = [
-                    "name": self.clique[indexPath.row].song,
-                    "artist": self.clique[indexPath.row].artist
+                    "name": CliqueManager.sharedInstance().clique[indexPath.row].song,
+                    "artist": CliqueManager.sharedInstance().clique[indexPath.row].artist
                 ]
 
                 Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/downvote", parameters: p, encoding: .JSON)
 
-                self.clique[indexPath.row].voting_available = false
-                self.clique[indexPath.row].votes -= 1
+                CliqueManager.sharedInstance().clique[indexPath.row].voting_available = false
+                CliqueManager.sharedInstance().clique[indexPath.row].votes -= 1
                 self.table.setEditing(false, animated: true)
                 self.table.reloadData()
             }
         })
 
-        let votes = UITableViewRowAction(style: .Default, title: clique[indexPath.row].votes.description, handler: {(action, indexpath) in })
+        let votes = UITableViewRowAction(style: .Default, title: CliqueManager.sharedInstance().clique[indexPath.row].votes.description, handler: {(action, indexpath) in })
 
         upvote.backgroundColor = UIColor(red: 0, green: 147/255, blue: 0, alpha: 1)
         votes.backgroundColor = UIColor.grayColor()

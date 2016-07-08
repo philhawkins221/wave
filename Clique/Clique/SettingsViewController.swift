@@ -79,6 +79,12 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             } else {
                 soundcloudswitch.setOn(false, animated: true)
             }
+            
+            if currentclique.voting {
+                votingswitch.setOn(true, animated: true)
+            } else {
+                votingswitch.setOn(false, animated: true)
+            }
         } else {
             votingswitch.hidden = true
             spotifyswitch.hidden = true
@@ -184,7 +190,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 return
             } else if (spotifysession!.isValid()) {
                 // Our session is valid - go straight to music playback.
-
+                currentclique.spotify = true
                 return
             } else {
                 // Session expired - we need to refresh it before continuing.
@@ -196,6 +202,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                     }
 
                     spotifysession = session
+                    currentclique.spotify = true
                 })
 
                 return

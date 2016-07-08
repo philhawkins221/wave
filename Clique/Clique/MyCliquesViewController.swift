@@ -235,14 +235,16 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         if cliques.isEmpty {
             return
         }
-
-        currentclique.id = cliques[indexPath.row].valueForKey("id") as! String
-        currentclique.leader = cliques[indexPath.row].valueForKey("isLeader") as! Bool
-        currentclique.name = cliques[indexPath.row].valueForKey("name") as! String
-        currentclique.passcode = cliques[indexPath.row].valueForKey("passcode") as! String
-        currentclique.spotify = cliques[indexPath.row].valueForKey("spotify") as! Bool
-        currentclique.applemusic = cliques[indexPath.row].valueForKey("applemusic") as! Bool
-        currentclique.voting = cliques[indexPath.row].valueForKey("voting") as! Bool
+        
+        currentclique = (
+            cliques[indexPath.row].valueForKey("id") as! String,
+            cliques[indexPath.row].valueForKey("isLeader") as! Bool,
+            cliques[indexPath.row].valueForKey("name") as! String,
+            cliques[indexPath.row].valueForKey("passcode") as! String,
+            cliques[indexPath.row].valueForKey("applemusic") as! Bool,
+            cliques[indexPath.row].valueForKey("spotify") as! Bool,
+            cliques[indexPath.row].valueForKey("voting") as! Bool
+        )
         
         PlayerManager.sharedInstance().library.removeAll()
 

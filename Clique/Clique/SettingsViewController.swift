@@ -113,7 +113,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             
             presentViewController(newalert, animated: true, completion: nil)
         } else {
-            soundcloudswitch.enabled = false
+            //soundcloudswitch.enabled = false
             //spotifyswitch.enabled = false
         }
         
@@ -157,6 +157,11 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     @IBAction func votingChanged(sender: AnyObject) {
+        if votingswitch.on {
+            currentclique.voting = true
+        } else {
+            currentclique.voting = false
+        }
     }
 
     @IBAction func spotifyChanged(sender: AnyObject) {
@@ -197,6 +202,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
             }
         } else {
             //TODO: set spotify member to false locally, in server, and in data store
+            currentclique.spotify = false
         }
 
 
@@ -289,6 +295,8 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                 self.presentViewController(nope, animated: true, completion: nil)
                 self.soundcloudswitch.setOn(false, animated: true)
             }
+        } else {
+            currentclique.applemusic = false
         }
     }
 
@@ -349,7 +357,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
                             newclique.setValue(true, forKey: "isLeader")
                             newclique.setValue(currentclique.applemusic, forKey: "applemusic")
                             newclique.setValue(currentclique.spotify, forKey: "spotify")
-                            newclique.setValue(true, forKey: "voting")
+                            newclique.setValue(currentclique.voting, forKey: "voting")
                             
                             //finish up
                             print(newclique)

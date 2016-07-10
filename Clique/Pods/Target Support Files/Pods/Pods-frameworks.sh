@@ -92,6 +92,7 @@ if [[ "$CONFIGURATION" == "Debug" ]]; then
   install_framework "Pods/SwiftyJSON.framework"
   install_framework "Pods/UICKeyChainStore.framework"
   install_framework "Pods/XCDYouTubeKit.framework"
+  install_framework "Pods/youtube_ios_player_helper.framework"
 fi
 if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/OnePasswordExtension.framework"
@@ -102,4 +103,5 @@ if [[ "$CONFIGURATION" == "Release" ]]; then
   install_framework "Pods/SwiftyJSON.framework"
   install_framework "Pods/UICKeyChainStore.framework"
   install_framework "Pods/XCDYouTubeKit.framework"
+  install_framework "Pods/youtube_ios_player_helper.framework"
 fi

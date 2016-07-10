@@ -14,22 +14,6 @@ import SwiftyJSON
 var currentclique: (id: String, leader: Bool, name: String, passcode: String, applemusic: Bool, spotify: Bool, voting: Bool) = ("", false, "", "", false, false, true) {
 
 didSet {
-    if !currentclique.leader || currentclique.id != oldValue.id {
-        return
-    }
-    
-    if currentclique.applemusic != oldValue.applemusic {
-        Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateAppleMusicStatus", parameters: ["value": currentclique.applemusic], encoding: .JSON)
-    }
-    
-    if currentclique.spotify != oldValue.spotify {
-        Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateSpotifyStatus", parameters: ["value": currentclique.spotify], encoding: .JSON)
-    }
-    
-    if currentclique.voting != oldValue.voting {
-        Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateVotingStatus", parameters: ["value": currentclique.voting], encoding: .JSON)
-    }
-    
     let appDelegate = UIApplication.sharedApplication().delegate as! AppDelegate
     let managedContext = appDelegate.managedObjectContext
     
@@ -63,8 +47,29 @@ didSet {
     } catch {
         print(error)
     }
+    
+    if !currentclique.leader || currentclique.id != oldValue.id {
+        return
+    }
+    
+    if currentclique.applemusic != oldValue.applemusic {
+        Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateAppleMusicStatus", parameters: ["value": currentclique.applemusic], encoding: .JSON)
+    }
+    
+    if currentclique.spotify != oldValue.spotify {
+        Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateSpotifyStatus", parameters: ["value": currentclique.spotify], encoding: .JSON)
+    }
+    
+    if currentclique.voting != oldValue.voting {
+        Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateVotingStatus", parameters: ["value": currentclique.voting], encoding: .JSON)
+    }
 }
 
+}
+
+enum CliqueEditAction {
+    case Delete
+    case Reorder
 }
 
 class CliqueManager {
@@ -280,6 +285,74 @@ class CliqueManager {
                 //let em know
                 NSNotificationCenter.defaultCenter().postNotificationName("CliqueUpdated", object: self)
             }).resume()
+        }
+    }
+    
+    func updateClique(forAction action: CliqueEditAction, sourceIndex: Int, destinationIndex: Int = 0) {
+        Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { response in
+            switch response.result {
+            case .Success:
+                if let value = response.result.value {
+                    let json = JSON(value)
+                    
+                    let songlist = json["songList"].array ?? []
+                    var played = [JSON]()
+                    var upcoming = [JSON]()
+                    
+                    for song in songlist {
+                        if song["played"].boolValue {
+                            played.append(song)
+                        } else {
+                            upcoming.append(song)
+                        }
+                    }
+                    
+                    var newlist = [[String : AnyObject]]()
+                    
+                    for song in played {
+                        let info: [String : AnyObject] = [
+                            "name": song["name"].string ?? "",
+                            "artist": song["artist"].string ?? "",
+                            "mpid": song["mpid"].string ?? "",
+                            "ytid": song["ytid"].string ?? "",
+                            "amid": song["amid"].string ?? "",
+                            "spid": song["spid"].string ?? "",
+                            "scid": song["scid"].string ?? "",
+                            "votes": song["votes"].int ?? 0,
+                            "played": true
+                        ]
+                        newlist.append(info)
+                    }
+                    
+                    for song in upcoming {
+                        let info: [String : AnyObject] = [
+                            "name": song["name"].string ?? "",
+                            "artist": song["artist"].string ?? "",
+                            "mpid": song["mpid"].string ?? "",
+                            "ytid": song["ytid"].string ?? "",
+                            "amid": song["amid"].string ?? "",
+                            "spid": song["spid"].string ?? "",
+                            "scid": song["scid"].string ?? "",
+                            "votes": song["votes"].int ?? 0,
+                            "played": false
+                        ]
+                        newlist.append(info)
+                    }
+                    
+                    switch action {
+                    case .Delete:
+                        newlist.removeAtIndex(sourceIndex + played.count)
+                    case .Reorder:
+                        let item = newlist[sourceIndex + played.count]
+                        newlist.removeAtIndex(sourceIndex + played.count)
+                        newlist.insert(item, atIndex: destinationIndex + played.count)
+                    }
+                    
+                    Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateClique", parameters: ["songList": newlist], encoding: .JSON)
+                }
+            case .Failure(let error):
+                print(error)
+            }
         }
     }
 }

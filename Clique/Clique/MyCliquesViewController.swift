@@ -215,7 +215,7 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             let widthScale = 40/(cell?.imageView?.image!.size.width)!
             let heightScale = 40/(cell?.imageView?.image!.size.height)!
             cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
-            
+            cell?.accessoryType = .None
         } else {
             cell?.textLabel?.text = cliques[indexPath.row].valueForKey("name") as? String
             if cliques[indexPath.row].valueForKey("isLeader") as! Bool {
@@ -232,7 +232,7 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if cliques.isEmpty {
+        if cliques.isEmpty || (nowplaying && indexPath.section == 0) {
             return
         }
         

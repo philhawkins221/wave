@@ -11,6 +11,7 @@ PODS:
   - SwiftyJSON (2.3.2)
   - UICKeyChainStore (2.0.7)
   - XCDYouTubeKit (2.5.1)
+  - youtube-ios-player-helper (0.1.6)
 
 DEPENDENCIES:
   - Alamofire
@@ -19,6 +20,7 @@ DEPENDENCIES:
   - SVGPlayButton (~> 0.4)
   - SwiftyJSON
   - XCDYouTubeKit (~> 2.5)
+  - youtube-ios-player-helper (~> 0.1)
 
 SPEC CHECKSUMS:
   1PasswordExtension: 00d6f4caae77c19ba33045b8569fbeb9689f0d1d
@@ -29,5 +31,6 @@ SPEC CHECKSUMS:
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
   UICKeyChainStore: 696cd35083f7c8fb5e201d909b7e6aea6b478575
   XCDYouTubeKit: ee78997dc92d1055f11459d95c492dae1dba909d
+  youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
 COCOAPODS: 0.39.0

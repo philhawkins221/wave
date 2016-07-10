@@ -7,14 +7,14 @@
 //
 
 import UIKit
-import XCDYouTubeKit
+import youtube_ios_player_helper
 import SDWebImage
 import SVGPlayButton
 
 //var tracktype: tracktypes = .isinactive
 
 
-class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate {
+class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate, YTPlayerViewDelegate {
     
     static var youtubewaiting = false
     
@@ -26,9 +26,8 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         }
     }
     
-    let video = XCDYouTubeVideoPlayerViewController()
     @IBOutlet weak var image: UIImageView!
-    @IBOutlet weak var player: UIView!
+    @IBOutlet weak var player: YTPlayerView!
     @IBOutlet weak var rewindbutton: UIButton!
     @IBOutlet weak var playbutton: SVGPlayButton!
     @IBOutlet weak var fastforwardbutton: UIButton!
@@ -47,7 +46,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
         fetch()
         
-        if PlayerViewController.youtubewaiting && video.moviePlayer.playbackState != .Playing {
+        if PlayerViewController.youtubewaiting && player.playerState() != .Playing {
             ytprepare()
         }
     }
@@ -59,6 +58,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(PlayerViewController.fetch), name: "PlayerManagerDidChangeSong", object: nil)
         playbutton.willPlay = { self.play() }
         playbutton.willPause = { self.pause() }
+        player.delegate = self
         
         /*waves.idleAmplitude = 0.9
         waves.numberOfWaves = 3
@@ -75,7 +75,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         PlayerViewController.youtubewaiting = false
         UIApplication.sharedApplication().setStatusBarHidden(false, withAnimation: .Slide)
         if PlayerManager.sharedInstance().tracktype == .isyoutube {
-            currentsong.time = video.moviePlayer.currentPlaybackTime
+            currentsong.time = Double(player.currentTime())
         }
         
     }
@@ -140,14 +140,13 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
     }
     
     func ytprepare() {
-        video.moviePlayer.fullscreen = false
-        video.videoIdentifier = PlayerManager.sharedInstance().ytid
-        video.presentInView(player)
-        video.moviePlayer.currentPlaybackTime = metadata.time
-        video.moviePlayer.prepareToPlay()
-        video.moviePlayer.play()
-        
+        player.loadWithVideoId(PlayerManager.sharedInstance().ytid, playerVars: ["playsinline": 1, "autohide": 1, "autoplay": 1, "rel": 0, "showinfo": 0, "modestbranding": 1])
+        player.seekToSeconds(Float(metadata.time), allowSeekAhead: true)
+
+        videoButton(UIView())
+        player.playVideo()
         PlayerViewController.youtubewaiting = false
+        
     }
     
     func resizeImage(image: UIImage, newWidth: CGFloat) -> UIImage {
@@ -161,6 +160,13 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         UIGraphicsEndImageContext()
         
         return newImage
+    }
+    
+    func playerView(playerView: YTPlayerView, didChangeToState state: YTPlayerState) {
+        if state == .Ended {
+            playbutton.playing = false
+            PlayerManager.sharedInstance().fetch()
+        }
     }
     
     override func didReceiveMemoryWarning() {
@@ -198,7 +204,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         switch PlayerManager.sharedInstance().tracktype {
         case .islocal, .isapplemusic: PlayerManager.sharedInstance().system.currentPlaybackTime = 0
         case .isspotify: PlayerManager.sharedInstance().spot.seekToOffset(0, callback: nil)
-        case .isyoutube: video.moviePlayer.currentPlaybackTime = 0
+        case .isyoutube: player.seekToSeconds(0, allowSeekAhead: true)
         case .issoundcloud: return
         case .isinactive: return
         }
@@ -208,7 +214,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         switch PlayerManager.sharedInstance().tracktype {
         case .islocal, .isapplemusic: PlayerManager.sharedInstance().system.play()
         case .isspotify: PlayerManager.sharedInstance().spot.setIsPlaying(true, callback: nil)
-        case .isyoutube: video.moviePlayer.play()
+        case .isyoutube: player.playVideo()
         case .issoundcloud: return
         case .isinactive:
             PlayerManager.sharedInstance().fetch()
@@ -220,7 +226,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate 
         switch PlayerManager.sharedInstance().tracktype {
         case .islocal, .isapplemusic: PlayerManager.sharedInstance().system.pause()
         case .isspotify: PlayerManager.sharedInstance().spot.setIsPlaying(false, callback: nil)
-        case .isyoutube: video.moviePlayer.pause()
+        case .isyoutube: player.pauseVideo()
         case .issoundcloud: return
         case .isinactive: return
         }

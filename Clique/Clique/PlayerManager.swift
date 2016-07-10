@@ -211,6 +211,13 @@ class PlayerManager {
                 ytalert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in }))
                 UIApplication.topViewController()?.presentViewController(ytalert, animated: true, completion: nil)
             }
+            
+            MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = [
+                MPMediaItemPropertyTitle: currentsong.song,
+                MPMediaItemPropertyArtist: currentsong.artist,
+                MPMediaItemPropertyAlbumTitle: currentsong.album,
+                MPMediaItemPropertyAlbumArtist: currentsong.artist
+            ]
         case .isspotify:
             print("preparing spotify player")
             spot.stop(nil)
@@ -232,6 +239,13 @@ class PlayerManager {
                     }
                 })
             }
+            
+            MPNowPlayingInfoCenter.defaultCenter().nowPlayingInfo = [
+                MPMediaItemPropertyTitle: currentsong.song,
+                MPMediaItemPropertyArtist: currentsong.artist,
+                MPMediaItemPropertyAlbumTitle: currentsong.album,
+                MPMediaItemPropertyAlbumArtist: currentsong.artist
+            ]
         case .islocal:
             print("preparing system player")
             MPMediaLibrary.defaultMediaLibrary().lastModifiedDate

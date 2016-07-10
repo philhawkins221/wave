@@ -208,7 +208,7 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xZ7-j0-wFq">
+                            <view hidden="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="xZ7-j0-wFq" customClass="YTPlayerView">
                                 <rect key="frame" x="0.0" y="0.0" width="600" height="298"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                             </view>
@@ -320,7 +320,7 @@
                         <outlet property="fastforwardbutton" destination="E5G-Up-MPZ" id="2WP-8H-ZIC"/>
                         <outlet property="image" destination="P3r-gw-eXZ" id="L7B-X2-LbX"/>
                         <outlet property="playbutton" destination="adI-i8-Y4J" id="1Lz-bx-FTc"/>
-                        <outlet property="player" destination="xZ7-j0-wFq" id="679-3S-Fq1"/>
+                        <outlet property="player" destination="xZ7-j0-wFq" id="duG-aW-sHE"/>
                         <outlet property="rewindbutton" destination="Klf-F4-IjZ" id="uoj-iJ-iDB"/>
                         <outlet property="savebutton" destination="D6B-HT-Une" id="Poq-na-OHb"/>
                         <outlet property="songlabel" destination="pVj-ST-ceU" id="N8g-oE-hN6"/>
@@ -511,7 +511,7 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
-                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="jni-NM-cVe">
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" allowsSelectionDuringEditing="YES" rowHeight="60" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="jni-NM-cVe">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
                                 <prototypes>
@@ -551,7 +551,7 @@
                                             </constraints>
                                         </tableViewCellContentView>
                                     </tableViewCell>
-                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="blue" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="song" textLabel="oob-VK-Lcf" detailTextLabel="Ym6-30-mP0" style="IBUITableViewCellStyleSubtitle" id="AWF-D4-a2J" customClass="CliqueSongTableViewCell" customModule="Clique" customModuleProvider="target">
+                                    <tableViewCell clipsSubviews="YES" contentMode="scaleToFill" selectionStyle="none" hidesAccessoryWhenEditing="NO" indentationLevel="1" indentationWidth="0.0" reuseIdentifier="song" textLabel="oob-VK-Lcf" detailTextLabel="Ym6-30-mP0" style="IBUITableViewCellStyleSubtitle" id="AWF-D4-a2J" customClass="CliqueSongTableViewCell" customModule="Clique" customModuleProvider="target">
                                         <rect key="frame" x="0.0" y="178" width="600" height="60"/>
                                         <autoresizingMask key="autoresizingMask"/>
                                         <tableViewCellContentView key="contentView" opaque="NO" clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="center" tableViewCell="AWF-D4-a2J" id="VUb-II-RWi">
@@ -772,6 +772,11 @@
                     </view>
                     <navigationItem key="navigationItem" title="Add to Clique" id="dCv-C9-Jfi">
                         <barButtonItem key="backBarButtonItem" title="Add" id="s7d-Tb-nYT"/>
+                        <barButtonItem key="rightBarButtonItem" title="Saved" id="H35-w4-LL5">
+                            <connections>
+                                <segue destination="3t0-ld-7I2" kind="presentation" id="XU9-Hy-c8u"/>
+                            </connections>
+                        </barButtonItem>
                     </navigationItem>
                     <connections>
                         <outlet property="applemusicbutton" destination="gVf-xW-RpL" id="dhK-Zr-3jY"/>
@@ -1151,6 +1156,8 @@
                         </barButtonItem>
                     </navigationItem>
                     <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" prompted="NO"/>
+                    <freeformSimulatedSizeMetrics key="simulatedDestinationMetrics"/>
+                    <size key="freeformSize" width="600" height="600"/>
                     <connections>
                         <outlet property="cliquename" destination="GeY-J2-0ng" id="R94-Bs-Os7"/>
                         <outlet property="donebutton" destination="LJn-lc-afw" id="omi-tt-17f"/>

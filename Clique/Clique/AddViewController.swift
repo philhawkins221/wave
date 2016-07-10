@@ -96,6 +96,11 @@ class AddViewController: UIViewController {
     }
     
     @IBAction func ytpressed(sender: AnyObject) {
+//        youtubebutton.setTitle("Coming Soon!", forState: .Normal)
+//        youtubebutton.alpha = 0.25
+//        youtubebutton.enabled = false
+//        return Void()
+        
         base = .youtube
         cleartheair()
     }

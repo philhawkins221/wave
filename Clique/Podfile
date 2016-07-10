@@ -4,6 +4,7 @@ use_frameworks!
 pod 'SDWebImage', '~>3.7'
 pod 'SwiftyJSON'
 pod 'XCDYouTubeKit', '~> 2.5'
+pod 'youtube-ios-player-helper', '~> 0.1'
 pod 'Alamofire'
 pod 'Soundcloud'
 pod 'SVGPlayButton', '~> 0.4'

@@ -12,7 +12,10 @@ import Alamofire
 
 class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDataSource {
 
+    var currentSong: (name: String, artist: String, artwork: String) = ("", "", "")
     var timer = NSTimer()
+    var library = [(song: [String : AnyObject], played: Bool)]()
+    var magic = [(song: [String : AnyObject], artwork: String, played: Bool)]()
 
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var player: UIBarButtonItem!
@@ -24,7 +27,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         table.delegate = self
         table.dataSource = self
         //table.hidden = true
-
+        
         if currentclique.leader {
             table.setEditing(true, animated: true)
         }
@@ -53,6 +56,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func fetch() {
+        //recheck voting status
         Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id).responseJSON { response in
             switch response.result {
             case .Success:
@@ -68,7 +72,29 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
         
+        //fetch current song
+        let r1 = Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON()
+        if let value = r1.result.value {
+            let json = JSON(value)
+            
+            self.currentSong = (json["currentSong"].string ?? "", json["artist"].string ?? "", "")
+        }
+        
+        //get artwork for current song
+        let r2 = Alamofire.request(.GET, "https://api.spotify.com/v1/search?q=track:" + PlayerManager.sharedInstance().plus(currentSong.name) + "%20artist:" + PlayerManager.sharedInstance().plus(currentSong.artist) + "&type=track&limit=1").responseJSON()
+        if let value = r2.result.value where self.currentSong.name != "" {
+            let json = JSON(value)
+            
+            self.currentSong.artwork = json["tracks"]["items"][0]["album"]["images"][0]["url"].string ?? ""
+        }
+        
+        //fetch up next
         CliqueManager.sharedInstance().fetch()
+        
+        //update libraries
+        library = PlayerManager.sharedInstance().library.filter({ !$0.played })
+        magic = PlayerManager.sharedInstance().magic.filter({ !$0.played })
+        
     }
     
     func refresh() {
@@ -86,14 +112,19 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     //MARK: - TableView Stack
 
     func numberOfSectionsInTableView(tableView: UITableView) -> Int {
-        return 2
+        switch emptydirective {
+        case .library, .magic where currentclique.leader: return 3
+        default: return 2
+        }
     }
 
     func tableView(tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        if section == 0 {
-            return 1
+        switch section {
+        case 0: return 1
+        case 1: return CliqueManager.sharedInstance().clique.isEmpty ? 1 : CliqueManager.sharedInstance().clique.count
+        case 2: return emptydirective == .library ? library.count : magic.count
+        default: return 0
         }
-        return CliqueManager.sharedInstance().clique.count
     }
 
     func tableView(tableView: UITableView, heightForRowAtIndexPath indexPath: NSIndexPath) -> CGFloat {
@@ -114,11 +145,40 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         }
 
         if indexPath.section != 0 {
-
+            
+            if indexPath.section == 2 {
+                switch emptydirective {
+                case .library:
+                    let song = library[indexPath.row].song
+                    
+                    cell?.textLabel?.text = song["name"] as? String ?? ""
+                    cell?.detailTextLabel?.text = song["artist"] as? String ?? ""
+                    cell?.imageView?.image = nil
+                    cell?.voteslabel.text = ""
+                case .magic:
+                    let song = magic[indexPath.row]
+                    
+                    cell?.textLabel?.text = song.song["name"] as? String ?? ""
+                    cell?.detailTextLabel?.text = song.song["artist"] as? String ?? ""
+                    cell?.imageView?.sd_setImageWithURL(NSURL(string: song.artwork), placeholderImage: UIImage(named: "genericart.png")!)
+                    cell?.voteslabel.text = ""
+                    
+                    if cell?.imageView?.image != nil {
+                        let widthScale = 50/(cell?.imageView?.image!.size.width)!
+                        let heightScale = 50/(cell?.imageView?.image!.size.height)!
+                        cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
+                    }
+                default: break
+                }
+                
+                return cell!
+            }
+            
             if CliqueManager.sharedInstance().clique.isEmpty {
                 cell?.textLabel?.text = "Clique is Empty"
                 cell?.detailTextLabel?.text = "Press the add button below to start listening"
                 cell?.voteslabel.text = ""
+                cell?.imageView?.image = nil
 
                 return cell!
             }
@@ -137,10 +197,10 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 let heightScale = 50/(cell?.imageView?.image!.size.height)!
                 cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
             }
-        } else { //TODO: - get current song, maybe do this in fetch()
-            cell?.textLabel?.text = CliqueManager.sharedInstance().currentSong.name
-            cell?.detailTextLabel?.text = CliqueManager.sharedInstance().currentSong.artist
-            cell?.imageView?.sd_setImageWithURL(NSURL(string: CliqueManager.sharedInstance().currentSong.artwork), placeholderImage: UIImage(named: "genericart.png")!)
+        } else {
+            cell?.textLabel?.text = currentSong.name
+            cell?.detailTextLabel?.text = currentSong.artist
+            cell?.imageView?.sd_setImageWithURL(NSURL(string: currentSong.artwork), placeholderImage: UIImage(named: "genericart.png")!)
             //cell?.backgroundColor = UIColor.lightTextColor()
 
             if cell?.imageView?.image != nil {
@@ -150,10 +210,10 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
             }
         }
 
-        if indexPath.section == 1 {
-            cell?.accessoryType = .None
-        } else {
+        if indexPath.section == 0 {
             cell?.accessoryType = .DisclosureIndicator
+        } else {
+            cell?.accessoryType = .None
         }
 
         if privatelistening || !currentclique.voting {
@@ -174,13 +234,15 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
             return "Now Playing"
         } else if section == 1 {
             return "Up Next"
+        } else if section == 2 {
+            return emptydirective == .library ? "From Clique Music Library" : "Clique Radio"
         }
 
         return nil
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        if indexPath.section == 0 || privatelistening {
+        if indexPath.section == 0 || privatelistening || indexPath.section == 2 {
             return nil
         }
 
@@ -195,8 +257,9 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
                 CliqueManager.sharedInstance().clique[indexPath.row].voting_available = false
                 CliqueManager.sharedInstance().clique[indexPath.row].votes += 1
-                self.table.setEditing(false, animated: false)
+                self.table.setEditing(false, animated: true)
                 self.table.reloadData()
+                if currentclique.leader { self.table.setEditing(true, animated: true) }
             }
         })
 
@@ -213,10 +276,11 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 CliqueManager.sharedInstance().clique[indexPath.row].votes -= 1
                 self.table.setEditing(false, animated: true)
                 self.table.reloadData()
+                if currentclique.leader { self.table.setEditing(true, animated: true) }
             }
         })
 
-        let votes = UITableViewRowAction(style: .Default, title: CliqueManager.sharedInstance().clique[indexPath.row].votes.description, handler: {(action, indexpath) in })
+        //let votes = UITableViewRowAction(style: .Default, title: CliqueManager.sharedInstance().clique[indexPath.row].votes.description, handler: {(action, indexpath) in })
         
         let delete = UITableViewRowAction(style: .Default, title: "Delete", handler: { (action, indexpath) in
             let alert = UIAlertController(title: "Delete Song", message: "This song will be removed from the Clique.", preferredStyle: .Alert)
@@ -232,9 +296,13 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         })
 
         upvote.backgroundColor = UIColor.orangeColor()
-        votes.backgroundColor = UIColor.grayColor()
+        //votes.backgroundColor = UIColor.grayColor()
         downvote.backgroundColor = UIColor(red: 200/255, green: 200/255, blue: 200/255, alpha: 1)
         delete.backgroundColor = UIColor.redColor()
+        
+        if privatelistening {
+            return [delete]
+        }
         
         return currentclique.leader ? [upvote, downvote, delete] : [upvote, downvote]
     }
@@ -255,15 +323,74 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(tableView: UITableView, canEditRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        return indexPath.section == 0 ? false : true
+        if indexPath.section == 0 {
+            return false
+        }
+        
+        if indexPath.section == 1 && CliqueManager.sharedInstance().clique.isEmpty {
+            return false
+        }
+        
+        return true
     }
     
     func tableView(tableView: UITableView, editingStyleForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCellEditingStyle {
-        return indexPath.section == 0 ? .None : .Delete
+        switch indexPath.section {
+        case 0: return .None
+        case 1: return .Delete
+        case 2: return .Insert
+        default: return .None
+        }
+    }
+    
+    func tableView(tableView: UITableView, commitEditingStyle editingStyle: UITableViewCellEditingStyle, forRowAtIndexPath indexPath: NSIndexPath) {
+        if editingStyle == .Insert {
+            let add = UIAlertController(title: "Add Song", message: "Add this song to Clique?", preferredStyle: .Alert)
+            add.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: nil))
+            add.addAction(UIAlertAction(title: "Add", style: .Default, handler: {[unowned self] action in
+                switch emptydirective {
+                case .library:
+                    self.library[indexPath.row].song["radio"] = false
+                    Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: self.library[indexPath.row].song, encoding: .JSON)
+                    
+                    self.library.removeAtIndex(indexPath.row)
+                    tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: indexPath.row, inSection: 2)], withRowAnimation: .Automatic)
+                    
+                    for i in 0..<PlayerManager.sharedInstance().library.count {
+                        if PlayerManager.sharedInstance().library[i].played {
+                            continue
+                        } else {
+                            PlayerManager.sharedInstance().library[i].played = true
+                            break
+                        }
+                    }
+                case .magic:
+                    self.magic[indexPath.row].song["radio"] = false
+                    Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: self.magic[indexPath.row].song, encoding: .JSON)
+                    
+                    self.magic.removeAtIndex(indexPath.row)
+                    tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: indexPath.row, inSection: 2)], withRowAnimation: .Automatic)
+                    
+                    for i in 0..<PlayerManager.sharedInstance().magic.count {
+                        if PlayerManager.sharedInstance().magic[i].played {
+                            continue
+                        } else {
+                            PlayerManager.sharedInstance().magic[i].played = true
+                            break
+                        }
+                    }
+                default: break
+                }
+            }))
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                self.presentViewController(add, animated: true, completion: nil)
+            })
+        }
     }
     
     func tableView(tableView: UITableView, canMoveRowAtIndexPath indexPath: NSIndexPath) -> Bool {
-        if currentclique.leader && !currentclique.voting && indexPath.section != 0 {
+        if (currentclique.leader && !currentclique.voting && indexPath.section != 0) || indexPath.section == 2 {
             return true
         }
         
@@ -271,11 +398,42 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
     
     func tableView(tableView: UITableView, moveRowAtIndexPath sourceIndexPath: NSIndexPath, toIndexPath destinationIndexPath: NSIndexPath) {
-        let item = CliqueManager.sharedInstance().clique[sourceIndexPath.row]
-        CliqueManager.sharedInstance().clique.removeAtIndex(sourceIndexPath.row)
-        CliqueManager.sharedInstance().clique.insert(item, atIndex: destinationIndexPath.row)
-        
-        CliqueManager.sharedInstance().updateClique(forAction: .Reorder, sourceIndex: sourceIndexPath.row, destinationIndex: destinationIndexPath.row)
+        switch sourceIndexPath.section {
+        case 1:
+            let item = CliqueManager.sharedInstance().clique[sourceIndexPath.row]
+            CliqueManager.sharedInstance().clique.removeAtIndex(sourceIndexPath.row)
+            CliqueManager.sharedInstance().clique.insert(item, atIndex: destinationIndexPath.row)
+            
+            CliqueManager.sharedInstance().updateClique(forAction: .Reorder, sourceIndex: sourceIndexPath.row, destinationIndex: destinationIndexPath.row)
+        case 2:
+            switch emptydirective {
+            case .library:
+                let item = library[sourceIndexPath.row]
+                library.removeAtIndex(sourceIndexPath.row)
+                library.insert(item, atIndex: destinationIndexPath.row)
+                
+                PlayerManager.sharedInstance().library = PlayerManager.sharedInstance().library.filter({ $0.played }) + library
+            case .magic:
+                let item = magic[sourceIndexPath.row]
+                magic.removeAtIndex(sourceIndexPath.row)
+                magic.insert(item, atIndex: destinationIndexPath.row)
+                
+                PlayerManager.sharedInstance().magic = PlayerManager.sharedInstance().magic.filter({ $0.played }) + magic
+            default: break
+            }
+        default: break
+        }
+    }
+    
+    func tableView(tableView: UITableView, targetIndexPathForMoveFromRowAtIndexPath sourceIndexPath: NSIndexPath, toProposedIndexPath proposedDestinationIndexPath: NSIndexPath) -> NSIndexPath {
+        if sourceIndexPath.section != proposedDestinationIndexPath.section {
+            var row = 0
+            if sourceIndexPath.section < proposedDestinationIndexPath.section {
+                row = self.tableView(tableView, numberOfRowsInSection: sourceIndexPath.section) - 1
+            }
+            return NSIndexPath(forRow: row, inSection: sourceIndexPath.section)
+        }
+        return proposedDestinationIndexPath
     }
 
     // MARK: - IBActions

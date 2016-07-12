@@ -104,11 +104,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate,
             
             switch PlayerManager.sharedInstance().tracktype {
             case .islocal:
-                if PlayerManager.sharedInstance().autoplaying {
-                    self.videobutton.title = "Autoplay"
-                } else {
-                    self.videobutton.title = "Clique"
-                }
+                self.videobutton.title = "Clique"
                 self.bottombar.barTintColor = UIColor.lightGrayColor()
             case .isapplemusic:
                 self.videobutton.title = "Apple Music"
@@ -128,6 +124,11 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate,
             case .isinactive:
                 self.videobutton.title = "Clique"
                 self.bottombar.barTintColor = UIColor.lightGrayColor()
+            }
+            
+            if PlayerManager.sharedInstance().autoplaying {
+                self.videobutton.title = "Clique Radio"
+                self.bottombar.barTintColor = self.view.window?.tintColor
             }
         })
         
@@ -234,6 +235,13 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate,
     
     @IBAction func fastforward(sender: AnyObject) {
         PlayerManager.sharedInstance().fetch()
+//        switch PlayerManager.sharedInstance().tracktype {
+//        case .islocal, .isapplemusic: PlayerManager.sharedInstance().system.stop()
+//        case .isspotify: PlayerManager.sharedInstance().spot.stop(nil)
+//        case .isyoutube: player.stopVideo()
+//        case .issoundcloud: return
+//        case .isinactive: return
+//        }
         
         rewindbutton.enabled = false
         playbutton.enabled = false

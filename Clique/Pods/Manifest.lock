@@ -1,6 +1,8 @@
 PODS:
   - 1PasswordExtension (1.8.1)
-  - Alamofire (3.2.1)
+  - Alamofire (3.4.0)
+  - Alamofire-Synchronous (3.0.0):
+    - Alamofire (~> 3.0)
   - SDWebImage (3.7.4):
     - SDWebImage/Core (= 3.7.4)
   - SDWebImage/Core (3.7.4)
@@ -10,27 +12,37 @@ PODS:
   - SVGPlayButton (0.4.0)
   - SwiftyJSON (2.3.2)
   - UICKeyChainStore (2.0.7)
-  - XCDYouTubeKit (2.5.1)
   - youtube-ios-player-helper (0.1.6)
 
 DEPENDENCIES:
-  - Alamofire
+  - Alamofire (~> 3.4)
+  - Alamofire-Synchronous (from `https://github.com/Dalodd/Alamofire-Synchronous.git`)
   - SDWebImage (~> 3.7)
   - Soundcloud
   - SVGPlayButton (~> 0.4)
   - SwiftyJSON
-  - XCDYouTubeKit (~> 2.5)
   - youtube-ios-player-helper (~> 0.1)
+
+EXTERNAL SOURCES:
+  Alamofire-Synchronous:
+    :git: https://github.com/Dalodd/Alamofire-Synchronous.git
+
+CHECKOUT OPTIONS:
+  Alamofire-Synchronous:
+    :commit: 91306da0592dd9d63b4fd3bb408a992b4fd5dd57
+    :git: https://github.com/Dalodd/Alamofire-Synchronous.git
 
 SPEC CHECKSUMS:
   1PasswordExtension: 00d6f4caae77c19ba33045b8569fbeb9689f0d1d
-  Alamofire: f11d8624a05f5d39e0c99309b3e600a3ba64298a
+  Alamofire: c19a627cefd6a95f840401c49ab1f124e07f54ee
+  Alamofire-Synchronous: dc5dccc284e03c3b760e09c655dfe6fa292364b6
   SDWebImage: 247edd7dd80dd6124197b0d6a17846fe9d1df968
   Soundcloud: 372ac38762a29949302bd52f5cbd2839af2aa930
   SVGPlayButton: 434e4bf97799c206ed283bd1951507f678328766
   SwiftyJSON: 04ccea08915aa0109039157c7974cf0298da292a
   UICKeyChainStore: 696cd35083f7c8fb5e201d909b7e6aea6b478575
-  XCDYouTubeKit: ee78997dc92d1055f11459d95c492dae1dba909d
   youtube-ios-player-helper: 21ab92db027c7ff86cb17a3843a3f6eafc8158d2
 
-COCOAPODS: 0.39.0
+PODFILE CHECKSUM: ad084d5b8b55c4e09964f92dd2a181d847821f3c
+
+COCOAPODS: 1.0.0

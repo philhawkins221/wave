@@ -63,6 +63,10 @@ didSet {
     if currentclique.voting != oldValue.voting {
         Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateVotingStatus", parameters: ["value": currentclique.voting], encoding: .JSON)
     }
+    
+    if currentclique.applemusic || currentclique.spotify {
+        emptydirective = .magic
+    }
 }
 
 }
@@ -77,7 +81,7 @@ class CliqueManager {
     static var instance: CliqueManager?
     
     var clique: [(song: String, artist: String, artwork: String?, votes: Int, voting_available: Bool)]
-    var currentSong: (name: String, artist: String, artwork: String) = ("", "", "")
+    //var currentSong: (name: String, artist: String, artwork: String) = ("", "", "")
     
     var cliquejson = [String : AnyObject]()
     
@@ -97,7 +101,6 @@ class CliqueManager {
         print("fetching")
         clique.removeAll()
         cliquejson.removeAll()
-        currentSong = ("", "", "")
         
         //step 1: check "voting" status in clique, and rearrange clique as needed
         if currentclique.leader && currentclique.voting {
@@ -133,7 +136,8 @@ class CliqueManager {
                                 "spid": song["spid"].string ?? "",
                                 "scid": song["scid"].string ?? "",
                                 "votes": song["votes"].int ?? 0,
-                                "played": true
+                                "played": true,
+                                "radio": song["radio"].bool ?? false
                             ]
                             newlist.append(info)
                         }
@@ -148,7 +152,8 @@ class CliqueManager {
                                 "spid": song["spid"].string ?? "",
                                 "scid": song["scid"].string ?? "",
                                 "votes": song["votes"].int ?? 0,
-                                "played": false
+                                "played": false,
+                                "radio": song["radio"].bool ?? false
                             ]
                             newlist.append(info)
                         }
@@ -164,20 +169,20 @@ class CliqueManager {
         }
         
         //step 2: get current song
-        Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { response in
-            switch response.result {
-            case .Success:
-                if let value = response.result.value {
-                    let json = JSON(value)
-                    
-                    dispatch_async(dispatch_get_main_queue(), {
-                        self.currentSong = (json["currentSong"].string ?? "", json["artist"].string ?? "", "")
-                    })
-                }
-            case .Failure(let error):
-                print(error)
-            }
-        }
+//        Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { response in
+//            switch response.result {
+//            case .Success:
+//                if let value = response.result.value {
+//                    let json = JSON(value)
+//                    
+//                    dispatch_async(dispatch_get_main_queue(), {
+//                        self.currentSong = (json["currentSong"].string ?? "", json["artist"].string ?? "", "")
+//                    })
+//                }
+//            case .Failure(let error):
+//                print(error)
+//            }
+//        }
         
         let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         var prime = [(song: String, artist: String, artwork: String?, votes: Int)]()
@@ -210,7 +215,7 @@ class CliqueManager {
             
             //check if the fetch came back empty
             if song == "" && artist == "" {
-                
+                NSNotificationCenter.defaultCenter().postNotificationName("CliqueUpdated", object: self)
                 
                 return
             }
@@ -240,19 +245,6 @@ class CliqueManager {
         let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         
         //step 4: verify names and find album+artwork - spotify api
-        Alamofire.request(.GET, "https://api.spotify.com/v1/search?q=track:" + plus(currentSong.name) + "%20artist:" + plus(currentSong.artist) + "&type=track&limit=1").responseJSON { [unowned self] response in
-            switch response.result {
-            case .Success:
-                if let value = response.result.value where self.currentSong.name != "" {
-                    let json = JSON(value)
-                    
-                    self.currentSong.artwork = json["tracks"]["items"][0]["album"]["images"][0]["url"].string ?? ""
-                }
-            case .Failure(let error):
-                print(error)
-            }
-        }
-        
         for song in prime {
             
             let plussong = plus(song.song)
@@ -319,7 +311,8 @@ class CliqueManager {
                             "spid": song["spid"].string ?? "",
                             "scid": song["scid"].string ?? "",
                             "votes": song["votes"].int ?? 0,
-                            "played": true
+                            "played": true,
+                            "radio": song["radio"].bool ?? false
                         ]
                         newlist.append(info)
                     }
@@ -334,7 +327,8 @@ class CliqueManager {
                             "spid": song["spid"].string ?? "",
                             "scid": song["scid"].string ?? "",
                             "votes": song["votes"].int ?? 0,
-                            "played": false
+                            "played": false,
+                            "radio": song["radio"].bool ?? false
                         ]
                         newlist.append(info)
                     }

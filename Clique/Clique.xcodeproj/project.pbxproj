@@ -44,13 +44,11 @@
 		4ADF95E61D026D6800E0CD19 /* clique 180.png in Resources */ = {isa = PBXBuildFile; fileRef = 4ADF95E41D026D6800E0CD19 /* clique 180.png */; };
 		4AFCD3521CEFB09600E5E9B1 /* AppleMusicViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */; };
 		4AFCD3541CEFB17D00E5E9B1 /* SoundcloudViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */; };
-		6206BB4708092D4AC7A802A8 /* Pods.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 04BB775530468DBA34B218CB /* Pods.framework */; };
+		9957A368FB2B39D6834B6673 /* Pods_Clique.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9D40512C31A8AE09B7542F /* Pods_Clique.framework */; };
 /* End PBXBuildFile section */
 
 /* Begin PBXFileReference section */
-		04BB775530468DBA34B218CB /* Pods.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		1AABC7B3C8D6DCE9D22BF001 /* Pods.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.debug.xcconfig; path = "Pods/Target Support Files/Pods/Pods.debug.xcconfig"; sourceTree = "<group>"; };
-		23A40A56E4D987BC4C1251AA /* Pods.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = Pods.release.xcconfig; path = "Pods/Target Support Files/Pods/Pods.release.xcconfig"; sourceTree = "<group>"; };
+		115498342A55072D64E42064 /* Pods-Clique.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clique.debug.xcconfig"; path = "Pods/Target Support Files/Pods-Clique/Pods-Clique.debug.xcconfig"; sourceTree = "<group>"; };
 		4A16BEDC1CAC3BC60089997F /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		4A16BEDE1CAC3BD40089997F /* YTViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTViewController.swift; sourceTree = "<group>"; };
 		4A179AF81D00C64100B6EE20 /* apple music logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "apple music logo.jpg"; sourceTree = "<group>"; };
@@ -89,9 +87,10 @@
 		4ACEF1F01CC7E82D0066EBFD /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		4ADF95E31D026D6800E0CD19 /* clique 120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 120.png"; sourceTree = "<group>"; };
 		4ADF95E41D026D6800E0CD19 /* clique 180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 180.png"; sourceTree = "<group>"; };
-		4ADF95E71D0278B100E0CD19 /* NPWaveformView.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = NPWaveformView.framework; path = "../../../../../Library/Developer/Xcode/DerivedData/Clique-fnnueyevesucevdvxxjsesornipt/Build/Products/Debug-iphoneos/NPWaveformView.framework"; sourceTree = "<group>"; };
 		4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicViewController.swift; sourceTree = "<group>"; };
 		4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundcloudViewController.swift; sourceTree = "<group>"; };
+		BF3FDFC5DDD37E53C14DA730 /* Pods-Clique.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clique.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clique/Pods-Clique.release.xcconfig"; sourceTree = "<group>"; };
+		ED9D40512C31A8AE09B7542F /* Pods_Clique.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clique.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
@@ -99,12 +98,12 @@
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				4A67C2A11CFE750B00C1D331 /* SVGPlayButton.framework in Frameworks */,
 				4A7D6C971CDFB22300ADDDA1 /* SystemConfiguration.framework in Frameworks */,
 				4AB840D11CD70640005FDB47 /* MediaPlayer.framework in Frameworks */,
 				4AC3EF3B1C7E95970013EEFF /* AVFoundation.framework in Frameworks */,
 				4A5A5B681CE1685A00BD2F5F /* Spotify.framework in Frameworks */,
-				6206BB4708092D4AC7A802A8 /* Pods.framework in Frameworks */,
+				9957A368FB2B39D6834B6673 /* Pods_Clique.framework in Frameworks */,
+				4A67C2A11CFE750B00C1D331 /* SVGPlayButton.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
@@ -116,8 +115,8 @@
 			children = (
 				4AC3C9F01C4ACCB700D5BCCA /* Clique */,
 				4AC3C9EF1C4ACCB700D5BCCA /* Products */,
-				AF8DB0C00DC22ACCAD0A6E8B /* Pods */,
 				E984A4FC6EC0F95028B54D07 /* Frameworks */,
+				C1F2C7F4AE4EE8E89104D46B /* Pods */,
 			);
 			sourceTree = "<group>";
 		};
@@ -170,11 +169,11 @@
 			path = Clique;
 			sourceTree = "<group>";
 		};
-		AF8DB0C00DC22ACCAD0A6E8B /* Pods */ = {
+		C1F2C7F4AE4EE8E89104D46B /* Pods */ = {
 			isa = PBXGroup;
 			children = (
-				1AABC7B3C8D6DCE9D22BF001 /* Pods.debug.xcconfig */,
-				23A40A56E4D987BC4C1251AA /* Pods.release.xcconfig */,
+				115498342A55072D64E42064 /* Pods-Clique.debug.xcconfig */,
+				BF3FDFC5DDD37E53C14DA730 /* Pods-Clique.release.xcconfig */,
 			);
 			name = Pods;
 			sourceTree = "<group>";
@@ -182,13 +181,12 @@
 		E984A4FC6EC0F95028B54D07 /* Frameworks */ = {
 			isa = PBXGroup;
 			children = (
-				4ADF95E71D0278B100E0CD19 /* NPWaveformView.framework */,
 				4A67C2A01CFE750B00C1D331 /* SVGPlayButton.framework */,
 				4A5A5B671CE1685A00BD2F5F /* Spotify.framework */,
 				4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */,
 				4AB840D01CD70640005FDB47 /* MediaPlayer.framework */,
 				4AC3EF3A1C7E95970013EEFF /* AVFoundation.framework */,
-				04BB775530468DBA34B218CB /* Pods.framework */,
+				ED9D40512C31A8AE09B7542F /* Pods_Clique.framework */,
 			);
 			name = Frameworks;
 			sourceTree = "<group>";
@@ -200,12 +198,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4AC3CA031C4ACCB700D5BCCA /* Build configuration list for PBXNativeTarget "Clique" */;
 			buildPhases = (
-				8F5CE3DF36A192CE5E1C84D3 /* Check Pods Manifest.lock */,
+				D1CE7353C83F6C7EFCCF3040 /* 📦 Check Pods Manifest.lock */,
 				4AC3C9EA1C4ACCB700D5BCCA /* Sources */,
 				4AC3C9EB1C4ACCB700D5BCCA /* Frameworks */,
 				4AC3C9EC1C4ACCB700D5BCCA /* Resources */,
-				A917C36853878A78F488A501 /* Embed Pods Frameworks */,
-				0899C097259E7F9E4F21A856 /* Copy Pods Resources */,
+				C392AB012A8641B1D552B830 /* 📦 Embed Pods Frameworks */,
+				4AC9CA828BA4FD2B0926C68C /* 📦 Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -272,49 +270,49 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		0899C097259E7F9E4F21A856 /* Copy Pods Resources */ = {
+		4AC9CA828BA4FD2B0926C68C /* 📦 Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Copy Pods Resources";
+			name = "📦 Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-resources.sh\"\n";
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clique/Pods-Clique-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		8F5CE3DF36A192CE5E1C84D3 /* Check Pods Manifest.lock */ = {
+		C392AB012A8641B1D552B830 /* 📦 Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "Check Pods Manifest.lock";
+			name = "📦 Embed Pods Frameworks";
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clique/Pods-Clique-frameworks.sh\"\n";
+			showEnvVarsInLog = 0;
+		};
+		D1CE7353C83F6C7EFCCF3040 /* 📦 Check Pods Manifest.lock */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			name = "📦 Check Pods Manifest.lock";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
 			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
-			showEnvVarsInLog = 0;
-		};
-		A917C36853878A78F488A501 /* Embed Pods Frameworks */ = {
-			isa = PBXShellScriptBuildPhase;
-			buildActionMask = 2147483647;
-			files = (
-			);
-			inputPaths = (
-			);
-			name = "Embed Pods Frameworks";
-			outputPaths = (
-			);
-			runOnlyForDeploymentPostprocessing = 0;
-			shellPath = /bin/sh;
-			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods/Pods-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -392,7 +390,10 @@
 				DEBUG_INFORMATION_FORMAT = dwarf;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
 				ENABLE_TESTABILITY = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)",
+					"$(INHERITED)",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_DYNAMIC_NO_PIC = NO;
 				GCC_NO_COMMON_BLOCKS = YES;
@@ -441,7 +442,10 @@
 				DEBUG_INFORMATION_FORMAT = "dwarf-with-dsym";
 				ENABLE_NS_ASSERTIONS = NO;
 				ENABLE_STRICT_OBJC_MSGSEND = YES;
-				FRAMEWORK_SEARCH_PATHS = "$(SRCROOT)";
+				FRAMEWORK_SEARCH_PATHS = (
+					"$(SRCROOT)",
+					"$(INHERITED)",
+				);
 				GCC_C_LANGUAGE_STANDARD = gnu99;
 				GCC_NO_COMMON_BLOCKS = YES;
 				GCC_WARN_64_TO_32_BIT_CONVERSION = YES;
@@ -464,17 +468,17 @@
 		};
 		4AC3CA041C4ACCB700D5BCCA /* Debug */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 1AABC7B3C8D6DCE9D22BF001 /* Pods.debug.xcconfig */;
+			baseConfigurationReference = 115498342A55072D64E42064 /* Pods-Clique.debug.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)",
 					"\"$(SRCROOT)/Spotify.framework\"",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = Clique/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -490,8 +494,6 @@
 					"\"SDWebImage\"",
 					"-framework",
 					"\"SwiftyJSON\"",
-					"-framework",
-					"\"XCDYouTubeKit\"",
 					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.phil.Clique;
@@ -504,17 +506,17 @@
 		};
 		4AC3CA051C4ACCB700D5BCCA /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = 23A40A56E4D987BC4C1251AA /* Pods.release.xcconfig */;
+			baseConfigurationReference = BF3FDFC5DDD37E53C14DA730 /* Pods-Clique.release.xcconfig */;
 			buildSettings = {
 				ASSETCATALOG_COMPILER_APPICON_NAME = AppIcon;
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
 				FRAMEWORK_SEARCH_PATHS = (
+					"$(inherited)",
 					"$(SRCROOT)/**",
 					"$(PROJECT_DIR)",
 					"\"$(SRCROOT)/Spotify.framework\"",
-					"$(PROJECT_DIR)/build/Debug-iphoneos",
 				);
 				INFOPLIST_FILE = Clique/Info.plist;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
@@ -530,8 +532,6 @@
 					"\"SDWebImage\"",
 					"-framework",
 					"\"SwiftyJSON\"",
-					"-framework",
-					"\"XCDYouTubeKit\"",
 					"-ObjC",
 				);
 				PRODUCT_BUNDLE_IDENTIFIER = com.phil.Clique;

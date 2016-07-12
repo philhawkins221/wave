@@ -74,6 +74,19 @@ class SavedViewController: UIViewController, UITableViewDelegate, UITableViewDat
         return cell!
     }
     
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let delete = UITableViewRowAction(style: .Default, title: "Delete", handler: { (action, indexPath) in
+            self.saves.removeAtIndex(indexPath.row)
+            self.table.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            
+            NSUserDefaults.standardUserDefaults().setObject(self.saves.reverse(), forKey: "Saved")
+            
+            self.table.endEditing(true)
+        })
+        
+        return [delete]
+    }
+    
     @IBAction func close(sender: AnyObject) {
         dismissViewControllerAnimated(true, completion: nil)
     }

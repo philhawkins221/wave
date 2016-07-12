@@ -9,11 +9,9 @@
 import Foundation
 import UIKit
 import MediaPlayer
-import AVFoundation
-import XCDYouTubeKit
 import SwiftyJSON
 import Alamofire
-import SDWebImage
+import Alamofire_Synchronous
 import Soundcloud
 
 enum tracktypes {
@@ -34,6 +32,7 @@ class PlayerManager {
     var spotmanager: SPTAudioStreamingPlaybackDelegate
     var tracktype: tracktypes
     var library: [(song: [String : AnyObject], played: Bool)]
+    var magic: [(song: [String : AnyObject], artwork: String, played: Bool)]
     var autoplaying: Bool
     
     var ytid: String
@@ -49,6 +48,7 @@ class PlayerManager {
         spotmanager = SpotifyManager()
         tracktype = tracktypes.isinactive
         library = [(song: [String : AnyObject], played: Bool)]()
+        magic = [(song: [String : AnyObject], artwork: String, played: Bool)]()
         autoplaying = false
         
         ytid = String()
@@ -66,6 +66,21 @@ class PlayerManager {
         }
         
         return instance!
+    }
+    
+    func plus(string: String) -> String {
+        var result = ""
+        
+        for c in string.characters {
+            if c == " " {
+                result += "+"
+            } else {
+                result.append(c)
+            }
+        }
+        
+        result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet(charactersInString: "+")) ?? ""
+        return result
     }
     
     @objc func fetch() {
@@ -120,6 +135,8 @@ class PlayerManager {
                 self.amid = item["amid"].string ?? ""
                 self.scid = item["scid"].string ?? ""
                 
+                self.autoplaying = item["radio"].bool ?? false
+                
                 break
                 
                 //json["songList"][i]["played"].boolValue = true
@@ -146,23 +163,8 @@ class PlayerManager {
                 return
             }
             
-            func plus(string: String) -> String {
-                var result = ""
-                
-                for c in string.characters {
-                    if c == " " {
-                        result += "+"
-                    } else {
-                        result.append(c)
-                    }
-                }
-                
-                result = result.stringByAddingPercentEncodingWithAllowedCharacters(NSCharacterSet.alphanumericCharacterSet()) ?? ""
-                return result
-            }
-            
-            plussong = plus(song)
-            plusartist = plus(artist)
+            plussong = self.plus(song)
+            plusartist = self.plus(artist)
             
             
             self.spotifetch(plussong, plusartist: plusartist, usersong: song, userartist: artist)
@@ -357,13 +359,200 @@ class PlayerManager {
             
             
         case .magic:
-            break
-            //use the clique's currentsong field (or maybe even the local currentsong field) to make magic
-            //pod "SwiftJavascriptBridge"
+            print("empty directive: starting clique radio")
             
-            //bridge.bridgeLoadScriptFromURL("https://raw.githubusercontent.com/loverajoel/magicplaylist/master/app/js/core/Magic.js")
+            //check which catalog will be used
+            var usingapplemusic = false
             
+            if currentclique.applemusic {
+                usingapplemusic = true
+            } else if currentclique.spotify {
+                usingapplemusic = false
+            } else {
+                return
+            }
             
+            //decide to use existing magic playlist
+            if autoplaying {
+                print("clique radio is ON")
+                for i in 0..<magic.count {
+                    if magic[i].played {
+                        continue
+                    }
+                    
+                    magic[i].played = true
+                    Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: magic[i].song, encoding: .JSON).responseJSON { response in
+                        self.fetch()
+                    }
+                    
+                    return
+                }
+            }
+            
+            //make magic
+            print("making magic")
+            
+            let radioalert = UIAlertController(title: "Starting Clique Radio", message: "Gathering songs based on music played in the Clique. Playback will resume shortly.", preferredStyle: .Alert)
+            radioalert.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
+            
+            dispatch_async(dispatch_get_main_queue(), {
+                UIApplication.topViewController()?.presentViewController(radioalert, animated: true, completion: nil)
+            })
+            
+            Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { response in
+                switch response.result {
+                case .Success:
+                    if let value = response.result.value {
+                        let json = JSON(value)
+                        var songlist = [(song: String, artist: String, votes: Int)]()
+                        
+                        //get song history
+                        for song in json["songList"].array ?? [] {
+                            let name = song["name"].string ?? ""
+                            let artist = song["artist"].string ?? ""
+                            let votes = song["votes"].int ?? 0
+                            
+                            songlist.append((name, artist, votes))
+                        }
+                        
+                        if songlist.isEmpty { return }
+                        
+                        var chosen = [(song: String, artist: String, votes: Int)]()
+                        
+                        //find the song with the most votes
+                        let favorite: (song: String, artist: String, votes: Int) = songlist.reduce(("", "", Int.min), combine: {
+                            $0.votes > $1.votes ? $0 : $1
+                        })
+                        if favorite.votes > 0 { chosen.append(favorite) }
+                        
+                        //get the most recent songs
+                        if songlist.count < 3 - chosen.count {
+                            chosen += songlist
+                        } else {
+                            chosen += songlist[songlist.count - (3 - chosen.count)..<songlist.count]
+                        }
+                        
+                        //get artist id for each chosen song
+                        var artistids = [String]()
+                        
+                        for song in chosen {
+                            let response = Alamofire.request(.GET, "https://api.spotify.com/v1/search?q=track:" + self.plus(song.song) + "%20artist:" + self.plus(song.artist) + "&type=track&limit=1").responseJSON()
+                            if let value = response.result.value {
+                                let json = JSON(value)
+                                
+                                guard let artistid = json["tracks"]["items"][0]["artists"][0]["id"].string else { continue }
+                                if !artistids.contains(artistid) { artistids.append(artistid) }
+                            }
+                        }
+                        
+                        //get related artists
+                        for i in 0..<3 {
+                            var relatedartists = [(id: String, popularity: Int)]()
+                            let response = Alamofire.request(.GET, "https://api.spotify.com/v1/artists/" + artistids[i] + "/related-artists").responseJSON()
+                            if let value = response.result.value {
+                                let json = JSON(value)
+                                
+                                for artist in json["artists"].array ?? [] {
+                                    guard let id = artist["id"].string, popularity = artist["popularity"].int else { continue }
+                                    relatedartists.append((id, popularity))
+                                }
+                                
+                                relatedartists.sortInPlace({ $0.popularity > $1.popularity })
+                                relatedartists.removeRange(4..<relatedartists.count)
+                                artistids += relatedartists.map({ $0.id })
+                                artistids = Array(Set(artistids))
+                            }
+                            
+                        }
+                        
+                        //get top tracks for each artist
+                        var magic = [(song: String, artist: String, artwork: String, id: String, popularity: Int)]()
+                        
+                        for artistid in artistids {
+                            let response = Alamofire.request(.GET, "https://api.spotify.com/v1/artists/" + artistid + "/top-tracks?country=US").responseJSON()
+                            if let value = response.result.value {
+                                let json = JSON(value)
+                                
+                                for song in json["tracks"].array ?? [] {
+                                    let name = song["name"].string ?? ""
+                                    let artist = song["artists"][0]["name"].string ?? ""
+                                    let popularity = song["popularity"].int ?? 0
+                                    let artwork = song["album"]["images"][0]["url"].string ?? ""
+                                    var id = ""
+                                    
+                                    if usingapplemusic {
+                                        let response = Alamofire.request(.GET, "https://itunes.apple.com/search?term=" + self.plus(name) + "+" + self.plus(artist) + "&entity=song&isStreamable=true&country=us").responseJSON()
+                                        if let value = response.result.value {
+                                            let json = JSON(value)
+                                            
+                                            
+                                            id = json["results"][0]["trackId"].intValue.description
+                                            
+                                            if id == "0" { print("https://itunes.apple.com/search?term=" + self.plus(name) + "+" + self.plus(artist) + "&entity=song&isStreamable=true&country=us") }
+                                        }
+                                    } else {
+                                        id = song["uri"].string ?? ""
+                                    }
+                                    
+                                    magic.append((name, artist, artwork, id, popularity))
+                                }
+                            }
+                        }
+                        
+                        //remove duplicates?
+                        
+                        //remove songs already played
+                        magic = magic.filter({
+                            for song in songlist[songlist.count - 30..<songlist.count] {
+                                if song.song.lowercaseString == $0.song.lowercaseString && song.artist.lowercaseString == $0.artist.lowercaseString {
+                                    return false
+                                }
+                            }
+                            
+                            return true
+                        })
+                        
+                        //sort by popularity
+                        magic.sortInPlace({ $0.popularity > $1.popularity })
+                        
+                        //prepare library
+                        self.magic.removeAll()
+                        
+                        for song in magic {
+                            var newsong = [String : AnyObject]()
+                            
+                            newsong["name"] = song.song
+                            newsong["artist"] = song.artist
+                            newsong["mpid"] = ""
+                            newsong["amid"] = ""
+                            newsong["spid"] = ""
+                            newsong["ytid"] = ""
+                            newsong["scid"] = ""
+                            newsong["votes"] = 0
+                            newsong["played"] = false
+                            newsong["radio"] = true
+                            
+                            if usingapplemusic {
+                                newsong["amid"] = song.id
+                                print("using apple music:", song.song, song.id)
+                            } else {
+                                newsong["spid"] = song.id
+                            }
+                            
+                            self.magic.append((newsong, song.artwork, false))
+                        }
+                        
+                        //print(self.magic)
+                        Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: self.magic[0].song, encoding: .JSON).responseJSON { response in
+                            self.fetch()
+                            self.magic[0].played = true
+                        }
+                        
+                    }
+                case .Failure(let error):
+                    print(error)
+                }
+            }
         }
     }
     
@@ -388,6 +577,7 @@ class PlayerManager {
                         newsong["scid"] = ""
                         newsong["votes"] = 0
                         newsong["played"] = false
+                        newsong["radio"] = true
                         
                         self.library.append((newsong, false))
                     }

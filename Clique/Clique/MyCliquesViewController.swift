@@ -189,7 +189,7 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("song")
 
-        if cliques.isEmpty {
+        if cliques.isEmpty && !(nowplaying && indexPath.section == 0) {
             if !privatelistening {
                 cell?.textLabel?.text = "You're not in any Cliques"
                 cell?.detailTextLabel?.text = "Join a Clique or start a new one of your own!"
@@ -243,7 +243,7 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             cliques[indexPath.row].valueForKey("passcode") as! String,
             cliques[indexPath.row].valueForKey("applemusic") as! Bool,
             cliques[indexPath.row].valueForKey("spotify") as! Bool,
-            cliques[indexPath.row].valueForKey("voting") as! Bool
+            privatelistening ? false : cliques[indexPath.row].valueForKey("voting") as! Bool
         )
         
         PlayerManager.sharedInstance().library.removeAll()

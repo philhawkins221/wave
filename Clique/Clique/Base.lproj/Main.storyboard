@@ -444,6 +444,9 @@
                         <rect key="frame" x="0.0" y="0.0" width="600" height="600"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
                         <subviews>
+                            <activityIndicatorView opaque="NO" contentMode="scaleToFill" horizontalHuggingPriority="750" verticalHuggingPriority="750" animating="YES" style="gray" translatesAutoresizingMaskIntoConstraints="NO" id="rUk-uo-aSP">
+                                <rect key="frame" x="290" y="290" width="20" height="20"/>
+                            </activityIndicatorView>
                             <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="44" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="wuj-Dh-IKO">
                                 <rect key="frame" x="0.0" y="64" width="600" height="536"/>
                                 <color key="backgroundColor" white="1" alpha="1" colorSpace="calibratedWhite"/>
@@ -479,8 +482,10 @@
                         <constraints>
                             <constraint firstItem="wuj-Dh-IKO" firstAttribute="bottom" secondItem="Eew-4d-SwJ" secondAttribute="top" id="APw-fb-rzj"/>
                             <constraint firstAttribute="trailing" secondItem="wuj-Dh-IKO" secondAttribute="trailing" id="Fjx-lx-Hht"/>
+                            <constraint firstItem="rUk-uo-aSP" firstAttribute="centerY" secondItem="sdg-HK-Ofz" secondAttribute="centerY" id="M8W-Kf-SIG"/>
                             <constraint firstItem="wuj-Dh-IKO" firstAttribute="top" secondItem="Z13-6j-KGI" secondAttribute="bottom" id="VRT-Ec-18f"/>
                             <constraint firstItem="wuj-Dh-IKO" firstAttribute="leading" secondItem="sdg-HK-Ofz" secondAttribute="leading" id="s3Z-jk-6jn"/>
+                            <constraint firstItem="rUk-uo-aSP" firstAttribute="centerX" secondItem="sdg-HK-Ofz" secondAttribute="centerX" id="vNB-oH-COe"/>
                         </constraints>
                     </view>
                     <navigationItem key="navigationItem" title="History" id="mq3-Pz-yQM">
@@ -528,15 +533,15 @@
                                                     <color key="textColor" red="0.98431372549999996" green="0.44471495690000001" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="O4O-jO-sj1">
-                                                    <rect key="frame" x="15" y="59" width="31.5" height="19.5"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="3" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="O4O-jO-sj1">
+                                                    <rect key="frame" x="15" y="58" width="34.5" height="21.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
-                                                    <fontDescription key="fontDescription" type="system" pointSize="16"/>
+                                                    <fontDescription key="fontDescription" type="system" weight="light" pointSize="18"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                                     <nil key="highlightedColor"/>
                                                 </label>
-                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ttv-xa-Jor">
-                                                    <rect key="frame" x="15" y="78.5" width="40.5" height="13.5"/>
+                                                <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" text="Subtitle" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="2" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="Ttv-xa-Jor">
+                                                    <rect key="frame" x="15" y="79.5" width="40.5" height="13.5"/>
                                                     <autoresizingMask key="autoresizingMask" flexibleMaxX="YES" flexibleMaxY="YES"/>
                                                     <fontDescription key="fontDescription" type="system" pointSize="11"/>
                                                     <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
@@ -1060,12 +1065,12 @@
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>
                             </label>
-                            <label hidden="YES" opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xn0-Cs-YTE">
+                            <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" lineBreakMode="tailTruncation" numberOfLines="5" baselineAdjustment="alignBaselines" minimumScaleFactor="0.5" translatesAutoresizingMaskIntoConstraints="NO" id="xn0-Cs-YTE">
                                 <rect key="frame" x="20" y="524" width="560" height="22"/>
                                 <constraints>
                                     <constraint firstAttribute="height" constant="22" id="5pH-A7-Uf1"/>
                                 </constraints>
-                                <string key="text">MagicPlaylist will select songs based on the last song plaed in the Clique. Apple Music or Spotify must be enabled to use MagicPlaylist.</string>
+                                <string key="text">Clique Radio will automatically play new songs based on songs played in the Clique. Apple Music or Spotify must be enabled to use Clique Radio.</string>
                                 <fontDescription key="fontDescription" type="system" pointSize="9"/>
                                 <color key="textColor" red="0.0" green="0.0" blue="0.0" alpha="1" colorSpace="calibratedRGB"/>
                                 <nil key="highlightedColor"/>

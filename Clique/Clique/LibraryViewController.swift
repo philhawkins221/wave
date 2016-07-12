@@ -202,7 +202,8 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
                     "scid": "",
                     "amid": "",
                     "votes": 0,
-                    "played": false
+                    "played": false,
+                    "radio": false
                 ]
             } else {
                 parameters = [
@@ -214,7 +215,8 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
                     "scid": "",
                     "amid": "",
                     "votes": 0,
-                    "played": false
+                    "played": false,
+                    "radio": false
                 ]
             }
             
@@ -327,7 +329,8 @@ class LibraryViewController: UIViewController, UITableViewDelegate, UITableViewD
                         "scid": "",
                         "amid": "",
                         "votes": 0,
-                        "played": false
+                        "played": false,
+                        "radio": false
                     ]
                     pm.library.append((newlibentry, false))
                 }

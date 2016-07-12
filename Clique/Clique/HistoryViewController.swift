@@ -120,7 +120,6 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             return result
         }
         
-        let session = NSURLSession(configuration: NSURLSessionConfiguration.defaultSessionConfiguration())
         
         //step 2: verify names and find album+artwork - spotify api
         for song in prime {
@@ -131,12 +130,9 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
             let plussong = plus(song.song)
             let plusartist = plus(song.artist)
             
-            session.dataTaskWithURL(NSURL(string: "https://api.spotify.com/v1/search?q=track:" + plussong + "%20artist:" + plusartist + "&type=track&limit=1")!, completionHandler: {(data, response, error) in
-                if data == nil {
-                    print("no data")
-                    return
-                }
-                let json = JSON(data: data!)
+            let response = Alamofire.request(.GET, "https://api.spotify.com/v1/search?q=track:" + plussong + "%20artist:" + plusartist + "&type=track&limit=1").responseJSON()
+            if let value = response.result.value {
+                let json = JSON(value)
                 
                 var title = String?()
                 var artist = String?()
@@ -154,15 +150,16 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
                 if cover != nil {newentry.artwork = cover!}
                 
                 self.clique.append(newentry)
-                self.clique = self.clique.reverse()
-                
-                dispatch_async(dispatch_get_main_queue(), {
-                    self.table.reloadData()
-                    self.table.setNeedsDisplay()
-                    self.table.hidden = false
-                })
-            }).resume()
+            }
         }
+        
+        self.clique = self.clique.reverse()
+        
+        dispatch_async(dispatch_get_main_queue(), {
+            self.table.reloadData()
+            self.table.setNeedsDisplay()
+            self.table.hidden = false
+        })
     }
 
     override func didReceiveMemoryWarning() {
@@ -204,8 +201,18 @@ class HistoryViewController: UIViewController, UITableViewDelegate, UITableViewD
         return cell!
     }
     
-    func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
+    func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
+        let save = UITableViewRowAction(style: .Default, title: "Save", handler: { (action, indexPath) in
+            var saves = NSUserDefaults.standardUserDefaults().objectForKey("Saved") as? [[String]] ?? []
+            saves.append([self.clique[indexPath.row].song, self.clique[indexPath.row].artist, self.clique[indexPath.row].artwork ?? ""])
+            print(saves)
+            NSUserDefaults.standardUserDefaults().setObject(saves, forKey: "Saved")
+            
+            tableView.setEditing(false, animated: true)
+        })
+        save.backgroundColor = view.window?.tintColor
         
+        return [save]
     }
     
     @IBAction func done(sender: AnyObject) {

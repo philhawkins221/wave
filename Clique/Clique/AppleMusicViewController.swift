@@ -115,7 +115,7 @@ class AppleMusicViewController: UIViewController, UITableViewDelegate, UITableVi
     }
     
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        let add = UIAlertController(title: "Add Song", message: "Add this song to clique?", preferredStyle: .Alert)
+        let add = UIAlertController(title: "Add Song", message: "Add this song to Clique?", preferredStyle: .Alert)
         add.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: {action in }))
         add.addAction(UIAlertAction(title: "Add", style: .Default, handler: {[unowned self] action in
             var parameters = [String : AnyObject]()
@@ -128,7 +128,8 @@ class AppleMusicViewController: UIViewController, UITableViewDelegate, UITableVi
                 "spid": "",
                 "scid": "",
                 "votes": 0,
-                "played": false
+                "played": false,
+                "radio": false
             ]
             
             Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: parameters as [String : AnyObject], encoding: .JSON)

@@ -67,8 +67,8 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         }
         
         if privatelistening {
-            joinbutton.title = ""
-            joinbutton.enabled = false
+            joinbutton.title = "Saved"
+            joinbutton.enabled = true
             
             listeningbutton.setTitle("Public Listening", forState: .Normal)
             listeningbutton.backgroundColor = UIColor.orangeColor()
@@ -189,13 +189,13 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
     func tableView(tableView: UITableView, cellForRowAtIndexPath indexPath: NSIndexPath) -> UITableViewCell {
         let cell = tableView.dequeueReusableCellWithIdentifier("song")
 
-        if cliques.isEmpty {
-            if privatelistening {
-                cell?.textLabel?.text = "You don't have any playlists"
-                cell?.detailTextLabel?.text = "Tap the New button to make a playlist"
-            } else {
+        if cliques.isEmpty && !(nowplaying && indexPath.section == 0) {
+            if !privatelistening {
                 cell?.textLabel?.text = "You're not in any Cliques"
                 cell?.detailTextLabel?.text = "Join a Clique or start a new one of your own!"
+            } else {
+                cell?.textLabel?.text = "You don't have any playlists"
+                cell?.detailTextLabel?.text = "Tap the New button to make a playlist"
             }
             
             cell?.detailTextLabel?.textColor = UIColor.blackColor()
@@ -215,7 +215,7 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             let widthScale = 40/(cell?.imageView?.image!.size.width)!
             let heightScale = 40/(cell?.imageView?.image!.size.height)!
             cell!.imageView!.transform = CGAffineTransformMakeScale(widthScale, heightScale)
-
+            cell?.accessoryType = .None
         } else {
             cell?.textLabel?.text = cliques[indexPath.row].valueForKey("name") as? String
             if cliques[indexPath.row].valueForKey("isLeader") as! Bool {
@@ -227,22 +227,24 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             }
             cell?.imageView?.image = nil
         }
-
+        
         return cell!
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if cliques.isEmpty {
+        if cliques.isEmpty || (nowplaying && indexPath.section == 0) {
             return
         }
-
-        currentclique.id = cliques[indexPath.row].valueForKey("id") as! String
-        currentclique.leader = cliques[indexPath.row].valueForKey("isLeader") as! Bool
-        currentclique.name = cliques[indexPath.row].valueForKey("name") as! String
-        currentclique.passcode = cliques[indexPath.row].valueForKey("passcode") as! String
-        currentclique.spotify = cliques[indexPath.row].valueForKey("spotify") as! Bool
-        currentclique.applemusic = cliques[indexPath.row].valueForKey("applemusic") as! Bool
-        currentclique.voting = cliques[indexPath.row].valueForKey("voting") as! Bool
+        
+        currentclique = (
+            cliques[indexPath.row].valueForKey("id") as! String,
+            cliques[indexPath.row].valueForKey("isLeader") as! Bool,
+            cliques[indexPath.row].valueForKey("name") as! String,
+            cliques[indexPath.row].valueForKey("passcode") as! String,
+            cliques[indexPath.row].valueForKey("applemusic") as! Bool,
+            cliques[indexPath.row].valueForKey("spotify") as! Bool,
+            privatelistening ? false : cliques[indexPath.row].valueForKey("voting") as! Bool
+        )
         
         PlayerManager.sharedInstance().library.removeAll()
 
@@ -259,11 +261,11 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             if section == 0 {
                 return "Now Playing"
             } else if section == 1 {
-                return "Cliques"
+                return privatelistening ? "Playlists" : "Cliques"
             }
         }
 
-        return "Cliques"
+        return privatelistening ? "Playlists" : "Cliques"
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
@@ -318,6 +320,15 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
         viewWillAppear(true)
     }
     
+    @IBAction func joinOrSaved(sender: AnyObject) {
+        if !privatelistening {
+            let joinnav = storyboard?.instantiateViewControllerWithIdentifier("joinnav")
+            presentViewController(joinnav!, animated: true, completion: nil)
+        } else {
+            let savednav = storyboard?.instantiateViewControllerWithIdentifier("savednav")
+            presentViewController(savednav!, animated: true, completion: nil)
+        }
+    }
 
     /*
     // MARK: - Navigation

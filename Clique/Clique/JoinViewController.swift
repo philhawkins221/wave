@@ -15,6 +15,7 @@ class JoinViewController: UIViewController {
 
     @IBOutlet weak var nametext: UITextField!
     @IBOutlet weak var passcode: UITextField!
+    @IBOutlet weak var joinbutton: UIButton!
     
     override func viewWillAppear(animated: Bool) {
         super.viewWillAppear(animated)
@@ -46,6 +47,7 @@ class JoinViewController: UIViewController {
     }
     
     @IBAction func join(sender: AnyObject) {
+        joinbutton.enabled = false
         Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/").responseJSON { response in
             switch response.result {
             case .Success:
@@ -86,6 +88,8 @@ class JoinViewController: UIViewController {
                     }
                     
                     if !passed {
+                        self.joinbutton.enabled = true
+                        
                         let nope = UIAlertController(title: "Sorry", message: "The Clique name and passcode didn't match anything.", preferredStyle: .Alert)
                         nope.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: nil))
                         self.presentViewController(nope, animated: true, completion: nil)
@@ -93,6 +97,7 @@ class JoinViewController: UIViewController {
                 }
             case .Failure(let error):
                 print(error)
+                self.joinbutton.enabled = true
             }
         }
     }

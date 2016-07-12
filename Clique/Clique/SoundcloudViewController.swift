@@ -121,7 +121,8 @@ class SoundcloudViewController: UIViewController, UITableViewDataSource, UITable
                 "spid": "",
                 "amid": "",
                 "votes": 0,
-                "played": false
+                "played": false,
+                "radio": false
             ]
             
             Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: parameters as [String : AnyObject], encoding: .JSON)

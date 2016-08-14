@@ -242,7 +242,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        if indexPath.section == 0 || privatelistening || indexPath.section == 2 {
+        if indexPath.section == 0 || indexPath.section == 2 {
             return nil
         }
 

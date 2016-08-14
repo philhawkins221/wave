@@ -101,6 +101,69 @@ class PlayerManager {
         ytid = ""
         scid = ""
         
+        //step 0: make sure clique is up-to-date
+        if currentclique.leader && currentclique.voting {
+            let response = Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON()
+            switch response.result {
+            case .Success:
+                if let value = response.result.value {
+                    let json = JSON(value)
+                    
+                    let songlist = json["songList"].array ?? []
+                    var played = [JSON]()
+                    var upcoming = [JSON]()
+                    
+                    for song in songlist {
+                        if song["played"].boolValue {
+                            played.append(song)
+                        } else {
+                            upcoming.append(song)
+                        }
+                    }
+                    
+                    upcoming.sortInPlace({ $0["votes"].int ?? 0 > $1["votes"].int ?? 0 })
+                    
+                    var newlist = [[String : AnyObject]]()
+                    
+                    for song in played {
+                        let info: [String : AnyObject] = [
+                            "name": song["name"].string ?? "",
+                            "artist": song["artist"].string ?? "",
+                            "mpid": song["mpid"].string ?? "",
+                            "ytid": song["ytid"].string ?? "",
+                            "amid": song["amid"].string ?? "",
+                            "spid": song["spid"].string ?? "",
+                            "scid": song["scid"].string ?? "",
+                            "votes": song["votes"].int ?? 0,
+                            "played": true,
+                            "radio": song["radio"].bool ?? false
+                        ]
+                        newlist.append(info)
+                    }
+                    
+                    for song in upcoming {
+                        let info: [String : AnyObject] = [
+                            "name": song["name"].string ?? "",
+                            "artist": song["artist"].string ?? "",
+                            "mpid": song["mpid"].string ?? "",
+                            "ytid": song["ytid"].string ?? "",
+                            "amid": song["amid"].string ?? "",
+                            "spid": song["spid"].string ?? "",
+                            "scid": song["scid"].string ?? "",
+                            "votes": song["votes"].int ?? 0,
+                            "played": false,
+                            "radio": song["radio"].bool ?? false
+                        ]
+                        newlist.append(info)
+                    }
+                    
+                    Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateClique", parameters: ["songList": newlist], encoding: .JSON)
+                }
+            case .Failure(let error):
+                print(error)
+            }
+        }
+        
         //step 1: pull the next song - get the stored artist and song name
         session.dataTaskWithURL(NSURL(string: "https://clique2016.herokuapp.com/playlists/" + currentclique.id)!, completionHandler: {  (data, response, error) in
             if data == nil {
@@ -168,7 +231,7 @@ class PlayerManager {
             
             
             self.spotifetch(plussong, plusartist: plusartist, usersong: song, userartist: artist)
-            }).resume()
+        }).resume()
     }
     
     func spotifetch(plussong: String, plusartist: String, usersong: String, userartist: String) {
@@ -196,7 +259,7 @@ class PlayerManager {
             artwork = json["tracks"]["items"][0]["album"]["images"][0]["url"].string
             
             currentsong = (song, artist, album, artwork, 0)
-    
+            
             self.prepare()
             
         }).resume()
@@ -207,7 +270,7 @@ class PlayerManager {
         switch tracktype {
         case .isyoutube:
             PlayerViewController.youtubewaiting = true
-
+            
             if (UIApplication.topViewController()?.isKindOfClass(PlayerViewController)) == false {
                 let ytalert = UIAlertController(title: "YouTube Link in " + currentclique.name, message: "Open the Clique Player to play this selection from YouTube.", preferredStyle: .Alert)
                 ytalert.addAction(UIAlertAction(title: "OK", style: .Default, handler: { action in }))
@@ -290,7 +353,7 @@ class PlayerManager {
         print("finishup")
         //tell the player that the song changed
         NSNotificationCenter.defaultCenter().postNotificationName("PlayerManagerDidChangeSong", object: self)
-            //player should check if isyoutube and get PlayerManager.sharedInstance().ytid
+        //player should check if isyoutube and get PlayerManager.sharedInstance().ytid
         
         //change song played field
         let p1 = [
@@ -373,18 +436,18 @@ class PlayerManager {
             }
             
             //decide to use existing magic playlist
-            if autoplaying {
-                print("clique radio is ON")
-                for i in 0..<magic.count {
-                    if magic[i].played {
-                        continue
-                    }
-                    
-                    magic[i].played = true
-                    Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: magic[i].song, encoding: .JSON).responseJSON { response in
-                        self.fetch()
-                    }
-                    
+            print("clique radio is ON")
+            for i in 0..<magic.count {
+                if magic[i].played {
+                    continue
+                }
+                
+                magic[i].played = true
+                Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: magic[i].song, encoding: .JSON).responseJSON { response in
+                    self.fetch()
+                }
+                
+                if autoplaying {
                     return
                 }
             }
@@ -593,13 +656,13 @@ class PlayerManager {
 }
 
 class SpotifyManager: NSObject, SPTAudioStreamingPlaybackDelegate {
-
+    
     //MARK: - Spotify Player Stack
     
     func audioStreaming(audioStreaming: SPTAudioStreamingController!, didStopPlayingTrack trackUri: NSURL!) {
         print("did stop playing:", trackUri)
         //if trackUri == PlayerManager.sharedInstance().spid {
-            PlayerManager.sharedInstance().fetch()
+        PlayerManager.sharedInstance().fetch()
         //}
     }
     
@@ -607,5 +670,5 @@ class SpotifyManager: NSObject, SPTAudioStreamingPlaybackDelegate {
         print("spotify did become inactive")
         PlayerManager.sharedInstance().fetch()
     }
-
+    
 }

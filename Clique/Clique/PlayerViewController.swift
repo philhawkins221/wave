@@ -46,6 +46,8 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate,
         UIApplication.sharedApplication().setStatusBarHidden(true, withAnimation: .Slide)
         fetch()
         
+        playbutton.playColor = privatelistening ? blue : UIColor.orangeColor()
+        
         if PlayerViewController.youtubewaiting && player.playerState() != .Playing {
             ytprepare()
         }

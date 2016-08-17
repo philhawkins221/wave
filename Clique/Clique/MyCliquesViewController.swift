@@ -274,14 +274,13 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             //delete from store
             (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext.deleteObject(self.cliques[indexPath.row])
             
-            
-            //remove from table
-            //self.table.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            
             //remove from array
             self.cliques.removeAtIndex(indexPath.row)
             
-            self.fetch()
+            //remove from table
+            self.table.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+            
+            //self.fetch()
             
             
         })

@@ -6,6 +6,29 @@
 //  Copyright © 2016 Phil Hawkins. All rights reserved.
 //
 
+extension CollectionType {
+    /// Return a copy of `self` with its elements shuffled
+    func shuffle() -> [Generator.Element] {
+        var list = Array(self)
+        list.shuffleInPlace()
+        return list
+    }
+}
+
+extension MutableCollectionType where Index == Int {
+    /// Shuffle the elements of `self` in-place.
+    mutating func shuffleInPlace() {
+        // empty and single-element collections don't shuffle
+        if count < 2 { return }
+        
+        for i in 0..<count - 1 {
+            let j = Int(arc4random_uniform(UInt32(count - i))) + i
+            guard i != j else { continue }
+            swap(&self[i], &self[j])
+        }
+    }
+}
+
 import Foundation
 import UIKit
 import MediaPlayer
@@ -323,6 +346,7 @@ class PlayerManager {
             print(currentsong)
             //system.setQueueWithQuery(searcher)
             system.setQueueWithItemCollection(MPMediaItemCollection(items: searcher.items!))
+            system.repeatMode = .None
             system.prepareToPlay()
             system.play()
         case .isapplemusic:
@@ -392,33 +416,61 @@ class PlayerManager {
         case .library:
             print("empty directive: selecting song from library")
             
-            let shuffle = {
-                var random = Int(arc4random_uniform(UInt32(self.library.count)))
-                
-                var counter = 0
-                while self.library[random].played {
-                    random = Int(arc4random_uniform(UInt32(self.library.count)))
-                    counter += 1
-                    if counter >= self.library.count {
-                        for i in 0..<self.library.count {
-                            self.library[i].played = false
-                        }
+            if autoplaying {
+                for i in 0..<library.count {
+                    if library[i].played {
+                        continue
                     }
-                }
-                print("empty has selected:", self.library[random])
-                let newsong = self.library[random].song
-                self.library[random].played = true
-                
-                Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: newsong, encoding: .JSON).responseJSON { response in
-                    self.fetch()
+                    
+                    library[i].played = true
+                    Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: library[i].song, encoding: .JSON).responseJSON { response in
+                        self.fetch()
+                    }
+                    
+                    return
                 }
             }
             
-            if library.isEmpty {
-                getLibrary(completionHandler: shuffle)
-            } else {
-                shuffle()
+            //fill library
+            library.removeAll()
+            getLibrary() { [unowned self] in
+                self.library.shuffleInPlace()
+                
+                if !self.library.isEmpty {
+                    Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: self.library[0].song, encoding: .JSON).responseJSON { response in
+                        self.fetch()
+                        self.library[0].played = true
+                    }
+                }
             }
+            
+//            let shuffle = {
+//                var random = Int(arc4random_uniform(UInt32(self.library.count)))
+//                
+//                var counter = 0
+//                while self.library[random].played {
+//                    random = Int(arc4random_uniform(UInt32(self.library.count)))
+//                    counter += 1
+//                    if counter >= self.library.count {
+//                        for i in 0..<self.library.count {
+//                            self.library[i].played = false
+//                        }
+//                    }
+//                }
+//                print("empty has selected:", self.library[random])
+//                let newsong = self.library[random].song
+//                self.library[random].played = true
+//                
+//                Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: newsong, encoding: .JSON).responseJSON { response in
+//                    self.fetch()
+//                }
+//            }
+//            
+//            if library.isEmpty {
+//                getLibrary(completionHandler: nil)
+//            } else {
+//                shuffle()
+//            }
             
             
         case .magic:
@@ -436,18 +488,18 @@ class PlayerManager {
             }
             
             //decide to use existing magic playlist
-            print("clique radio is ON")
-            for i in 0..<magic.count {
-                if magic[i].played {
-                    continue
-                }
-                
-                magic[i].played = true
-                Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: magic[i].song, encoding: .JSON).responseJSON { response in
-                    self.fetch()
-                }
-                
-                if autoplaying {
+            if autoplaying {
+                print("clique radio is ON")
+                for i in 0..<magic.count {
+                    if magic[i].played {
+                        continue
+                    }
+                    
+                    magic[i].played = true
+                    Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: magic[i].song, encoding: .JSON).responseJSON { response in
+                        self.fetch()
+                    }
+                    
                     return
                 }
             }
@@ -566,7 +618,8 @@ class PlayerManager {
                         
                         //remove songs already played
                         magic = magic.filter({
-                            for song in songlist[songlist.count - 30..<songlist.count] {
+                            let range = songlist.count < 30 ? 0..<songlist.count : songlist.count - 30..<songlist.count
+                            for song in songlist[range] {
                                 if song.song.lowercaseString == $0.song.lowercaseString && song.artist.lowercaseString == $0.artist.lowercaseString {
                                     return false
                                 }
@@ -619,7 +672,7 @@ class PlayerManager {
         }
     }
     
-    func getLibrary(completionHandler block: ()->()) {
+    func getLibrary(handler: () -> ()) {
         print("empty fetching library")
         Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON { response in
             switch response.result {
@@ -645,7 +698,8 @@ class PlayerManager {
                         self.library.append((newsong, false))
                     }
                     
-                    block()
+                    handler()
+                    
                 }
             case .Failure(let error):
                 print(error)

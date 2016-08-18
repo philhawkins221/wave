@@ -63,10 +63,6 @@ didSet {
     if currentclique.voting != oldValue.voting {
         Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateVotingStatus", parameters: ["value": currentclique.voting], encoding: .JSON)
     }
-    
-    if currentclique.applemusic || currentclique.spotify {
-        emptydirective = .magic
-    }
 }
 
 }

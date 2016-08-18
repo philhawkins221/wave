@@ -34,6 +34,7 @@ import UIKit
 import CoreData
 import StoreKit
 import MediaPlayer
+import Alamofire
 
 var nowplaying = false
 var currentsong: (song: String, artist: String, album: String, artwork: String?, time: Double) = ("", "", "", nil, 0)
@@ -75,7 +76,7 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
             
             title = "My Playlists"
         } else {
-            joinbutton.title = "Join"
+            joinbutton.title = "Saved"
             joinbutton.enabled = true
             
             listeningbutton.setTitle("Private Listening", forState: .Normal)
@@ -269,19 +270,34 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
 
     func tableView(tableView: UITableView, editActionsForRowAtIndexPath indexPath: NSIndexPath) -> [UITableViewRowAction]? {
-        let leaveAction = UITableViewRowAction(style: .Default, title: "Leave", handler: {[unowned self](action, indexpath) in
+        let id = self.cliques[indexPath.row].valueForKey("id") as! String
+        let leader = self.cliques[indexPath.row].valueForKey("isLeader") as! Bool
+        let action = leader ? "Disband" : "Leave"
+        let title = leader ? "Disband Clique" : "Leave Clique"
+        let message = leader ? "This Clique will be permanently deleted." : "This Clique will be removed from your list of Cliques."
+        
+        let leaveAction = UITableViewRowAction(style: .Default, title: action, handler: {[unowned self] (action, indexpath) in
             
-            //delete from store
-            (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext.deleteObject(self.cliques[indexPath.row])
+            let alert = UIAlertController(title: title, message: message, preferredStyle: .Alert)
+            alert.addAction(UIAlertAction(title: "Continue", style: .Destructive) { action in
+                
+                //delete from store
+                (UIApplication.sharedApplication().delegate as! AppDelegate).managedObjectContext.deleteObject(self.cliques[indexPath.row])
+                
+                //remove from array
+                self.cliques.removeAtIndex(indexPath.row)
+                
+                //remove from table
+                self.table.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
+                
+                //delete clique (if necessary)
+                if leader {
+                    Alamofire.request(.DELETE, "http://clique2016.herokuapp.com/playlists/" + id)
+                }
+            })
+            alert.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: nil))
             
-            //remove from array
-            self.cliques.removeAtIndex(indexPath.row)
-            
-            //remove from table
-            self.table.deleteRowsAtIndexPaths([indexPath], withRowAnimation: .Automatic)
-            
-            //self.fetch()
-            
+            self.presentViewController(alert, animated: true, completion: nil)
             
         })
         leaveAction.backgroundColor = UIColor.redColor()
@@ -320,15 +336,28 @@ class MyCliquesViewController: UIViewController, UITableViewDelegate, UITableVie
     }
     
     @IBAction func joinOrSaved(sender: AnyObject) {
-        if !privatelistening {
-            let joinnav = storyboard?.instantiateViewControllerWithIdentifier("joinnav")
-            presentViewController(joinnav!, animated: true, completion: nil)
-        } else {
-            let savednav = storyboard?.instantiateViewControllerWithIdentifier("savednav")
-            presentViewController(savednav!, animated: true, completion: nil)
-        }
+        let savednav = storyboard?.instantiateViewControllerWithIdentifier("savednav")
+        presentViewController(savednav!, animated: true, completion: nil)
     }
-
+    
+    @IBAction func new(sender: AnyObject) {
+        let alert = UIAlertController(title: nil, message: nil, preferredStyle: .Alert)
+        
+        alert.addAction(UIAlertAction(title: "Start a new Clique", style: .Default) { [unowned self] action in
+            let new = self.storyboard?.instantiateViewControllerWithIdentifier("newnav")
+            self.presentViewController(new!, animated: true, completion: nil)
+        })
+        
+        alert.addAction(UIAlertAction(title: "Join an existing Clique", style: .Default) { [unowned self] action in
+            let join = self.storyboard?.instantiateViewControllerWithIdentifier("joinnav")
+            self.presentViewController(join!, animated: true, completion: nil)
+        })
+        
+        alert.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: nil))
+        
+        presentViewController(alert, animated: true, completion: nil)
+    }
+    
     /*
     // MARK: - Navigation
 

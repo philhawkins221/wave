@@ -251,7 +251,7 @@ class PlayerViewController: UIViewController, SPTAudioStreamingPlaybackDelegate,
     }
     
     @IBAction func save(sender: AnyObject) {
-        let save = UIAlertController(title: "Add Song to Saved?", message: "Your saved songs can be viewed at any time in Private Listening mode.", preferredStyle: .ActionSheet)
+        let save = UIAlertController(title: "Add Song to Saved?", message: "Your saved songs can be viewed later at any time.", preferredStyle: .ActionSheet)
         save.addAction(UIAlertAction(title: "Nevermind", style: .Cancel, handler: nil))
         save.addAction(UIAlertAction(title: "Save", style: .Default, handler: { action in
             var saves = NSUserDefaults.standardUserDefaults().objectForKey("Saved") as? [[String]] ?? []

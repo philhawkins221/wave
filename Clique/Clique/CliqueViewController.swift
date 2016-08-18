@@ -14,7 +14,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
 
     var currentSong: (name: String, artist: String, artwork: String) = ("", "", "")
     var timer = NSTimer()
-    var library = [(song: [String : AnyObject], played: Bool)]()
+    var vclibrary = [(song: [String : AnyObject], played: Bool)]()
     var magic = [(song: [String : AnyObject], artwork: String, played: Bool)]()
 
     @IBOutlet weak var table: UITableView!
@@ -30,6 +30,10 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         if currentclique.leader {
             table.setEditing(true, animated: true)
+            
+            if emptydirective == .nothing && (currentclique.applemusic || currentclique.spotify) {
+                emptydirective = .magic
+            }
         }
     }
 
@@ -69,6 +73,15 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
                 }
             case .Failure(let error):
                 print(error)
+                
+                if error.code == -6006 {
+                    let alert = UIAlertController(title: "Clique Disbanded", message: "This Clique no longer exists.", preferredStyle: .Alert)
+                    alert.addAction(UIAlertAction(title: "Go Back", style: .Cancel) { action in
+                        self.navigationController?.popViewControllerAnimated(true)
+                    })
+                    
+                    self.presentViewController(alert, animated: true, completion: nil)
+                }
             }
         }
         
@@ -92,7 +105,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         CliqueManager.sharedInstance().fetch()
         
         //update libraries
-        library = PlayerManager.sharedInstance().library.filter({ !$0.played })
+        vclibrary = PlayerManager.sharedInstance().library.filter({ !$0.played })
         magic = PlayerManager.sharedInstance().magic.filter({ !$0.played })
         
     }
@@ -122,7 +135,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         switch section {
         case 0: return 1
         case 1: return CliqueManager.sharedInstance().clique.isEmpty ? 1 : CliqueManager.sharedInstance().clique.count
-        case 2: return emptydirective == .library ? library.count : magic.count
+        case 2: return emptydirective == .library ? vclibrary.count : magic.count
         default: return 0
         }
     }
@@ -149,7 +162,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
             if indexPath.section == 2 {
                 switch emptydirective {
                 case .library:
-                    let song = library[indexPath.row].song
+                    let song = vclibrary[indexPath.row].song
                     
                     cell?.textLabel?.text = song["name"] as? String ?? ""
                     cell?.detailTextLabel?.text = song["artist"] as? String ?? ""
@@ -350,10 +363,10 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
             add.addAction(UIAlertAction(title: "Add", style: .Default, handler: {[unowned self] action in
                 switch emptydirective {
                 case .library:
-                    self.library[indexPath.row].song["radio"] = false
-                    Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: self.library[indexPath.row].song, encoding: .JSON)
+                    self.vclibrary[indexPath.row].song["radio"] = false
+                    Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/addSong", parameters: self.vclibrary[indexPath.row].song, encoding: .JSON)
                     
-                    self.library.removeAtIndex(indexPath.row)
+                    self.vclibrary.removeAtIndex(indexPath.row)
                     tableView.deleteRowsAtIndexPaths([NSIndexPath(forRow: indexPath.row, inSection: 2)], withRowAnimation: .Automatic)
                     
                     for i in 0..<PlayerManager.sharedInstance().library.count {
@@ -408,11 +421,11 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         case 2:
             switch emptydirective {
             case .library:
-                let item = library[sourceIndexPath.row]
-                library.removeAtIndex(sourceIndexPath.row)
-                library.insert(item, atIndex: destinationIndexPath.row)
+                let item = vclibrary[sourceIndexPath.row]
+                vclibrary.removeAtIndex(sourceIndexPath.row)
+                vclibrary.insert(item, atIndex: destinationIndexPath.row)
                 
-                PlayerManager.sharedInstance().library = PlayerManager.sharedInstance().library.filter({ $0.played }) + library
+                PlayerManager.sharedInstance().library = PlayerManager.sharedInstance().library.filter({ $0.played }) + vclibrary
             case .magic:
                 let item = magic[sourceIndexPath.row]
                 magic.removeAtIndex(sourceIndexPath.row)

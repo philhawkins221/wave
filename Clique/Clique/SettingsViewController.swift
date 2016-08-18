@@ -251,7 +251,7 @@ class SettingsViewController: UIViewController, UITableViewDelegate, UITableView
     }
 
     func tableView(tableView: UITableView, didSelectRowAtIndexPath indexPath: NSIndexPath) {
-        if indexPath.row == 2 && (!currentclique.applemusic && !currentclique.spotify) {
+        if currentclique.leader && indexPath.row == 2 && (!currentclique.applemusic && !currentclique.spotify) {
             let nope = UIAlertController(title: "Clique Radio Not Available", message: "An Apple Music or Spotify Premium account must be connected to use Clique Radio.", preferredStyle: .Alert)
             nope.addAction(UIAlertAction(title: "OK", style: .Cancel, handler: { action in
                 self.emptytable.selectRowAtIndexPath(NSIndexPath(forRow: 0, inSection: 0), animated: true, scrollPosition: .None)

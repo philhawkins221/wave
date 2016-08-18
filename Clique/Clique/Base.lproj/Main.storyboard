@@ -116,7 +116,7 @@
                                     </tableViewCell>
                                 </prototypes>
                             </tableView>
-                            <button opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTh-xV-5Z9">
+                            <button hidden="YES" opaque="NO" contentMode="scaleToFill" contentHorizontalAlignment="center" contentVerticalAlignment="center" buttonType="roundedRect" lineBreakMode="middleTruncation" translatesAutoresizingMaskIntoConstraints="NO" id="FTh-xV-5Z9">
                                 <rect key="frame" x="172" y="562" width="256" height="30"/>
                                 <color key="backgroundColor" red="0.078431372550000003" green="0.60392156860000001" blue="0.91372549020000005" alpha="1" colorSpace="calibratedRGB"/>
                                 <constraints>
@@ -149,7 +149,7 @@
                         </barButtonItem>
                         <barButtonItem key="rightBarButtonItem" systemItem="add" id="gIT-ft-BWX">
                             <connections>
-                                <segue destination="qXf-CU-1Nc" kind="presentation" modalTransitionStyle="coverVertical" id="gBW-IN-QAm"/>
+                                <action selector="new:" destination="BYZ-38-t0r" id="nAp-Ev-bF8"/>
                             </connections>
                         </barButtonItem>
                     </navigationItem>
@@ -1652,7 +1652,7 @@
         <!--Navigation Controller-->
         <scene sceneID="UrE-eY-ugr">
             <objects>
-                <navigationController automaticallyAdjustsScrollViewInsets="NO" id="qXf-CU-1Nc" sceneMemberID="viewController">
+                <navigationController storyboardIdentifier="newnav" automaticallyAdjustsScrollViewInsets="NO" id="qXf-CU-1Nc" sceneMemberID="viewController">
                     <toolbarItems/>
                     <navigationBar key="navigationBar" contentMode="scaleToFill" id="FTN-i5-tJ0">
                         <rect key="frame" x="0.0" y="0.0" width="320" height="44"/>

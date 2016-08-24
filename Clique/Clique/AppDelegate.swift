@@ -44,6 +44,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MusicPlayerNotification), name: MPMusicPlayerControllerPlaybackStateDidChangeNotification, object: PlayerManager.sharedInstance().system)
         
+        application.idleTimerDisabled = true
+        
         return true
     }
     

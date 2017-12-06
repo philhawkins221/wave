@@ -7,17 +7,17 @@
 //
 
 extension UIApplication {
-    class func topViewController(base: UIViewController? = UIApplication.sharedApplication().keyWindow?.rootViewController) -> UIViewController? {
+    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
         if let nav = base as? UINavigationController {
-            return topViewController(nav.visibleViewController)
+            return topViewController(base: nav.visibleViewController)
         }
         if let tab = base as? UITabBarController {
             if let selected = tab.selectedViewController {
-                return topViewController(selected)
+                return topViewController(base: selected)
             }
         }
         if let presented = base?.presentedViewController {
-            return topViewController(presented)
+            return topViewController(base: presented)
         }
         return base
     }
@@ -37,25 +37,27 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
-    func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
+    private func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        window!.tintColor = UIColor.orangeColor()
-        application.setStatusBarStyle(.LightContent, animated: true)
+        window!.tintColor = UIColor.orange
+        //application.setStatusBarStyle(.lightContent, animated: true)
         
+        /*
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MusicPlayerNotification), name: MPMusicPlayerControllerPlaybackStateDidChangeNotification, object: PlayerManager.sharedInstance().system)
         
         application.idleTimerDisabled = true
+        */
         
         return true
     }
     
-    func application(application: UIApplication, openURL url: NSURL, sourceApplication: String?, annotation: AnyObject) -> Bool {
+    func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         // Ask SPTAuth if the URL given is a Spotify authentication callback
-        if (SPTAuth.defaultInstance().canHandleURL(url)) {
-            SPTAuth.defaultInstance().handleAuthCallbackWithTriggeredAuthURL(url, callback: { (error, session) -> Void in
+        if (SPTAuth.defaultInstance().canHandle(url as URL! as URL!)) {
+            SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL!, callback: { (error, session) -> Void in
                 print("spot")
                 if (error != nil) {
-                    print("appdelegate: *** Auth error: \(error)")
+                    print("appdelegate: *** Auth error: \(String(describing: error))")
                     return
                 }
                 print("appdelegate: spotify authenticated successfully")
@@ -69,44 +71,43 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         return false
     }
 
-    func applicationWillResignActive(application: UIApplication) {
+    func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
     }
 
-    func applicationDidEnterBackground(application: UIApplication) {
+    func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
     }
 
-    func applicationWillEnterForeground(application: UIApplication) {
+    func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
     }
 
-    func applicationDidBecomeActive(application: UIApplication) {
+    func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
     }
 
-    func applicationWillTerminate(application: UIApplication) {
+    func applicationWillTerminate(_ application: UIApplication) {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
-        self.saveContext()
+        //self.saveContext()
     }
     
     
     //MARK: - Responding to Music Player Notification
     
     func MusicPlayerNotification() {
-        if PlayerManager.sharedInstance().system.playbackState == .Stopped {
-            PlayerManager.sharedInstance().fetch()
-        }
+
     }
 
-    // MARK: - Core Data stack
+    // MARK: - Core Data stack *** need new stack ***
+    /*
 
     lazy var applicationDocumentsDirectory: NSURL = {
         // The directory the application uses to store the Core Data store file. This code uses a directory named "phil.Clique" in the application's documents Application Support directory.
-        let urls = NSFileManager.defaultManager().URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
+        let urls = FileManager.defaultManager.URLsForDirectory(.DocumentDirectory, inDomains: .UserDomainMask)
         return urls[urls.count-1]
     }()
 
@@ -164,6 +165,7 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
             }
         }
     }
+ */
 
 }
 

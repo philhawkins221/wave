@@ -110,6 +110,31 @@
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
+		4A06C3021FD77C3B00E99FED /* legacy */ = {
+			isa = PBXGroup;
+			children = (
+				4A5ECD6D1D106E9200C1F702 /* CliqueSongTableViewCell.swift */,
+				4AA5AA571D01F28D004B30FA /* NewCliqueViewController.swift */,
+				4A86D4841CFB6A8200E298AB /* DummyPlayerViewController.swift */,
+				4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */,
+				4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */,
+				4AB53C9E1CE289C2000E47A2 /* SpotifyViewController.swift */,
+				4A5A5B6A1CE2434E00BD2F5F /* SettingsViewController.swift */,
+				4ACEF1F01CC7E82D0066EBFD /* JoinViewController.swift */,
+				4A2D92321CBEE14400985FA8 /* HistoryViewController.swift */,
+				4A16BEDC1CAC3BC60089997F /* AddViewController.swift */,
+				4A16BEDE1CAC3BD40089997F /* YTViewController.swift */,
+				4AA798181C56ECBA00E211E7 /* LibraryViewController.swift */,
+				4A3EBFE31C500CF9001BAA33 /* PlayerViewController.swift */,
+				4A86D4861CFD11E200E298AB /* PlayerManager.swift */,
+				4A3EBFE11C4F4E2D001BAA33 /* CliqueViewController.swift */,
+				4A92CD171D3028C300D1C488 /* CliqueManager.swift */,
+				4AC3CA081C4ACE7400D5BCCA /* MyCliquesViewController.swift */,
+				4A4D60631D2EDF80009B6375 /* SavedViewController.swift */,
+			);
+			path = legacy;
+			sourceTree = "<group>";
+		};
 		4AC3C9E51C4ACCB700D5BCCA = {
 			isa = PBXGroup;
 			children = (
@@ -131,6 +156,7 @@
 		4AC3C9F01C4ACCB700D5BCCA /* Clique */ = {
 			isa = PBXGroup;
 			children = (
+				4A06C3021FD77C3B00E99FED /* legacy */,
 				4A2B670B1C501AB700681F70 /* genericart.png */,
 				4A179AF81D00C64100B6EE20 /* apple music logo.jpg */,
 				4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */,
@@ -139,24 +165,6 @@
 				4AC3C9F11C4ACCB700D5BCCA /* AppDelegate.swift */,
 				4AC3C9F31C4ACCB700D5BCCA /* ViewController.swift */,
 				4AC3C9F51C4ACCB700D5BCCA /* Main.storyboard */,
-				4A5ECD6D1D106E9200C1F702 /* CliqueSongTableViewCell.swift */,
-				4AA5AA571D01F28D004B30FA /* NewCliqueViewController.swift */,
-				4A86D4841CFB6A8200E298AB /* DummyPlayerViewController.swift */,
-				4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */,
-				4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */,
-				4AB53C9E1CE289C2000E47A2 /* SpotifyViewController.swift */,
-				4A5A5B6A1CE2434E00BD2F5F /* SettingsViewController.swift */,
-				4ACEF1F01CC7E82D0066EBFD /* JoinViewController.swift */,
-				4A2D92321CBEE14400985FA8 /* HistoryViewController.swift */,
-				4A16BEDC1CAC3BC60089997F /* AddViewController.swift */,
-				4A16BEDE1CAC3BD40089997F /* YTViewController.swift */,
-				4AA798181C56ECBA00E211E7 /* LibraryViewController.swift */,
-				4A3EBFE31C500CF9001BAA33 /* PlayerViewController.swift */,
-				4A86D4861CFD11E200E298AB /* PlayerManager.swift */,
-				4A3EBFE11C4F4E2D001BAA33 /* CliqueViewController.swift */,
-				4A92CD171D3028C300D1C488 /* CliqueManager.swift */,
-				4AC3CA081C4ACE7400D5BCCA /* MyCliquesViewController.swift */,
-				4A4D60631D2EDF80009B6375 /* SavedViewController.swift */,
 				4AC3C9FB1C4ACCB700D5BCCA /* Assets.xcassets */,
 				4AC3C9FD1C4ACCB700D5BCCA /* LaunchScreen.storyboard */,
 				4ADF95E31D026D6800E0CD19 /* clique 120.png */,
@@ -198,12 +206,12 @@
 			isa = PBXNativeTarget;
 			buildConfigurationList = 4AC3CA031C4ACCB700D5BCCA /* Build configuration list for PBXNativeTarget "Clique" */;
 			buildPhases = (
-				D1CE7353C83F6C7EFCCF3040 /* 📦 Check Pods Manifest.lock */,
+				D1CE7353C83F6C7EFCCF3040 /* [CP] Check Pods Manifest.lock */,
 				4AC3C9EA1C4ACCB700D5BCCA /* Sources */,
 				4AC3C9EB1C4ACCB700D5BCCA /* Frameworks */,
 				4AC3C9EC1C4ACCB700D5BCCA /* Resources */,
-				C392AB012A8641B1D552B830 /* 📦 Embed Pods Frameworks */,
-				4AC9CA828BA4FD2B0926C68C /* 📦 Copy Pods Resources */,
+				C392AB012A8641B1D552B830 /* [CP] Embed Pods Frameworks */,
+				4AC9CA828BA4FD2B0926C68C /* [CP] Copy Pods Resources */,
 			);
 			buildRules = (
 			);
@@ -270,14 +278,14 @@
 /* End PBXResourcesBuildPhase section */
 
 /* Begin PBXShellScriptBuildPhase section */
-		4AC9CA828BA4FD2B0926C68C /* 📦 Copy Pods Resources */ = {
+		4AC9CA828BA4FD2B0926C68C /* [CP] Copy Pods Resources */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Copy Pods Resources";
+			name = "[CP] Copy Pods Resources";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -285,14 +293,14 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clique/Pods-Clique-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		C392AB012A8641B1D552B830 /* 📦 Embed Pods Frameworks */ = {
+		C392AB012A8641B1D552B830 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
 			);
-			name = "📦 Embed Pods Frameworks";
+			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -300,19 +308,22 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clique/Pods-Clique-frameworks.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
-		D1CE7353C83F6C7EFCCF3040 /* 📦 Check Pods Manifest.lock */ = {
+		D1CE7353C83F6C7EFCCF3040 /* [CP] Check Pods Manifest.lock */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
 			);
 			inputPaths = (
+				"${PODS_PODFILE_DIR_PATH}/Podfile.lock",
+				"${PODS_ROOT}/Manifest.lock",
 			);
-			name = "📦 Check Pods Manifest.lock";
+			name = "[CP] Check Pods Manifest.lock";
 			outputPaths = (
+				"$(DERIVED_FILE_DIR)/Pods-Clique-checkManifestLockResult.txt",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 			shellPath = /bin/sh;
-			shellScript = "diff \"${PODS_ROOT}/../Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [[ $? != 0 ]] ; then\n    cat << EOM\nerror: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\nEOM\n    exit 1\nfi\n";
+			shellScript = "diff \"${PODS_PODFILE_DIR_PATH}/Podfile.lock\" \"${PODS_ROOT}/Manifest.lock\" > /dev/null\nif [ $? != 0 ] ; then\n    # print error to STDERR\n    echo \"error: The sandbox is not in sync with the Podfile.lock. Run 'pod install' or update your CocoaPods installation.\" >&2\n    exit 1\nfi\n# This output is used by Xcode 'outputs' to avoid re-running this script phase.\necho \"SUCCESS\" > \"${SCRIPT_OUTPUT_FILE_0}\"\n";
 			showEnvVarsInLog = 0;
 		};
 /* End PBXShellScriptBuildPhase section */
@@ -408,7 +419,7 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				MTL_ENABLE_DEBUG_INFO = YES;
 				ONLY_ACTIVE_ARCH = YES;
@@ -416,6 +427,7 @@
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
 				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 			};
 			name = Debug;
@@ -454,13 +466,14 @@
 				GCC_WARN_UNINITIALIZED_AUTOS = YES_AGGRESSIVE;
 				GCC_WARN_UNUSED_FUNCTION = YES;
 				GCC_WARN_UNUSED_VARIABLE = YES;
-				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LIBRARY_SEARCH_PATHS = "$(SRCROOT)/**";
 				MTL_ENABLE_DEBUG_INFO = NO;
 				ONLY_ACTIVE_ARCH = YES;
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 			};
@@ -481,6 +494,7 @@
 					"\"$(SRCROOT)/Spotify.framework\"",
 				);
 				INFOPLIST_FILE = Clique/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",
@@ -519,6 +533,7 @@
 					"\"$(SRCROOT)/Spotify.framework\"",
 				);
 				INFOPLIST_FILE = Clique/Info.plist;
+				IPHONEOS_DEPLOYMENT_TARGET = 11.1;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks";
 				LIBRARY_SEARCH_PATHS = (
 					"$(inherited)",

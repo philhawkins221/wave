@@ -1,10 +1,6 @@
-EMBEDDED_CONTENT_CONTAINS_SWIFT = YES
-FRAMEWORK_SEARCH_PATHS = $(inherited) "$PODS_CONFIGURATION_BUILD_DIR/1PasswordExtension" "$PODS_CONFIGURATION_BUILD_DIR/Alamofire" "$PODS_CONFIGURATION_BUILD_DIR/Alamofire-Synchronous" "$PODS_CONFIGURATION_BUILD_DIR/SDWebImage" "$PODS_CONFIGURATION_BUILD_DIR/SVGPlayButton" "$PODS_CONFIGURATION_BUILD_DIR/Soundcloud" "$PODS_CONFIGURATION_BUILD_DIR/SwiftyJSON" "$PODS_CONFIGURATION_BUILD_DIR/UICKeyChainStore" "$PODS_CONFIGURATION_BUILD_DIR/youtube-ios-player-helper"
 GCC_PREPROCESSOR_DEFINITIONS = $(inherited) COCOAPODS=1
 LD_RUNPATH_SEARCH_PATHS = $(inherited) '@executable_path/Frameworks' '@loader_path/Frameworks'
-OTHER_CFLAGS = $(inherited) -iquote "$PODS_CONFIGURATION_BUILD_DIR/1PasswordExtension/OnePasswordExtension.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/Alamofire-Synchronous/Alamofire_Synchronous.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/Alamofire/Alamofire.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/SDWebImage/SDWebImage.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/SVGPlayButton/SVGPlayButton.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/Soundcloud/Soundcloud.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/SwiftyJSON/SwiftyJSON.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/UICKeyChainStore/UICKeyChainStore.framework/Headers" -iquote "$PODS_CONFIGURATION_BUILD_DIR/youtube-ios-player-helper/youtube_ios_player_helper.framework/Headers"
-OTHER_LDFLAGS = $(inherited) -framework "Alamofire" -framework "Alamofire_Synchronous" -framework "OnePasswordExtension" -framework "SDWebImage" -framework "SVGPlayButton" -framework "Soundcloud" -framework "SwiftyJSON" -framework "UICKeyChainStore" -framework "youtube_ios_player_helper"
-OTHER_SWIFT_FLAGS = $(inherited) "-D" "COCOAPODS"
 PODS_BUILD_DIR = $BUILD_DIR
 PODS_CONFIGURATION_BUILD_DIR = $PODS_BUILD_DIR/$(CONFIGURATION)$(EFFECTIVE_PLATFORM_NAME)
+PODS_PODFILE_DIR_PATH = ${SRCROOT}/.
 PODS_ROOT = ${SRCROOT}/Pods

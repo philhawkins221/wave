@@ -9,4 +9,7 @@ target 'Clique' do
     #pod 'SVGPlayButton', '~> 0.4'
     #pod 'Alamofire-Synchronous', :git => 'https://github.com/Dalodd/Alamofire-Synchronous.git'
     #pod 'Alamofire', '~> 3.4'
+    
+    pod 'EZSwipeController', '~> 0.6'
+    pod 'SwipeableTabBarController', '~> 1.0'
 end

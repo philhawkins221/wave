@@ -1,3 +1,15 @@
-PODFILE CHECKSUM: 7a8b52e61ca5e0a1f71090fe9fc6f7ab29dd7488
+PODS:
+  - EZSwipeController (0.6.1)
+  - SwipeableTabBarController (1.0.8)
+
+DEPENDENCIES:
+  - EZSwipeController (~> 0.6)
+  - SwipeableTabBarController (~> 1.0)
+
+SPEC CHECKSUMS:
+  EZSwipeController: 255b0f8aed31963b0236802c926e27dd006a2532
+  SwipeableTabBarController: a5ac23b96e96aa35b857799e431f605f9350105a
+
+PODFILE CHECKSUM: 25c772031c1b979941247841f257b4b2c93bf4cb
 
 COCOAPODS: 1.3.1

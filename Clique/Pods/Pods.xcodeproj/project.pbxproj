@@ -7,45 +7,128 @@
 	objects = {
 
 /* Begin PBXBuildFile section */
-		094DFA62D19472564A847AF089D1442D /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
-		157FE6DBEFFD57874D676770AE35461A /* Pods-Clique-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4371710D7E4C771E79715FFAE68278A0 /* Pods-Clique-dummy.m */; };
-		7C3A9EBF9EB734FB49B0F4BF60DCF597 /* Pods-Clique-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CAA46B1201C3FFF1C297B17C257BC4DE /* Pods-Clique-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		1321B403AC5E23154374BA85010CCF0F /* EZSwipeController-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = 525F7D488A23E1FFF658E1B1BA5CA67E /* EZSwipeController-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		33C385F110DCF21B04781E1443840E98 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		383203BFB753B5336A55FE258D14501F /* Pods-Clique-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = CAA46B1201C3FFF1C297B17C257BC4DE /* Pods-Clique-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
+		3973C1EF5B21BFA0BC185F0797D11359 /* UIKit+Extensions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 8D3761B29242E11D9582039DADC1D3B1 /* UIKit+Extensions.swift */; };
+		3F601B9BED4D22A21238C76B3DB53DBB /* SwipeAnimationType.swift in Sources */ = {isa = PBXBuildFile; fileRef = 7C66B18326F460F2D30910F844761D12 /* SwipeAnimationType.swift */; };
+		49077420660430F4450166D4581664C1 /* SwipeableTabBarController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = C80896D693F861DC8D624098429AA957 /* SwipeableTabBarController-dummy.m */; };
+		6F81EA0F789E6AAA24A15140495A7D70 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		7A5A1E38B3058CD9CF7D271AB8C1DB3A /* SwipeableTabBarController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4226B4FD07FE15F91E252F50EF88627F /* SwipeableTabBarController.swift */; };
+		873A35BDAA592D2CFD1073368ECDA627 /* SwipeTransitioningProtocol.swift in Sources */ = {isa = PBXBuildFile; fileRef = DFA3E9A8FC6E75C63F9D1389D7AEE87A /* SwipeTransitioningProtocol.swift */; };
+		8C346F3046ACBD94E6437ACA5937E70D /* Pods-Clique-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 4371710D7E4C771E79715FFAE68278A0 /* Pods-Clique-dummy.m */; };
+		93DF8C34DFDB74B43B8FDFB85851B4EB /* SwipeAnimation.swift in Sources */ = {isa = PBXBuildFile; fileRef = EF1644BCF3CD89D1EADB82E15BF4D1E7 /* SwipeAnimation.swift */; };
+		99BE5C68B085B0E1541914B8A8894D2F /* EZSwipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 76158319531638BEE1B2FD5D8580EE7C /* EZSwipeController.swift */; };
+		B1EA651375C5A81C0191D15E9C301C74 /* EZSwipeController-dummy.m in Sources */ = {isa = PBXBuildFile; fileRef = 469733FCB8229861777BB59168B71A3E /* EZSwipeController-dummy.m */; };
+		B562D1AA880D607EA9F3ACFE06A9E7E2 /* Foundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */; };
+		C60A8DD7C507D1B695B91BEED6F974E9 /* SwipeInteractor.swift in Sources */ = {isa = PBXBuildFile; fileRef = E25492FE3F23DD2FFCCFC78E2D3C8B46 /* SwipeInteractor.swift */; };
+		FA839E470C3964D3E9B87293EFF2A47E /* SwipeableTabBarController-umbrella.h in Headers */ = {isa = PBXBuildFile; fileRef = DDF5B569957A7053EC50226B8383811D /* SwipeableTabBarController-umbrella.h */; settings = {ATTRIBUTES = (Public, ); }; };
 /* End PBXBuildFile section */
+
+/* Begin PBXContainerItemProxy section */
+		6F3FAE5C6F876BDBF6CE0391710C2F3F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 3DA30DE183B4A4EDA2181B7EBD959C54;
+			remoteInfo = EZSwipeController;
+		};
+		7CA227EAE87307108DD85AE02951C90F /* PBXContainerItemProxy */ = {
+			isa = PBXContainerItemProxy;
+			containerPortal = D41D8CD98F00B204E9800998ECF8427E /* Project object */;
+			proxyType = 1;
+			remoteGlobalIDString = 73DC81A0D5FFF218C4CD7796D276759F;
+			remoteInfo = SwipeableTabBarController;
+		};
+/* End PBXContainerItemProxy section */
 
 /* Begin PBXFileReference section */
 		1EABF7AB1DBA03C35BC2DF3588549BA9 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		2297E4AE25CD36A51903BCA0A04C9172 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		2BEDE95D73965A045EC875BAEA09C1C7 /* Pods-Clique-acknowledgements.markdown */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text; path = "Pods-Clique-acknowledgements.markdown"; sourceTree = "<group>"; };
+		39F7F744A9B67E8EE4E334E15F8C38A6 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
+		3E3D7C6A6B7F569C236FB71D9A3A7B24 /* SwipeableTabBarController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwipeableTabBarController-prefix.pch"; sourceTree = "<group>"; };
+		4226B4FD07FE15F91E252F50EF88627F /* SwipeableTabBarController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeableTabBarController.swift; path = SwipeableTabBarController/Classes/SwipeableTabBarController.swift; sourceTree = "<group>"; };
 		4371710D7E4C771E79715FFAE68278A0 /* Pods-Clique-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Clique-dummy.m"; sourceTree = "<group>"; };
+		469733FCB8229861777BB59168B71A3E /* EZSwipeController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "EZSwipeController-dummy.m"; sourceTree = "<group>"; };
 		48EBF7B605BCD4060299A261370CF8FB /* Pods-Clique.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Clique.release.xcconfig"; sourceTree = "<group>"; };
 		514E4B0DF16F507CF2E66F38311DAC7C /* Pods-Clique.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Clique.modulemap"; sourceTree = "<group>"; };
+		525F7D488A23E1FFF658E1B1BA5CA67E /* EZSwipeController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EZSwipeController-umbrella.h"; sourceTree = "<group>"; };
+		5855BADAD80CA89FF541932C1BD1FFCE /* EZSwipeController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = EZSwipeController.xcconfig; sourceTree = "<group>"; };
 		6604A7D69453B4569E4E4827FB9155A9 /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
+		76158319531638BEE1B2FD5D8580EE7C /* EZSwipeController.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; path = EZSwipeController.swift; sourceTree = "<group>"; };
 		78A7B3C9A54C630E80050F5D68A9FB0C /* Pods-Clique-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Clique-resources.sh"; sourceTree = "<group>"; };
+		7C66B18326F460F2D30910F844761D12 /* SwipeAnimationType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeAnimationType.swift; path = SwipeableTabBarController/Classes/SwipeAnimationType.swift; sourceTree = "<group>"; };
+		8D3761B29242E11D9582039DADC1D3B1 /* UIKit+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIKit+Extensions.swift"; path = "SwipeableTabBarController/Classes/UIKit+Extensions.swift"; sourceTree = "<group>"; };
 		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		A77C084F5911B4C144543F120B8A029C /* SwipeableTabBarController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwipeableTabBarController.xcconfig; sourceTree = "<group>"; };
 		A9879276B7B3FFF6A269D133F9D685BD /* Pods-Clique-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Clique-frameworks.sh"; sourceTree = "<group>"; };
 		B5EB01DA90BF93DBA72DA6C8F49141F1 /* Pods-Clique-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Clique-acknowledgements.plist"; sourceTree = "<group>"; };
-		C771C355E65491A4EA81B62DDA34BC5C /* Pods_Clique.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Clique.framework; path = "Pods-Clique.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		C80896D693F861DC8D624098429AA957 /* SwipeableTabBarController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwipeableTabBarController-dummy.m"; sourceTree = "<group>"; };
 		CAA46B1201C3FFF1C297B17C257BC4DE /* Pods-Clique-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Clique-umbrella.h"; sourceTree = "<group>"; };
+		DDF5B569957A7053EC50226B8383811D /* SwipeableTabBarController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwipeableTabBarController-umbrella.h"; sourceTree = "<group>"; };
+		DFA3E9A8FC6E75C63F9D1389D7AEE87A /* SwipeTransitioningProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeTransitioningProtocol.swift; path = SwipeableTabBarController/Classes/SwipeTransitioningProtocol.swift; sourceTree = "<group>"; };
+		E25492FE3F23DD2FFCCFC78E2D3C8B46 /* SwipeInteractor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeInteractor.swift; path = SwipeableTabBarController/Classes/SwipeInteractor.swift; sourceTree = "<group>"; };
+		EF1644BCF3CD89D1EADB82E15BF4D1E7 /* SwipeAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeAnimation.swift; path = SwipeableTabBarController/Classes/SwipeAnimation.swift; sourceTree = "<group>"; };
+		F128EF55AD00653D554D75C4E067D43D /* Pods_Clique.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Clique.framework; path = "Pods-Clique.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		F13331AA147F395AFD98C4CCE0847D61 /* EZSwipeController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = EZSwipeController.framework; path = EZSwipeController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F3A4877FB81E21983C68E6A75841CCE6 /* SwipeableTabBarController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = SwipeableTabBarController.modulemap; sourceTree = "<group>"; };
 		F682934FD17E62751DDA2BC8E6526AEE /* Pods-Clique.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Clique.debug.xcconfig"; sourceTree = "<group>"; };
+		F6C7D136276CAEC7CC4613675E49BB2B /* SwipeableTabBarController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwipeableTabBarController.framework; path = SwipeableTabBarController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		F9FD9CA6AB5434D5AAF4F20A3AC57387 /* EZSwipeController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = EZSwipeController.modulemap; sourceTree = "<group>"; };
+		FDFE45A6AD65F0DD08A070F387C62D6C /* EZSwipeController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "EZSwipeController-prefix.pch"; sourceTree = "<group>"; };
 /* End PBXFileReference section */
 
 /* Begin PBXFrameworksBuildPhase section */
-		F6F103E70B1EBDAB04D4B2AE5D6F3558 /* Frameworks */ = {
+		51A7D8D432E93C3C8CA1D6207ED7CF58 /* Frameworks */ = {
 			isa = PBXFrameworksBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				094DFA62D19472564A847AF089D1442D /* Foundation.framework in Frameworks */,
+				B562D1AA880D607EA9F3ACFE06A9E7E2 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		577775F8A517FB9FD7B6E9CDBB8FB58A /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				33C385F110DCF21B04781E1443840E98 /* Foundation.framework in Frameworks */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		7C60D43455E466E7C34AE6EA70414A64 /* Frameworks */ = {
+			isa = PBXFrameworksBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				6F81EA0F789E6AAA24A15140495A7D70 /* Foundation.framework in Frameworks */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXFrameworksBuildPhase section */
 
 /* Begin PBXGroup section */
-		6A83AB4780517A1B27A5EAB2DCEA4E24 /* Products */ = {
+		01F058202F9F44FE3D6CA799791444A4 /* EZSwipeController */ = {
 			isa = PBXGroup;
 			children = (
-				C771C355E65491A4EA81B62DDA34BC5C /* Pods_Clique.framework */,
+				76158319531638BEE1B2FD5D8580EE7C /* EZSwipeController.swift */,
+				959D73EE1E1E7EE9B579D84AFF5C46DC /* Support Files */,
 			);
-			name = Products;
+			name = EZSwipeController;
+			path = EZSwipeController;
+			sourceTree = "<group>";
+		};
+		301CC3EA38575BAE277789123D2FC15D /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				2297E4AE25CD36A51903BCA0A04C9172 /* Info.plist */,
+				F3A4877FB81E21983C68E6A75841CCE6 /* SwipeableTabBarController.modulemap */,
+				A77C084F5911B4C144543F120B8A029C /* SwipeableTabBarController.xcconfig */,
+				C80896D693F861DC8D624098429AA957 /* SwipeableTabBarController-dummy.m */,
+				3E3D7C6A6B7F569C236FB71D9A3A7B24 /* SwipeableTabBarController-prefix.pch */,
+				DDF5B569957A7053EC50226B8383811D /* SwipeableTabBarController-umbrella.h */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/SwipeableTabBarController";
 			sourceTree = "<group>";
 		};
 		7DB346D0F39D3F0E887471402A8071AB = {
@@ -53,9 +136,58 @@
 			children = (
 				93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */,
 				BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */,
-				6A83AB4780517A1B27A5EAB2DCEA4E24 /* Products */,
+				80CC7E01A2C31854AF8982C64526D211 /* Pods */,
+				8D3C5113BC20C393D54FC02E1ACC27AA /* Products */,
 				E5326F881C191B0169D74792857D19AC /* Targets Support Files */,
 			);
+			sourceTree = "<group>";
+		};
+		80CC7E01A2C31854AF8982C64526D211 /* Pods */ = {
+			isa = PBXGroup;
+			children = (
+				01F058202F9F44FE3D6CA799791444A4 /* EZSwipeController */,
+				B8BCD6770D6B69A81D670E31C28B56CB /* SwipeableTabBarController */,
+			);
+			name = Pods;
+			sourceTree = "<group>";
+		};
+		8D3C5113BC20C393D54FC02E1ACC27AA /* Products */ = {
+			isa = PBXGroup;
+			children = (
+				F13331AA147F395AFD98C4CCE0847D61 /* EZSwipeController.framework */,
+				F128EF55AD00653D554D75C4E067D43D /* Pods_Clique.framework */,
+				F6C7D136276CAEC7CC4613675E49BB2B /* SwipeableTabBarController.framework */,
+			);
+			name = Products;
+			sourceTree = "<group>";
+		};
+		959D73EE1E1E7EE9B579D84AFF5C46DC /* Support Files */ = {
+			isa = PBXGroup;
+			children = (
+				F9FD9CA6AB5434D5AAF4F20A3AC57387 /* EZSwipeController.modulemap */,
+				5855BADAD80CA89FF541932C1BD1FFCE /* EZSwipeController.xcconfig */,
+				469733FCB8229861777BB59168B71A3E /* EZSwipeController-dummy.m */,
+				FDFE45A6AD65F0DD08A070F387C62D6C /* EZSwipeController-prefix.pch */,
+				525F7D488A23E1FFF658E1B1BA5CA67E /* EZSwipeController-umbrella.h */,
+				39F7F744A9B67E8EE4E334E15F8C38A6 /* Info.plist */,
+			);
+			name = "Support Files";
+			path = "../Target Support Files/EZSwipeController";
+			sourceTree = "<group>";
+		};
+		B8BCD6770D6B69A81D670E31C28B56CB /* SwipeableTabBarController */ = {
+			isa = PBXGroup;
+			children = (
+				4226B4FD07FE15F91E252F50EF88627F /* SwipeableTabBarController.swift */,
+				EF1644BCF3CD89D1EADB82E15BF4D1E7 /* SwipeAnimation.swift */,
+				7C66B18326F460F2D30910F844761D12 /* SwipeAnimationType.swift */,
+				E25492FE3F23DD2FFCCFC78E2D3C8B46 /* SwipeInteractor.swift */,
+				DFA3E9A8FC6E75C63F9D1389D7AEE87A /* SwipeTransitioningProtocol.swift */,
+				8D3761B29242E11D9582039DADC1D3B1 /* UIKit+Extensions.swift */,
+				301CC3EA38575BAE277789123D2FC15D /* Support Files */,
+			);
+			name = SwipeableTabBarController;
+			path = SwipeableTabBarController;
 			sourceTree = "<group>";
 		};
 		BC3CA7F9E30CC8F7E2DD044DD34432FC /* Frameworks */ = {
@@ -103,32 +235,84 @@
 /* End PBXGroup section */
 
 /* Begin PBXHeadersBuildPhase section */
-		432D5CC8DE9368294691556A5D906B07 /* Headers */ = {
+		3C948CE6A91DE0DBBFF93DB95B1A1538 /* Headers */ = {
 			isa = PBXHeadersBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				7C3A9EBF9EB734FB49B0F4BF60DCF597 /* Pods-Clique-umbrella.h in Headers */,
+				FA839E470C3964D3E9B87293EFF2A47E /* SwipeableTabBarController-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		8EB9EEAB31A0BCB8C3F1BED92180FF6E /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				383203BFB753B5336A55FE258D14501F /* Pods-Clique-umbrella.h in Headers */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		AE6298D8683454C321D4CC60A5DEC469 /* Headers */ = {
+			isa = PBXHeadersBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				1321B403AC5E23154374BA85010CCF0F /* EZSwipeController-umbrella.h in Headers */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXHeadersBuildPhase section */
 
 /* Begin PBXNativeTarget section */
-		AD7625A61F27819863105B17E78C9C56 /* Pods-Clique */ = {
+		3DA30DE183B4A4EDA2181B7EBD959C54 /* EZSwipeController */ = {
 			isa = PBXNativeTarget;
-			buildConfigurationList = B18D2136770494BB02DE413385F71532 /* Build configuration list for PBXNativeTarget "Pods-Clique" */;
+			buildConfigurationList = D5CE6AE0E1F679CB1649373025E2A606 /* Build configuration list for PBXNativeTarget "EZSwipeController" */;
 			buildPhases = (
-				664B4FDF2A4A414975B54AE5CBE48FCB /* Sources */,
-				F6F103E70B1EBDAB04D4B2AE5D6F3558 /* Frameworks */,
-				432D5CC8DE9368294691556A5D906B07 /* Headers */,
+				7D419D6A06C199F39D45831835ABBBC9 /* Sources */,
+				51A7D8D432E93C3C8CA1D6207ED7CF58 /* Frameworks */,
+				AE6298D8683454C321D4CC60A5DEC469 /* Headers */,
 			);
 			buildRules = (
 			);
 			dependencies = (
 			);
+			name = EZSwipeController;
+			productName = EZSwipeController;
+			productReference = F13331AA147F395AFD98C4CCE0847D61 /* EZSwipeController.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		73DC81A0D5FFF218C4CD7796D276759F /* SwipeableTabBarController */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = C1820B1B3D68A3F510D1C34AF3CE8450 /* Build configuration list for PBXNativeTarget "SwipeableTabBarController" */;
+			buildPhases = (
+				EA9435711533525F65140C0E695C1A6F /* Sources */,
+				7C60D43455E466E7C34AE6EA70414A64 /* Frameworks */,
+				3C948CE6A91DE0DBBFF93DB95B1A1538 /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+			);
+			name = SwipeableTabBarController;
+			productName = SwipeableTabBarController;
+			productReference = F6C7D136276CAEC7CC4613675E49BB2B /* SwipeableTabBarController.framework */;
+			productType = "com.apple.product-type.framework";
+		};
+		9807F3F25DAEA4EB96960CC8D16428B2 /* Pods-Clique */ = {
+			isa = PBXNativeTarget;
+			buildConfigurationList = 8C910848DA26ACD3065E3834A4E42D9A /* Build configuration list for PBXNativeTarget "Pods-Clique" */;
+			buildPhases = (
+				B8F105F70C8762415779966C8AB991BE /* Sources */,
+				577775F8A517FB9FD7B6E9CDBB8FB58A /* Frameworks */,
+				8EB9EEAB31A0BCB8C3F1BED92180FF6E /* Headers */,
+			);
+			buildRules = (
+			);
+			dependencies = (
+				2446B8974087270ACB20D1B6BA471909 /* PBXTargetDependency */,
+				5AEA957395FC3900F392D6E110482D74 /* PBXTargetDependency */,
+			);
 			name = "Pods-Clique";
 			productName = "Pods-Clique";
-			productReference = C771C355E65491A4EA81B62DDA34BC5C /* Pods_Clique.framework */;
+			productReference = F128EF55AD00653D554D75C4E067D43D /* Pods_Clique.framework */;
 			productType = "com.apple.product-type.framework";
 		};
 /* End PBXNativeTarget section */
@@ -148,25 +332,65 @@
 				en,
 			);
 			mainGroup = 7DB346D0F39D3F0E887471402A8071AB;
-			productRefGroup = 6A83AB4780517A1B27A5EAB2DCEA4E24 /* Products */;
+			productRefGroup = 8D3C5113BC20C393D54FC02E1ACC27AA /* Products */;
 			projectDirPath = "";
 			projectRoot = "";
 			targets = (
-				AD7625A61F27819863105B17E78C9C56 /* Pods-Clique */,
+				3DA30DE183B4A4EDA2181B7EBD959C54 /* EZSwipeController */,
+				9807F3F25DAEA4EB96960CC8D16428B2 /* Pods-Clique */,
+				73DC81A0D5FFF218C4CD7796D276759F /* SwipeableTabBarController */,
 			);
 		};
 /* End PBXProject section */
 
 /* Begin PBXSourcesBuildPhase section */
-		664B4FDF2A4A414975B54AE5CBE48FCB /* Sources */ = {
+		7D419D6A06C199F39D45831835ABBBC9 /* Sources */ = {
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
-				157FE6DBEFFD57874D676770AE35461A /* Pods-Clique-dummy.m in Sources */,
+				B1EA651375C5A81C0191D15E9C301C74 /* EZSwipeController-dummy.m in Sources */,
+				99BE5C68B085B0E1541914B8A8894D2F /* EZSwipeController.swift in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		B8F105F70C8762415779966C8AB991BE /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				8C346F3046ACBD94E6437ACA5937E70D /* Pods-Clique-dummy.m in Sources */,
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+		};
+		EA9435711533525F65140C0E695C1A6F /* Sources */ = {
+			isa = PBXSourcesBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+				49077420660430F4450166D4581664C1 /* SwipeableTabBarController-dummy.m in Sources */,
+				7A5A1E38B3058CD9CF7D271AB8C1DB3A /* SwipeableTabBarController.swift in Sources */,
+				93DF8C34DFDB74B43B8FDFB85851B4EB /* SwipeAnimation.swift in Sources */,
+				3F601B9BED4D22A21238C76B3DB53DBB /* SwipeAnimationType.swift in Sources */,
+				C60A8DD7C507D1B695B91BEED6F974E9 /* SwipeInteractor.swift in Sources */,
+				873A35BDAA592D2CFD1073368ECDA627 /* SwipeTransitioningProtocol.swift in Sources */,
+				3973C1EF5B21BFA0BC185F0797D11359 /* UIKit+Extensions.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
 		};
 /* End PBXSourcesBuildPhase section */
+
+/* Begin PBXTargetDependency section */
+		2446B8974087270ACB20D1B6BA471909 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = EZSwipeController;
+			target = 3DA30DE183B4A4EDA2181B7EBD959C54 /* EZSwipeController */;
+			targetProxy = 6F3FAE5C6F876BDBF6CE0391710C2F3F /* PBXContainerItemProxy */;
+		};
+		5AEA957395FC3900F392D6E110482D74 /* PBXTargetDependency */ = {
+			isa = PBXTargetDependency;
+			name = SwipeableTabBarController;
+			target = 73DC81A0D5FFF218C4CD7796D276759F /* SwipeableTabBarController */;
+			targetProxy = 7CA227EAE87307108DD85AE02951C90F /* PBXContainerItemProxy */;
+		};
+/* End PBXTargetDependency section */
 
 /* Begin XCBuildConfiguration section */
 		12C4B864767C59600DBFA238F1E2F8BC /* Release */ = {
@@ -224,9 +448,9 @@
 			};
 			name = Release;
 		};
-		527FB986A01CEBC4975C9D6BAA360CD5 /* Debug */ = {
+		223A8E4D5DC917116495541AB14F1EE9 /* Release */ = {
 			isa = XCBuildConfiguration;
-			baseConfigurationReference = F682934FD17E62751DDA2BC8E6526AEE /* Pods-Clique.debug.xcconfig */;
+			baseConfigurationReference = A77C084F5911B4C144543F120B8A029C /* SwipeableTabBarController.xcconfig */;
 			buildSettings = {
 				CODE_SIGN_IDENTITY = "";
 				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
@@ -237,24 +461,24 @@
 				DYLIB_COMPATIBILITY_VERSION = 1;
 				DYLIB_CURRENT_VERSION = 1;
 				DYLIB_INSTALL_NAME_BASE = "@rpath";
-				INFOPLIST_FILE = "Target Support Files/Pods-Clique/Info.plist";
+				GCC_PREFIX_HEADER = "Target Support Files/SwipeableTabBarController/SwipeableTabBarController-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwipeableTabBarController/Info.plist";
 				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
-				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
 				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
-				MACH_O_TYPE = staticlib;
-				MODULEMAP_FILE = "Target Support Files/Pods-Clique/Pods-Clique.modulemap";
-				OTHER_LDFLAGS = "";
-				OTHER_LIBTOOLFLAGS = "";
-				PODS_ROOT = "$(SRCROOT)";
-				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
-				PRODUCT_NAME = Pods_Clique;
+				MODULEMAP_FILE = "Target Support Files/SwipeableTabBarController/SwipeableTabBarController.modulemap";
+				PRODUCT_NAME = SwipeableTabBarController;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
-			name = Debug;
+			name = Release;
 		};
 		59F0302F2371FCC6B73EF0A418D40734 /* Debug */ = {
 			isa = XCBuildConfiguration;
@@ -316,7 +540,104 @@
 			};
 			name = Debug;
 		};
-		FAE94069DE96BC8D2012BE6AD4056F55 /* Release */ = {
+		68E8038C4B20AFB54EBFC73DFFD413C4 /* Release */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5855BADAD80CA89FF541932C1BD1FFCE /* EZSwipeController.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/EZSwipeController/EZSwipeController-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/EZSwipeController/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/EZSwipeController/EZSwipeController.modulemap";
+				PRODUCT_NAME = EZSwipeController;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VALIDATE_PRODUCT = YES;
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Release;
+		};
+		71424D104D19EDD678B5F93837C108CC /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = F682934FD17E62751DDA2BC8E6526AEE /* Pods-Clique.debug.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				INFOPLIST_FILE = "Target Support Files/Pods-Clique/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 11.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MACH_O_TYPE = staticlib;
+				MODULEMAP_FILE = "Target Support Files/Pods-Clique/Pods-Clique.modulemap";
+				OTHER_LDFLAGS = "";
+				OTHER_LIBTOOLFLAGS = "";
+				PODS_ROOT = "$(SRCROOT)";
+				PRODUCT_BUNDLE_IDENTIFIER = "org.cocoapods.${PRODUCT_NAME:rfc1034identifier}";
+				PRODUCT_NAME = Pods_Clique;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = DEBUG;
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		729E6693B39FF55C12B24CD539D5A2F8 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = 5855BADAD80CA89FF541932C1BD1FFCE /* EZSwipeController.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/EZSwipeController/EZSwipeController-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/EZSwipeController/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/EZSwipeController/EZSwipeController.modulemap";
+				PRODUCT_NAME = EZSwipeController;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
+		};
+		8F940EBC38848C7971F52C35C47E0C94 /* Release */ = {
 			isa = XCBuildConfiguration;
 			baseConfigurationReference = 48EBF7B605BCD4060299A261370CF8FB /* Pods-Clique.release.xcconfig */;
 			buildSettings = {
@@ -342,12 +663,44 @@
 				PRODUCT_NAME = Pods_Clique;
 				SDKROOT = iphoneos;
 				SKIP_INSTALL = YES;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;
 				VERSIONING_SYSTEM = "apple-generic";
 				VERSION_INFO_PREFIX = "";
 			};
 			name = Release;
+		};
+		D5EAB5CD41BBFE0842B1E9B8149C0910 /* Debug */ = {
+			isa = XCBuildConfiguration;
+			baseConfigurationReference = A77C084F5911B4C144543F120B8A029C /* SwipeableTabBarController.xcconfig */;
+			buildSettings = {
+				CODE_SIGN_IDENTITY = "";
+				"CODE_SIGN_IDENTITY[sdk=appletvos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "";
+				"CODE_SIGN_IDENTITY[sdk=watchos*]" = "";
+				CURRENT_PROJECT_VERSION = 1;
+				DEFINES_MODULE = YES;
+				DYLIB_COMPATIBILITY_VERSION = 1;
+				DYLIB_CURRENT_VERSION = 1;
+				DYLIB_INSTALL_NAME_BASE = "@rpath";
+				GCC_PREFIX_HEADER = "Target Support Files/SwipeableTabBarController/SwipeableTabBarController-prefix.pch";
+				INFOPLIST_FILE = "Target Support Files/SwipeableTabBarController/Info.plist";
+				INSTALL_PATH = "$(LOCAL_LIBRARY_DIR)/Frameworks";
+				IPHONEOS_DEPLOYMENT_TARGET = 8.0;
+				LD_RUNPATH_SEARCH_PATHS = "$(inherited) @executable_path/Frameworks @loader_path/Frameworks";
+				MODULEMAP_FILE = "Target Support Files/SwipeableTabBarController/SwipeableTabBarController.modulemap";
+				PRODUCT_NAME = SwipeableTabBarController;
+				SDKROOT = iphoneos;
+				SKIP_INSTALL = YES;
+				SWIFT_ACTIVE_COMPILATION_CONDITIONS = "$(inherited) ";
+				SWIFT_OPTIMIZATION_LEVEL = "-Onone";
+				SWIFT_VERSION = 4.0;
+				TARGETED_DEVICE_FAMILY = "1,2";
+				VERSIONING_SYSTEM = "apple-generic";
+				VERSION_INFO_PREFIX = "";
+			};
+			name = Debug;
 		};
 /* End XCBuildConfiguration section */
 
@@ -361,11 +714,29 @@
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;
 		};
-		B18D2136770494BB02DE413385F71532 /* Build configuration list for PBXNativeTarget "Pods-Clique" */ = {
+		8C910848DA26ACD3065E3834A4E42D9A /* Build configuration list for PBXNativeTarget "Pods-Clique" */ = {
 			isa = XCConfigurationList;
 			buildConfigurations = (
-				527FB986A01CEBC4975C9D6BAA360CD5 /* Debug */,
-				FAE94069DE96BC8D2012BE6AD4056F55 /* Release */,
+				71424D104D19EDD678B5F93837C108CC /* Debug */,
+				8F940EBC38848C7971F52C35C47E0C94 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		C1820B1B3D68A3F510D1C34AF3CE8450 /* Build configuration list for PBXNativeTarget "SwipeableTabBarController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				D5EAB5CD41BBFE0842B1E9B8149C0910 /* Debug */,
+				223A8E4D5DC917116495541AB14F1EE9 /* Release */,
+			);
+			defaultConfigurationIsVisible = 0;
+			defaultConfigurationName = Release;
+		};
+		D5CE6AE0E1F679CB1649373025E2A606 /* Build configuration list for PBXNativeTarget "EZSwipeController" */ = {
+			isa = XCConfigurationList;
+			buildConfigurations = (
+				729E6693B39FF55C12B24CD539D5A2F8 /* Debug */,
+				68E8038C4B20AFB54EBFC73DFFD413C4 /* Release */,
 			);
 			defaultConfigurationIsVisible = 0;
 			defaultConfigurationName = Release;

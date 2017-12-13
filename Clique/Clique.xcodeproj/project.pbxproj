@@ -34,6 +34,12 @@
 		4ADF95E61D026D6800E0CD19 /* clique 180.png in Resources */ = {isa = PBXBuildFile; fileRef = 4ADF95E41D026D6800E0CD19 /* clique 180.png */; };
 		4AF452E11FDE0D52007FCF8F /* SwipeableTabBarController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF452E21FDE0D52007FCF8F /* SwipeableTabBarController.framework */; };
 		4AF452E41FDE1982007FCF8F /* StyleGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452E31FDE1982007FCF8F /* StyleGuide.swift */; };
+		4AF452E81FE0CAAE007FCF8F /* QueueSongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */; };
+		4AF452E91FE0CAAE007FCF8F /* QueueSongTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */; };
+		4AF452EB1FE0CCBF007FCF8F /* QueueDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */; };
+		4AF452ED1FE0D159007FCF8F /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EC1FE0D159007FCF8F /* Utility.swift */; };
+		4AF452EF1FE0E758007FCF8F /* QueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EE1FE0E758007FCF8F /* QueueManager.swift */; };
+		4AF452F11FE0E8C3007FCF8F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452F01FE0E8C3007FCF8F /* Song.swift */; };
 		9957A368FB2B39D6834B6673 /* Pods_Clique.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9D40512C31A8AE09B7542F /* Pods_Clique.framework */; };
 /* End PBXBuildFile section */
 
@@ -87,6 +93,12 @@
 		4ADF95E41D026D6800E0CD19 /* clique 180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 180.png"; sourceTree = "<group>"; };
 		4AF452E21FDE0D52007FCF8F /* SwipeableTabBarController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwipeableTabBarController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AF452E31FDE1982007FCF8F /* StyleGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleGuide.swift; sourceTree = "<group>"; };
+		4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueSongTableViewCell.swift; sourceTree = "<group>"; };
+		4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QueueSongTableViewCell.xib; sourceTree = "<group>"; };
+		4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueDelegate.swift; sourceTree = "<group>"; };
+		4AF452EC1FE0D159007FCF8F /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
+		4AF452EE1FE0E758007FCF8F /* QueueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueManager.swift; sourceTree = "<group>"; };
+		4AF452F01FE0E8C3007FCF8F /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicViewController.swift; sourceTree = "<group>"; };
 		4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundcloudViewController.swift; sourceTree = "<group>"; };
 		BF3FDFC5DDD37E53C14DA730 /* Pods-Clique.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clique.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clique/Pods-Clique.release.xcconfig"; sourceTree = "<group>"; };
@@ -166,6 +178,12 @@
 				4AC3C9F31C4ACCB700D5BCCA /* ViewController.swift */,
 				4AC3C9F51C4ACCB700D5BCCA /* Main.storyboard */,
 				4A06C3031FD7888C00E99FED /* wave.storyboard */,
+				4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */,
+				4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */,
+				4AF452EE1FE0E758007FCF8F /* QueueManager.swift */,
+				4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */,
+				4AF452EC1FE0D159007FCF8F /* Utility.swift */,
+				4AF452F01FE0E8C3007FCF8F /* Song.swift */,
 				4A06C3111FDC928600E99FED /* SwipeController.swift */,
 				4A06C3091FDC8A0600E99FED /* NowPlayingViewController.swift */,
 				4AF452E31FDE1982007FCF8F /* StyleGuide.swift */,
@@ -275,6 +293,7 @@
 				4A2B670C1C501AB700681F70 /* genericart.png in Resources */,
 				4ADF95E61D026D6800E0CD19 /* clique 180.png in Resources */,
 				4A179AFF1D00C64100B6EE20 /* youtube logo.png in Resources */,
+				4AF452E91FE0CAAE007FCF8F /* QueueSongTableViewCell.xib in Resources */,
 				4A179AFD1D00C64100B6EE20 /* soundcloud logo.gif in Resources */,
 				4AC3C9FC1C4ACCB700D5BCCA /* Assets.xcassets in Resources */,
 				4A179AFC1D00C64100B6EE20 /* apple music logo.jpg in Resources */,
@@ -312,12 +331,10 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Clique/Pods-Clique-frameworks.sh",
-				"${BUILT_PRODUCTS_DIR}/EZSwipeController/EZSwipeController.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeableTabBarController/SwipeableTabBarController.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
-				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/EZSwipeController.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeableTabBarController.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -350,14 +367,19 @@
 			isa = PBXSourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AF452F11FE0E8C3007FCF8F /* Song.swift in Sources */,
 				4AC3C9F41C4ACCB700D5BCCA /* ViewController.swift in Sources */,
 				4A06C30A1FDC8A0600E99FED /* NowPlayingViewController.swift in Sources */,
 				4A06C30C1FDC8B0000E99FED /* QueueViewController.swift in Sources */,
 				4A06C3081FD79D4B00E99FED /* ProfileBar.swift in Sources */,
 				4A06C3121FDC928600E99FED /* SwipeController.swift in Sources */,
+				4AF452EF1FE0E758007FCF8F /* QueueManager.swift in Sources */,
 				4A06C30E1FDC8BFD00E99FED /* LibraryViewController.swift in Sources */,
+				4AF452E81FE0CAAE007FCF8F /* QueueSongTableViewCell.swift in Sources */,
 				4AC3C9F21C4ACCB700D5BCCA /* AppDelegate.swift in Sources */,
+				4AF452ED1FE0D159007FCF8F /* Utility.swift in Sources */,
 				4AC3C9FA1C4ACCB700D5BCCA /* Clique.xcdatamodeld in Sources */,
+				4AF452EB1FE0CCBF007FCF8F /* QueueDelegate.swift in Sources */,
 				4AF452E41FDE1982007FCF8F /* StyleGuide.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

@@ -10,12 +10,12 @@ import Foundation
 
 protocol StyleGuide {
     associatedtype controller
-    func enforce(on controller: controller)
+    static func enforce(on controller: controller)
 }
 
 struct NavigationControllerStyleGuide: StyleGuide {
     
-    func enforce(on controller: UINavigationController?) {
+    static func enforce(on controller: UINavigationController?) {
         if #available(iOS 8.2, *) {
             controller?.navigationBar.titleTextAttributes = [
                 NSAttributedStringKey.foregroundColor: UIColor.white,
@@ -31,8 +31,15 @@ struct NavigationControllerStyleGuide: StyleGuide {
 
 struct TabBarControllerStyleGuide: StyleGuide {
     
-    func enforce(on controller: UITabBarController?) {
+    static func enforce(on controller: UITabBarController?) {
         controller?.tabBar.isHidden = true
     }
+}
+
+//TODO: - table header style guide -- requires utility
+struct TableHeaderStyleGuide: StyleGuide {
     
+    static func enforce(on controller: UITableViewHeaderFooterView) {
+        <#code#>
+    }
 }

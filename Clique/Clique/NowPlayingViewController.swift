@@ -24,7 +24,7 @@ class NowPlayingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        TabBarControllerStyleGuide().enforce(on: tabBarController)
+        TabBarControllerStyleGuide.enforce(on: tabBarController)
     }
 
     override func viewDidLoad() {

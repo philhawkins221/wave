@@ -8,6 +8,7 @@
         <plugIn identifier="com.apple.InterfaceBuilder.IBCocoaTouchPlugin" version="13527"/>
         <capability name="Aspect ratio constraints" minToolsVersion="5.1"/>
         <capability name="Constraints to layout margins" minToolsVersion="6.0"/>
+        <capability name="Navigation items with more than one left or right bar item" minToolsVersion="7.0"/>
         <capability name="Safe area layout guides" minToolsVersion="9.0"/>
         <capability name="documents saved in the Xcode 8 format" minToolsVersion="8.0"/>
     </dependencies>
@@ -41,7 +42,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="p4Y-lY-aTy" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="596" y="193"/>
+            <point key="canvasLocation" x="558" y="193"/>
         </scene>
         <!--Swipe Controller-->
         <scene sceneID="ucZ-U9-s6z">
@@ -170,20 +171,37 @@
                                     <constraint firstAttribute="height" constant="99" id="aQC-MA-byV"/>
                                 </constraints>
                             </view>
+                            <tableView clipsSubviews="YES" contentMode="scaleToFill" alwaysBounceVertical="YES" dataMode="prototypes" style="plain" separatorStyle="default" rowHeight="-1" estimatedRowHeight="-1" sectionHeaderHeight="28" sectionFooterHeight="28" translatesAutoresizingMaskIntoConstraints="NO" id="iNU-RT-xRK">
+                                <rect key="frame" x="0.0" y="88" width="375" height="576"/>
+                                <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </tableView>
                         </subviews>
                         <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                         <constraints>
+                            <constraint firstItem="1gs-v1-8uo" firstAttribute="top" secondItem="iNU-RT-xRK" secondAttribute="bottom" id="Bmf-Is-Tiv"/>
+                            <constraint firstItem="iNU-RT-xRK" firstAttribute="top" secondItem="SWT-TK-hpJ" secondAttribute="top" id="D0d-9z-pyd"/>
+                            <constraint firstItem="iNU-RT-xRK" firstAttribute="leading" secondItem="SWT-TK-hpJ" secondAttribute="leading" id="L7p-P4-MpR"/>
                             <constraint firstItem="1gs-v1-8uo" firstAttribute="bottom" secondItem="SWT-TK-hpJ" secondAttribute="bottom" constant="34" id="fsY-vS-dhJ"/>
                             <constraint firstItem="1gs-v1-8uo" firstAttribute="leading" secondItem="SWT-TK-hpJ" secondAttribute="leading" id="qOi-JL-Y0h"/>
                             <constraint firstItem="1gs-v1-8uo" firstAttribute="trailing" secondItem="SWT-TK-hpJ" secondAttribute="trailing" id="s03-ml-juv"/>
+                            <constraint firstItem="iNU-RT-xRK" firstAttribute="trailing" secondItem="SWT-TK-hpJ" secondAttribute="trailing" id="wfG-Tw-hLe"/>
                         </constraints>
                         <viewLayoutGuide key="safeArea" id="SWT-TK-hpJ"/>
                     </view>
-                    <navigationItem key="navigationItem" title="Queue" id="2M7-Kt-54A"/>
+                    <navigationItem key="navigationItem" title="Queue" id="2M7-Kt-54A">
+                        <rightBarButtonItems>
+                            <barButtonItem systemItem="add" id="n9z-ys-qXD">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </barButtonItem>
+                            <barButtonItem systemItem="bookmarks" id="PY5-DU-vFW">
+                                <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                            </barButtonItem>
+                        </rightBarButtonItems>
+                    </navigationItem>
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="8a0-Ka-mM7" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="3464.8000000000002" y="192.85714285714286"/>
+            <point key="canvasLocation" x="3157.5999999999999" y="192.85714285714286"/>
         </scene>
         <!--Swipe Controller-->
         <scene sceneID="y3P-nW-f1W">
@@ -227,7 +245,7 @@
                 </navigationController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="yna-nB-Wvl" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="2652" y="192.85714285714286"/>
+            <point key="canvasLocation" x="2393" y="193"/>
         </scene>
         <!--Item-->
         <scene sceneID="FsN-oX-Ybr">

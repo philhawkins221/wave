@@ -95,7 +95,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         
         //get artwork for current song
         let r2 = Alamofire.request(.GET, "https://api.spotify.com/v1/search?q=track:" + PlayerManager.sharedInstance().plus(currentSong.name) + "%20artist:" + PlayerManager.sharedInstance().plus(currentSong.artist) + "&type=track&limit=1").responseJSON()
-        if let value = r2.result.value where self.currentSong.name != "" {
+        if let value = r2.result.value, self.currentSong.name != "" {
             let json = JSON(value)
             
             self.currentSong.artwork = json["tracks"]["items"][0]["album"]["images"][0]["url"].string ?? ""
@@ -154,7 +154,7 @@ class CliqueViewController: UIViewController, UITableViewDelegate, UITableViewDa
         if indexPath.section == 0 {
             cell = tableView.dequeueReusableCellWithIdentifier("nowplaying") as? CliqueSongTableViewCell
         } else {
-            cell = tableView.dequeueReusableCellWithIdentifier("song") as? CliqueSongTableViewCell
+            cell = tableView.dequeueReusableCellWithIdentifier("song") as CliqueSongTableViewCell
         }
 
         if indexPath.section != 0 {

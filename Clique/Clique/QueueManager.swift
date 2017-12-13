@@ -16,7 +16,12 @@ struct QueueManager {
     var delegate: QueueDelegate
     
     static func sharedInstance() -> QueueManager {
-        return instance ?? QueueManager()
+        
+        if instance == nil {
+			instance = QueueManager()
+		}
+		
+        return instance!
     }
     
     private init() {

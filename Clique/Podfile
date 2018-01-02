@@ -10,6 +10,10 @@ target 'Clique' do
     #pod 'Alamofire-Synchronous', :git => 'https://github.com/Dalodd/Alamofire-Synchronous.git'
     #pod 'Alamofire', '~> 3.4'
     
-    #pod 'EZSwipeController', '~> 0.6'
+    #pod 'BTNavigationDropdownMenu'
     pod 'SwipeableTabBarController', '~> 1.0'
+    pod 'Alamofire', '~> 4.6'
+    pod 'AlamofireImage', '~> 3.3'
+    pod 'SwiftyJSON', '~> 4.0'
+    
 end

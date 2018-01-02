@@ -44,21 +44,6 @@
             </objects>
             <point key="canvasLocation" x="558" y="193"/>
         </scene>
-        <!--Swipe Controller-->
-        <scene sceneID="ucZ-U9-s6z">
-            <objects>
-                <viewController id="uRY-qn-zH2" customClass="SwipeController" customModule="Clique" customModuleProvider="target" sceneMemberID="viewController">
-                    <view key="view" contentMode="scaleToFill" id="rJ0-jL-Nfx">
-                        <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
-                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
-                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
-                        <viewLayoutGuide key="safeArea" id="oK0-H0-5xt"/>
-                    </view>
-                </viewController>
-                <placeholder placeholderIdentifier="IBFirstResponder" id="YzF-j9-HjF" userLabel="First Responder" sceneMemberID="firstResponder"/>
-            </objects>
-            <point key="canvasLocation" x="1460" y="1023"/>
-        </scene>
         <!--Item-->
         <scene sceneID="cSH-Kp-qrX">
             <objects>
@@ -209,6 +194,7 @@
                 <tabBarController automaticallyAdjustsScrollViewInsets="NO" id="te1-pW-f6c" customClass="SwipeController" customModule="Clique" customModuleProvider="target" sceneMemberID="viewController">
                     <toolbarItems/>
                     <tabBar key="tabBar" contentMode="scaleToFill" insetsLayoutMarginsFromSafeArea="NO" id="djW-EJ-kLG">
+                        <rect key="frame" x="0.0" y="0.0" width="1000" height="1000"/>
                         <autoresizingMask key="autoresizingMask"/>
                         <color key="backgroundColor" white="0.0" alpha="0.0" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                     </tabBar>

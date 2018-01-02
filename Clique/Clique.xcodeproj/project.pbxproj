@@ -19,6 +19,8 @@
 		4A179AFE1D00C64100B6EE20 /* spotify logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */; };
 		4A179AFF1D00C64100B6EE20 /* youtube logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AFB1D00C64100B6EE20 /* youtube logo.png */; };
 		4A2B670C1C501AB700681F70 /* genericart.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A2B670B1C501AB700681F70 /* genericart.png */; };
+		4A5495801FFB0E5100345CB1 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A54957F1FFB0E5100345CB1 /* Endpoints.swift */; };
+		4A5495821FFB0E5A00345CB1 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495811FFB0E5A00345CB1 /* Global.swift */; };
 		4A5A5B681CE1685A00BD2F5F /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A5A5B671CE1685A00BD2F5F /* Spotify.framework */; };
 		4A7D6C971CDFB22300ADDDA1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */; };
 		4AB840D11CD70640005FDB47 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB840D01CD70640005FDB47 /* MediaPlayer.framework */; };
@@ -64,6 +66,8 @@
 		4A3EBFE11C4F4E2D001BAA33 /* CliqueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqueViewController.swift; sourceTree = "<group>"; };
 		4A3EBFE31C500CF9001BAA33 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		4A4D60631D2EDF80009B6375 /* SavedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
+		4A54957F1FFB0E5100345CB1 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
+		4A5495811FFB0E5A00345CB1 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
 		4A5A5B671CE1685A00BD2F5F /* Spotify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Spotify.framework; sourceTree = "<group>"; };
 		4A5A5B691CE16A6700BD2F5F /* Clique-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clique-Bridging-Header.h"; sourceTree = "<group>"; };
 		4A5A5B6A1CE2434E00BD2F5F /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -183,6 +187,8 @@
 				4AF452EE1FE0E758007FCF8F /* QueueManager.swift */,
 				4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */,
 				4AF452EC1FE0D159007FCF8F /* Utility.swift */,
+				4A54957F1FFB0E5100345CB1 /* Endpoints.swift */,
+				4A5495811FFB0E5A00345CB1 /* Global.swift */,
 				4AF452F01FE0E8C3007FCF8F /* Song.swift */,
 				4A06C3111FDC928600E99FED /* SwipeController.swift */,
 				4A06C3091FDC8A0600E99FED /* NowPlayingViewController.swift */,
@@ -331,10 +337,16 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Clique/Pods-Clique-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
+				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeableTabBarController/SwipeableTabBarController.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeableTabBarController.framework",
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -371,9 +383,11 @@
 				4AC3C9F41C4ACCB700D5BCCA /* ViewController.swift in Sources */,
 				4A06C30A1FDC8A0600E99FED /* NowPlayingViewController.swift in Sources */,
 				4A06C30C1FDC8B0000E99FED /* QueueViewController.swift in Sources */,
+				4A5495801FFB0E5100345CB1 /* Endpoints.swift in Sources */,
 				4A06C3081FD79D4B00E99FED /* ProfileBar.swift in Sources */,
 				4A06C3121FDC928600E99FED /* SwipeController.swift in Sources */,
 				4AF452EF1FE0E758007FCF8F /* QueueManager.swift in Sources */,
+				4A5495821FFB0E5A00345CB1 /* Global.swift in Sources */,
 				4A06C30E1FDC8BFD00E99FED /* LibraryViewController.swift in Sources */,
 				4AF452E81FE0CAAE007FCF8F /* QueueSongTableViewCell.swift in Sources */,
 				4AC3C9F21C4ACCB700D5BCCA /* AppDelegate.swift in Sources */,

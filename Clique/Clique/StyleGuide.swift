@@ -36,10 +36,14 @@ struct TabBarControllerStyleGuide: StyleGuide {
     }
 }
 
-//TODO: - table header style guide -- requires utility
 struct TableHeaderStyleGuide: StyleGuide {
     
     static func enforce(on controller: UITableViewHeaderFooterView) {
-        <#code#>
+        if #available(iOS 8.2, *) {
+            controller.textLabel?.font = UIFont.systemFont(ofSize: 15, weight: UIFont.Weight.light)
+        }
+        
+        controller.textLabel?.textColor = UIColor.white
+        controller.contentView.backgroundColor = UIColor.lightGray
     }
 }

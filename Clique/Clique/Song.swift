@@ -8,6 +8,21 @@
 
 import Foundation
 
-struct Song {
-    //TODO: - song class
+struct Song: Equatable, Codable {
+    
+    let id: String
+    let library: String
+    let title: String
+    let artist: String
+    //let album: String
+    let artwork: String
+    
+    static func ==(lhs: Song, rhs: Song) -> Bool {
+        if lhs.id == rhs.id && lhs.library == rhs.library {
+            return true
+        }
+        
+        return false
+    }
+    
 }

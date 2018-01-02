@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "C60AD07353D8804DA8C0AE6E1292BCB6"
+               BlueprintIdentifier = "16AF3323FE56F322CF26C4BEC4CA6F03"
                BuildableName = "Pods_Clique.framework"
                BlueprintName = "Pods-Clique"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -47,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "C60AD07353D8804DA8C0AE6E1292BCB6"
+            BlueprintIdentifier = "16AF3323FE56F322CF26C4BEC4CA6F03"
             BuildableName = "Pods_Clique.framework"
             BlueprintName = "Pods-Clique"
             ReferencedContainer = "container:Pods.xcodeproj">

@@ -8,7 +8,9 @@
 
 import Foundation
 
-struct Song: Equatable, Codable {
+protocol CatalogItem {}
+
+struct Song: Equatable, Codable, CatalogItem {
     
     let id: String
     let library: String
@@ -25,4 +27,12 @@ struct Song: Equatable, Codable {
         return false
     }
     
+}
+
+struct Artist: CatalogItem {
+    let id: String
+}
+
+struct Album: CatalogItem {
+    let id: String
 }

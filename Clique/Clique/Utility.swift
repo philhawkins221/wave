@@ -12,16 +12,18 @@ import SwiftyJSON
 
 //MARK: - protocols
 
-protocol LibrarySearching {
-    static func search(_ term: String) -> [Song]
-    static func find(id: String) -> Song?
+protocol Searching {
+    static func search(_ term: String) -> [CatalogItem] //[Any]
+    //static func find(id: String) -> Song?
 }
 
 //MARK: - utilities
 
-struct Utility {
+struct WebUtility {
     
     static func sendRequest(type: RequestMethod, to endpoint: String, with parameters: [String : Any]?) -> JSON? {
+        
+        print("sending", type.rawValue, "request to endpoint", endpoint)
         
         let method: HTTPMethod
         switch type {
@@ -39,23 +41,68 @@ struct Utility {
             }
         }
         
+        print(response as Any)
+        
         return response
     }
-        
     
-    //TODO: - set table view cell image size utility function
-    static func setTableViewCellImageSize(to size: Int, on cell: UITableViewCell) {
+}
+
+struct QueueUtility {
+    static func queue(song: Song, to user: User) {
+        var replacement = user.queue.queue
+        replacement.append(song)
         
+        let queue = Queue(
+            radio: user.queue.radio,
+            voting: user.queue.voting,
+            requestsonly: user.queue.requestsonly,
+            donotdisturb: user.queue.donotdisturb,
+            queue: replacement,
+            history: user.queue.history,
+            current: user.queue.current,
+            listeners: user.queue.listeners)
+        
+        CliqueAPIUtility.update(queue: user, with: queue)
+    }
+    
+    static func advance(queue user: User) {
+        var newhistory = user.queue.history
+        var newqueue = user.queue.queue
+        
+        newhistory.insert(user.queue.current, at: 0)
+        let newcurrent = newqueue.removeFirst()
+        
+        let replacement = Queue(
+            radio: user.queue.radio,
+            voting: user.queue.voting,
+            requestsonly: user.queue.requestsonly,
+            donotdisturb: user.queue.donotdisturb,
+            queue: newqueue,
+            history: newhistory,
+            current: newcurrent,
+            listeners: user.queue.listeners)
+        
+        CliqueAPIUtility.update(queue: user, with: replacement)
+        
+    }
+    
+    static func vote(song: Song, _ direction: Vote, in queue: Queue, of user: User) {
+        
+        //vote
+        
+        //update queue
     }
 }
 
-struct AppleMusicAPIUtility: LibrarySearching {
-    static func search(_ term: String) -> [Song] {
-        var results = [Song]()
-        let endpoint = Endpoints.AppleMusic.searchpoint + term + Endpoints.AppleMusic.searchparameters
+struct AppleMusicAPIUtility: Searching {
+    static func search(_ term: String) -> [CatalogItem] {
+        var results = [CatalogItem]()
+        let endpoint = Endpoints.AppleMusic.searchpoint(term)
         
-        if let response = Utility.sendRequest(type: .get, to: endpoint, with: nil) {
+        if let response = WebUtility.sendRequest(type: .get, to: endpoint, with: nil) {
             let songs = response["results"]["songs"]["data"].array ?? []
+            let artists = response["results"]["artists"]["data"].array ?? []
             
             for song in songs {
                 results.append(Song(
@@ -66,6 +113,10 @@ struct AppleMusicAPIUtility: LibrarySearching {
                     artwork: song["attributes"]["artwork"]["url"].string ?? "")
                 )
             }
+            
+            for artist in artists {
+                results.append(Artist(id: artist["id"].string ?? ""))
+            }
         }
         
         return results
@@ -73,9 +124,9 @@ struct AppleMusicAPIUtility: LibrarySearching {
     
     static func find(id: String) -> Song? {
         let result: Song?
-        let endpoint = Endpoints.AppleMusic.songpoint + id
+        let endpoint = Endpoints.AppleMusic.songpoint(id)
         
-        check: if let response = Utility.sendRequest(type: .get, to: endpoint, with: nil) {
+        check: if let response = WebUtility.sendRequest(type: .get, to: endpoint, with: nil) {
             guard let song = response["data"].array?[0] else { break check }
             
             result = Song(
@@ -91,22 +142,76 @@ struct AppleMusicAPIUtility: LibrarySearching {
 
 }
 
-struct SpotifyAPIUtility: LibrarySearching {
-    static func search(_ term: String) -> [Song] {
-        <#code#>
-    }
-    
-    static func find(id: String) -> Song? {
-        <#code#>
+struct SpotifyAPIUtility: Searching {
+    static func search(_ term: String) -> [CatalogItem] {
+        var results = [CatalogItem]()
+        let endpoint = Endpoints.AppleMusic.searchpoint(term)
+        
+        if let response = WebUtility.sendRequest(type: .get, to: endpoint, with: nil) {
+            let songs = response["tracks"]["items"].array ?? []
+            let artists = response["artists"]["items"].array ?? []
+            
+            for song in songs {
+                results.append(Song(
+                    id: song["id"].string ?? "",
+                    library: Catalogues.AppleMusic.rawValue,
+                    title: song["attributes"]["name"].string ?? "",
+                    artist: song["attributes"]["artistName"].string ?? "",
+                    artwork: song["attributes"]["artwork"]["url"].string ?? "")
+                )
+            }
+            
+            for artist in artists {
+                results.append(Artist(id: artist["id"].string ?? ""))
+            }
+        }
+        
+        return results
     }
 }
 
 struct iTunesAPIUtility {
-    
+    static func match(_ song: Song) -> Song? {
+        let result: Song?
+        
+        let term = song.artist + " " + song.title
+        let endpoint = Endpoints.iTunes.searchpoint(term)
+        
+        if let response = WebUtility.sendRequest(type: .get, to: endpoint, with: nil) {
+            let match = response["results"].array?.first ?? []
+            result = Song(
+                id: song.id,
+                library: Catalogues.Library.rawValue,
+                title: match["trackName"].string ?? "",
+                artist: match["artistName"].string ?? "",
+                artwork: match["artworkUrl60"].string ?? "")
+        }
+        
+        return result
+    }
 }
 
 struct CliqueAPIUtility {
-    static func add(song: Song, to clique: String) {
+    
+    static func find(user id: String) -> User? {
+        
+    }
+    
+    static func search(user username: String) -> [User] {
+    
+    }
+    
+    static func update(queue user: User, with replacement: Queue) {
+        //make songlist the queue
+    }
+    
+    static func update(library user: User, with replacement: [Song]) {
+        var clone = user.clone()
+        clone.library = replacement
+    }
+    
+    //static func add(song: Song, to clique: String) {
+        
         //get clique with id
         //Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON()
        
@@ -131,5 +236,10 @@ struct CliqueAPIUtility {
                 //self.table.reloadData()
             //})
         //}
-    }
+    
+        //create new user
+        //Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/", parameters: newclique, encoding: .JSON)
+    //}
+        //load all playlists
+        //"http://clique2016.herokuapp.com/playlists"
 }

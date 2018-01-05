@@ -14,6 +14,7 @@
 		4A06C30C1FDC8B0000E99FED /* QueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A06C30B1FDC8B0000E99FED /* QueueViewController.swift */; };
 		4A06C30E1FDC8BFD00E99FED /* LibraryViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A06C30D1FDC8BFD00E99FED /* LibraryViewController.swift */; };
 		4A06C3121FDC928600E99FED /* SwipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A06C3111FDC928600E99FED /* SwipeController.swift */; };
+		4A0F86D91FFEEF3D00ECFD03 /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0F86D81FFEEF3C00ECFD03 /* Utility.swift */; };
 		4A179AFC1D00C64100B6EE20 /* apple music logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AF81D00C64100B6EE20 /* apple music logo.jpg */; };
 		4A179AFD1D00C64100B6EE20 /* soundcloud logo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AF91D00C64100B6EE20 /* soundcloud logo.gif */; };
 		4A179AFE1D00C64100B6EE20 /* spotify logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */; };
@@ -21,6 +22,8 @@
 		4A2B670C1C501AB700681F70 /* genericart.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A2B670B1C501AB700681F70 /* genericart.png */; };
 		4A5495801FFB0E5100345CB1 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A54957F1FFB0E5100345CB1 /* Endpoints.swift */; };
 		4A5495821FFB0E5A00345CB1 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495811FFB0E5A00345CB1 /* Global.swift */; };
+		4A5495841FFC822500345CB1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495831FFC822500345CB1 /* User.swift */; };
+		4A5495861FFC854800345CB1 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495851FFC854800345CB1 /* Queue.swift */; };
 		4A5A5B681CE1685A00BD2F5F /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A5A5B671CE1685A00BD2F5F /* Spotify.framework */; };
 		4A7D6C971CDFB22300ADDDA1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */; };
 		4AB840D11CD70640005FDB47 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB840D01CD70640005FDB47 /* MediaPlayer.framework */; };
@@ -39,7 +42,6 @@
 		4AF452E81FE0CAAE007FCF8F /* QueueSongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */; };
 		4AF452E91FE0CAAE007FCF8F /* QueueSongTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */; };
 		4AF452EB1FE0CCBF007FCF8F /* QueueDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */; };
-		4AF452ED1FE0D159007FCF8F /* Utility.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EC1FE0D159007FCF8F /* Utility.swift */; };
 		4AF452EF1FE0E758007FCF8F /* QueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EE1FE0E758007FCF8F /* QueueManager.swift */; };
 		4AF452F11FE0E8C3007FCF8F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452F01FE0E8C3007FCF8F /* Song.swift */; };
 		9957A368FB2B39D6834B6673 /* Pods_Clique.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9D40512C31A8AE09B7542F /* Pods_Clique.framework */; };
@@ -55,6 +57,7 @@
 		4A06C30D1FDC8BFD00E99FED /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		4A06C3101FDC8F6500E99FED /* EZSwipeController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EZSwipeController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A06C3111FDC928600E99FED /* SwipeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeController.swift; sourceTree = "<group>"; };
+		4A0F86D81FFEEF3C00ECFD03 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		4A16BEDC1CAC3BC60089997F /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		4A16BEDE1CAC3BD40089997F /* YTViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTViewController.swift; sourceTree = "<group>"; };
 		4A179AF81D00C64100B6EE20 /* apple music logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "apple music logo.jpg"; sourceTree = "<group>"; };
@@ -68,6 +71,8 @@
 		4A4D60631D2EDF80009B6375 /* SavedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
 		4A54957F1FFB0E5100345CB1 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
 		4A5495811FFB0E5A00345CB1 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
+		4A5495831FFC822500345CB1 /* User.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = User.swift; sourceTree = "<group>"; };
+		4A5495851FFC854800345CB1 /* Queue.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Queue.swift; sourceTree = "<group>"; };
 		4A5A5B671CE1685A00BD2F5F /* Spotify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Spotify.framework; sourceTree = "<group>"; };
 		4A5A5B691CE16A6700BD2F5F /* Clique-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clique-Bridging-Header.h"; sourceTree = "<group>"; };
 		4A5A5B6A1CE2434E00BD2F5F /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
@@ -100,7 +105,6 @@
 		4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueSongTableViewCell.swift; sourceTree = "<group>"; };
 		4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QueueSongTableViewCell.xib; sourceTree = "<group>"; };
 		4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueDelegate.swift; sourceTree = "<group>"; };
-		4AF452EC1FE0D159007FCF8F /* Utility.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		4AF452EE1FE0E758007FCF8F /* QueueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueManager.swift; sourceTree = "<group>"; };
 		4AF452F01FE0E8C3007FCF8F /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicViewController.swift; sourceTree = "<group>"; };
@@ -186,10 +190,12 @@
 				4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */,
 				4AF452EE1FE0E758007FCF8F /* QueueManager.swift */,
 				4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */,
-				4AF452EC1FE0D159007FCF8F /* Utility.swift */,
+				4A0F86D81FFEEF3C00ECFD03 /* Utility.swift */,
 				4A54957F1FFB0E5100345CB1 /* Endpoints.swift */,
 				4A5495811FFB0E5A00345CB1 /* Global.swift */,
 				4AF452F01FE0E8C3007FCF8F /* Song.swift */,
+				4A5495851FFC854800345CB1 /* Queue.swift */,
+				4A5495831FFC822500345CB1 /* User.swift */,
 				4A06C3111FDC928600E99FED /* SwipeController.swift */,
 				4A06C3091FDC8A0600E99FED /* NowPlayingViewController.swift */,
 				4AF452E31FDE1982007FCF8F /* StyleGuide.swift */,
@@ -385,13 +391,15 @@
 				4A06C30C1FDC8B0000E99FED /* QueueViewController.swift in Sources */,
 				4A5495801FFB0E5100345CB1 /* Endpoints.swift in Sources */,
 				4A06C3081FD79D4B00E99FED /* ProfileBar.swift in Sources */,
+				4A0F86D91FFEEF3D00ECFD03 /* Utility.swift in Sources */,
 				4A06C3121FDC928600E99FED /* SwipeController.swift in Sources */,
+				4A5495861FFC854800345CB1 /* Queue.swift in Sources */,
+				4A5495841FFC822500345CB1 /* User.swift in Sources */,
 				4AF452EF1FE0E758007FCF8F /* QueueManager.swift in Sources */,
 				4A5495821FFB0E5A00345CB1 /* Global.swift in Sources */,
 				4A06C30E1FDC8BFD00E99FED /* LibraryViewController.swift in Sources */,
 				4AF452E81FE0CAAE007FCF8F /* QueueSongTableViewCell.swift in Sources */,
 				4AC3C9F21C4ACCB700D5BCCA /* AppDelegate.swift in Sources */,
-				4AF452ED1FE0D159007FCF8F /* Utility.swift in Sources */,
 				4AC3C9FA1C4ACCB700D5BCCA /* Clique.xcdatamodeld in Sources */,
 				4AF452EB1FE0CCBF007FCF8F /* QueueDelegate.swift in Sources */,
 				4AF452E41FDE1982007FCF8F /* StyleGuide.swift in Sources */,

@@ -125,7 +125,7 @@ exports.addSong = function(req, res) {
     console.log(song);
     console.log('Adding song: ' + song);
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {songList: song} }, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {queue.queue: song} }, function(err, result) {
             if (err) {
                 console.log('Error updating playlist: ' + err);
                 res.send({'err': 'An error has occurred'});
@@ -170,7 +170,7 @@ exports.updateClique = function(req, res) {
     var newList = req.body.songList;
     console.log('Updating playlist ' + id);
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {songList: newList} }, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {queue.queue: newList} }, function(err, result) {
             if (err) {
                 console.log('Error updating Clique: ' + err);
                 res.send({'error':'An error has occured'});
@@ -226,7 +226,7 @@ exports.updateVotingStatus = function(req, res) {
                 console.log('Error updating voting status');
                 res.send(err);
             } else {
-                result.voting = set;
+                result.queue.voting = set;
                 collection.save(result);
             }
         });
@@ -243,17 +243,20 @@ exports.markSongAsPlayed = function(req, res) {
                 console.log('Error finding playlist');
                 res.send(err);
             } else {
-                result.songList.forEach(function(item) {
-                    if (!item.played && !found) { //}(item.name == song.name && item.artist == song.artist) {
-                        item.played = true;
-                        collection.save(result);
-                        res.send(item);
-                        found = true;
-                    }
-                });
-                if (found == false) {
-                    res.send(404);
+                var next;
+                if (result.queue.voting) {
+                    var topvotes = Number.NEGATIVE_INFINITY;
+                    result.queue.queue.forEach(function(song) {
+                        if (song.votes > topvotes) {
+                            next = song;
+                        }
+                    });
+                } else {
+                    next = result.queue.queue[0];
                 }
+                result.queue.current = next;
+                collection.save(result);
+                res.send(next);
             }
         });
     });
@@ -269,12 +272,12 @@ exports.upvote = function(req, res) {
                 console.log('Error upvoting song: ' + err);
                 res.send(err);
             } else {
-                result.songList.forEach(function(item) {
+                result.queue.queue.forEach(function(item) {
                 //for (item in result.songList) {
-                    if ((item.name.toLowerCase() == song.name.toLowerCase() && item.artist.toLowerCase() == song.artist.toLowerCase()) && (!item.played && !found)) {
+                    if ((item.id == song.id && item.library == song.library) && !found) {
                         console.log("Found " + item.name);
                         if (item.votes === undefined) {
-                            item.votes = 0;
+                            item.votes = 1;
                         }
                         item.votes += 1;
                         collection.save(result);
@@ -303,10 +306,10 @@ exports.downvote = function(req, res) {
             } else {
                 result.songList.forEach(function(item) {
                 //for (item in result.songList) {
-                    if ((item.name.toLowerCase() == song.name.toLowerCase() && item.artist.toLowerCase() == song.artist.toLowerCase()) && (!item.played && !found)) {
+                    if ((item.id == song.id && item.library == song.library) && !found) {
                         console.log("Found " + item.name);
                         if (item.votes === undefined) {
-                            item.votes = 0;
+                            item.votes = -1;
                         }
                         item.votes -= 1;
                         collection.save(result);

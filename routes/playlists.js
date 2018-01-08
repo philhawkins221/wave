@@ -235,7 +235,6 @@ exports.updateVotingStatus = function(req, res) {
 
 exports.markSongAsPlayed = function(req, res) {
     var id = req.params.id;
-    var song = req.body;
     var found = false;
     database.collection('playlists', function(err, collection) {
         collection.findOne({'_id': new BSON.ObjectID(id)}, function(err, result){

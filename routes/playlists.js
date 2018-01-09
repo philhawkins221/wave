@@ -139,10 +139,10 @@ exports.addSong = function(req, res) {
 }
 exports.loadSongs = function(req, res) {
     var id = req.params.id;
-    var newList = req.body.songList;
-    console.log(req.body.songList);
+    var library = req.body.library;
+    console.log(req.body.library);
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {library: newList} }, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {library: library} }, function(err, result) {
             if (err) {
                 console.log('Error loading songs: ' + err);
                 res.send({'error':'An error has occurred'});
@@ -167,10 +167,10 @@ exports.loadSongs = function(req, res) {
 
 exports.updateClique = function(req, res) {
     var id = req.params.id;
-    var newList = req.body.songList;
+    var queue = req.body.queue;
     console.log('Updating playlist ' + id);
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {queue.queue: newList} }, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {queue: queue} }, function(err, result) {
             if (err) {
                 console.log('Error updating Clique: ' + err);
                 res.send({'error':'An error has occured'});

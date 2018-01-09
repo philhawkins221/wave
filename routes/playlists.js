@@ -139,7 +139,7 @@ exports.addSong = function(req, res) {
 }
 exports.loadSongs = function(req, res) {
     var id = req.params.id;
-    var library = req.body;
+    var library = req.body.library;
     console.log(req.body.library);
     database.collection('playlists', function(err, collection) {
         collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {library: library} }, function(err, result) {

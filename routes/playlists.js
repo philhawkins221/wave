@@ -64,6 +64,7 @@ exports.findAll = function(req, res) {
     });
 };
 
+//may need revision for id
 exports.addPlaylist = function(req, res) {
     var playlist = req.body;
     console.log('Adding playlist: ' + JSON.stringify(playlist));
@@ -235,6 +236,7 @@ exports.updateVotingStatus = function(req, res) {
     });
 }
 
+//may need revision for empty
 exports.markSongAsPlayed = function(req, res) {
     var id = req.params.id;
     var found = false;
@@ -250,13 +252,13 @@ exports.markSongAsPlayed = function(req, res) {
                     var index = 0;
                     var nextindex = -1;
                     result.queue.queue.forEach(function(song) {
-                        if (song.votes > topvotes && nextindex > -1) {
+                        if (song.votes > topvotes) {
                             next = song;
                             nextindex = index;
                         }
                         index++;
                     });
-                    result.queue.queue.splice(nextindex, 1);
+                    if (nextindex > -1) { result.queue.queue.splice(nextindex, 1); }
                 } else {
                     next = result.queue.queue[0];
                     result.queue.queue.splice(0, 1);

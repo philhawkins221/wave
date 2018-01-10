@@ -247,13 +247,19 @@ exports.markSongAsPlayed = function(req, res) {
                 var next;
                 if (result.queue.voting) {
                     var topvotes = Number.NEGATIVE_INFINITY;
+                    var index = 0;
+                    var nextindex = -1;
                     result.queue.queue.forEach(function(song) {
-                        if (song.votes > topvotes) {
+                        if (song.votes > topvotes && nextindex > -1) {
                             next = song;
+                            nextindex = index;
                         }
+                        index++;
                     });
+                    result.queue.queue.splice(nextindex, 1);
                 } else {
                     next = result.queue.queue[0];
+                    result.queue.queue.splice(0, 1);
                 }
                 result.queue.current = next;
                 collection.save(result);

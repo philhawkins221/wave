@@ -14,6 +14,9 @@ import Foundation
 //let username: String = "anonymous"
 let searchlimit: Int = 25
 
+let scClientID = "2c9d9d500b26f5a1ae7661215c5b4e1c"
+let scClientSecret = "1745f37d41a47591147470a84acda2c5"
+
 //MARK: - enumerations
 
 enum Catalogues: String {
@@ -26,6 +29,7 @@ enum RequestMethod: String {
     case get = "GET"
     case put = "PUT"
     case post = "POST"
+    case delete = "DELETE"
 }
 
 enum Vote {

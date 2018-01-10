@@ -15,9 +15,10 @@ struct Song: Equatable, Codable, CatalogItem {
     let id: String
     let library: String
     let title: String
-    let artist: String
+    let artist: Artist
     //let album: String
-    let artwork: String
+    var artwork: String
+    var votes: Int
     
     static func ==(lhs: Song, rhs: Song) -> Bool {
         if lhs.id == rhs.id && lhs.library == rhs.library {
@@ -29,10 +30,14 @@ struct Song: Equatable, Codable, CatalogItem {
     
 }
 
-struct Artist: CatalogItem {
+struct Artist: Codable, CatalogItem {
     let id: String
+    let library: String
+    let name: String
 }
 
 struct Album: CatalogItem {
     let id: String
+    let name: String
+    let artwork: String
 }

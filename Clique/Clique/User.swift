@@ -11,19 +11,33 @@ import Foundation
 struct User: Codable {
     var username: String
     let id: String
-    let queue: Queue
+    var queue: Queue
     var library: [Song]
+    var applemusic: Bool
+    var spotify: Bool
     
-    init(_ username: String, id: String, queue: Queue, library: [Song]) {
+    init(_ username: String, id: String, queue: Queue, library: [Song], applemusic: Bool, spotify: Bool) {
         self.username = username
         self.id = id
         self.queue = queue
         self.library = library
+        self.applemusic = applemusic
+        self.spotify = spotify
+    }
+    
+    init(user: User) {
+        username = user.username
+        id = user.id
+        queue = user.queue
+        library = user.library
+        applemusic = user.applemusic
+        spotify = user.spotify
     }
     
     func clone() -> User {
-        return User(username, id: id, queue: queue, library: library)
+        return User(user: self)
     }
+
 }
 
 struct Identity {

@@ -26,6 +26,7 @@
 		4A5495861FFC854800345CB1 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495851FFC854800345CB1 /* Queue.swift */; };
 		4A5A5B681CE1685A00BD2F5F /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A5A5B671CE1685A00BD2F5F /* Spotify.framework */; };
 		4A7D6C971CDFB22300ADDDA1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */; };
+		4A8F5FF520063DEE00564EFE /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8F5FF420063DEE00564EFE /* Alerts.swift */; };
 		4AB840D11CD70640005FDB47 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB840D01CD70640005FDB47 /* MediaPlayer.framework */; };
 		4AC3C9F21C4ACCB700D5BCCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC3C9F11C4ACCB700D5BCCA /* AppDelegate.swift */; };
 		4AC3C9F41C4ACCB700D5BCCA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC3C9F31C4ACCB700D5BCCA /* ViewController.swift */; };
@@ -81,6 +82,7 @@
 		4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
 		4A86D4841CFB6A8200E298AB /* DummyPlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = DummyPlayerViewController.swift; sourceTree = "<group>"; };
 		4A86D4861CFD11E200E298AB /* PlayerManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerManager.swift; sourceTree = "<group>"; };
+		4A8F5FF420063DEE00564EFE /* Alerts.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Alerts.swift; sourceTree = "<group>"; };
 		4A92CD171D3028C300D1C488 /* CliqueManager.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqueManager.swift; sourceTree = "<group>"; };
 		4AA5AA571D01F28D004B30FA /* NewCliqueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewCliqueViewController.swift; sourceTree = "<group>"; };
 		4AA798181C56ECBA00E211E7 /* LibraryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
@@ -190,6 +192,7 @@
 				4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */,
 				4AF452EE1FE0E758007FCF8F /* QueueManager.swift */,
 				4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */,
+				4A8F5FF420063DEE00564EFE /* Alerts.swift */,
 				4A0F86D81FFEEF3C00ECFD03 /* Utility.swift */,
 				4A54957F1FFB0E5100345CB1 /* Endpoints.swift */,
 				4A5495811FFB0E5A00345CB1 /* Global.swift */,
@@ -269,7 +272,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0720;
-				LastUpgradeCheck = 0720;
+				LastUpgradeCheck = 0910;
 				ORGANIZATIONNAME = "Phil Hawkins";
 				TargetAttributes = {
 					4AC3C9ED1C4ACCB700D5BCCA = {
@@ -386,6 +389,7 @@
 			buildActionMask = 2147483647;
 			files = (
 				4AF452F11FE0E8C3007FCF8F /* Song.swift in Sources */,
+				4A8F5FF520063DEE00564EFE /* Alerts.swift in Sources */,
 				4AC3C9F41C4ACCB700D5BCCA /* ViewController.swift in Sources */,
 				4A06C30A1FDC8A0600E99FED /* NowPlayingViewController.swift in Sources */,
 				4A06C30C1FDC8B0000E99FED /* QueueViewController.swift in Sources */,
@@ -436,13 +440,21 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -489,13 +501,21 @@
 				CLANG_CXX_LIBRARY = "libc++";
 				CLANG_ENABLE_MODULES = YES;
 				CLANG_ENABLE_OBJC_ARC = YES;
+				CLANG_WARN_BLOCK_CAPTURE_AUTORELEASING = YES;
 				CLANG_WARN_BOOL_CONVERSION = YES;
+				CLANG_WARN_COMMA = YES;
 				CLANG_WARN_CONSTANT_CONVERSION = YES;
 				CLANG_WARN_DIRECT_OBJC_ISA_USAGE = YES_ERROR;
 				CLANG_WARN_EMPTY_BODY = YES;
 				CLANG_WARN_ENUM_CONVERSION = YES;
+				CLANG_WARN_INFINITE_RECURSION = YES;
 				CLANG_WARN_INT_CONVERSION = YES;
+				CLANG_WARN_NON_LITERAL_NULL_CONVERSION = YES;
+				CLANG_WARN_OBJC_LITERAL_CONVERSION = YES;
 				CLANG_WARN_OBJC_ROOT_CLASS = YES_ERROR;
+				CLANG_WARN_RANGE_LOOP_ANALYSIS = YES;
+				CLANG_WARN_STRICT_PROTOTYPES = YES;
+				CLANG_WARN_SUSPICIOUS_MOVE = YES;
 				CLANG_WARN_UNREACHABLE_CODE = YES;
 				CLANG_WARN__DUPLICATE_METHOD_MATCH = YES;
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
@@ -522,6 +542,7 @@
 				OTHER_LDFLAGS = "-ObjC";
 				SDKROOT = iphoneos;
 				SWIFT_OBJC_BRIDGING_HEADER = "";
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SWIFT_VERSION = 4.0;
 				TARGETED_DEVICE_FAMILY = "1,2";
 				VALIDATE_PRODUCT = YES;

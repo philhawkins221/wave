@@ -73,12 +73,23 @@ struct WebUtility {
         ]
     }
     
+    static func parameterize(playlist: Playlist) -> [String : Any] {
+        return [
+            "owner": playlist.owner,
+            "id": playlist.id,
+            "library": playlist.library,
+            "name": playlist.name,
+            "social": playlist.social,
+            "songs": playlist.songs.map { parameterize(song: $0) }
+        ]
+    }
+    
     static func parameterize(user: User) -> [String : Any] {
         return [
             "username": user.username,
             "id": user.id,
             "queue": parameterize(queue: user.queue),
-            "library": user.library.map {parameterize(song: $0) },
+            "library": user.library.map { parameterize(playlist: $0) },
             "applemusic": user.applemusic,
             "spotify": user.spotify
         ]
@@ -122,14 +133,13 @@ struct AppleMusicAPIUtility: Searching {
     }
     
     static func match(_ song: Song) -> Song? {
-        let result: Song?
         
         let term = song.artist.name + " " + song.title
         let endpoint = Endpoints.AppleMusic.matchpoint(term)
         
         if let response = WebUtility.send(.get, to: endpoint, with: nil) {
             let match = response["results"]["songs"].array?.first ?? []
-            result = Song(
+            return Song(
                 id: match["id"].string ?? "",
                 library: Catalogues.AppleMusic.rawValue,
                 title: match["attributes"]["name"].string ?? "",
@@ -140,7 +150,7 @@ struct AppleMusicAPIUtility: Searching {
                 votes: 0)
         }
         
-        return result
+        return nil
     }
     
     static func get(albums artist: Artist) -> [Album] {
@@ -162,6 +172,7 @@ struct AppleMusicAPIUtility: Searching {
             for album in albums {
                 results.append(Album(
                     id: album["id"].string ?? "",
+                    library: Catalogues.AppleMusic.rawValue,
                     name: "",
                     artwork: artwork))
             }
@@ -194,13 +205,12 @@ struct AppleMusicAPIUtility: Searching {
     }
     
     static func find(id: String) -> Song? {
-        let result: Song?
         let endpoint = Endpoints.AppleMusic.songpoint(id)
         
         check: if let response = WebUtility.send(.get, to: endpoint, with: nil) {
             guard let song = response["data"].array?[0] else { break check }
             
-            result = Song(
+            return Song(
                 id: song["id"].string ?? "",
                 library: Catalogues.AppleMusic.rawValue,
                 title: song["attributes"]["name"].string ?? "",
@@ -212,12 +222,13 @@ struct AppleMusicAPIUtility: Searching {
                 votes: 0)
         }
         
-        return result
+        return nil
     }
 
 }
 
 struct SpotifyAPIUtility: Searching {
+    //TODO: fix tf out of search
     static func search(_ term: String) -> [CatalogItem] {
         var results = [CatalogItem]()
         let endpoint = Endpoints.AppleMusic.searchpoint(term)
@@ -251,6 +262,11 @@ struct SpotifyAPIUtility: Searching {
         return results
     }
     
+    //TODO: spotify match
+    static func match(_ song: Song) -> Song? {
+        return nil
+    }
+    
     static func get(albums artist: Artist) -> [Album] {
         let endpoint = Endpoints.Spotify.artists.albumspoint(artist.id)
         var results = [Album]()
@@ -261,6 +277,7 @@ struct SpotifyAPIUtility: Searching {
             for album in albums {
                 results.append(Album(
                     id: album["id"].string ?? "",
+                    library: Catalogues.Spotify.rawValue,
                     name: album["name"].string ?? "",
                     artwork: album["images"][0]["url"].string ?? ""))
             }
@@ -331,19 +348,20 @@ struct SpotifyAPIUtility: Searching {
                     votes: 0))
             }
         }
+        
+        return results
     }
 }
 
 struct iTunesAPIUtility {
     static func match(_ song: Song) -> Song? {
-        let result: Song?
         
         let term = song.artist.name + " " + song.title
         let endpoint = Endpoints.iTunes.searchpoint(term)
         
         if let response = WebUtility.send(.get, to: endpoint, with: nil) {
             let match = response["results"].array?.first ?? []
-            result = Song(
+            return Song(
                 id: song.id,
                 library: Catalogues.Library.rawValue,
                 title: match["trackName"].string ?? "",
@@ -355,21 +373,20 @@ struct iTunesAPIUtility {
                 votes: 0)
         }
         
-        return result
+        return nil
     }
 }
 
 struct CliqueAPIUtility {
     
     static func find(user id: String) -> User? {
-        let result: User?
         let endpoint = Endpoints.Clique.findpoint(id)
         
         if let response = WebUtility.send(.get, to: endpoint, with: nil) {
-            result = try? JSONDecoder().decode(User.self, from: response.rawData())
+            return try? JSONDecoder().decode(User.self, from: response.rawData())
         }
         
-        return result
+        return nil
     }
     
     static func search(user username: String) -> [User] {
@@ -387,6 +404,7 @@ struct CliqueAPIUtility {
             }
         }
         
+        return results
     }
     
     static func add(song: Song, to user: User) {
@@ -397,14 +415,13 @@ struct CliqueAPIUtility {
     }
     
     static func advance(queue user: User) -> Song? {
-        let next: Song?
         let endpoint = Endpoints.Clique.advancepoint(user.id)
         
         if let response = WebUtility.send(.put, to: endpoint, with: nil) {
-            next = try? JSONDecoder().decode(Song.self, from: response.rawData())
+            return try? JSONDecoder().decode(Song.self, from: response.rawData())
         }
         
-        return next
+        return nil
     }
     
     static func vote(song: Song, _ direction: Vote, for user: User) {
@@ -435,6 +452,8 @@ struct CliqueAPIUtility {
         if let response = WebUtility.send(.post, to: endpoint, with: parameters) {
             return try? JSONDecoder().decode(User.self, from: response.rawData())
         }
+        
+        return nil
     }
     
     static func delete(user: User) {
@@ -443,4 +462,17 @@ struct CliqueAPIUtility {
         let _ = WebUtility.send(.delete, to: endpoint, with: nil)
     }
 
+}
+
+struct AlertsUtility {
+    
+}
+
+struct DefaultsUtility {
+    //bool: synced playlists
+    //last sync date
+    
+    //identity values
+    //personal id
+    //friends
 }

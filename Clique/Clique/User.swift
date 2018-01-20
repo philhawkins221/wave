@@ -8,15 +8,16 @@
 
 import Foundation
 
-struct User: Codable {
+struct User: Codable, Equatable {
+    
     var username: String
     let id: String
     var queue: Queue
-    var library: [Song]
+    var library: [Playlist]
     var applemusic: Bool
     var spotify: Bool
     
-    init(_ username: String, id: String, queue: Queue, library: [Song], applemusic: Bool, spotify: Bool) {
+    init(_ username: String, id: String, queue: Queue, library: [Playlist], applemusic: Bool, spotify: Bool) {
         self.username = username
         self.id = id
         self.queue = queue
@@ -34,6 +35,12 @@ struct User: Codable {
         spotify = user.spotify
     }
     
+    static func ==(lhs: User, rhs: User) -> Bool {
+        if lhs.id == rhs.id { return true }
+        
+        return false
+    }
+    
     func clone() -> User {
         return User(user: self)
     }
@@ -42,7 +49,8 @@ struct User: Codable {
 
 struct Identity {
     static var instance: Identity?
-    private var identity: User
+    var me: User
+    var friends: [String]
     
     static func sharedInstance() -> Identity {
         
@@ -57,4 +65,6 @@ struct Identity {
         //TODO: - populate identity
         
     }
+    
+    
 }

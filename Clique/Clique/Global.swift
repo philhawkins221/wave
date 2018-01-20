@@ -37,20 +37,26 @@ enum Vote {
     case down
 }
 
+enum VCid: String {
+    case lib = "lib"
+    case np = "np"
+    case q = "q"
+}
+
 //MARK: - extensions
 
 extension Collection {
     /// Return a copy of `self` with its elements shuffled
-    func shuffle() -> [Iterator.Element] {
+    func shuffled() -> [Iterator.Element] {
         var list = Array(self)
-        list.shuffleInPlace()
+        list.shuffle()
         return list
     }
 }
 
 extension MutableCollection where Index == Int {
     /// Shuffle the elements of `self` in-place.
-    mutating func shuffleInPlace() {
+    mutating func shuffle() {
         let size = Int(count)
         
         // empty and single-element collections don't shuffle
@@ -59,7 +65,7 @@ extension MutableCollection where Index == Int {
         for i in 0..<(size - 1) {
             let j = Int(arc4random_uniform(UInt32(size - i))) + i
             guard i != j else { continue }
-            swap(&self[i], &self[j])
+            self.swapAt(i, j)
         }
     }
 }

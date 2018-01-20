@@ -9,8 +9,9 @@
 import Foundation
 
 protocol CatalogItem {}
+protocol LibraryItem {}
 
-struct Song: Equatable, Codable, CatalogItem {
+struct Song: Equatable, Codable, CatalogItem, LibraryItem {
     
     let id: String
     let library: String
@@ -30,7 +31,20 @@ struct Song: Equatable, Codable, CatalogItem {
     
 }
 
-struct Artist: Codable, CatalogItem {
+struct Playlist: Equatable, Codable, LibraryItem {
+    let owner: String
+    let id: String
+    let library: String
+    var name: String
+    var social: Bool
+    var songs: [Song]
+    
+    static func ==(lhs: Playlist, rhs: Playlist) -> Bool {
+        return lhs.id == rhs.id && lhs.library == rhs.library ? true : false
+    }
+}
+
+struct Artist: Codable, CatalogItem, LibraryItem {
     let id: String
     let library: String
     let name: String
@@ -38,6 +52,7 @@ struct Artist: Codable, CatalogItem {
 
 struct Album: CatalogItem {
     let id: String
+    let library: String
     let name: String
     let artwork: String
 }

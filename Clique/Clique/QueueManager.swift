@@ -14,6 +14,7 @@ struct QueueManager {
     private var user: User
     var table: UITableView
     var delegate: QueueDelegate
+    var fill: Playlist
     
     static func sharedInstance() -> QueueManager {
         
@@ -29,8 +30,12 @@ struct QueueManager {
         
     }
     
-    mutating func manage(user: User) {
-        self.user = user
+    static func manage(user: User) {
+        instance?.user = user
+    }
+    
+    static func manage(fill: Playlist) {
+        instance?.fill = fill
     }
     
     func client() -> User {
@@ -48,6 +53,10 @@ struct QueueManager {
         if let next = CliqueAPIUtility.advance(queue: user) { play(song: next) }
         else { empty() }
         
+    }
+    
+    func update(to result: Queue? = nil) {
+        //CliqueAPIUtility.update(queue: user, with: result)
     }
     
     func vote(song: Song, _ direction: Vote) {

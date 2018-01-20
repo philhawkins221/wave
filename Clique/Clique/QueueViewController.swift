@@ -15,7 +15,7 @@ class QueueViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        NavigationControllerStyleGuide.enforce(on: navigationController)
+        NavigationControllerStyleGuide.enforce(on: navigationController) //needs to be inout?
         TabBarControllerStyleGuide.enforce(on: tabBarController)
     }
     

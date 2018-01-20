@@ -16,7 +16,7 @@
         <!--Library-->
         <scene sceneID="mD1-OL-7MQ">
             <objects>
-                <viewController id="3rW-rF-rtn" customClass="LibraryViewController" customModule="Clique" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="lib" id="3rW-rF-rtn" customClass="LibraryViewController" customModule="Clique" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="ELF-Zx-Dd0">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -47,7 +47,7 @@
         <!--Item-->
         <scene sceneID="cSH-Kp-qrX">
             <objects>
-                <viewController id="1Uq-S4-MAN" customClass="NowPlayingViewController" customModule="Clique" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="np" id="1Uq-S4-MAN" customClass="NowPlayingViewController" customModule="Clique" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="Ztc-81-7kq">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
@@ -143,7 +143,7 @@
         <!--Queue-->
         <scene sceneID="wMM-bV-tQ2">
             <objects>
-                <viewController id="mp2-9N-S18" customClass="QueueViewController" customModule="Clique" customModuleProvider="target" sceneMemberID="viewController">
+                <viewController storyboardIdentifier="q" id="mp2-9N-S18" customClass="QueueViewController" customModule="Clique" customModuleProvider="target" sceneMemberID="viewController">
                     <view key="view" contentMode="scaleToFill" id="k7d-CC-Y0N">
                         <rect key="frame" x="0.0" y="0.0" width="375" height="812"/>
                         <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>

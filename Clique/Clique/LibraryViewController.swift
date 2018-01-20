@@ -23,6 +23,9 @@ class LibraryViewController: UIViewController {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
+        //LibraryManager.sharedInstance().table = table
+        //delegate = LibraryManager.sharedInstance().delegate
+        //delegate = LibraryManager.sharedInstance().delegate
     }
 
     override func didReceiveMemoryWarning() {
@@ -30,6 +33,7 @@ class LibraryViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
+    //MARK: delegate extensions
 
     /*
     // MARK: - Navigation

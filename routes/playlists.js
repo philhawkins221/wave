@@ -73,8 +73,9 @@ exports.addPlaylist = function(req, res) {
             if (err) {
                 res.send({'error': 'An error has occurred'});
             } else {
-                result.id = result.insertedIds.get(0)
+                result.id = result.insertedIds.get(0);
                 console.log('Success: ' +JSON.stringify(result));
+                console.log('Success: ' +JSON.stringify(result[0]);
                 res.send(result);
                 collection.save(result);
             }

@@ -73,11 +73,10 @@ exports.addPlaylist = function(req, res) {
             if (err) {
                 res.send({'error': 'An error has occurred'});
             } else {
-                result.id = result._id;
+                result.ops[0].id = result.ops[0]._id;
                 console.log('Success: ' +JSON.stringify(result));
-                console.log('Success: ' +JSON.stringify(result[0]));
-                res.send(result);
-                collection.save(result);
+                res.send(result.ops[0]);
+                collection.save(result.ops[0]);
             }
         });
     });

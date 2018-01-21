@@ -75,7 +75,7 @@ exports.addPlaylist = function(req, res) {
             } else {
                 result.id = result.insertedIds.get(0);
                 console.log('Success: ' +JSON.stringify(result));
-                console.log('Success: ' +JSON.stringify(result[0]);
+                console.log('Success: ' +JSON.stringify(result[0]));
                 res.send(result);
                 collection.save(result);
             }

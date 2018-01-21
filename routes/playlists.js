@@ -129,7 +129,7 @@ exports.addSong = function(req, res) {
     console.log(song);
     console.log('Adding song: ' + song);
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {queue.queue: song} }, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {"queue.queue": song} }, function(err, result) {
             if (err) {
                 console.log('Error updating playlist: ' + err);
                 res.send({'err': 'An error has occurred'});

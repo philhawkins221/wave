@@ -151,7 +151,7 @@ exports.loadSongs = function(req, res) {
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('' + result + ' songs loaded');
-                res.send(newList);
+                res.send(library);
             }
         });
     });

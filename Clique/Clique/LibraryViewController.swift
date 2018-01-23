@@ -10,7 +10,15 @@ import UIKit
 
 class LibraryViewController: UIViewController {
     
-    //MARK: lifecycle methods
+    //MARK: - storyboard outlets
+    
+    @IBOutlet weak var profilebar: ProfileBar!
+    
+    @IBOutlet weak var table: UITableView!
+    @IBOutlet weak var addButton: UIBarButtonItem!
+    @IBOutlet weak var editButton: UIBarButtonItem!
+    
+    //MARK: - lifecycle methods
 
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
@@ -19,13 +27,29 @@ class LibraryViewController: UIViewController {
         TabBarControllerStyleGuide.enforce(on: tabBarController)
     }
     
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
+        
+        try! LibraryManager.manage(controller: self)
+        LibraryManager.sharedInstance().update()
+        
+        if navigationController?.viewControllers.count == 1 {
+            try? LibraryManager.manage(display: nil)
+        }
+        
+        if let selected = table.indexPathForSelectedRow {
+            table.deselectRow(at: selected, animated: true)
+        }
+    }
+    
     override func viewDidLoad() {
         super.viewDidLoad()
 
         // Do any additional setup after loading the view.
-        //LibraryManager.sharedInstance().table = table
-        //delegate = LibraryManager.sharedInstance().delegate
-        //delegate = LibraryManager.sharedInstance().delegate
+        table.delegate = LibraryManager.sharedInstance().delegate
+        table.dataSource = LibraryManager.sharedInstance().delegate
+        
+        profilebar.controller = .lib
     }
 
     override func didReceiveMemoryWarning() {
@@ -33,16 +57,20 @@ class LibraryViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //MARK: delegate extensions
-
-    /*
+    //MARK: - storyboard actions
+    @IBAction func edit(_ sender: Any) {
+        
+    }
+    
+    
     // MARK: - Navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         // Get the new view controller using segue.destinationViewController.
         // Pass the selected object to the new view controller.
+        
+        //TODO: set adding to true when showing library then show library
     }
-    */
+ 
 
 }

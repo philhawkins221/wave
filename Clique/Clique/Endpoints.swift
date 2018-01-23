@@ -101,6 +101,9 @@ struct Endpoints {
         }
         
         struct update {
+            static let userpoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id
+            }
             static let queuepoint = { id in
                  "http://clique2016.herokuapp.com/playlists/" + id + "/updateClique"
             }

@@ -14,6 +14,9 @@ target 'Clique' do
     pod 'SwipeableTabBarController', '~> 1.0'
     pod 'Alamofire', '~> 4.6'
     pod 'AlamofireImage', '~> 3.3'
+    pod 'Alamofire-Synchronous', '~> 4.0'
     pod 'SwiftyJSON', '~> 4.0'
+    pod 'RSPlayPauseButton', '~> 1.0'
+    pod 'ASPVideoPlayer', '~> 3.1'
     
 end

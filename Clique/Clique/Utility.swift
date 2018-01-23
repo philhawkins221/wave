@@ -8,6 +8,8 @@
 
 import Foundation
 import Alamofire
+import Alamofire_Synchronous
+import AlamofireImage
 import SwiftyJSON
 
 //MARK: - protocols
@@ -21,7 +23,32 @@ protocol Searching {
 
 struct WebUtility {
     
-    static func send(_ type: RequestMethod, to endpoint: String, with parameters: [String : Any]?) -> JSON? {
+    static func call(_ type: RequestMethod, to endpoint: String, with parameters: [String : Any]?) -> JSON? {
+        
+        print("calling", type.rawValue, "request to endpoint", endpoint)
+        
+        let method: HTTPMethod
+        switch type {
+        case .get: method = .get
+        case .put: method = .put
+        case .post: method = .post
+        case .delete: method = .delete
+        }
+        
+        var response: JSON? = nil
+        
+        let res = Alamofire.request(endpoint, method: method, parameters: parameters, encoding: JSONEncoding.prettyPrinted, headers: nil).responseJSON()
+        
+        if let value = res.result.value {
+            response = JSON(value)
+        }
+        
+        print(response as Any)
+        
+        return response
+    }
+    
+    static func send(_ type: RequestMethod, to endpoint: String, with parameters: [String : Any]?) {
         
         print("sending", type.rawValue, "request to endpoint", endpoint)
         
@@ -33,18 +60,7 @@ struct WebUtility {
         case .delete: method = .delete
         }
         
-        var response: JSON?
-        
-        Alamofire.request(endpoint, method: method, parameters: parameters, encoding: JSONEncoding.prettyPrinted, headers: nil).responseJSON {
-            
-            if let value = $0.result.value {
-                response = JSON(value)
-            }
-        }
-        
-        print(response as Any)
-        
-        return response
+        Alamofire.request(endpoint, method: method, parameters: parameters, encoding: JSONEncoding.prettyPrinted, headers: nil).validate()
     }
     
     static func parameterize(song: Song) -> [String : Any] {
@@ -67,7 +83,7 @@ struct WebUtility {
             
             "queue": queue.queue.map { parameterize(song: $0) },
             "history": queue.history.map { parameterize(song: $0) },
-            "current": parameterize(song: queue.current),
+            "current": (queue.current != nil ? parameterize(song: queue.current!) : nil) as Any,
             
             "listeners": queue.listeners
         ]
@@ -95,6 +111,16 @@ struct WebUtility {
         ]
     }
     
+    static func get(image url: String) -> UIImageView? {
+        guard let location = URL(string: url) else { return nil }
+        let placeholder = UIImage(named: "genericart.png")
+        
+        let image = UIImageView()
+        image.af_setImage(withURL: location, placeholderImage: placeholder)
+        
+        return image
+    }
+    
 }
 
 struct AppleMusicAPIUtility: Searching {
@@ -102,7 +128,7 @@ struct AppleMusicAPIUtility: Searching {
         var results = [CatalogItem]()
         let endpoint = Endpoints.AppleMusic.searchpoint(term)
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let songs = response["results"]["songs"]["data"].array ?? []
             let artists = response["results"]["artists"]["data"].array ?? []
             
@@ -137,7 +163,7 @@ struct AppleMusicAPIUtility: Searching {
         let term = song.artist.name + " " + song.title
         let endpoint = Endpoints.AppleMusic.matchpoint(term)
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let match = response["results"]["songs"].array?.first ?? []
             return Song(
                 id: match["id"].string ?? "",
@@ -157,14 +183,14 @@ struct AppleMusicAPIUtility: Searching {
         let endpoint = Endpoints.AppleMusic.artistpoint(artist.id)
         var results = [Album]()
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let albums = response["data"][0]["relationships"]["albums"]["data"].array ?? []
             
             var artwork = ""
             
             if let id = albums.first?["id"].string {
                 let ep = Endpoints.AppleMusic.albumpoint(id)
-                if let res = WebUtility.send(.get, to: ep, with: nil) {
+                if let res = WebUtility.call(.get, to: ep, with: nil) {
                     artwork = res["data"][0]["attributes"]["artwork"]["url"].string ?? ""
                 }
             }
@@ -185,7 +211,7 @@ struct AppleMusicAPIUtility: Searching {
         let endpoint = Endpoints.AppleMusic.albumpoint(album.id)
         var results = [Song]()
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let songs = response["data"][0]["relationships"]["tracks"]["data"].array ?? []
             
             for song in songs {
@@ -207,7 +233,7 @@ struct AppleMusicAPIUtility: Searching {
     static func find(id: String) -> Song? {
         let endpoint = Endpoints.AppleMusic.songpoint(id)
         
-        check: if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        check: if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             guard let song = response["data"].array?[0] else { break check }
             
             return Song(
@@ -233,7 +259,7 @@ struct SpotifyAPIUtility: Searching {
         var results = [CatalogItem]()
         let endpoint = Endpoints.AppleMusic.searchpoint(term)
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let songs = response["tracks"]["items"].array ?? []
             let artists = response["artists"]["items"].array ?? []
             
@@ -271,7 +297,7 @@ struct SpotifyAPIUtility: Searching {
         let endpoint = Endpoints.Spotify.artists.albumspoint(artist.id)
         var results = [Album]()
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let albums = response["items"].array ?? []
             
             for album in albums {
@@ -290,7 +316,7 @@ struct SpotifyAPIUtility: Searching {
         let endpoint = Endpoints.Spotify.albums.songspoint(album.id)
         var result = [Song]()
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let songs = response["items"].array ?? []
             
             for song in songs {
@@ -314,7 +340,7 @@ struct SpotifyAPIUtility: Searching {
         let endpoint = Endpoints.Spotify.artists.relatedartistspoint(artist.id)
         var results = [Artist]()
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let artists = response["artists"].array ?? []
             
             for artist in artists {
@@ -332,7 +358,7 @@ struct SpotifyAPIUtility: Searching {
         let endpoint = Endpoints.Spotify.artists.topsongspoint(artist.id)
         var results = [Song]()
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let songs = response["tracks"].array ?? []
             
             for song in songs {
@@ -359,7 +385,7 @@ struct iTunesAPIUtility {
         let term = song.artist.name + " " + song.title
         let endpoint = Endpoints.iTunes.searchpoint(term)
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let match = response["results"].array?.first ?? []
             return Song(
                 id: song.id,
@@ -382,7 +408,7 @@ struct CliqueAPIUtility {
     static func find(user id: String) -> User? {
         let endpoint = Endpoints.Clique.findpoint(id)
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             return try? JSONDecoder().decode(User.self, from: response.rawData())
         }
         
@@ -393,7 +419,7 @@ struct CliqueAPIUtility {
         var results = [User]()
         let endpoint = Endpoints.Clique.searchpoint
         
-        if let response = WebUtility.send(.get, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.get, to: endpoint, with: nil) {
             let users = response.array ?? []
             for user in users {
                 if let result = try? JSONDecoder().decode(User.self, from: user.rawData()) {
@@ -407,65 +433,114 @@ struct CliqueAPIUtility {
         return results
     }
     
-    static func add(song: Song, to user: User) {
+    static func add(song: Song, to user: User?) {
+        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
+        
         let endpoint = Endpoints.Clique.addpoint(user.id)
         let parameters = WebUtility.parameterize(song: song)
         
-        let _ = WebUtility.send(.get, to: endpoint, with: parameters)
+        let _ = WebUtility.call(.get, to: endpoint, with: parameters)
     }
     
-    static func advance(queue user: User) -> Song? {
+    static func advance(queue user: User?) -> Song? {
+        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
+
         let endpoint = Endpoints.Clique.advancepoint(user.id)
         
-        if let response = WebUtility.send(.put, to: endpoint, with: nil) {
+        if let response = WebUtility.call(.put, to: endpoint, with: nil) {
             return try? JSONDecoder().decode(Song.self, from: response.rawData())
         }
         
         return nil
     }
     
-    static func vote(song: Song, _ direction: Vote, for user: User) {
+    static func vote(song: Song, _ direction: Vote, for user: User?) {
+        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
+
         let endpoint = Endpoints.Clique.votepoint(user.id, direction)
         let parameters = WebUtility.parameterize(song: song)
         
-        let _ = WebUtility.send(.put, to: endpoint, with: parameters)
+        let _ = WebUtility.call(.post, to: endpoint, with: parameters)
     }
     
-    static func update(queue user: User, with replacement: Queue) {
+    static func update(user replacement: User?) {
+        guard let replacement = replacement else {
+            fatalError(ManagementError.unidentifiedUser.rawValue)
+        }
+        
+        let endpoint = Endpoints.Clique.update.userpoint(replacement.id)
+        let parameters = WebUtility.parameterize(user: replacement)
+        
+        let _ = WebUtility.call(.put, to: endpoint, with: parameters)
+    }
+    
+    static func update(queue user: User?, with replacement: Queue) {
+        guard let user = user else {
+            fatalError(ManagementError.unidentifiedUser.rawValue)
+        }
+
         let endpoint = Endpoints.Clique.update.queuepoint(user.id)
         let parameters = WebUtility.parameterize(queue: replacement)
         
-        let _ = WebUtility.send(.post, to: endpoint, with: parameters)
+        let _ = WebUtility.call(.post, to: endpoint, with: parameters)
     }
     
-    static func update(library user: User, with replacement: [Song]) {
+    static func update(library user: User?, with replacement: [Playlist]) {
+        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
+
         let endpoint = Endpoints.Clique.update.librarypoint(user.id)
-        let parameters: [String : Any] = ["library": replacement.map( { WebUtility.parameterize(song: $0) })]
+        let parameters: [String : Any] = ["library": replacement.map { WebUtility.parameterize(playlist: $0) }]
         
-        let _ = WebUtility.send(.put, to: endpoint, with: parameters)
+        let _ = WebUtility.call(.put, to: endpoint, with: parameters)
     }
     
     static func new(user: User) -> User? {
         let endpoint = Endpoints.Clique.newpoint
         let parameters = WebUtility.parameterize(user: user)
         
-        if let response = WebUtility.send(.post, to: endpoint, with: parameters) {
+        if let response = WebUtility.call(.post, to: endpoint, with: parameters) {
             return try? JSONDecoder().decode(User.self, from: response.rawData())
         }
         
         return nil
     }
     
-    static func delete(user: User) {
+    static func delete(user: User?) {
+        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
+
         let endpoint = Endpoints.Clique.deletepoint(user.id)
         
-        let _ = WebUtility.send(.delete, to: endpoint, with: nil)
+        let _ = WebUtility.call(.delete, to: endpoint, with: nil)
     }
 
 }
 
 struct AlertsUtility {
+    static func textField(title: String? = nil, message: String? = nil, entry: String? = nil, action: ((_ action: UIAlertAction, _ controller: UIAlertController) -> Void)? = nil) -> UIAlertController {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        alert.addTextField { $0.text = entry }
+        
+        alert.addAction(UIAlertAction(title: "Nevermind", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Continue", style: .default) { act in
+            action?(act, alert)
+        })
+        
+        alert.view.tintColor = UIColor.orange
+        
+        return alert
+    }
     
+    static func confirmation(title: String? = nil, message: String? = nil, entry: String? = nil, action: ((UIAlertAction) -> Void)? = nil) -> UIAlertController {
+        let alert = UIAlertController(title: title, message: message, preferredStyle: .alert)
+        
+        alert.addAction(UIAlertAction(title: "Nevermind", style: .cancel))
+        alert.addAction(UIAlertAction(title: "Continue", style: .default) { action?($0) })
+        
+        alert.view.tintColor = UIColor.orange
+        
+        return alert
+    }
 }
 
 struct DefaultsUtility {

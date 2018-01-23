@@ -16,7 +16,19 @@ struct Queue: Codable {
     
     var queue: [Song]
     var history: [Song]
-    var current: Song
+    var current: Song?
     
     var listeners: [String]
+    
+    init() {
+        radio = false
+        voting = false
+        requestsonly = false
+        donotdisturb = false
+        
+        queue = []
+        history = []
+        
+        listeners = []
+    }
 }

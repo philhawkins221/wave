@@ -8,19 +8,21 @@
 
 import UIKit
 
-protocol QueueDelegate: QueueTableViewDelegate, QueueTableViewDataSource {}
+class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
 
-protocol QueueTableViewDelegate: UITableViewDelegate {}
-protocol QueueTableViewDataSource: UITableViewDataSource {}
+    //MARK: - properties
 
-//TODO: - queue table view delegate extension
-extension QueueTableViewDelegate {
     var me: Bool {
         return QueueManager.sharedInstance().client() == Identity.sharedInstance().me
     }
     var queue: Queue {
-        return QueueManager.sharedInstance().client().queue
+        return QueueManager.sharedInstance().client()?.queue ?? Queue()
     }
+    var fill: Playlist? {
+        return QueueManager.sharedInstance().fill
+    }
+
+    //MARK: - table delegate methods
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         switch indexPath.section {
@@ -30,12 +32,15 @@ extension QueueTableViewDelegate {
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        tableView.deselectRow(at: indexPath, animated: true)
+        switch indexPath.section {
+        case 0: break //TODO: swipe to now playing vc
+        default: tableView.deselectRow(at: indexPath, animated: true)
+        }
     }
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         switch indexPath.section {
-        case 1:
+        case 1 where tableView.cellForRow(at: indexPath) is QueueSongTableViewCell:
             let up = UITableViewRowAction(style: .default, title: "+") { [weak self] (action, indexpath) in
                 if let song = self?.queue.queue[indexPath.row] {
                     QueueManager.sharedInstance().vote(song: song, .up)
@@ -65,7 +70,7 @@ extension QueueTableViewDelegate {
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         switch indexPath.section {
-        case 1 where me: return .delete
+        case 1 where me && !queue.queue.isEmpty: return .delete
         case 2: return .insert
         default: return .none
         }
@@ -91,30 +96,18 @@ extension QueueTableViewDelegate {
         default: return sourceIndexPath
         }
     }
-
-}
-
-//TODO: - queue table view data source extension
-extension QueueTableViewDataSource {
-    var me: Bool {
-        return QueueManager.sharedInstance().client() == Identity.sharedInstance().me
-    }
-    var queue: Queue {
-        return QueueManager.sharedInstance().client().queue
-    }
-    var fill: Playlist {
-        return QueueManager.sharedInstance().fill
-    }
+    
+    //MARK: - table data source methods
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return me ? 3 : 2
+        return me && fill != nil ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return 1
-        case 1: return queue.queue.count
-        case 2: return fill.songs.count
+        case 1: return queue.queue.isEmpty ? 1 : queue.queue.count
+        case 2 where fill != nil: return fill!.songs.count
         default: return 0
         }
     }
@@ -122,17 +115,17 @@ extension QueueTableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
+            return NowPlayingTableViewCell(song: queue.current)
+        case 1 where queue.queue.isEmpty:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            cell.textLabel?.text = queue.current.title
-            cell.detailTextLabel?.text = queue.current.artist.name
-            //TODO: artwork
-            cell.setImageSize(to: 100)
+            cell.textLabel?.text = "No songs"
+            cell.detailTextLabel?.text = "Tap + to add a song to the queue"
             cell.accessoryType = .none
             return cell
         case 1:
             return QueueSongTableViewCell(song: queue.queue[indexPath.row])
-        case 2:
-            let cell = QueueSongTableViewCell(song: fill.songs[indexPath.row])
+        case 2 where fill != nil:
+            let cell = QueueSongTableViewCell(song: fill!.songs[indexPath.row])
             cell.voteslabel.text = ""
             return cell
         default: return UITableViewCell()
@@ -143,11 +136,11 @@ extension QueueTableViewDataSource {
         switch section {
         case 0: return "Now Playing"
         case 1: return "Up Next"
-        case 2:
-            if let owner = CliqueAPIUtility.find(user: fill.owner), owner != Identity.sharedInstance().me {
-                return "From " + fill.name + " by " + owner.username
+        case 2 where fill != nil:
+            if let owner = CliqueAPIUtility.find(user: fill!.owner), owner != Identity.sharedInstance().me {
+                return "From " + fill!.name + " by " + owner.username
             } else {
-                return "From " + fill.name
+                return "From " + fill!.name
             }
         default: return nil
         }
@@ -172,9 +165,9 @@ extension QueueTableViewDataSource {
             case .insert: break
             case .none: break
             }
-        case 2:
+        case 2 where fill != nil:
             switch editingStyle {
-            case .insert: QueueManager.sharedInstance().add(song: fill.songs[indexPath.row])
+            case .insert: QueueManager.sharedInstance().add(song: fill!.songs[indexPath.row])
             case .delete: break
             case .none: break
             }
@@ -199,11 +192,11 @@ extension QueueTableViewDataSource {
             result.queue.insert(mover, at: destinationIndexPath.row)
             QueueManager.sharedInstance().update(to: result)
         case 2:
-            var result = fill
+            guard var result = fill else { return }
             let mover = result.songs[sourceIndexPath.row]
             result.songs.remove(at: sourceIndexPath.row)
             result.songs.insert(mover, at: destinationIndexPath.row)
-            QueueManager.manage(fill: result)
+            try? QueueManager.manage(fill: result)
         default: break
         }
     }

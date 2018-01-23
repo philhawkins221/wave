@@ -10,11 +10,16 @@ import Foundation
 
 struct QueueManager {
     
-    static var instance: QueueManager?
-    private var user: User
-    var table: UITableView
+    //MARK: - properties
+    
+    static private var instance: QueueManager?
+    
+    private var user: User?
+    var controller: QueueViewController?
     var delegate: QueueDelegate
-    var fill: Playlist
+    var fill: Playlist?
+    
+    //MARK: - initializers
     
     static func sharedInstance() -> QueueManager {
         
@@ -26,26 +31,56 @@ struct QueueManager {
     }
     
     private init() {
-        //TODO: - populate with music player queue
+        //TODO: populate with music player queue
+        user = Identity.sharedInstance().me
+        delegate = QueueDelegate()
+    }
+    
+    //MARK: - mutators
+    
+    static func manage(user: User) throws {
+        switch instance {
+        case nil: throw ManagementError.unsetInstance
+        default:
+            instance?.user = user
+            instance?.controller?.profilebar.manage(profile: user)
+        }
+    }
+    
+    static func manage(fill: Playlist) throws {
+        switch instance {
+        case nil: throw ManagementError.unsetInstance
+        default: instance?.fill = fill
+        }
+    }
+    
+    static func manage(controller: QueueViewController) throws {
+        switch instance {
+        case nil: throw ManagementError.unsetInstance
+        default: instance?.controller = controller
+        }
+    }
+    
+    //MARK: - accessors
+    
+    func client() -> User? {
+        refresh()
         
-    }
-    
-    static func manage(user: User) {
-        instance?.user = user
-    }
-    
-    static func manage(fill: Playlist) {
-        instance?.fill = fill
-    }
-    
-    func client() -> User {
-        var clone = user.clone()
-        if clone.queue.voting { clone.queue.queue.sort(by: { $0.votes > $1.votes }) }
+        var clone = user?.clone()
+        if clone?.queue.voting ?? false { clone?.queue.queue.sort(by: { $0.votes > $1.votes }) }
         
         return clone
     }
     
-    func add(song: Song) {
+    //MARK: - actions
+    
+    private func refresh() {
+        if let found = CliqueAPIUtility.find(user: user?.id ?? "") {
+            try? QueueManager.manage(user: found)
+        }
+    }
+    
+    func add(song: Song) {        
         CliqueAPIUtility.add(song: song, to: user)
     }
     
@@ -55,8 +90,23 @@ struct QueueManager {
         
     }
     
-    func update(to result: Queue? = nil) {
-        //CliqueAPIUtility.update(queue: user, with: result)
+    func update(with addition: Song? = nil, to result: Queue? = nil) {
+        guard let user = client() else { return }
+        
+        //result
+        if let result = result {
+            CliqueAPIUtility.update(queue: user, with: result)
+            refresh()
+            
+            return
+        }
+        
+        //additions
+        if let addition = addition {
+            CliqueAPIUtility.add(song: addition, to: user)
+        }
+        
+        refresh()
     }
     
     func vote(song: Song, _ direction: Vote) {
@@ -70,4 +120,5 @@ struct QueueManager {
     private func empty() {
         
     }
+
 }

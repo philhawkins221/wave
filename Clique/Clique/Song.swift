@@ -8,8 +8,12 @@
 
 import Foundation
 
+//MARK: - protocols
+
 protocol CatalogItem {}
 protocol LibraryItem {}
+
+//MARK: - song class
 
 struct Song: Equatable, Codable, CatalogItem, LibraryItem {
     
@@ -31,6 +35,8 @@ struct Song: Equatable, Codable, CatalogItem, LibraryItem {
     
 }
 
+//MARK: - playlist class
+
 struct Playlist: Equatable, Codable, LibraryItem {
     let owner: String
     let id: String
@@ -44,11 +50,15 @@ struct Playlist: Equatable, Codable, LibraryItem {
     }
 }
 
+//MARK: - artist class
+
 struct Artist: Codable, CatalogItem, LibraryItem {
     let id: String
     let library: String
     let name: String
 }
+
+//MARK: - album class
 
 struct Album: CatalogItem {
     let id: String

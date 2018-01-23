@@ -8,10 +8,14 @@
 
 import Foundation
 
+//MARK: - protocol
+
 protocol StyleGuide {
     associatedtype controller
     static func enforce(on controller: controller)
 }
+
+//MARK: - style guides
 
 struct NavigationControllerStyleGuide: StyleGuide {
     

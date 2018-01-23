@@ -33,6 +33,7 @@
 		4A8F5FFD200FA8F200564EFE /* FriendsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8F5FFC200FA8F200564EFE /* FriendsDelegate.swift */; };
 		4A8F5FFF200FA90400564EFE /* BrowseManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8F5FFE200FA90400564EFE /* BrowseManager.swift */; };
 		4A8F6001200FA90E00564EFE /* BrowseDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8F6000200FA90E00564EFE /* BrowseDelegate.swift */; };
+		4AAD8F3A20162D410090CE17 /* waves.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 4A0AA6242016277B0018E9CD /* waves.mp4 */; };
 		4AB840D11CD70640005FDB47 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB840D01CD70640005FDB47 /* MediaPlayer.framework */; };
 		4AC3C9F21C4ACCB700D5BCCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC3C9F11C4ACCB700D5BCCA /* AppDelegate.swift */; };
 		4AC3C9F41C4ACCB700D5BCCA /* ViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC3C9F31C4ACCB700D5BCCA /* ViewController.swift */; };
@@ -44,6 +45,8 @@
 		4AC3EF3B1C7E95970013EEFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC3EF3A1C7E95970013EEFF /* AVFoundation.framework */; };
 		4ADF95E51D026D6800E0CD19 /* clique 120.png in Resources */ = {isa = PBXBuildFile; fileRef = 4ADF95E31D026D6800E0CD19 /* clique 120.png */; };
 		4ADF95E61D026D6800E0CD19 /* clique 180.png in Resources */ = {isa = PBXBuildFile; fileRef = 4ADF95E41D026D6800E0CD19 /* clique 180.png */; };
+		4AEE14CF2013555700FC8D80 /* GeneralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEE14CE2013555700FC8D80 /* GeneralManager.swift */; };
+		4AEE14D12013628700FC8D80 /* ProfileManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEE14D02013628700FC8D80 /* ProfileManager.swift */; };
 		4AF452E11FDE0D52007FCF8F /* SwipeableTabBarController.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AF452E21FDE0D52007FCF8F /* SwipeableTabBarController.framework */; };
 		4AF452E41FDE1982007FCF8F /* StyleGuide.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452E31FDE1982007FCF8F /* StyleGuide.swift */; };
 		4AF452E81FE0CAAE007FCF8F /* QueueSongTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */; };
@@ -64,6 +67,7 @@
 		4A06C30D1FDC8BFD00E99FED /* LibraryViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
 		4A06C3101FDC8F6500E99FED /* EZSwipeController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EZSwipeController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A06C3111FDC928600E99FED /* SwipeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeController.swift; sourceTree = "<group>"; };
+		4A0AA6242016277B0018E9CD /* waves.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = waves.mp4; path = "/Users/phil/Documents/xcode/clique/ubiquitous-journey/Clique/Clique/waves.mp4"; sourceTree = "<absolute>"; };
 		4A0F86D81FFEEF3C00ECFD03 /* Utility.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = Utility.swift; sourceTree = "<group>"; };
 		4A16BEDC1CAC3BC60089997F /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		4A16BEDE1CAC3BD40089997F /* YTViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTViewController.swift; sourceTree = "<group>"; };
@@ -114,6 +118,8 @@
 		4ACEF1F01CC7E82D0066EBFD /* JoinViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = JoinViewController.swift; sourceTree = "<group>"; };
 		4ADF95E31D026D6800E0CD19 /* clique 120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 120.png"; sourceTree = "<group>"; };
 		4ADF95E41D026D6800E0CD19 /* clique 180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 180.png"; sourceTree = "<group>"; };
+		4AEE14CE2013555700FC8D80 /* GeneralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralManager.swift; sourceTree = "<group>"; };
+		4AEE14D02013628700FC8D80 /* ProfileManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ProfileManager.swift; sourceTree = "<group>"; };
 		4AF452E21FDE0D52007FCF8F /* SwipeableTabBarController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = SwipeableTabBarController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4AF452E31FDE1982007FCF8F /* StyleGuide.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = StyleGuide.swift; sourceTree = "<group>"; };
 		4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueSongTableViewCell.swift; sourceTree = "<group>"; };
@@ -195,14 +201,16 @@
 				4A179AF81D00C64100B6EE20 /* apple music logo.jpg */,
 				4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */,
 				4A179AFB1D00C64100B6EE20 /* youtube logo.png */,
-				4A179AF91D00C64100B6EE20 /* soundcloud logo.gif */,
+				4A0AA6242016277B0018E9CD /* waves.mp4 */,
 				4AC3C9F11C4ACCB700D5BCCA /* AppDelegate.swift */,
+				4A179AF91D00C64100B6EE20 /* soundcloud logo.gif */,
 				4AC3C9F31C4ACCB700D5BCCA /* ViewController.swift */,
 				4AC3C9F51C4ACCB700D5BCCA /* Main.storyboard */,
 				4A06C3031FD7888C00E99FED /* wave.storyboard */,
 				4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */,
 				4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */,
 				4A06C3091FDC8A0600E99FED /* NowPlayingViewController.swift */,
+				4AEE14CE2013555700FC8D80 /* GeneralManager.swift */,
 				4A06C30B1FDC8B0000E99FED /* QueueViewController.swift */,
 				4AF452EE1FE0E758007FCF8F /* QueueManager.swift */,
 				4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */,
@@ -222,8 +230,9 @@
 				4A8F5FF420063DEE00564EFE /* Alerts.swift */,
 				4AF452E31FDE1982007FCF8F /* StyleGuide.swift */,
 				4A06C3111FDC928600E99FED /* SwipeController.swift */,
-				4A06C3051FD7978E00E99FED /* ProfileBar.xib */,
+				4AEE14D02013628700FC8D80 /* ProfileManager.swift */,
 				4A06C3071FD79D4B00E99FED /* ProfileBar.swift */,
+				4A06C3051FD7978E00E99FED /* ProfileBar.xib */,
 				4AC3C9FB1C4ACCB700D5BCCA /* Assets.xcassets */,
 				4AC3C9FD1C4ACCB700D5BCCA /* LaunchScreen.storyboard */,
 				4ADF95E31D026D6800E0CD19 /* clique 120.png */,
@@ -295,7 +304,6 @@
 				TargetAttributes = {
 					4AC3C9ED1C4ACCB700D5BCCA = {
 						CreatedOnToolsVersion = 7.2;
-						DevelopmentTeam = GEGSW4FP6J;
 					};
 				};
 			};
@@ -322,6 +330,7 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4AAD8F3A20162D410090CE17 /* waves.mp4 in Resources */,
 				4AC3C9FF1C4ACCB700D5BCCA /* LaunchScreen.storyboard in Resources */,
 				4A2B670C1C501AB700681F70 /* genericart.png in Resources */,
 				4ADF95E61D026D6800E0CD19 /* clique 180.png in Resources */,
@@ -364,15 +373,21 @@
 			);
 			inputPaths = (
 				"${SRCROOT}/Pods/Target Support Files/Pods-Clique/Pods-Clique-frameworks.sh",
+				"${BUILT_PRODUCTS_DIR}/ASPVideoPlayer/ASPVideoPlayer.framework",
 				"${BUILT_PRODUCTS_DIR}/Alamofire/Alamofire.framework",
+				"${BUILT_PRODUCTS_DIR}/Alamofire-Synchronous/Alamofire_Synchronous.framework",
 				"${BUILT_PRODUCTS_DIR}/AlamofireImage/AlamofireImage.framework",
+				"${BUILT_PRODUCTS_DIR}/RSPlayPauseButton/RSPlayPauseButton.framework",
 				"${BUILT_PRODUCTS_DIR}/SwiftyJSON/SwiftyJSON.framework",
 				"${BUILT_PRODUCTS_DIR}/SwipeableTabBarController/SwipeableTabBarController.framework",
 			);
 			name = "[CP] Embed Pods Frameworks";
 			outputPaths = (
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/ASPVideoPlayer.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/Alamofire_Synchronous.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/AlamofireImage.framework",
+				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/RSPlayPauseButton.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwiftyJSON.framework",
 				"${TARGET_BUILD_DIR}/${FRAMEWORKS_FOLDER_PATH}/SwipeableTabBarController.framework",
 			);
@@ -422,6 +437,7 @@
 				4A5495841FFC822500345CB1 /* User.swift in Sources */,
 				4AF452EF1FE0E758007FCF8F /* QueueManager.swift in Sources */,
 				4A8F6001200FA90E00564EFE /* BrowseDelegate.swift in Sources */,
+				4AEE14D12013628700FC8D80 /* ProfileManager.swift in Sources */,
 				4A5495821FFB0E5A00345CB1 /* Global.swift in Sources */,
 				4A06C30E1FDC8BFD00E99FED /* LibraryViewController.swift in Sources */,
 				4AF452E81FE0CAAE007FCF8F /* QueueSongTableViewCell.swift in Sources */,
@@ -430,6 +446,7 @@
 				4A8F5FFD200FA8F200564EFE /* FriendsDelegate.swift in Sources */,
 				4AC3C9FA1C4ACCB700D5BCCA /* Clique.xcdatamodeld in Sources */,
 				4AF452EB1FE0CCBF007FCF8F /* QueueDelegate.swift in Sources */,
+				4AEE14CF2013555700FC8D80 /* GeneralManager.swift in Sources */,
 				4AF452E41FDE1982007FCF8F /* StyleGuide.swift in Sources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -581,6 +598,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",
@@ -611,6 +629,7 @@
 				CODE_SIGN_IDENTITY = "iPhone Developer";
 				"CODE_SIGN_IDENTITY[sdk=iphoneos*]" = "iPhone Developer";
 				DEFINES_MODULE = YES;
+				DEVELOPMENT_TEAM = "";
 				FRAMEWORK_SEARCH_PATHS = (
 					"$(inherited)",
 					"$(SRCROOT)/**",

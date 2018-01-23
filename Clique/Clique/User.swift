@@ -8,6 +8,8 @@
 
 import Foundation
 
+//MARK: - user class
+
 struct User: Codable, Equatable {
     
     var username: String
@@ -41,16 +43,26 @@ struct User: Codable, Equatable {
         return false
     }
     
+    func me() -> Bool {
+        return self == Identity.sharedInstance().me
+    }
+    
     func clone() -> User {
         return User(user: self)
     }
 
 }
 
+//MARK: - identity class
+
 struct Identity {
     static var instance: Identity?
-    var me: User
-    var friends: [String]
+    var me: User! {
+        return CliqueAPIUtility.find(user: UserDefaults.standard.string(forKey: "id") ?? "")
+    }
+    var friends: [String] {
+        return UserDefaults.standard.stringArray(forKey: "friends") ?? []
+    }
     
     static func sharedInstance() -> Identity {
         
@@ -62,9 +74,19 @@ struct Identity {
     }
     
     private init() {
-        //TODO: - populate identity
-        
+        if UserDefaults.standard.string(forKey: "id") == nil {
+            let new = User("anonymous",
+                           id: "",
+                           queue: Queue(),
+                           library: [],
+                           applemusic: false,
+                           spotify: false)
+            
+            let _ = CliqueAPIUtility.new(user: new)
+            
+            UserDefaults.standard.set(me.id, forKey: "id")
+            UserDefaults.standard.set(friends, forKey: "friends")
+        }
     }
-    
     
 }

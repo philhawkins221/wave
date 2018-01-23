@@ -6,23 +6,6 @@
 //  Copyright © 2016 Phil Hawkins. All rights reserved.
 //
 
-extension UIApplication {
-    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
-        if let nav = base as? UINavigationController {
-            return topViewController(base: nav.visibleViewController)
-        }
-        if let tab = base as? UITabBarController {
-            if let selected = tab.selectedViewController {
-                return topViewController(base: selected)
-            }
-        }
-        if let presented = base?.presentedViewController {
-            return topViewController(base: presented)
-        }
-        return base
-    }
-}
-
 import UIKit
 import CoreData
 import MediaPlayer
@@ -39,15 +22,20 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     private func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
-        window!.tintColor = UIColor.orange
-        //application.setStatusBarStyle(.lightContent, animated: true)
         
-        /*
+        /*application.setStatusBarStyle(.lightContent, animated: true)
+        
+        
         NSNotificationCenter.defaultCenter().addObserver(self, selector: #selector(MusicPlayerNotification), name: MPMusicPlayerControllerPlaybackStateDidChangeNotification, object: PlayerManager.sharedInstance().system)
         
         application.idleTimerDisabled = true
         */
-        
+//        let _ = Identity.sharedInstance()
+//        
+//        let _ = GeneralManager.sharedInstance()
+//        let _ = LibraryManager.sharedInstance()
+//        let _ = QueueManager.sharedInstance()
+                
         return true
     }
     

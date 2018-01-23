@@ -9,14 +9,18 @@
 import Foundation
 
 struct LibraryManager {
-    static var instance: LibraryManager?
     
-    private var user: User
-    var controller: LibraryViewController
-    var table: UITableView
+    //MARK: - properties
+    
+    static private var instance: LibraryManager?
+    
+    private var user: User?
+    var controller: LibraryViewController?
     var delegate: LibraryDelegate
     var display: Playlist?
     var adding: Bool
+    
+    //MARK: - initializers
     
     static func sharedInstance() -> LibraryManager {
         
@@ -28,52 +32,67 @@ struct LibraryManager {
     }
     
     private init() {
-        
-        
+        delegate = LibraryDelegate()
+        adding = false
     }
     
-    //MARK: mutators
+    //MARK: - mutators
     
-    static func manage(user: User) {
-        instance?.user = user
+    static func manage(user: User) throws {
+        switch instance {
+        case nil: throw ManagementError.unsetInstance
+        default:
+            instance?.user = user
+            instance?.controller?.profilebar.manage(profile: user)
+        }
     }
     
-    static func manage(display: Playlist) {
-        instance?.display = display
+    static func manage(display: Playlist?) throws {
+        switch instance {
+        case nil: throw ManagementError.unsetInstance
+        default: instance?.display = display
+        }
     }
     
-    static func manage(table: UITableView) {
-        instance?.table = table
-    }
-    
-    static func manage(controller: LibraryViewController) {
-        instance?.controller = controller
+    static func manage(controller: LibraryViewController) throws {
+        switch instance {
+        case nil: throw ManagementError.unsetInstance
+        default: instance?.controller = controller
+        }
     }
     
     static func removeDisplay() {
         instance?.display = nil
     }
     
-    //MARK: accessors
+    //MARK: - accessors
     
-    func client() -> User {
-        let clone = user.clone()
+    func client() -> User? {
+        refresh()
+        
+        let clone = user?.clone()
         
         return clone
     }
     
-    //MARK: actions
+    //MARK: - actions
     
-    func refresh() {
-        
+    private func refresh() {
+        if let found = CliqueAPIUtility.find(user: user?.id ?? "") {
+            try? LibraryManager.manage(user: found)
+        }
     }
     
     func view(playlist: Playlist) {
         //refresh user
-        LibraryManager.manage(display: playlist)
+        try? LibraryManager.manage(display: playlist)
         
-        guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.lib.rawValue) else { return }
-        controller.show(vc, sender: self)
+        guard let vc = controller?.storyboard?.instantiateViewController(withIdentifier: VCid.lib.rawValue) else { return }
+        controller?.show(vc, sender: self)
+    }
+    
+    func viewAllPlaylists() {
+        try? LibraryManager.manage(display: nil)
     }
     
     func viewAllSongs() {
@@ -89,10 +108,33 @@ struct LibraryManager {
         //use QueueManager.sharedInstance().client()
     }
     
-    func update(with replacements: [Playlist] = [], to result: [Playlist]? = nil) {
-        //if result is not nil, perform library update with that
-        //if replacements is not empty, for each replace playlist in library that is ==
-        //otherwise, refresh()
-
+    func update(for replacements: [Playlist] = [], with additions: [Playlist] = [], to result: [Playlist]? = nil) {
+        guard let user = client() else { return }
+        
+        //result
+        if let result = result {
+            CliqueAPIUtility.update(library: user, with: result)
+            return
+        }
+        
+        var result = [Playlist]()
+        
+        //replacements
+        result = user.library.map {
+            for replacement in replacements {
+                if $0 == replacement {
+                    return replacement
+                }
+            }
+            return $0
+        }
+        
+        //additions
+        result.append(contentsOf: additions)
+        
+        if !replacements.isEmpty || !additions.isEmpty {
+            CliqueAPIUtility.update(library: user, with: result)
+        }
+        refresh()
     }
 }

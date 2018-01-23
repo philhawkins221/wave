@@ -1,6 +1,6 @@
 <?xml version="1.0" encoding="UTF-8"?>
 <Scheme
-   LastUpgradeVersion = "0910"
+   LastUpgradeVersion = "0700"
    version = "1.3">
    <BuildAction
       parallelizeBuildables = "YES"
@@ -14,7 +14,7 @@
             buildForAnalyzing = "YES">
             <BuildableReference
                BuildableIdentifier = "primary"
-               BlueprintIdentifier = "16AF3323FE56F322CF26C4BEC4CA6F03"
+               BlueprintIdentifier = "85BCDD9DFF3B201B4009CDD32D215184"
                BuildableName = "Pods_Clique.framework"
                BlueprintName = "Pods-Clique"
                ReferencedContainer = "container:Pods.xcodeproj">
@@ -47,7 +47,7 @@
       <MacroExpansion>
          <BuildableReference
             BuildableIdentifier = "primary"
-            BlueprintIdentifier = "16AF3323FE56F322CF26C4BEC4CA6F03"
+            BlueprintIdentifier = "85BCDD9DFF3B201B4009CDD32D215184"
             BuildableName = "Pods_Clique.framework"
             BlueprintName = "Pods-Clique"
             ReferencedContainer = "container:Pods.xcodeproj">

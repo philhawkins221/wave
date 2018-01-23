@@ -43,7 +43,50 @@ enum VCid: String {
     case q = "q"
 }
 
+enum ProfileController {
+    case library
+    case nowplaying
+    case queue
+}
+
+enum Message: String {
+    case generic = "start a wave"
+    case peopleListening
+    case nowPlaying
+    case requests
+    case listening
+    case createUsername = "tap to change"
+}
+
+//MARK: - errors
+
+enum ControllerError: String, Error {
+    case wrongProvisioning = "Controller Error - Wrong Provisioning"
+}
+
+enum ManagementError: String, Error {
+    case unsetInstance = "Management Error - Unset Instance"
+    case unidentifiedUser = "Management Error - Unidentified User"
+}
+
 //MARK: - extensions
+
+extension UIApplication {
+    class func topViewController(base: UIViewController? = UIApplication.shared.keyWindow?.rootViewController) -> UIViewController? {
+        if let nav = base as? UINavigationController {
+            return topViewController(base: nav.visibleViewController)
+        }
+        if let tab = base as? UITabBarController {
+            if let selected = tab.selectedViewController {
+                return topViewController(base: selected)
+            }
+        }
+        if let presented = base?.presentedViewController {
+            return topViewController(base: presented)
+        }
+        return base
+    }
+}
 
 extension Collection {
     /// Return a copy of `self` with its elements shuffled
@@ -88,9 +131,12 @@ extension String {
 extension UITableViewCell {
     func setImageSize(to size: CGFloat) {
         if imageView?.image != nil {
-            let widthScale = size/(imageView?.image!.size.width)!
-            let heightScale = size/(imageView?.image!.size.height)!
-            imageView?.transform = CGAffineTransform(scaleX: widthScale, y: heightScale)
+            let itemSize = CGSize.init(width: 100, height: 100)
+            UIGraphicsBeginImageContextWithOptions(itemSize, false, UIScreen.main.scale)
+            let imageRect = CGRect.init(origin: CGPoint.zero, size: itemSize)
+            imageView?.image!.draw(in: imageRect)
+            imageView?.image! = UIGraphicsGetImageFromCurrentImageContext()!
+            UIGraphicsEndImageContext()
         }
     }
 }

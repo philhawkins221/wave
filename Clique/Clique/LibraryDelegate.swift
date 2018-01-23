@@ -9,22 +9,21 @@
 import Foundation
 import UIKit
 
-protocol LibraryDelegate: LibraryTableViewDelegate, LibraryTableViewDataSource {}
-
-protocol LibraryTableViewDelegate: UITableViewDelegate {}
-protocol LibraryTableViewDataSource: UITableViewDataSource {}
-
-extension LibraryTableViewDelegate {
+class LibraryDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
+    
+    //MARK: - properties
     
     var me: Bool {
         return LibraryManager.sharedInstance().client() == Identity.sharedInstance().me
     }
     var display: Any {
-        return LibraryManager.sharedInstance().display ?? LibraryManager.sharedInstance().client().library
+        return LibraryManager.sharedInstance().display ?? LibraryManager.sharedInstance().client()?.library ?? [Playlist]()
     }
     var adding: Bool {
         return LibraryManager.sharedInstance().adding
     }
+    
+    //MARK: - table delegate methods
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
         return 60
@@ -66,19 +65,7 @@ extension LibraryTableViewDelegate {
         }
     }
     
-}
-
-extension LibraryTableViewDataSource {
-    
-    var me: Bool {
-        return LibraryManager.sharedInstance().client() == Identity.sharedInstance().me
-    }
-    var display: Any {
-        return LibraryManager.sharedInstance().display ?? LibraryManager.sharedInstance().client().library
-    }
-    var adding: Bool {
-        return LibraryManager.sharedInstance().adding
-    }
+    //MARK: - table data source methods
     
     func numberOfSections(in tableView: UITableView) -> Int {
         switch display {
@@ -108,7 +95,7 @@ extension LibraryTableViewDataSource {
             cell.accessoryType = .disclosureIndicator
             return cell
         case let display as [Playlist] where indexPath.section == 1:
-            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.textLabel?.text = display[indexPath.row].name
             cell.detailTextLabel?.text = display[indexPath.row].songs.count.description + " songs"
             cell.accessoryType = .disclosureIndicator

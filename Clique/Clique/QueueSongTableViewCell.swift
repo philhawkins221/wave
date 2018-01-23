@@ -23,8 +23,9 @@ class QueueSongTableViewCell: UITableViewCell {
         detailTextLabel?.text = song.artist.name
         voteslabel.text = song.votes.description
         accessoryType = .none
-        //artwork
+        let url = URL(string: song.artwork) ?? URL(string: "/")!
         setImageSize(to: 50)
+        imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "genericart.png"))
     }
     
     override func awakeFromNib() {
@@ -38,4 +39,28 @@ class QueueSongTableViewCell: UITableViewCell {
         // Configure the view for the selected state
     }
     
+}
+
+class NowPlayingTableViewCell: UITableViewCell {
+    required init?(coder aDecoder: NSCoder) {
+        super.init(coder: aDecoder)
+    }
+    
+    init(song: Song?) {
+        super.init(style: .subtitle, reuseIdentifier: nil)
+        
+        if let song = song {
+            textLabel?.text = song.title
+            detailTextLabel?.text = song.artist.name
+            textLabel?.font = UIFont.systemFont(ofSize: 18, weight: .light)
+            accessoryType = .none
+            let url = URL(string: song.artwork) ?? URL(string: "/")!
+            imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "genericart.png"))
+            setImageSize(to: 100)
+        } else {
+            imageView?.image = UIImage(named: "genericart.png")
+            setImageSize(to: 100)
+            accessoryType = .none
+        }
+    }
 }

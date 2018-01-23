@@ -313,7 +313,7 @@ exports.downvote = function(req, res) {
                 console.log('Error upvoting song: ' + err);
                 res.send(err);
             } else {
-                result.songList.forEach(function(item) {
+                result.queue.queue.forEach(function(item) {
                 //for (item in result.songList) {
                     if ((item.id == song.id && item.library == song.library) && !found) {
                         console.log("Found " + item.name);

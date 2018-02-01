@@ -238,7 +238,7 @@ exports.markSongAsPlayed = function(req, res) {
     var id = req.params.id;
     var found = false;
     database.collection('playlists', function(err, collection) {
-        collection.findOne({'_id': new BSON.ObjectID(id)}, function(err, result){
+        collection.findOne({'_id': new BSON.ObjectID(id)}, function(err, result) {
             if (err) {
                 console.log('Error finding playlist');
                 res.send(err);
@@ -260,6 +260,7 @@ exports.markSongAsPlayed = function(req, res) {
                     next = result.queue.queue[0];
                     result.queue.queue.splice(0, 1);
                 }
+                result.queue.history.push(result.queue.current);
                 result.queue.current = next;
                 collection.save(result);
                 res.send(next);

@@ -103,20 +103,17 @@ exports.updatePlaylist = function(req, res) {
 
 exports.updatePlaylistSong = function(req, res) {
     var id = req.params.id;
-    var playlist = req.body;
-    var newName = req.body.song;
-    var newArtist = req.body.artist;
-    console.log(newName);
-    console.log('Updating playlist song: ' + id);
-    console.log(JSON.stringify(playlist));
+    var song = req.body;
+    console.log('Updating current song: ' + id);
+    console.log(JSON.stringify(song));
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {currentSong: newName, artist: newArtist} }, playlist, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {"queue.current": song} }, function(err, result) {
             if (err) {
                 console.log('Error updating playlist: ' + err);
                 res.send({'error':'An error has occurred'});
             } else {
                 console.log('' + result + ' documents(s) updated');
-                res.send(playlist);
+                res.send(song);
             }
         });
 

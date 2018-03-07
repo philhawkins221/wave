@@ -150,12 +150,12 @@
 /* Begin PBXFileReference section */
 		02732CC4D2AC11D8A9EC3684B83462A4 /* SwipeableTabBarController-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwipeableTabBarController-dummy.m"; sourceTree = "<group>"; };
 		08EB389BF06B6A2D8118947867EF6558 /* Alamofire-Synchronous.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Alamofire-Synchronous.xcconfig"; sourceTree = "<group>"; };
-		0B4D5505F9BF78F19C79264D50A59F44 /* SwipeableTabBarController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = SwipeableTabBarController.modulemap; sourceTree = "<group>"; };
+		0B4D5505F9BF78F19C79264D50A59F44 /* SwipeableTabBarController.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = SwipeableTabBarController.modulemap; sourceTree = "<group>"; };
 		0D0533E4EC2277AAAC8888328EC5A64B /* Foundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = Foundation.framework; path = Platforms/iPhoneOS.platform/Developer/SDKs/iPhoneOS10.3.sdk/System/Library/Frameworks/Foundation.framework; sourceTree = DEVELOPER_DIR; };
 		1088A47B72F4D42F762CFAC0040838D2 /* MultipartFormData.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = MultipartFormData.swift; path = Source/MultipartFormData.swift; sourceTree = "<group>"; };
 		13452352180FF8787191D115AC081BC2 /* RSPlayPauseButton.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; name = RSPlayPauseButton.h; path = RSPlayPauseButtonDemo/RSPlayPauseButton/RSPlayPauseButton.h; sourceTree = "<group>"; };
-		148469FC6755EC6BE21BC26A7EF593D7 /* ASPVideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = ASPVideoPlayer.framework; path = ASPVideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
-		158E85AD1E8D82F78834EAC1F6F2CA3B /* SwipeableTabBarController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwipeableTabBarController.framework; path = SwipeableTabBarController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		148469FC6755EC6BE21BC26A7EF593D7 /* ASPVideoPlayer.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = ASPVideoPlayer.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		158E85AD1E8D82F78834EAC1F6F2CA3B /* SwipeableTabBarController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwipeableTabBarController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		1D6BA614AE32FC2046AB5C61E4135BF1 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1EABF7AB1DBA03C35BC2DF3588549BA9 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		1FCBD3D2FA3F28CFA4495CEEF3C1026E /* Alamofire.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = Alamofire.xcconfig; sourceTree = "<group>"; };
@@ -172,12 +172,12 @@
 		390E555CF5D9CAFEEE6610FDFE5CB87E /* DispatchQueue+Alamofire.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "DispatchQueue+Alamofire.swift"; path = "Source/DispatchQueue+Alamofire.swift"; sourceTree = "<group>"; };
 		4033CE83EA7C483CBF06D3158105EF75 /* SessionManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SessionManager.swift; path = Source/SessionManager.swift; sourceTree = "<group>"; };
 		4371710D7E4C771E79715FFAE68278A0 /* Pods-Clique-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "Pods-Clique-dummy.m"; sourceTree = "<group>"; };
-		43D6935E46AE779845D6EB6797205B1B /* ASPVideoPlayer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = ASPVideoPlayer.modulemap; sourceTree = "<group>"; };
+		43D6935E46AE779845D6EB6797205B1B /* ASPVideoPlayer.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = ASPVideoPlayer.modulemap; sourceTree = "<group>"; };
 		4813B0630256C37911593904CDE7E11C /* UIKit+Extensions.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIKit+Extensions.swift"; path = "SwipeableTabBarController/Classes/UIKit+Extensions.swift"; sourceTree = "<group>"; };
 		48EBF7B605BCD4060299A261370CF8FB /* Pods-Clique.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Clique.release.xcconfig"; sourceTree = "<group>"; };
-		4CB241A93BB58B279931332C2E03A082 /* Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = Alamofire.modulemap; sourceTree = "<group>"; };
+		4CB241A93BB58B279931332C2E03A082 /* Alamofire.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = Alamofire.modulemap; sourceTree = "<group>"; };
 		50C4A76B14AEBCA64FC76C6FD1C63368 /* RSPlayPauseButton-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "RSPlayPauseButton-prefix.pch"; sourceTree = "<group>"; };
-		514E4B0DF16F507CF2E66F38311DAC7C /* Pods-Clique.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Pods-Clique.modulemap"; sourceTree = "<group>"; };
+		514E4B0DF16F507CF2E66F38311DAC7C /* Pods-Clique.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Pods-Clique.modulemap"; sourceTree = "<group>"; };
 		5222B6F4BDE424783C4F095E4F7653CD /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		5348E2F15797DE2EEB41B8218AAFF55E /* ASPVideoPlayer-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ASPVideoPlayer-prefix.pch"; sourceTree = "<group>"; };
 		54880D0AB1367655E42913F41C9A54C3 /* Image.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Image.swift; path = Source/Image.swift; sourceTree = "<group>"; };
@@ -188,28 +188,28 @@
 		6BF7C18DCBC6C8C46B3911E4C13C65F9 /* ServerTrustPolicy.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ServerTrustPolicy.swift; path = Source/ServerTrustPolicy.swift; sourceTree = "<group>"; };
 		706C7AFFE37BA158C3553250F4B5FAED /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		76F176497E197DFF078DBC2D39B4C2D3 /* AlamofireImage-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "AlamofireImage-umbrella.h"; sourceTree = "<group>"; };
-		781A25F1796BCE904A7344A99074CDB2 /* Alamofire-Synchronous.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = "Alamofire-Synchronous.modulemap"; sourceTree = "<group>"; };
+		781A25F1796BCE904A7344A99074CDB2 /* Alamofire-Synchronous.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = "Alamofire-Synchronous.modulemap"; sourceTree = "<group>"; };
 		78A7B3C9A54C630E80050F5D68A9FB0C /* Pods-Clique-resources.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Clique-resources.sh"; sourceTree = "<group>"; };
 		7D4E2657CF24D93A7986EB3E0B8B3568 /* AFIError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFIError.swift; path = Source/AFIError.swift; sourceTree = "<group>"; };
 		7D8714809D7886F98404897CE877977D /* Alamofire-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Alamofire-umbrella.h"; sourceTree = "<group>"; };
-		7DD52EA32487DC0A4032DF7FA33C1816 /* Alamofire_Synchronous.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Alamofire_Synchronous.framework; path = "Alamofire-Synchronous.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		7DD52EA32487DC0A4032DF7FA33C1816 /* Alamofire_Synchronous.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire_Synchronous.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		7DE7EBEB4503DE1A2C6FBF11B3211D52 /* UIImage+AlamofireImage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIImage+AlamofireImage.swift"; path = "Source/UIImage+AlamofireImage.swift"; sourceTree = "<group>"; };
-		7E69E750A75460C3F1D68C5941048EFC /* SwiftyJSON.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = SwiftyJSON.modulemap; sourceTree = "<group>"; };
+		7E69E750A75460C3F1D68C5941048EFC /* SwiftyJSON.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = SwiftyJSON.modulemap; sourceTree = "<group>"; };
 		823A2919443EA9BDBC5B112A4FEB6B8B /* Validation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Validation.swift; path = Source/Validation.swift; sourceTree = "<group>"; };
 		87A91DC3240A14166343ADF8816D2035 /* SwipeableTabBarController-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwipeableTabBarController-prefix.pch"; sourceTree = "<group>"; };
 		8918C1AE2020D8E30049EC3017D36FB4 /* Loader.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Loader.swift; path = ASPVideoPlayer/Classes/Loader.swift; sourceTree = "<group>"; };
 		8C98AF34A9926CAA58AEA504B9FAEF6F /* SwipeTransitioningProtocol.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeTransitioningProtocol.swift; path = SwipeableTabBarController/Classes/SwipeTransitioningProtocol.swift; sourceTree = "<group>"; };
 		8DCA713A47A7B698FA09C7F6AE8332D8 /* RSPlayPauseButton.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; name = RSPlayPauseButton.m; path = RSPlayPauseButtonDemo/RSPlayPauseButton/RSPlayPauseButton.m; sourceTree = "<group>"; };
-		8F9E2FDB77F161D8B3EE5BF9655E65EF /* AlamofireImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = AlamofireImage.framework; path = AlamofireImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		8F9E2FDB77F161D8B3EE5BF9655E65EF /* AlamofireImage.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = AlamofireImage.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		93140DD57156597CC5302B1B25055C8E /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
-		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; lastKnownFileType = text; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
+		93A4A3777CF96A4AAC1D13BA6DCCEA73 /* Podfile */ = {isa = PBXFileReference; explicitFileType = text.script.ruby; includeInIndex = 1; name = Podfile; path = ../Podfile; sourceTree = SOURCE_ROOT; xcLanguageSpecificationIdentifier = xcode.lang.ruby; };
 		95084C6DE18C7195D6F0121167FD6264 /* Notifications.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Notifications.swift; path = Source/Notifications.swift; sourceTree = "<group>"; };
 		95A83D9CD93E58CF40BAF337B640D370 /* ASPVideoPlayer-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "ASPVideoPlayer-umbrella.h"; sourceTree = "<group>"; };
 		969C06012703F36B223097F628108AFD /* SwiftyJSON-dummy.m */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.objc; path = "SwiftyJSON-dummy.m"; sourceTree = "<group>"; };
 		975A2E905EE6939DFD0E861F99C97A1A /* ASPVideoPlayer.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = ASPVideoPlayer.xcconfig; sourceTree = "<group>"; };
 		A08B4AB20C9810F94700A0FC7594BF29 /* ParameterEncoding.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ParameterEncoding.swift; path = Source/ParameterEncoding.swift; sourceTree = "<group>"; };
 		A317CAB61D3A3F081C48314824F978CD /* ResponseSerialization.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ResponseSerialization.swift; path = Source/ResponseSerialization.swift; sourceTree = "<group>"; };
-		A3503DFE4157A81A0B375EEA08C20736 /* AlamofireImage.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = AlamofireImage.modulemap; sourceTree = "<group>"; };
+		A3503DFE4157A81A0B375EEA08C20736 /* AlamofireImage.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = AlamofireImage.modulemap; sourceTree = "<group>"; };
 		A3FC53B9F1CCAE999E2A7AEC1923A0AC /* SwipeableTabBarController.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = SwipeableTabBarController.xcconfig; sourceTree = "<group>"; };
 		A9879276B7B3FFF6A269D133F9D685BD /* Pods-Clique-frameworks.sh */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.script.sh; path = "Pods-Clique-frameworks.sh"; sourceTree = "<group>"; };
 		ADE9E1B19642A784048EC91380D279EC /* UIButton+AlamofireImage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "UIButton+AlamofireImage.swift"; path = "Source/UIButton+AlamofireImage.swift"; sourceTree = "<group>"; };
@@ -219,7 +219,7 @@
 		B4B366542D89F57FD62C7E09506C2809 /* Request+AlamofireImage.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Request+AlamofireImage.swift"; path = "Source/Request+AlamofireImage.swift"; sourceTree = "<group>"; };
 		B4D12E601ABFF8993870F22F60BF7226 /* AnimationForwarder.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AnimationForwarder.swift; path = ASPVideoPlayer/Classes/AnimationForwarder.swift; sourceTree = "<group>"; };
 		B5EB01DA90BF93DBA72DA6C8F49141F1 /* Pods-Clique-acknowledgements.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = "Pods-Clique-acknowledgements.plist"; sourceTree = "<group>"; };
-		B68F503712FB17F7FF6A9619C4CDF947 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = SwiftyJSON.framework; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		B68F503712FB17F7FF6A9619C4CDF947 /* SwiftyJSON.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = SwiftyJSON.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		B882DAAD2B22E84707276A883FDD1DC3 /* Scrubber.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Scrubber.swift; path = ASPVideoPlayer/Classes/Scrubber.swift; sourceTree = "<group>"; };
 		B887A6661F163236C77D9FD903FA474F /* SwipeInteractor.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeInteractor.swift; path = SwipeableTabBarController/Classes/SwipeInteractor.swift; sourceTree = "<group>"; };
 		BA503BE101E1144BAB8AEB086E7E0E46 /* Info.plist */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
@@ -227,10 +227,10 @@
 		BE6725BC560E6875BC45F25936AA8306 /* Alamofire-Synchronous-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Alamofire-Synchronous-umbrella.h"; sourceTree = "<group>"; };
 		BE76AA33ADE6D5884F620EF8F8FCF6C6 /* ASPVideoPlayerView.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASPVideoPlayerView.swift; path = ASPVideoPlayer/Classes/ASPVideoPlayerView.swift; sourceTree = "<group>"; };
 		C01ABD4E611AE9A3A118399A75C4EAF5 /* SwipeAnimationType.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeAnimationType.swift; path = SwipeableTabBarController/Classes/SwipeAnimationType.swift; sourceTree = "<group>"; };
-		C0C7D930AFA14028E7486F876DE28EF6 /* RSPlayPauseButton.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; path = RSPlayPauseButton.modulemap; sourceTree = "<group>"; };
+		C0C7D930AFA14028E7486F876DE28EF6 /* RSPlayPauseButton.modulemap */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = "sourcecode.module-map"; path = RSPlayPauseButton.modulemap; sourceTree = "<group>"; };
 		C840EA14C37B768CAAD7CB2F1E73D8B7 /* SwiftyJSON-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyJSON-umbrella.h"; sourceTree = "<group>"; };
 		CAA46B1201C3FFF1C297B17C257BC4DE /* Pods-Clique-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Pods-Clique-umbrella.h"; sourceTree = "<group>"; };
-		CC176311668FF4555BF4DD62D38CD254 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Alamofire.framework; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		CC176311668FF4555BF4DD62D38CD254 /* Alamofire.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Alamofire.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		CC2960E8499362637ED6E6039FB886B7 /* AlamofireImage.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = AlamofireImage.xcconfig; sourceTree = "<group>"; };
 		CC69CDCFFF518977E8BB7B5D4DA71E17 /* Alamofire-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "Alamofire-prefix.pch"; sourceTree = "<group>"; };
 		CF8DE719EDE92EB8F4B1C0C3360A578C /* Alamofire+Synchronous.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = "Alamofire+Synchronous.swift"; path = "Source/Alamofire+Synchronous.swift"; sourceTree = "<group>"; };
@@ -243,7 +243,7 @@
 		E54E2D42FF28C4BBD9CB05419D0A4C10 /* Math.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Math.swift; path = ASPVideoPlayer/Classes/Math.swift; sourceTree = "<group>"; };
 		E602D1A397E93853D62360A2EE453421 /* Request.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Request.swift; path = Source/Request.swift; sourceTree = "<group>"; };
 		E8345854DC239E0DA80FC5980885DF6B /* SwipeAnimation.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = SwipeAnimation.swift; path = SwipeableTabBarController/Classes/SwipeAnimation.swift; sourceTree = "<group>"; };
-		EC0A28E275650B638DC22F52160FBF9B /* RSPlayPauseButton.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = RSPlayPauseButton.framework; path = RSPlayPauseButton.framework; sourceTree = BUILT_PRODUCTS_DIR; };
+		EC0A28E275650B638DC22F52160FBF9B /* RSPlayPauseButton.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = RSPlayPauseButton.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		ED4932B493C1C19A1D88FB4215E4D38C /* Response.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Response.swift; path = Source/Response.swift; sourceTree = "<group>"; };
 		EDB11B085484DAF2010D0C324D0E4EE3 /* SwiftyJSON-prefix.pch */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwiftyJSON-prefix.pch"; sourceTree = "<group>"; };
 		F0FBAC6D71E3BC8198BCE127B2622DB1 /* ASPVideoPlayerControls.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ASPVideoPlayerControls.swift; path = ASPVideoPlayer/Classes/ASPVideoPlayerControls.swift; sourceTree = "<group>"; };
@@ -251,7 +251,7 @@
 		F1B6E6C0EB0F1F7574FA25A31B250B6A /* SwipeableTabBarController-umbrella.h */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.c.h; path = "SwipeableTabBarController-umbrella.h"; sourceTree = "<group>"; };
 		F31F998E651B41B7955FF1075AC27855 /* NetworkReachabilityManager.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = NetworkReachabilityManager.swift; path = Source/NetworkReachabilityManager.swift; sourceTree = "<group>"; };
 		F682934FD17E62751DDA2BC8E6526AEE /* Pods-Clique.debug.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; path = "Pods-Clique.debug.xcconfig"; sourceTree = "<group>"; };
-		FAA95743A1FF3A035F30DC38853F9C0D /* Pods_Clique.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; name = Pods_Clique.framework; path = "Pods-Clique.framework"; sourceTree = BUILT_PRODUCTS_DIR; };
+		FAA95743A1FF3A035F30DC38853F9C0D /* Pods_Clique.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clique.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		FB7AE8C1FF4CCF2E00CACFA67559C23B /* AFError.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = AFError.swift; path = Source/AFError.swift; sourceTree = "<group>"; };
 		FBFECDA3CA67FB04A85B504BC869018B /* Result.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = Result.swift; path = Source/Result.swift; sourceTree = "<group>"; };
 		FDC4CF1E71E662351C2BEBD8A36A1C63 /* ImageFilter.swift */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = sourcecode.swift; name = ImageFilter.swift; path = Source/ImageFilter.swift; sourceTree = "<group>"; };
@@ -364,7 +364,6 @@
 				CF8DE719EDE92EB8F4B1C0C3360A578C /* Alamofire+Synchronous.swift */,
 				58C0CABC2333AFFDCFECB44FD4CE3CA8 /* Support Files */,
 			);
-			name = "Alamofire-Synchronous";
 			path = "Alamofire-Synchronous";
 			sourceTree = "<group>";
 		};
@@ -393,7 +392,6 @@
 				4813B0630256C37911593904CDE7E11C /* UIKit+Extensions.swift */,
 				8E04C3EA141C8441B27247CDC5C5FBBF /* Support Files */,
 			);
-			name = SwipeableTabBarController;
 			path = SwipeableTabBarController;
 			sourceTree = "<group>";
 		};
@@ -434,7 +432,6 @@
 				2F72ADAE5A6FF709CFC436785D33FF57 /* SwiftyJSON.swift */,
 				0C6243D4A0590819A14335E922D29B26 /* Support Files */,
 			);
-			name = SwiftyJSON;
 			path = SwiftyJSON;
 			sourceTree = "<group>";
 		};
@@ -484,7 +481,6 @@
 				8DCA713A47A7B698FA09C7F6AE8332D8 /* RSPlayPauseButton.m */,
 				C6F540A4BF4C24DA6602DAD80E81483C /* Support Files */,
 			);
-			name = RSPlayPauseButton;
 			path = RSPlayPauseButton;
 			sourceTree = "<group>";
 		};
@@ -530,7 +526,6 @@
 				2267212480E1161DF518B8D31EB7B3FB /* UIImageView+AlamofireImage.swift */,
 				FADFB015585E0E57670775633531A728 /* Support Files */,
 			);
-			name = AlamofireImage;
 			path = AlamofireImage;
 			sourceTree = "<group>";
 		};
@@ -575,7 +570,6 @@
 				B882DAAD2B22E84707276A883FDD1DC3 /* Scrubber.swift */,
 				137C78A9E1BFBA942F7BD59CF7229921 /* Support Files */,
 			);
-			name = ASPVideoPlayer;
 			path = ASPVideoPlayer;
 			sourceTree = "<group>";
 		};
@@ -615,7 +609,6 @@
 				823A2919443EA9BDBC5B112A4FEB6B8B /* Validation.swift */,
 				94B76D444EFC44FB5D39E2916121FAEF /* Support Files */,
 			);
-			name = Alamofire;
 			path = Alamofire;
 			sourceTree = "<group>";
 		};
@@ -842,7 +835,7 @@
 			isa = PBXProject;
 			attributes = {
 				LastSwiftUpdateCheck = 0830;
-				LastUpgradeCheck = 0700;
+				LastUpgradeCheck = 0920;
 			};
 			buildConfigurationList = 2D8E8EC45A3A1A1D94AE762CB5028504 /* Build configuration list for PBXProject "Pods" */;
 			compatibilityVersion = "Xcode 3.2";
@@ -1089,6 +1082,7 @@
 				PRODUCT_NAME = "$(TARGET_NAME)";
 				PROVISIONING_PROFILE_SPECIFIER = NO_SIGNING/;
 				STRIP_INSTALLED_PRODUCT = NO;
+				SWIFT_OPTIMIZATION_LEVEL = "-Owholemodule";
 				SYMROOT = "${SRCROOT}/../build";
 			};
 			name = Release;

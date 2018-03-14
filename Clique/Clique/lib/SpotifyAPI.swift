@@ -91,7 +91,7 @@ struct SpotifyAPI: Searching {
         return result
     }
     
-    static func get(relatedartists artist: Artist) -> [Artist] {
+    static func get(related artist: Artist) -> [Artist] {
         let endpoint = Endpoints.Spotify.artists.relatedartistspoint(artist.id)
         var results = [Artist]()
         
@@ -109,7 +109,7 @@ struct SpotifyAPI: Searching {
         return results
     }
     
-    static func get(topsongs artist: Artist) -> [Song] {
+    static func get(top artist: Artist) -> [Song] {
         let endpoint = Endpoints.Spotify.artists.topsongspoint(artist.id)
         var results = [Song]()
         

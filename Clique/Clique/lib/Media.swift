@@ -71,7 +71,7 @@ struct Media {
     
     static func get(playlist: MPMediaPlaylist, from source: Catalogues = .Library) -> Playlist {
         return Playlist(
-            owner: Identity.sharedInstance().me,
+            owner: Identity.me,
             id: String(playlist.persistentID),
             library: source.rawValue,
             name: playlist.name ?? "",

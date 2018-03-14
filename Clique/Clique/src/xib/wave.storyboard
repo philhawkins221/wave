@@ -83,6 +83,7 @@
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
                                     <action selector="add:" destination="3rW-rF-rtn" id="6tT-qQ-Qc5"/>
+                                    <segue destination="3rW-rF-rtn" kind="show" identifier="add" id="fMq-h0-MSM"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem title="Edit" id="rOO-d7-BqT">
@@ -336,11 +337,14 @@
                         <rightBarButtonItems>
                             <barButtonItem systemItem="add" id="n9z-ys-qXD">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                                <connections>
+                                    <segue destination="3rW-rF-rtn" kind="show" identifier="search" id="QY1-1A-98R"/>
+                                </connections>
                             </barButtonItem>
                             <barButtonItem systemItem="bookmarks" id="PY5-DU-vFW">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
-                                    <action selector="poop:" destination="mp2-9N-S18" id="Fuq-uc-9cI"/>
+                                    <segue destination="mp2-9N-S18" kind="show" identifier="history" id="tKu-Nv-WrL"/>
                                 </connections>
                             </barButtonItem>
                         </rightBarButtonItems>
@@ -503,7 +507,7 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="DF2-Ka-lh3" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="558" y="879"/>
+            <point key="canvasLocation" x="1460" y="1786"/>
         </scene>
         <!--Select Existing Playlist-->
         <scene sceneID="lj3-gv-rXa">
@@ -578,10 +582,13 @@
                 </viewController>
                 <placeholder placeholderIdentifier="IBFirstResponder" id="iyG-LC-Dy1" userLabel="First Responder" sceneMemberID="firstResponder"/>
             </objects>
-            <point key="canvasLocation" x="558" y="1542"/>
+            <point key="canvasLocation" x="1460" y="2449"/>
         </scene>
     </scenes>
     <resources>
         <image name="genericart.png" width="336" height="336"/>
     </resources>
+    <inferredMetricsTieBreakers>
+        <segue reference="QY1-1A-98R"/>
+    </inferredMetricsTieBreakers>
 </document>

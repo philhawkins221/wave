@@ -50,7 +50,7 @@ struct Alerts {
                 }
                 
                 let new = Playlist(
-                    owner: Identity.sharedInstance().me,
+                    owner: Identity.me,
                     id: id.description,
                     library: Catalogues.Library.rawValue,
                     name: alert.textFields?.first?.text ?? "",
@@ -64,7 +64,7 @@ struct Alerts {
             bro.manager?.controller.present(alert, animated: true)
         })
         alert.addAction(UIAlertAction(title: "Add Existing Playlist", style: .default) { action in
-            bro.manager?.viewSyncPlaylists()
+            bro.manager?.view(sync: ())
         })
         alert.addAction(UIAlertAction(title: "Nevermind", style: .cancel))
         

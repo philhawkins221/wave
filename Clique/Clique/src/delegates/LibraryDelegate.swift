@@ -34,7 +34,7 @@ class LibraryDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         
         switch indexPath.section {
-        case 0: manager.viewAllSongs()
+        case 0: manager.view(songs: ())
         case 1: manager.view(playlist: library[indexPath.row])
         default: break
         }

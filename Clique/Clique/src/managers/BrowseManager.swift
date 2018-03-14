@@ -19,19 +19,22 @@ struct BrowseManager {
     
     //MARK: - initializers
     
-    init?(to controller: BrowseViewController, for user: String = Identity.sharedInstance().me) {
-        guard let found = CliqueAPI.find(user: user) else { return nil }
+    init?(to controller: BrowseViewController) {
+        guard let found = CliqueAPI.find(user: controller.user) else { return nil }
         
         self.user = found
         self.controller = controller
         adding = false
         
-        update()
-    }
-    
-    init?(to controller: BrowseViewController, with delegate: BrowseDelegate, for user: String = Identity.sharedInstance().me) {
-        self.init(to: controller, for: user)
-        self.delegate = delegate
+        switch controller.mode {
+        case .browse: delegate = BrowseDelegate(to: self)
+        case .friends: delegate = FriendsDelegate(to: self)
+        case .library: delegate = LibraryDelegate(to: self)
+        case .playlist: delegate = PlaylistDelegate(to: self)
+        case .sync: delegate = SyncDelegate(to: self)
+        case .search: delegate = SearchDelegate(to: self)
+        case .catalog: delegate = CatalogDelegate(to: self)
+        }
         
         update()
     }
@@ -41,6 +44,7 @@ struct BrowseManager {
     mutating func manage(user: User) {
         self.user = user
         controller.profilebar.manage(profile: user)
+        delegate?.manager = self
     }
     
     mutating func update(with replacement: [Playlist]? = nil) {
@@ -53,6 +57,7 @@ struct BrowseManager {
     
     private mutating func refresh() {
         guard let found = CliqueAPI.find(user: user.id) else { return }
+        if delegate == nil { delegate = FriendsDelegate(to: self) }
         
         manage(user: found)
         delegate?.populate()
@@ -75,11 +80,8 @@ struct BrowseManager {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
         else { return }
         
-        if let manager = BrowseManager(to: vc, for: user) {
-            vc.manager = manager
-            vc.manager?.delegate = LibraryDelegate(to: vc.manager!)
-        }
-        
+        vc.user = user
+        vc.mode = .library
         controller.show(vc, sender: controller)
     }
     
@@ -87,28 +89,61 @@ struct BrowseManager {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
         else { return }
         
-        if let manager = BrowseManager(to: vc, for: user.id) {
-            vc.manager = manager
-            vc.manager?.delegate = PlaylistDelegate(to: vc.manager!, for: playlist)
-        }
-        
+        vc.user = user.id
+        vc.playlist = playlist
+        vc.mode = .playlist
         controller.show(vc, sender: controller)
     }
     
-    func viewAllSongs() {
+    func view(songs: Void) {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
         else { return }
         
-        if let manager = BrowseManager(to: vc, for: user.id) {
-            vc.manager = manager
-            vc.manager?.delegate = BrowseDelegate(to: vc.manager!)
+        vc.user = user.id
+        vc.mode = .browse
+        controller.show(vc, sender: controller)
+    }
+    
+    func view(sync: Void) {
+        guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
+        else { return }
+        
+        vc.user = user.id
+        vc.mode = .sync
+        controller.show(vc, sender: controller)
+    }
+    
+    func view(search query: String, from sender: String) {
+        guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
+            else { return }
+        
+        vc.user = user.id
+        vc.query = query
+        vc.mode = .search
+        
+        switch sender {
+        case _ where sender.contains("search username"): vc.searching = .users
+        case _ where sender.contains("search Device Library"):
+            vc.searching = .library
+            let picker = Media.picker(with: delegate!)
+            controller.present(picker, animated: true)
+            return
+        case _ where sender.contains("search Apple Music"): vc.searching = .applemusic
+        case _ where sender.contains("search Spotify"): vc.searching = .spotify
+        default: vc.searching = .none
         }
         
         controller.show(vc, sender: controller)
     }
     
-    func viewSyncPlaylists() {
+    func view(catalog item: CatalogItem) {
+        guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
+            else { return }
         
+        vc.user = user.id
+        vc.catalog = item
+        vc.mode = .catalog
+        controller.show(vc, sender: controller)
     }
     
     mutating func add(playlist: Playlist) {
@@ -122,7 +157,7 @@ struct BrowseManager {
         q.manager?.play(playlist: playlist, at: index)
     }
     
-    func search(query: String, in library: Catalogues) {
+    func search(query: String) {
         
     }
     

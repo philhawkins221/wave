@@ -1,0 +1,169 @@
+//
+//  CatalogDelegate.swift
+//  Clique
+//
+//  Created by Phil Hawkins on 3/13/18.
+//  Copyright © 2018 Phil Hawkins. All rights reserved.
+//
+
+import Foundation
+
+class CatalogDelegate: BrowseDelegate {
+    
+    //MARK: - properties
+    
+    var item: CatalogItem { return manager.controller.catalog }
+    
+    var songs = [Song]()
+    var albums = [Album]()
+    
+    //MARK: - actions
+    
+    override func populate() {
+        super.populate()
+        
+        songs.removeAll()
+        albums.removeAll()
+        
+        switch item {
+        case let artist as Artist:
+            switch artist.library {
+            case Catalogues.AppleMusic.rawValue: albums = AppleMusicAPI.get(albums: artist)
+            case Catalogues.Spotify.rawValue: albums = SpotifyAPI.get(albums: artist)
+            default: break
+            }
+        case let album as Album:
+            switch album.library {
+            case Catalogues.AppleMusic.rawValue: songs = AppleMusicAPI.get(songs: album)
+            case Catalogues.Spotify.rawValue: songs = SpotifyAPI.get(songs: album)
+            default: break
+            }
+        default: break
+        }
+    }
+    
+    override func title() {
+        switch item {
+        case let artist as Artist: manager.controller.title = artist.name
+        case let album as Album: manager.controller.title = album.name
+        default: break
+        }
+        
+        manager.controller.addButton.isEnabled = false
+        manager.controller.editButton.isEnabled = false
+    }
+    
+    //MARK: - table delegate stack
+    
+    override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
+        
+        switch item {
+        case let artist as Artist where indexPath.section == 0:
+            let songs = SpotifyAPI.get(top: artist)
+            let playlist = Playlist(
+                owner: "",
+                id: "",
+                library: "",
+                name: artist.name,
+                social: false,
+                songs: songs
+            )
+            manager.view(playlist: playlist)
+        case is Artist, is Album: manager.view(catalog: item)
+        default: break
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if searching { return super.tableView(tableView, editingStyleForRowAt: indexPath) }
+        
+        switch item {
+        case is Artist: return .none
+        case is Album: return manager.adding ? .insert : .none
+        default: return .none
+        }
+    }
+    
+    //MARK: - table data source stack
+    
+    override func numberOfSections(in tableView: UITableView) -> Int {
+        if searching { return super.numberOfSections(in: tableView) }
+        
+        switch item {
+        case is Artist: return 2
+        case is Album: return 1
+        default: return 0
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
+        if searching { return super.tableView(tableView, numberOfRowsInSection: section) }
+        
+        switch item {
+        case is Artist where section == 0: return 1
+        case is Artist: return albums.count
+        case is Album: return songs.count
+        default: return 0
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
+        if searching { return super.tableView(tableView, cellForRowAt: indexPath) }
+        
+        switch item {
+        case is Artist where indexPath.section == 0:
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textLabel?.text = "All Songs"
+            cell.accessoryType = .disclosureIndicator
+            return cell
+        case is Artist:
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textLabel?.text = albums[indexPath.row].name
+            cell.accessoryType = .disclosureIndicator
+            let url = URL(string: albums[indexPath.row].artwork) ?? URL(string: "/")!
+            cell.imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "bin/genericart.png"))
+            cell.setImageSize(to: 45)
+            return cell
+        case is Album:
+            let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
+            cell.set(song: songs[indexPath.row])
+            cell.voteslabel.text = nil
+            return cell
+        default: return UITableViewCell()
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
+        return nil
+    }
+    
+    override func sectionIndexTitles(for tableView: UITableView) -> [String]? {
+        return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
+        if searching { return super.tableView(tableView, canEditRowAt: indexPath) }
+        
+        switch item {
+        case is Artist where indexPath.section == 0: return false
+        case is Artist, is Album: return true
+        default: return false
+        }
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if searching { return super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
+        
+        switch editingStyle {
+        case .insert: manager.queue(song: songs[indexPath.row])
+        case .none, .delete: break
+        }
+    }
+    
+}

@@ -38,7 +38,7 @@ class SwipeController: SwipeableTabBarController {
     func provision() {
         if provisioned { return }
         
-        let _ = Identity.sharedInstance()
+        Identity.wave()
         
         let controllers = viewControllers!
         
@@ -49,15 +49,20 @@ class SwipeController: SwipeableTabBarController {
         q = qnav.visibleViewController as! QueueViewController
         
         selectedViewController = controllers[startindex]
-        //let _ = q.view
         
-        let me = UserDefaults.standard.string(forKey: "id")!
-        let _ = CliqueAPI.find(user: me)!
-        
-        np.manager = GeneralManager(to: np)
-        
-        bro.manager = BrowseManager(to: bro)
-        q.manager = QueueManager(to: q)
+//        let me = UserDefaults.standard.string(forKey: "id")!
+//        let _ = CliqueAPI.find(user: me)!
+//        
+//        let _ = bro.view
+//        let _ = q.view
+//        
+//        np.manager = GeneralManager(to: np)
+//        
+//        bro.manager = BrowseManager(to: bro)
+//        q.manager = QueueManager(to: q)
+//        
+//        bro.viewDidLoad()
+//        q.viewDidLoad()
         
         provisioned = true
     }

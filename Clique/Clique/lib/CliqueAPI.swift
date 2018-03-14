@@ -30,7 +30,7 @@ struct CliqueAPI {
             let users = response.array ?? []
             for user in users {
                 if let result = try? JSONDecoder().decode(User.self, from: user.rawData()) {
-                    if result.username == username {
+                    if result.username.contains(username) {
                         results.append(result)
                     }
                 }

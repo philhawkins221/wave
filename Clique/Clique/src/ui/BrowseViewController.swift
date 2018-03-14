@@ -21,23 +21,47 @@ class BrowseViewController: UIViewController {
     //MARK: - properties
     
     var manager: BrowseManager?
-    var search: UISearchController!
+    let search = UISearchController(searchResultsController: nil)
+    
+    var mode: BrowseMode = .friends
+    var searching: SearchMode = .none
+    var query = ""
+    var catalog: CatalogItem = Artist(id: "", library: "", name: "")
     
     var edit = "Edit"
+
+    var user = Identity.me
+    var playlist = Playlist(
+        owner: "",
+        id: "",
+        library: "",
+        name: "",
+        social: false,
+        songs: []
+    )
     
     //MARK: - lifecycle stack
     
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //manager = BrowseManager(to: self)
-        search = UISearchController(searchResultsController: self)
+        manager = BrowseManager(to: self)
         
+        //let search = UISearchController(searchResultsController: self)
+        search.searchResultsUpdater = manager?.delegate
+        search.hidesNavigationBarDuringPresentation = false
+        search.dimsBackgroundDuringPresentation = false
+        search.searchBar.sizeToFit()
+        search.searchBar.tintColor = UIColor.orange
+        
+        table.tableHeaderView = search.searchBar
+        table.tintColor = UIColor.orange
         table.canCancelContentTouches = false
         table.delegate = manager?.delegate
         table.dataSource = manager?.delegate
         table.setEditing(false, animated: false)
         
+        search.searchResultsUpdater = manager?.delegate
         search.searchBar.placeholder = "search users, songs, or artists"
     }
 
@@ -49,6 +73,7 @@ class BrowseViewController: UIViewController {
         
         //TODO: change edit button to sync if playlist is from am or spotify
         table.setEditing(false, animated: false)
+        
         if let delegate = manager?.delegate as? PlaylistDelegate {
             switch delegate.playlist.library {
             case "applemusic", "spotify": edit = "Sync"

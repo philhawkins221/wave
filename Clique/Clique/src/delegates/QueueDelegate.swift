@@ -1,5 +1,5 @@
 //
-//  SongQueueTableView.swift
+//  QueueDelegate.swift
 //  Clique
 //
 //  Created by Phil Hawkins on 12/12/17.
@@ -175,7 +175,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 0: return "Now Playing"
         case 1: return "Up Next"
         case 2:
-            if let owner = CliqueAPI.find(user: fill!.owner), owner.id != Identity.sharedInstance().me {
+            if let owner = CliqueAPI.find(user: fill!.owner), owner.id != Identity.me {
                 return "From " + fill!.name + " by " + owner.username
             } else {
                 return "From " + fill!.name

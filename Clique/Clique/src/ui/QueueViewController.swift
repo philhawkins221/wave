@@ -28,7 +28,7 @@ class QueueViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        // Do any additional setup after loading the view.
+        manager = QueueManager(to: self)
         table.delegate = manager?.delegate
         table.dataSource = manager?.delegate
                 
@@ -73,11 +73,6 @@ class QueueViewController: UIViewController {
     }
     
     //MARK: - storyboard actions
-    
-    @IBAction func poop(_ sender: Any) {
-        let vc = storyboard!.instantiateViewController(withIdentifier: VCid.q.rawValue) as! QueueViewController
-        show(vc, sender: self)
-    }
     
     //MARK: - navigation
 

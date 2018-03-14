@@ -35,6 +35,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let _ = GeneralManager.sharedInstance()
 //        let _ = LibraryManager.sharedInstance()
 //        let _ = QueueManager.sharedInstance()
+        
+        window?.tintColor = UIColor.orange
                 
         return true
     }

@@ -19,4 +19,5 @@ struct Playlist: Equatable, Codable, LibraryItem {
     static func ==(lhs: Playlist, rhs: Playlist) -> Bool {
         return lhs.id == rhs.id && lhs.library == rhs.library && lhs.owner == rhs.owner ? true : false
     }
+
 }

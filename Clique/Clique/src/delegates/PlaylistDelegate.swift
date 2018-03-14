@@ -16,8 +16,8 @@ class PlaylistDelegate: BrowseDelegate {
     
     //MARK: - initializers
     
-    init(to manager: BrowseManager, for playlist: Playlist) {
-        self.playlist = playlist
+    override init(to manager: BrowseManager) {
+        self.playlist = manager.controller.playlist
         super.init(to: manager)
     }
     
@@ -38,6 +38,10 @@ class PlaylistDelegate: BrowseDelegate {
         manager.play(playlist: playlist, at: indexPath.row)
     }
     
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
+    }
+    
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         return proposedDestinationIndexPath
     }
@@ -53,7 +57,7 @@ class PlaylistDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searching { return super.tableView(tableView, numberOfRowsInSection: section) }
         
-        return playlist.songs.count
+        return playlist.songs.isEmpty ? 1 : playlist.songs.count
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -61,10 +65,18 @@ class PlaylistDelegate: BrowseDelegate {
         
         if searching { return super.tableView(tableView, cellForRowAt: indexPath) }
         
+        switch playlist.songs.isEmpty {
+        case true:
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+            cell.textLabel?.text = "no songs"
+            cell.detailTextLabel?.text = "tap + to add a song"
+            return cell
+        case false:
         let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
-        cell.set(song: results[indexPath.row])
+        cell.set(song: playlist.songs[indexPath.row])
         cell.voteslabel.text = nil
         return cell
+        }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
@@ -78,7 +90,7 @@ class PlaylistDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if searching { return super.tableView(tableView, canEditRowAt: indexPath) }
         
-        return true
+        return playlist.songs.isEmpty
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -101,7 +113,7 @@ class PlaylistDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         if searching { return super.tableView(tableView, canMoveRowAt: indexPath) }
         
-        return playlist.owner == manager.client().id
+        return !playlist.songs.isEmpty && playlist.owner == manager.client().id
     }
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {

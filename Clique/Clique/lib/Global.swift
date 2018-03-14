@@ -61,6 +61,24 @@ enum ProfileController {
     case queue
 }
 
+enum BrowseMode: String {
+    case browse
+    case friends
+    case library
+    case playlist
+    case sync
+    case search
+    case catalog
+}
+
+enum SearchMode {
+    case none
+    case users
+    case applemusic
+    case spotify
+    case library
+}
+
 enum Sorting {
     case song
     case artist

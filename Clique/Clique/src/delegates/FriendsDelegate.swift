@@ -12,7 +12,7 @@ class FriendsDelegate: BrowseDelegate {
     
     //MARK: - properties
     
-    var friends = Identity.sharedInstance().friends
+    var friends = Identity.friends
     
     //MARK: - actions
     
@@ -26,10 +26,14 @@ class FriendsDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         
         switch indexPath.section {
-        case 0: manager.view(user: Identity.sharedInstance().me)
+        case 0: manager.view(user: Identity.me)
         case 1: manager.view(user: friends[indexPath.row])
         default: break
         }
+    }
+    
+    override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        return nil
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -49,26 +53,44 @@ class FriendsDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searching { return super.tableView(tableView, numberOfRowsInSection: section) }
         
-        return section == 0 ? 1 : friends.count
+        switch friends.isEmpty {
+        case true: return 1
+        case false: return section == 0 ? 1 : friends.count
+        }
+        
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
         if searching { return super.tableView(tableView, cellForRowAt: indexPath) }
+        var cell = UITableViewCell(style: .default, reuseIdentifier: nil)
         
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        
-        if let friend = CliqueAPI.find(user: friends[indexPath.row]) {
-            cell.textLabel?.text = "@" + friend.username
+        switch indexPath.section {
+        case 0:
+            cell.textLabel?.text = "My Library"
             cell.accessoryType = .disclosureIndicator
             cell.imageView?.image = UIImage(named: "clique 120.png")
             cell.setImageSize(to: 50)
             cell.imageView?.layer.cornerRadius = cell.frame.size.width / 2
             cell.imageView?.clipsToBounds = true
-        } else {
-            cell.textLabel?.text = "deleted user"
-            cell.textLabel?.textColor = UIColor.gray
-            cell.accessoryType = .none
+        case 1 where friends.isEmpty:
+            cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+            cell.textLabel?.text = "no friends"
+            cell.detailTextLabel?.text = "tap + to add a friend"
+        case 1:
+            if let friend = CliqueAPI.find(user: friends[indexPath.row]) {
+                cell.textLabel?.text = "@" + friend.username
+                cell.accessoryType = .disclosureIndicator
+                cell.imageView?.image = UIImage(named: "clique 120.png")
+                cell.setImageSize(to: 50)
+                cell.imageView?.layer.cornerRadius = cell.frame.size.width / 2
+                cell.imageView?.clipsToBounds = true
+            } else {
+                cell.textLabel?.text = "deleted user"
+                cell.textLabel?.textColor = UIColor.gray
+                cell.accessoryType = .none
+            }
+        default: break
         }
         
         return cell

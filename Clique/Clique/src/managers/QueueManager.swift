@@ -7,7 +7,6 @@
 //
 
 import Foundation
-//import MediaPlayer
 
 struct QueueManager {
     
@@ -19,25 +18,23 @@ struct QueueManager {
     
     //MARK: - initializers
     
-    init?(to controller: QueueViewController, for user: String = Identity.sharedInstance().me) {
+    init?(to controller: QueueViewController, for user: String = Identity.me) {
         guard let found = CliqueAPI.find(user: user) else { return nil }
         
         self.user = found
         self.controller = controller
         
+        delegate = QueueDelegate(to: self)
+        
         update()
-    }
-    
-    init?(to controller: QueueViewController, with delegate: QueueDelegate, for user: String = Identity.sharedInstance().me) {
-        self.init(to: controller, for: user)
-        self.delegate = delegate
     }
     
     //MARK: - mutators
     
     mutating func manage(user: User) {
-            self.user = user
-            controller.profilebar.manage(profile: user)
+        self.user = user
+        controller.profilebar.manage(profile: user)
+        delegate?.manager = self
     }
     
     //MARK: - accessors
@@ -57,6 +54,7 @@ struct QueueManager {
     
     private mutating func refresh() {
         guard let found = CliqueAPI.find(user: user.id) else { return }
+        if delegate == nil { delegate = QueueDelegate(to: self) }
         
         manage(user: found)
         delegate?.populate()

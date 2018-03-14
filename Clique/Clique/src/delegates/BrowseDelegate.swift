@@ -15,7 +15,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     
     var manager: BrowseManager
     
-    var searching: Bool { return manager.controller.search.isActive }
+    var searching: Bool { return manager.controller.search.isActive && manager.controller.search.searchBar.text != "" }
     
     private var songs = [[Song]](repeating: [], count: 27)
     var list = [Song]()
@@ -37,6 +37,10 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     
     func populate() {
         let client = manager.client()
+        
+        songs = [[Song]](repeating: [], count: 27)
+        list = [Song]()
+        results = [Song]()
         
         for playlist in client.library {
             let uniques = playlist.songs.filter { !list.contains($0) }
@@ -107,7 +111,11 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         )
         
         switch searching {
-        case true where indexPath.section == 0: break //TODO: manager.search(query)
+        case true where indexPath.section == 0:
+            manager.view(
+                search: manager.controller.search.searchBar.text ?? "",
+                from: tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
+            )
         case true: manager.play(playlist: allsongs, at: list.index(of: results[indexPath.row]) ?? 0)
         case false: manager.play(playlist: allsongs, at: list.index(of: songs[indexPath.section][indexPath.row]) ?? 0)
         }
@@ -178,6 +186,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
                 if fields.spotify { prompts.append("search Spotify for '" + query + "'...")}
                 
                 cell.textLabel?.text = prompts[indexPath.row]
+                cell.textLabel?.textColor = UIColor.orange
                 
             case nil where fields.library: cell.textLabel?.text = "Search Device Library..."
             default: break

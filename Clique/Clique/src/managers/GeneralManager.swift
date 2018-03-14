@@ -13,14 +13,14 @@ struct GeneralManager {
     //MARK: - properties
     
     private var user: User
-    private var friends = Identity.sharedInstance().friends
+    private var friends = Identity.friends
     var controller: NowPlayingViewController
     var display: Song?
     
     //MARK: - initializers
     
     init?(to controller: NowPlayingViewController) {
-        guard let found = CliqueAPI.find(user: Identity.sharedInstance().me) else { return nil }
+        guard let found = CliqueAPI.find(user: Identity.me) else { return nil }
         
         self.user = found
         self.controller = controller

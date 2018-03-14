@@ -44,60 +44,11 @@ struct User: Codable, Equatable {
     }
     
     func me() -> Bool {
-        return self.id == Identity.sharedInstance().me
+        return self.id == Identity.me
     }
     
     func clone() -> User {
         return User(user: self)
     }
 
-}
-
-//MARK: - identity class
-
-struct Identity {
-    static var instance: Identity?
-    var me: String! = UserDefaults.standard.string(forKey: "id")
-    var friends: [String] {
-        return UserDefaults.standard.stringArray(forKey: "friends") ?? []
-    }
-    var applemusic: Bool = UserDefaults.standard.bool(forKey: "applemusic")
-    var spotify: Bool = UserDefaults.standard.bool(forKey: "spotify")
-    
-    static func sharedInstance() -> Identity {
-        
-        if instance == nil {
-            instance = Identity()
-        }
-        
-        return instance!
-    }
-    
-    private init() {
-        if UserDefaults.standard.string(forKey: "id") == nil {
-            let new = User("anonymous",
-                           id: "",
-                           queue: Queue(),
-                           library: [],
-                           applemusic: false,
-                           spotify: false)
-            
-            me = CliqueAPI.new(user: new)?.id ?? ""
-            //TODO: what to do if this is nil
-            
-            UserDefaults.standard.set(me, forKey: "id")
-            UserDefaults.standard.set(friends, forKey: "friends")
-        }
-    }
-    
-    mutating func connectAppleMusic(status: Bool) {
-        applemusic = status
-        UserDefaults.standard.set(status, forKey: "applemusic")
-    }
-    
-    mutating func connectSpotify(status: Bool) {
-        spotify = status
-        UserDefaults.standard.set(status, forKey: "spotify")
-    }
-    
 }

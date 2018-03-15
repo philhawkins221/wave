@@ -21,6 +21,11 @@ class QueueViewController: UIViewController {
     //MARK: - properties
     
     var manager: QueueManager?
+    
+    var mode: QueueMode = .queue
+    var user = Identity.me
+    var fill: Playlist?
+    
     var timer = Timer()
     
     //MARK: - lifecycle stack
@@ -28,42 +33,37 @@ class QueueViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        manager = QueueManager(to: self)
-        table.delegate = manager?.delegate
-        table.dataSource = manager?.delegate
+        refresh()
+        
+        NavigationControllerStyleGuide.enforce(on: navigationController)
+        TabBarControllerStyleGuide.enforce(on: tabBarController)
+        
+        table.tintColor = UIColor.orange
+        table.canCancelContentTouches = false
                 
         //TODO: timer and notifications
         //NotificationCenter.default.addObserver(self, selector: #selector(self.advance), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
     }
     
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+    override func viewDidAppear(_ animated: Bool) {
+        super.viewDidAppear(animated)
         
-        NavigationControllerStyleGuide.enforce(on: navigationController)
-        TabBarControllerStyleGuide.enforce(on: tabBarController)
+        refresh()
+        
+        if manager?.client().me() ?? false {
+            table.setEditing(true, animated: true)
+        }
         
         if let selected = table.indexPathForSelectedRow {
             table.deselectRow(at: selected, animated: true)
         }
         
-        if manager?.client().me() ?? false {
-            table.setEditing(true, animated: false)
-        }
-    }
-    
-    override func viewDidAppear(_ animated: Bool) {
-        super.viewDidAppear(animated)
-        
-        manager?.update()
-        
-        timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { [unowned self] _ in self.manager?.update() })
+        //timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { [unowned self] _ in self.manager?.update() })
         //timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
     }
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        
-        //TODO: fix timer invalidate -- view is not disappearing
         timer.invalidate()
     }
     
@@ -72,17 +72,23 @@ class QueueViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //MARK: - storyboard actions
+    //MARK: - tasks
+    
+    func refresh() {
+        manager = QueueManager(to: self)
+        table.delegate = manager?.delegate
+        table.dataSource = manager?.delegate
+        table.reloadData()
+    }
     
     //MARK: - navigation
 
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-        
-        //TODO: history
-        //TODO: add
+        switch segue.identifier ?? "" {
+        case "search": manager?.search(on: segue.destination)
+        case "history": manager?.view(history: segue.destination)
+        default: break
+        }
     }
     
 

@@ -26,6 +26,9 @@ class LibraryDelegate: BrowseDelegate {
     
     override func title() {
         manager.controller.title = "Library"
+        
+        manager.controller.addButton.isEnabled = manager.client().me()
+        manager.controller.editButton.isEnabled = manager.client().me()
     }
     
     //MARK: - table delegate methods
@@ -47,7 +50,9 @@ class LibraryDelegate: BrowseDelegate {
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return .none
+        if searching { return super.tableView(tableView, editingStyleForRowAt: indexPath) }
+        
+        return indexPath.section == 0 ? .none : .delete
     }
     
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
@@ -106,6 +111,18 @@ class LibraryDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, canEditRowAt: indexPath) }
         
         return indexPath.section != 0 //== 0 ? false : manager.client().me()
+    }
+    
+    override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
+        if searching { return super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
+        
+        switch editingStyle {
+        case .delete:
+            library.remove(at: indexPath.row)
+            tableView.deleteRows(at: [indexPath], with: .automatic)
+            manager.update(with: library)
+        case .none, .insert: break
+        }
     }
     
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {

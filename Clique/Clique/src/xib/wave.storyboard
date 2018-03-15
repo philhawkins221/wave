@@ -338,7 +338,7 @@
                             <barButtonItem systemItem="add" id="n9z-ys-qXD">
                                 <color key="tintColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
                                 <connections>
-                                    <segue destination="3rW-rF-rtn" kind="show" identifier="search" id="QY1-1A-98R"/>
+                                    <segue destination="3rW-rF-rtn" kind="show" identifier="search" id="DpG-hl-wpQ"/>
                                 </connections>
                             </barButtonItem>
                             <barButtonItem systemItem="bookmarks" id="PY5-DU-vFW">
@@ -589,6 +589,6 @@
         <image name="genericart.png" width="336" height="336"/>
     </resources>
     <inferredMetricsTieBreakers>
-        <segue reference="QY1-1A-98R"/>
+        <segue reference="DpG-hl-wpQ"/>
     </inferredMetricsTieBreakers>
 </document>

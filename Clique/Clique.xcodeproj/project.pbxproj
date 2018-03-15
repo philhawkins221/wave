@@ -67,6 +67,7 @@
 		4AF452EB1FE0CCBF007FCF8F /* QueueDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */; };
 		4AF452EF1FE0E758007FCF8F /* QueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EE1FE0E758007FCF8F /* QueueManager.swift */; };
 		4AF452F11FE0E8C3007FCF8F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452F01FE0E8C3007FCF8F /* Song.swift */; };
+		4AFDA1F5205A0FD100C87E09 /* HistoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFDA1F4205A0FD100C87E09 /* HistoryDelegate.swift */; };
 		9957A368FB2B39D6834B6673 /* Pods_Clique.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9D40512C31A8AE09B7542F /* Pods_Clique.framework */; };
 /* End PBXBuildFile section */
 
@@ -155,6 +156,7 @@
 		4AF452F01FE0E8C3007FCF8F /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
 		4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicViewController.swift; sourceTree = "<group>"; };
 		4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundcloudViewController.swift; sourceTree = "<group>"; };
+		4AFDA1F4205A0FD100C87E09 /* HistoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDelegate.swift; sourceTree = "<group>"; };
 		BF3FDFC5DDD37E53C14DA730 /* Pods-Clique.release.xcconfig */ = {isa = PBXFileReference; includeInIndex = 1; lastKnownFileType = text.xcconfig; name = "Pods-Clique.release.xcconfig"; path = "Pods/Target Support Files/Pods-Clique/Pods-Clique.release.xcconfig"; sourceTree = "<group>"; };
 		ED9D40512C31A8AE09B7542F /* Pods_Clique.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; includeInIndex = 0; path = Pods_Clique.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 /* End PBXFileReference section */
@@ -259,13 +261,14 @@
 			children = (
 				4AC3C9F11C4ACCB700D5BCCA /* AppDelegate.swift */,
 				4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */,
-				4A186DBF205073FD0091F8FF /* SyncDelegate.swift */,
+				4AFDA1F4205A0FD100C87E09 /* HistoryDelegate.swift */,
 				4A8F6000200FA90E00564EFE /* BrowseDelegate.swift */,
-				4A9DE05420582657002EBA04 /* SearchDelegate.swift */,
-				4A9DE05620588EE7002EBA04 /* CatalogDelegate.swift */,
 				4A8F5FFC200FA8F200564EFE /* FriendsDelegate.swift */,
 				4A8F5FF82009811900564EFE /* LibraryDelegate.swift */,
 				4A8F5FFA200FA8E900564EFE /* PlaylistDelegate.swift */,
+				4A186DBF205073FD0091F8FF /* SyncDelegate.swift */,
+				4A9DE05420582657002EBA04 /* SearchDelegate.swift */,
+				4A9DE05620588EE7002EBA04 /* CatalogDelegate.swift */,
 			);
 			path = delegates;
 			sourceTree = "<group>";
@@ -393,6 +396,7 @@
 				4AC3C9EC1C4ACCB700D5BCCA /* Resources */,
 				C392AB012A8641B1D552B830 /* [CP] Embed Pods Frameworks */,
 				4AC9CA828BA4FD2B0926C68C /* [CP] Copy Pods Resources */,
+				4AFDA1F32059EBB700C87E09 /* ShellScript */,
 			);
 			buildRules = (
 			);
@@ -477,6 +481,19 @@
 			shellScript = "\"${SRCROOT}/Pods/Target Support Files/Pods-Clique/Pods-Clique-resources.sh\"\n";
 			showEnvVarsInLog = 0;
 		};
+		4AFDA1F32059EBB700C87E09 /* ShellScript */ = {
+			isa = PBXShellScriptBuildPhase;
+			buildActionMask = 2147483647;
+			files = (
+			);
+			inputPaths = (
+			);
+			outputPaths = (
+			);
+			runOnlyForDeploymentPostprocessing = 0;
+			shellPath = /bin/sh;
+			shellScript = "TAGS=\"TODO:\"\necho \"searching ${SRCROOT} for ${TAGS}\"\nfind \"Clique\" \\( -name \"*.swift\" \\) -print0 \\\n| xargs -0 egrep --with-filename --line-number --only-matching \"($TAGS).*\\$\" \\\n| perl -p -e \"s/($TAGS)/ warning: \\$1/\"";
+		};
 		C392AB012A8641B1D552B830 /* [CP] Embed Pods Frameworks */ = {
 			isa = PBXShellScriptBuildPhase;
 			buildActionMask = 2147483647;
@@ -543,6 +560,7 @@
 				4A186DD02050A46F0091F8FF /* WaveManager.swift in Sources */,
 				4A8F5FF92009811900564EFE /* LibraryDelegate.swift in Sources */,
 				4A9DE05720588EE7002EBA04 /* CatalogDelegate.swift in Sources */,
+				4AFDA1F5205A0FD100C87E09 /* HistoryDelegate.swift in Sources */,
 				4A186DDC2050A6EE0091F8FF /* Media.swift in Sources */,
 				4A06C3081FD79D4B00E99FED /* ProfileBar.swift in Sources */,
 				4A186DC92050A3C10091F8FF /* NowPlayingTableViewCell.swift in Sources */,

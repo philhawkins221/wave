@@ -25,21 +25,30 @@ class PlaylistDelegate: BrowseDelegate {
     
     override func title() {
         manager.controller.title = playlist.name
+        
+        manager.controller.addButton.isEnabled = manager.client().me() && playlist.library == Catalogues.Library.rawValue
+        manager.controller.editButton.isEnabled = manager.client().me()
     }
     
     //MARK: - table delegate stack
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
-        
-        if manager.adding
-            { return super.tableView(tableView, commit: .insert, forRowAt: indexPath) }
+        if adding { return self.tableView(tableView, commit: .insert, forRowAt: indexPath) }
+        if final { manager.find(songs: [playlist.songs[indexPath.row]]) }
         
         manager.play(playlist: playlist, at: indexPath.row)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
         return nil
+    }
+    
+    override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
+        if searching { return super.tableView(tableView, editingStyleForRowAt: indexPath) }
+        if adding { return playlist.songs.isEmpty ? .none : .insert }
+        
+        return playlist.songs.isEmpty ? .none : .delete
     }
     
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
@@ -90,19 +99,19 @@ class PlaylistDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if searching { return super.tableView(tableView, canEditRowAt: indexPath) }
         
-        return playlist.songs.isEmpty
+        return !playlist.songs.isEmpty
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         if searching { return super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
         
         switch editingStyle {
-        case .insert: manager.queue(song: playlist.songs[indexPath.row])
+        case .insert: q.manager?.find(song: playlist.songs[indexPath.row])
         case .delete:
             playlist.songs.remove(at: indexPath.row)
-            var replacement: [Playlist]! = manager.client().library
-            
-            if let i = replacement.index(of: playlist) { replacement[i] = playlist }
+            manager.controller.playlist = playlist
+            var replacement: [Playlist]? = manager.client().library
+            if let i = replacement?.index(of: playlist) { replacement![i] = playlist }
             else { replacement = nil }
             
             manager.update(with: replacement)

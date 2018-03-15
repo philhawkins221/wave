@@ -10,6 +10,9 @@ import Foundation
 import MediaPlayer
 
 struct Media {
+    
+    static var searcher = UIViewController()
+    
     static func play(song: Song? = nil) {
         //TODO: where to end generating notifications?
         player.endGeneratingPlaybackNotifications()
@@ -46,54 +49,19 @@ struct Media {
         //TODO: pause
     }
     
-    static func picker(with delegate: BrowseDelegate) -> MPMediaPickerController {
+    static func search(multiple: Bool, on controller: BrowseViewController) {
+        searcher = controller
+        
         let picker = MPMediaPickerController(mediaTypes: .music)
-        picker.delegate = delegate
+        picker.delegate = controller.manager?.delegate
+        picker.allowsPickingMultipleItems = multiple
+        //picker.prompt = "select songs to be added to the playlist"
         
-        picker.allowsPickingMultipleItems = true
-        picker.prompt = "Select songs to be added to the playlist"
-        
-        return picker
+        controller.present(picker, animated: true)
     }
     
-    static func get(song: MPMediaItem) -> Song {
-        return Song(
-            id: String(song.persistentID),
-            library: Catalogues.Library.rawValue,
-            title: song.title ?? "",
-            artist: Artist(
-                id: String(song.artistPersistentID),
-                library: Catalogues.Library.rawValue,
-                name: song.artist ?? ""),
-            artwork: "",
-            votes: 0)
-    }
-    
-    static func get(playlist: MPMediaPlaylist, from source: Catalogues = .Library) -> Playlist {
-        return Playlist(
-            owner: Identity.me,
-            id: String(playlist.persistentID),
-            library: source.rawValue,
-            name: playlist.name ?? "",
-            social: false,
-            songs: playlist.items.map { get(song: $0) })
-    }
-    
-    static func getAllPlaylists() -> [Playlist] {
-        var results = [Playlist]()
-        
-        let searcher = MPMediaQuery.playlists()
-        for playlist in searcher.collections ?? [] {
-            if let result = playlist as? MPMediaPlaylist {
-                results.append(get(playlist: result, from: .AppleMusic))
-            }
-        }
-        
-        return results
-    }
-    
-    static func find(song id: String) -> Song? {
-        return nil
+    static func find() {
+        searcher.dismiss(animated: true)
     }
     
     static func get(artwork id: String) -> UIImage? {
@@ -102,4 +70,61 @@ struct Media {
         return searcher.items?.first?.artwork?.image(at: CGSize(width: 45, height: 45))
     }
     
+    static func get(song id: String) -> Song? {
+        let searcher = MPMediaQuery.songs()
+        searcher.addFilterPredicate(MPMediaPropertyPredicate(value: Int(id), forProperty: MPMediaItemPropertyPersistentID))
+        
+        if let song = searcher.items?.first { return virtualize(song: song) }
+        else { return nil }
+    }
+    
+    static func get(playlist id: String) -> Playlist? {
+        let searcher = MPMediaQuery.playlists()
+        searcher.addFilterPredicate(MPMediaPropertyPredicate(value: Int(id), forProperty: MPMediaItemPropertyPersistentID))
+        
+        if let playlist = searcher.collections?.first as? MPMediaPlaylist {
+            return virtualize(playlist: playlist, from: .AppleMusic)
+        } else {
+            return nil
+        }
+    }
+    
+    static func getAllPlaylists() -> [Playlist] {
+        var results = [Playlist]()
+        
+        let searcher = MPMediaQuery.playlists()
+        for collection in searcher.collections ?? [] {
+            if let playlist = collection as? MPMediaPlaylist {
+                results.append(virtualize(playlist: playlist))
+            }
+        }
+        
+        return results
+    }
+    
+    static func virtualize(song: MPMediaItem, from source: Catalogues = .Library) -> Song {
+        return Song(
+            id: String(song.persistentID),
+            library: source.rawValue,
+            title: song.title ?? "",
+            artist: Artist(
+                id: String(song.artistPersistentID),
+                library: Catalogues.Library.rawValue,
+                name: song.artist ?? ""),
+            artwork: "",
+            votes: 0
+        )
+    }
+    
+    static func virtualize(playlist: MPMediaPlaylist, from source: Catalogues = .Library) -> Playlist {
+        return Playlist(
+            owner: Identity.me,
+            id: String(playlist.persistentID),
+            library: source.rawValue,
+            name: playlist.name ?? "",
+            social: false,
+            songs: playlist.items.map { virtualize(song: $0) }
+        )
+    }
+
 }

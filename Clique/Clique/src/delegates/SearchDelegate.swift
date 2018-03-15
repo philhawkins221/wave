@@ -69,9 +69,14 @@ class SearchDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         
         switch search {
+        case .users where final: manager.find(friend: users[indexPath.row].id); fallthrough
         case .users: manager.view(user: users[indexPath.row].id)
         case .applemusic where indexPath.section == 0,
              .spotify where indexPath.section == 0: manager.view(catalog: artists[indexPath.row])
+        case .applemusic where adding,
+             .spotify where adding: self.tableView(tableView, commit: .insert, forRowAt: indexPath)
+        case .applemusic where final,
+             .spotify where final: manager.find(songs: [songs[indexPath.row]]); fallthrough
         case .applemusic, .spotify:
             let playlist = Playlist(
                 owner: "",
@@ -97,7 +102,7 @@ class SearchDelegate: BrowseDelegate {
         case .users: return .none
         case .applemusic where indexPath.section == 0,
              .spotify where indexPath.section == 0: return .none
-        case .applemusic, .spotify: return manager.adding ? .insert : .none
+        case .applemusic, .spotify: return adding ? .insert : .none
         case .none, .library: return .none
         }
     }
@@ -135,7 +140,7 @@ class SearchDelegate: BrowseDelegate {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.textLabel?.text = "@" + users[indexPath.row].username
             cell.accessoryType = .disclosureIndicator
-            cell.imageView?.image = UIImage(named: "bin/clique 120.png")
+            cell.imageView?.image = UIImage(named: "clique 120.png")
             cell.setImageSize(to: 50)
             cell.imageView?.layer.cornerRadius = cell.frame.size.width / 2
             cell.imageView?.clipsToBounds = true
@@ -183,11 +188,9 @@ class SearchDelegate: BrowseDelegate {
         if searching { super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
         
         switch editingStyle {
-        case .insert: manager.queue(song: songs[indexPath.row])
+        case .insert: q.manager?.find(song: songs[indexPath.row])
         case .delete, .none: break
         }
     }
-    
-    
     
 }

@@ -50,19 +50,8 @@ class SwipeController: SwipeableTabBarController {
         
         selectedViewController = controllers[startindex]
         
-//        let me = UserDefaults.standard.string(forKey: "id")!
-//        let _ = CliqueAPI.find(user: me)!
-//        
-//        let _ = bro.view
-//        let _ = q.view
-//        
-//        np.manager = GeneralManager(to: np)
-//        
-//        bro.manager = BrowseManager(to: bro)
-//        q.manager = QueueManager(to: q)
-//        
-//        bro.viewDidLoad()
-//        q.viewDidLoad()
+        //bro.refresh()
+        //q.refresh()
         
         provisioned = true
     }

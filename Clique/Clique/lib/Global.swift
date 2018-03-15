@@ -79,6 +79,11 @@ enum SearchMode {
     case library
 }
 
+enum QueueMode {
+    case queue
+    case history
+}
+
 enum Sorting {
     case song
     case artist

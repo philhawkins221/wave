@@ -23,13 +23,14 @@ class BrowseViewController: UIViewController {
     var manager: BrowseManager?
     let search = UISearchController(searchResultsController: nil)
     
+    var adding = false
+    var final = false
     var mode: BrowseMode = .friends
     var searching: SearchMode = .none
     var query = ""
     var catalog: CatalogItem = Artist(id: "", library: "", name: "")
+    var end: BrowseMode?
     
-    var edit = "Edit"
-
     var user = Identity.me
     var playlist = Playlist(
         owner: "",
@@ -45,10 +46,12 @@ class BrowseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        manager = BrowseManager(to: self)
+        refresh()
         
-        //let search = UISearchController(searchResultsController: self)
-        search.searchResultsUpdater = manager?.delegate
+        NavigationControllerStyleGuide.enforce(on: navigationController)
+        TabBarControllerStyleGuide.enforce(on: tabBarController)
+        
+        search.searchBar.placeholder = "search users, songs, or artists"
         search.hidesNavigationBarDuringPresentation = false
         search.dimsBackgroundDuringPresentation = false
         search.searchBar.sizeToFit()
@@ -57,47 +60,40 @@ class BrowseViewController: UIViewController {
         table.tableHeaderView = search.searchBar
         table.tintColor = UIColor.orange
         table.canCancelContentTouches = false
-        table.delegate = manager?.delegate
-        table.dataSource = manager?.delegate
-        table.setEditing(false, animated: false)
-        
-        search.searchResultsUpdater = manager?.delegate
-        search.searchBar.placeholder = "search users, songs, or artists"
-    }
 
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
+        addButton.isEnabled = false
+        editButton.isEnabled = false
         
-        NavigationControllerStyleGuide.enforce(on: navigationController)
-        TabBarControllerStyleGuide.enforce(on: tabBarController)
-        
-        //TODO: change edit button to sync if playlist is from am or spotify
-        table.setEditing(false, animated: false)
-        
-        if let delegate = manager?.delegate as? PlaylistDelegate {
-            switch delegate.playlist.library {
-            case "applemusic", "spotify": edit = "Sync"
-            case "library": edit = "Edit"
-            default: break
-            }
+        if adding {
+            table.setEditing(true, animated: false)
         }
+    
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        manager?.update()
-                        
-        editButton.isEnabled = manager?.client().me() ?? false
-        addButton.isEnabled = manager?.client().me() ?? false
+        refresh()
         
-        if manager?.adding ?? false {
-            table.setEditing(true, animated: false)
+        if adding || final {
+            addButton.isEnabled = false
             editButton.isEnabled = false
         }
         
         if let selected = table.indexPathForSelectedRow {
             table.deselectRow(at: selected, animated: true)
+        }
+        
+        if let delegate = manager?.delegate as? PlaylistDelegate {
+            switch delegate.playlist.library {
+            case "applemusic", "spotify": editButton.title = "Sync"
+            default: break
+            }
+        }
+        
+        if final && mode == .friends { //TODO: bad condition
+            search.isActive = true
+            search.searchBar.becomeFirstResponder()
         }
     }
 
@@ -106,9 +102,21 @@ class BrowseViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //MARK: - storyboard actions
+    //MARK: - tasks
+    
+    func refresh() {
+        manager = BrowseManager(to: self)
+        search.searchResultsUpdater = manager?.delegate
+        table.delegate = manager?.delegate
+        table.dataSource = manager?.delegate
+        table.reloadData()
+    }
+    
+    //MARK: - actions
     
     @IBAction func edit(_ sender: Any) {
+        guard editButton.title != "Sync" else { return manager?.sync() ?? () }
+        
         switch table.isEditing {
         case true:
             table.setEditing(false, animated: true)
@@ -125,14 +133,16 @@ class BrowseViewController: UIViewController {
         //TODO: add
     }
     
-    // MARK: - Navigation
+    //MARK: - navigation
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
+        guard let vc = segue.destination as? BrowseViewController else { return }
         
-        //TODO: set adding to true when showing library then show library
+        switch mode {
+        case .friends, .playlist: manager?.search(for: mode, on: vc)
+        case .library: break //TODO: add playlist alert
+        case .browse, .sync, .search, .catalog: break
+        }
     }
- 
 
 }

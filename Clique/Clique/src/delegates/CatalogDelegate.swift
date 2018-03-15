@@ -64,13 +64,25 @@ class CatalogDelegate: BrowseDelegate {
             let playlist = Playlist(
                 owner: "",
                 id: "",
-                library: "",
+                library: artist.library,
                 name: artist.name,
                 social: false,
                 songs: songs
             )
             manager.view(playlist: playlist)
-        case is Artist, is Album: manager.view(catalog: item)
+        case is Artist: manager.view(catalog: albums[indexPath.row])
+        case is Album where final: manager.find(songs: [songs[indexPath.row]]); fallthrough
+        case is Album where adding: self.tableView(tableView, commit: .insert, forRowAt: indexPath)
+        case let album as Album:
+            let playlist = Playlist(
+                owner: "",
+                id: "",
+                library: album.library,
+                name: album.name,
+                social: false,
+                songs: songs
+            )
+            manager.play(playlist: playlist, at: indexPath.row)
         default: break
         }
     }
@@ -84,7 +96,7 @@ class CatalogDelegate: BrowseDelegate {
         
         switch item {
         case is Artist: return .none
-        case is Album: return manager.adding ? .insert : .none
+        case is Album: return adding ? .insert : .none
         default: return .none
         }
     }
@@ -151,8 +163,8 @@ class CatalogDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, canEditRowAt: indexPath) }
         
         switch item {
-        case is Artist where indexPath.section == 0: return false
-        case is Artist, is Album: return true
+        case is Artist: return false
+        case is Album: return true
         default: return false
         }
     }
@@ -161,7 +173,7 @@ class CatalogDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
         
         switch editingStyle {
-        case .insert: manager.queue(song: songs[indexPath.row])
+        case .insert: q.manager?.find(song: songs[indexPath.row])
         case .none, .delete: break
         }
     }

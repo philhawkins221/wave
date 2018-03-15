@@ -12,29 +12,41 @@ struct QueueManager {
     
     //MARK: - properties
     
-    private var user: User
-    var controller: QueueViewController
+    private let user: User
+    let controller: QueueViewController
     var delegate: QueueDelegate?
     
     //MARK: - initializers
     
-    init?(to controller: QueueViewController, for user: String = Identity.me) {
-        guard let found = CliqueAPI.find(user: user) else { return nil }
+    init?(to controller: QueueViewController) {
+        guard let found = CliqueAPI.find(user: controller.user) else { return nil }
         
         self.user = found
         self.controller = controller
         
-        delegate = QueueDelegate(to: self)
+        switch controller.mode {
+        case .queue: delegate = QueueDelegate(to: self)
+        case .history: delegate = HistoryDelegate(to: self)
+        }
         
-        update()
+        controller.profilebar.manage(profile: user)
     }
     
     //MARK: - mutators
     
-    mutating func manage(user: User) {
-        self.user = user
+    func manage(user: User) {
+        controller.user = user.id
         controller.profilebar.manage(profile: user)
-        delegate?.manager = self
+        
+        update()
+    }
+    
+    func update(with replacement: Queue? = nil) {
+        if let replacement = replacement {
+            CliqueAPI.update(queue: user, with: replacement)
+        }
+        
+        controller.refresh()
     }
     
     //MARK: - accessors
@@ -44,21 +56,6 @@ struct QueueManager {
         if client.queue.voting { client.queue.queue.sort(by: { $0.votes > $1.votes }) }
         
         return client
-    }
-    
-    mutating func update(with replacement: Queue? = nil) {
-        if let replacement = replacement { CliqueAPI.update(queue: user, with: replacement) }
-        
-        refresh()
-    }
-    
-    private mutating func refresh() {
-        guard let found = CliqueAPI.find(user: user.id) else { return }
-        if delegate == nil { delegate = QueueDelegate(to: self) }
-        
-        manage(user: found)
-        delegate?.populate()
-        controller.table.reloadData()
     }
     
     //MARK: - actions
@@ -74,12 +71,13 @@ struct QueueManager {
     func advance() {
         player.pause()
         if let next = CliqueAPI.advance(queue: user) { play(song: next) }
-        else { empty() } //might not be right
+        else { play() } //might not be right
         
     }
     
-    func vote(song: Song, _ direction: Vote) {
-        CliqueAPI.vote(song: song, direction, for: user)
+    func play() {
+        print("queue is empty")
+        //TODO: play
     }
     
     func play(song: Song) {
@@ -89,11 +87,35 @@ struct QueueManager {
     
     func play(playlist: Playlist, at index: Int) {
         play(song: playlist.songs[index])
-        delegate?.fill = playlist
+        controller.fill = playlist
+        
+        update()
     }
     
-    private func empty() {
-        print("queue is empty")
+    func search(on controller: UIViewController) {
+        guard let controller = controller as? BrowseViewController else { return }
+        
+        controller.adding = true
+        controller.user = Identity.me
+        controller.mode = .friends
+    }
+    
+    func find(song: Song) {
+        add(song: song)
+        
+        Media.find()
+        controller.navigationController?.popToViewController(controller, animated: true)
+    }
+    
+    func view(history controller: UIViewController) {
+        guard let controller = controller as? QueueViewController else { return }
+        
+        controller.user = user.id
+        controller.mode = .history
+    }
+    
+    func vote(song: Song, _ direction: Vote) {
+        CliqueAPI.vote(song: song, direction, for: user)
     }
 
 }

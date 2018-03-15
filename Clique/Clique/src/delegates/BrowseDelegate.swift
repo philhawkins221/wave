@@ -15,7 +15,9 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     
     var manager: BrowseManager
     
-    var searching: Bool { return manager.controller.search.isActive && manager.controller.search.searchBar.text != "" }
+    var searching: Bool { return manager.controller.search.isActive }
+    var adding: Bool { return manager.controller.adding }
+    var final: Bool { return manager.controller.final }
     
     private var songs = [[Song]](repeating: [], count: 27)
     var list = [Song]()
@@ -89,6 +91,9 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     
     func title() {
         manager.controller.title = "All Songs"
+        
+        manager.controller.addButton.isEnabled = false
+        manager.controller.editButton.isEnabled = false
     }
     
     //MARK: -  table delegate stack
@@ -107,7 +112,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
             library: "",
             name: "All Songs",
             social: true,
-            songs: list
+            songs: searching ? results : list
         )
         
         switch searching {
@@ -116,7 +121,10 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
                 search: manager.controller.search.searchBar.text ?? "",
                 from: tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
             )
-        case true: manager.play(playlist: allsongs, at: list.index(of: results[indexPath.row]) ?? 0)
+        case _ where adding: self.tableView(tableView, commit: .insert, forRowAt: indexPath)
+        case true where final: manager.find(songs: [results[indexPath.row]]); fallthrough
+        case true: manager.play(playlist: allsongs, at: indexPath.row)
+        case false where final: manager.find(songs: [songs[indexPath.section][indexPath.row]]); fallthrough
         case false: manager.play(playlist: allsongs, at: list.index(of: songs[indexPath.section][indexPath.row]) ?? 0)
         }
     }
@@ -140,7 +148,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        if manager.adding { return .insert }
+        if adding { return .insert }
         return .none
     }
     
@@ -161,7 +169,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         switch searching {
         case true where section == 0:
             switch manager.controller.search.searchBar.text {
-                case .some: return fields.count
+                case .some: return manager.controller.search.searchBar.text == "" ? 1 : fields.count
                 case nil: return fields.library ? 1 : 0
             }
         case true: return results.count
@@ -180,10 +188,10 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
             case .some(let query):
                 var prompts = [String]()
                 
-                if fields.users { prompts.append("search username @" + query + "...") }
-                if fields.library { prompts.append("search Device Library for '" + query + "'...") }
-                if fields.applemusic { prompts.append("search Apple Music for '" + query + "'...") }
-                if fields.spotify { prompts.append("search Spotify for '" + query + "'...")}
+                if fields.users && query != "" { prompts.append("search username @" + query + "...") }
+                if fields.library { prompts.append("search Device Library...") }
+                if fields.applemusic && query != "" { prompts.append("search Apple Music for '" + query + "'...") }
+                if fields.spotify && query != "" { prompts.append("search Spotify for '" + query + "'...")}
                 
                 cell.textLabel?.text = prompts[indexPath.row]
                 cell.textLabel?.textColor = UIColor.orange
@@ -229,8 +237,8 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         case .insert:
             
             switch searching {
-            case true: manager.queue(song: results[indexPath.row])
-            case false: manager.queue(song: songs[indexPath.section][indexPath.row])
+            case true: q.manager?.find(song: results[indexPath.row])
+            case false: q.manager?.find(song: songs[indexPath.section][indexPath.row])
             }
             
         case .delete: break
@@ -244,7 +252,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
     
-    //MARK: - search delegate stack
+    //MARK: - search results updater stack
     
     func updateSearchResults(for searchController: UISearchController) {
         manager.controller.table.setEditing(false, animated: true)
@@ -264,10 +272,14 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     //MARK: - media picker delegate stack
     
     func mediaPicker(_ mediaPicker: MPMediaPickerController, didPickMediaItems mediaItemCollection: MPMediaItemCollection) {
-        //TODO: decide if to play all selected songs or add selected songs to playlist --> playlistdelegate needs to add
-        
         var songs = [Song]()
-        for song in mediaItemCollection.items { songs.append(Media.get(song: song)) }
+        for song in mediaItemCollection.items { songs.append(Media.virtualize(song: song)) }
+        
+        if adding && !songs.isEmpty {
+            q.manager?.find(song: songs.first!)
+            return
+        }
+        if final { manager.find(songs: songs) }
         
         let selected = Playlist(
             owner: manager.client().id,

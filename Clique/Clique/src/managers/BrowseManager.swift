@@ -12,11 +12,10 @@ struct BrowseManager {
     
     //MARK: - properties
     
-    private var user: User
-    var controller: BrowseViewController
+    private let user: User
+    let controller: BrowseViewController
     var delegate: BrowseDelegate?
-    var adding: Bool
-    
+        
     //MARK: - initializers
     
     init?(to controller: BrowseViewController) {
@@ -24,7 +23,6 @@ struct BrowseManager {
         
         self.user = found
         self.controller = controller
-        adding = false
         
         switch controller.mode {
         case .browse: delegate = BrowseDelegate(to: self)
@@ -36,32 +34,24 @@ struct BrowseManager {
         case .catalog: delegate = CatalogDelegate(to: self)
         }
         
-        update()
+        controller.profilebar.manage(profile: user)
     }
     
     //MARK: - mutators
     
-    mutating func manage(user: User) {
-        self.user = user
+    func manage(user: User) {
+        controller.user = user.id
         controller.profilebar.manage(profile: user)
-        delegate?.manager = self
+        
+        update()
     }
     
-    mutating func update(with replacement: [Playlist]? = nil) {
+    func update(with replacement: [Playlist]? = nil) {
         if let replacement = replacement {
             CliqueAPI.update(library: user, with: replacement)
         }
         
-        refresh()
-    }
-    
-    private mutating func refresh() {
-        guard let found = CliqueAPI.find(user: user.id) else { return }
-        if delegate == nil { delegate = FriendsDelegate(to: self) }
-        
-        manage(user: found)
-        delegate?.populate()
-        controller.table.reloadData()
+        controller.refresh()
     }
     
     //MARK: - accessors
@@ -76,10 +66,88 @@ struct BrowseManager {
     
     //MARK: - actions
     
+    func add(songs: [Song]) {
+        var replacement = controller.playlist
+        replacement.songs.append(contentsOf: songs)
+        if controller.mode == .playlist { controller.playlist = replacement }
+        
+        add(playlist: replacement)
+    }
+    
+    func add(playlist: Playlist) {
+        var replacement = user.library
+        if let i = replacement.index(of: playlist) { replacement[i] = playlist }
+        
+        update(with: replacement)
+    }
+    
+    //TODO: mutating func add(friend: String)
+    
+    func play(playlist: Playlist, at index: Int) {
+        q.manager?.play(playlist: playlist, at: index)
+    }
+    
+    func search(for end: BrowseMode, on vc: BrowseViewController) {
+        controller.end = end
+        vc.final = true
+        vc.adding = controller.adding
+        vc.user = user.id
+        vc.mode = .friends
+    }
+    
+    func find(friend: String? = nil, songs: [Song]? = nil) {
+        if controller.final {
+            
+            for vc in controller.navigationController?.viewControllers as? [BrowseViewController] ?? [] {
+                if vc.final { continue }
+                
+                if vc.end == BrowseMode.friends && friend != nil ||
+                    vc.end == BrowseMode.playlist && songs != nil {
+                    
+                    vc.manager?.find(friend: friend, songs: songs)
+                    Media.find()
+                    controller.navigationController?.popToViewController(vc, animated: true)
+                    
+                    return
+                }
+            }
+            
+            return
+        }
+        
+        controller.search.isActive = false
+        
+        if let friend = friend {} //TODO: add(friend: friend)
+        if let songs = songs { add(songs: songs) }
+    }
+    
+    func sync(playlist: Playlist? = nil) {
+        if let playlist = playlist {
+            add(playlist: playlist)
+            controller.navigationController?.popViewController(animated: true)
+            
+            return
+        }
+        
+        guard controller.mode == .playlist else { return }
+        
+        switch controller.playlist.library {
+        case Catalogues.AppleMusic.rawValue:
+            guard let playlist = Media.get(playlist: controller.playlist.id) else { return }
+            var replacement = user.library
+            if let i = replacement.index(of: playlist) { replacement[i] = playlist }
+            update(with: replacement)
+        case Catalogues.Spotify.rawValue: break //TODO: spotify sync
+        default: break
+        }
+    }
+    
     func view(user: String) {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
         else { return }
         
+        vc.final = controller.final
+        vc.adding = controller.adding
         vc.user = user
         vc.mode = .library
         controller.show(vc, sender: controller)
@@ -89,6 +157,8 @@ struct BrowseManager {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
         else { return }
         
+        vc.final = controller.final
+        vc.adding = controller.adding
         vc.user = user.id
         vc.playlist = playlist
         vc.mode = .playlist
@@ -99,6 +169,8 @@ struct BrowseManager {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
         else { return }
         
+        vc.final = controller.final
+        vc.adding = controller.adding
         vc.user = user.id
         vc.mode = .browse
         controller.show(vc, sender: controller)
@@ -108,6 +180,8 @@ struct BrowseManager {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
         else { return }
         
+        vc.final = controller.final
+        vc.adding = controller.adding
         vc.user = user.id
         vc.mode = .sync
         controller.show(vc, sender: controller)
@@ -117,6 +191,8 @@ struct BrowseManager {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
             else { return }
         
+        vc.final = controller.final
+        vc.adding = controller.adding
         vc.user = user.id
         vc.query = query
         vc.mode = .search
@@ -125,8 +201,7 @@ struct BrowseManager {
         case _ where sender.contains("search username"): vc.searching = .users
         case _ where sender.contains("search Device Library"):
             vc.searching = .library
-            let picker = Media.picker(with: delegate!)
-            controller.present(picker, animated: true)
+            Media.search(multiple: !controller.adding, on: controller)
             return
         case _ where sender.contains("search Apple Music"): vc.searching = .applemusic
         case _ where sender.contains("search Spotify"): vc.searching = .spotify
@@ -140,30 +215,12 @@ struct BrowseManager {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
             else { return }
         
+        vc.final = controller.final
+        vc.adding = controller.adding
         vc.user = user.id
         vc.catalog = item
         vc.mode = .catalog
         controller.show(vc, sender: controller)
     }
     
-    mutating func add(playlist: Playlist) {
-        var replacement = user.library
-        replacement.append(playlist)
-        
-        update(with: replacement)
-    }
-    
-    func play(playlist: Playlist, at index: Int) {
-        q.manager?.play(playlist: playlist, at: index)
-    }
-    
-    func search(query: String) {
-        
-    }
-    
-    func queue(song: Song) {
-        if !adding { return }
-        
-        //TODO: QueueManager.sharedInstance().add()
-    }
 }

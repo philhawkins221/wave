@@ -22,9 +22,11 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     init(to manager: QueueManager) {
         self.manager = manager
+        fill = manager.controller.fill
         super.init()
         
         populate()
+        title()
     }
     
     //MARK: - actions
@@ -35,7 +37,12 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         queue = client.queue
         me = client.me()
         
-        if !me { fill = nil }
+        //if !me { fill = nil }
+    }
+    
+    func title() {
+        manager.controller.addbutton.isEnabled = manager.client().me()
+        manager.controller.historybutton.isEnabled = manager.client().me()
     }
 
     //MARK: - table delegate stack
@@ -84,6 +91,15 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             
             up.backgroundColor = UIColor.orange
             down.backgroundColor = UIColor.lightGray
+            
+            if tableView.cellForRow(at: indexPath)?.editingStyle == .delete {
+                let delete = UITableViewRowAction(style: .default, title: "Delete") { [unowned self] (_,_) in
+                    self.tableView(tableView, commit: .delete, forRowAt: indexPath)
+                }
+                
+                delete.backgroundColor = UIColor.red
+                return [up, down, delete]
+            }
             
             return [up, down]
         default: return nil
@@ -176,9 +192,9 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 1: return "Up Next"
         case 2:
             if let owner = CliqueAPI.find(user: fill!.owner), owner.id != Identity.me {
-                return "From " + fill!.name + " by " + owner.username
+                return "from " + fill!.name + " by @" + owner.username
             } else {
-                return "From " + fill!.name
+                return "from " + fill!.name
             }
         default: return nil
         }
@@ -199,6 +215,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             switch editingStyle {
             case .delete:
                 queue.queue.remove(at: indexPath.row)
+                tableView.deleteRows(at: [indexPath], with: .automatic)
                 manager.update(with: queue)
             case .insert: break
             case .none: break

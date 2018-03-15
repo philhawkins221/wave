@@ -18,9 +18,12 @@ class FriendsDelegate: BrowseDelegate {
     
     override func title() {
         manager.controller.title = "Browse"
+        
+        manager.controller.addButton.isEnabled = manager.client().me()
+        manager.controller.editButton.isEnabled = manager.client().me()
     }
     
-    //MARK : - table delegate stack
+    //MARK: - table delegate stack
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }

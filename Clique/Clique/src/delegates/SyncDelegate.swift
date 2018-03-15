@@ -21,11 +21,16 @@ class SyncDelegate: BrowseDelegate {
         super.populate()
         
         applemusic = Media.getAllPlaylists()
-        //TODO: spotify = SpotifyAPIUtility.getAllPlaylists()
+        //TODO: spotify = SpotifyAPI.getAllPlaylists()
     }
     
     override func title() {
         manager.controller.title = "Sync"
+        
+        manager.controller.table.tableHeaderView = nil
+        
+        manager.controller.addButton.isEnabled = false
+        manager.controller.editButton.isEnabled = false
     }
     
     //MARK: - table delegate stack
@@ -34,8 +39,8 @@ class SyncDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         
         switch indexPath.section {
-        case 0 where !applemusic.isEmpty: manager.add(playlist: applemusic[indexPath.row])
-        case 1: manager.add(playlist: spotify![indexPath.row])
+        case 0 where !applemusic.isEmpty: manager.sync(playlist: applemusic[indexPath.row])
+        case 1: manager.sync(playlist: spotify![indexPath.row])
         default: tableView.deselectRow(at: indexPath, animated: true)
         }
     }

@@ -35,6 +35,10 @@ class SyncDelegate: BrowseDelegate {
     
     //MARK: - table delegate stack
     
+    override func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
+        return 40
+    }
+    
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         

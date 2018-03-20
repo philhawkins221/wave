@@ -14,7 +14,7 @@ import SwiftyJSON
 
 struct Web {
     
-    static func call(_ type: RequestMethod, to endpoint: String, with parameters: [String : Any]?) -> JSON? {
+    static func call(_ type: RequestMethod, to endpoint: String, with parameters: [String : Any]? = nil) -> JSON? {
         
         print("calling", type.rawValue, "request to endpoint", endpoint)
         
@@ -39,7 +39,7 @@ struct Web {
         return response
     }
     
-    static func send(_ type: RequestMethod, to endpoint: String, with parameters: [String : Any]?) {
+    static func send(_ type: RequestMethod, to endpoint: String, with parameters: [String : Any]? = nil) {
         
         print("sending", type.rawValue, "request to endpoint", endpoint)
         
@@ -79,6 +79,9 @@ struct Web {
     
     static func parameterize(queue: Queue) -> [String : Any] {
         return [
+            "owner": queue.owner,
+            "listeners": queue.listeners,
+            
             "radio": queue.radio,
             "voting": queue.voting,
             "requestsonly": queue.requestsonly,
@@ -86,9 +89,8 @@ struct Web {
             
             "queue": queue.queue.map { parameterize(song: $0) },
             "history": queue.history.map { parameterize(song: $0) },
-            "current": (queue.current != nil ? parameterize(song: queue.current!) : nil) as Any,
-            
-            "listeners": queue.listeners
+            "requests": queue.requests.map { parameterize(song: $0) },
+            "current": (queue.current != nil ? parameterize(song: queue.current!) : nil) as Any
         ]
     }
     
@@ -107,6 +109,8 @@ struct Web {
         return [
             "username": user.username,
             "id": user.id,
+            "friends": user.friends,
+            "requests": user.requests,
             "queue": parameterize(queue: user.queue),
             "library": user.library.map { parameterize(playlist: $0) },
             "applemusic": user.applemusic,

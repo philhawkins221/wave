@@ -30,6 +30,7 @@ class FriendsDelegate: BrowseDelegate {
         
         switch indexPath.section {
         case 0: manager.view(user: Identity.me)
+        case 1 where friends.isEmpty: tableView.deselectRow(at: indexPath, animated: true)
         case 1: manager.view(user: friends[indexPath.row])
         default: break
         }
@@ -42,7 +43,7 @@ class FriendsDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         if searching { return super.tableView(tableView, editingStyleForRowAt: indexPath) }
         
-        return .none
+        return .delete
     }
     
     //MARK: - table data source stack
@@ -70,7 +71,7 @@ class FriendsDelegate: BrowseDelegate {
         
         switch indexPath.section {
         case 0:
-            cell.textLabel?.text = "My Library"
+            cell.textLabel?.text = "library"
             cell.accessoryType = .disclosureIndicator
             cell.imageView?.image = UIImage(named: "clique 120.png")
             cell.setImageSize(to: 50)
@@ -80,6 +81,7 @@ class FriendsDelegate: BrowseDelegate {
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.textLabel?.text = "no friends"
             cell.detailTextLabel?.text = "tap + to add a friend"
+            cell.selectionStyle = .none
         case 1:
             if let friend = CliqueAPI.find(user: friends[indexPath.row]) {
                 cell.textLabel?.text = "@" + friend.username
@@ -110,7 +112,7 @@ class FriendsDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if searching { return super.tableView(tableView, canEditRowAt: indexPath) }
         
-        return indexPath.section != 0
+        return indexPath.section != 0 && !friends.isEmpty
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -123,5 +125,11 @@ class FriendsDelegate: BrowseDelegate {
         case .insert: break
         case .none: break
         }
+    }
+    
+    //MARK: - search delegate stack
+    
+    func didPresentSearchController(_ searchController: UISearchController) {
+        if final { searchController.searchBar.becomeFirstResponder() }
     }
 }

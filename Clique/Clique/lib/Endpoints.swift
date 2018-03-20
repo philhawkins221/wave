@@ -79,28 +79,33 @@ struct Endpoints {
     }
     
     struct Clique {
+        static let newpoint = "http://clique2016.herokuapp.com/playlists/"
         static let findpoint = { id in
             "http://clique2016.herokuapp.com/playlists/" + id
         }
-        static let searchpoint = "http://clique2016.herokuapp.com/playlists"
-        static let votepoint = {(id: String, _ direction: Vote) -> String in
+        static let searchpoint = "http://clique2016.herokuapp.com/playlists/search"
+        static let allpoint = "http://clique2016.herokuapp.com/playlists/"
+        
+        static let playpoint = { id in
+            "http://clique2016.herokuapp.com/playlists/" + id + "/play"
+        }
+        static let advancepoint = { id in
+            "http://clique2016.herokuapp.com/playlists/" + id + "/advance"
+        }
+        static let votepoint = { (id: String, direction: Vote) -> String in
             switch direction {
             case .up: return "http://clique2016.herokuapp.com/playlists/" + id + "/upvote"
             case .down: return "http://clique2016.herokuapp.com/playlists/" + id + "/downvote"
             }
         }
-        static let addpoint = { id in
-            "http://clique2016.herokuapp.com/playlists/" + id + "/addSong"
-        }
-        static let newpoint = "http://clique2016.herokuapp.com/playlists/"
-        static let advancepoint = {id in
-            "http://clique2016.herokuapp.com/playlists/" + id + "/markSongAsPlayed"
-        }
-        static let playpoint = { id in
-            "http://clique2016.herokuapp.com/playlists/" + id + "/changeSong"
-        }
-        static let deletepoint = { id in
-            "http://clique2016.herokuapp.com/playlists/" + id
+        
+        struct add {
+            static let songpoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id + "/queue"
+            }
+            static let friendpoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id + "/add-friend"
+            }
         }
         
         struct update {
@@ -108,10 +113,34 @@ struct Endpoints {
                 "http://clique2016.herokuapp.com/playlists/" + id
             }
             static let queuepoint = { id in
-                 "http://clique2016.herokuapp.com/playlists/" + id + "/updateClique"
+                "http://clique2016.herokuapp.com/playlists/" + id + "/update-queue"
             }
             static let librarypoint = { id in
-                "http://clique2016.herokuapp.com/playlists/" + id + "/loadSongs"
+                "http://clique2016.herokuapp.com/playlists/" + id + "/update-library"
+            }
+            static let playlistpoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id + "/update-playlist"
+            }
+            static let applemusicpoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id + "/update-applemusic"
+            }
+            static let spotifypoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id + "/update-spotify"
+            }
+            static let votingpoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id + "/update-voting"
+            }
+        }
+        
+        struct delete {
+            static let userpoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id
+            }
+            static let playlistpoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id + "/delete-playlist"
+            }
+            static let friendpoint = { id in
+                "http://clique2016.herokuapp.com/playlists/" + id + "delete-friend"
             }
         }
         

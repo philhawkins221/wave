@@ -55,7 +55,7 @@ struct Media {
         let picker = MPMediaPickerController(mediaTypes: .music)
         picker.delegate = controller.manager?.delegate
         picker.allowsPickingMultipleItems = multiple
-        //picker.prompt = "select songs to be added to the playlist"
+        picker.prompt = controller.navigationItem.prompt
         
         controller.present(picker, animated: true)
     }
@@ -79,14 +79,10 @@ struct Media {
     }
     
     static func get(playlist id: String) -> Playlist? {
-        let searcher = MPMediaQuery.playlists()
-        searcher.addFilterPredicate(MPMediaPropertyPredicate(value: Int(id), forProperty: MPMediaItemPropertyPersistentID))
+        let playlists = getAllPlaylists().filter { $0.id == id }
         
-        if let playlist = searcher.collections?.first as? MPMediaPlaylist {
-            return virtualize(playlist: playlist, from: .AppleMusic)
-        } else {
-            return nil
-        }
+        if playlists.count == 1, let playlist = playlists.first { return playlist }
+        else { return nil }
     }
     
     static func getAllPlaylists() -> [Playlist] {
@@ -95,7 +91,7 @@ struct Media {
         let searcher = MPMediaQuery.playlists()
         for collection in searcher.collections ?? [] {
             if let playlist = collection as? MPMediaPlaylist {
-                results.append(virtualize(playlist: playlist))
+                results.append(virtualize(playlist: playlist, from: .AppleMusic))
             }
         }
         

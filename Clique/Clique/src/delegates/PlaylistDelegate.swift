@@ -33,6 +33,8 @@ class PlaylistDelegate: BrowseDelegate {
     //MARK: - table delegate stack
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        if playlist.songs.isEmpty { return tableView.deselectRow(at: indexPath, animated: true) }
+        
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         if adding { return self.tableView(tableView, commit: .insert, forRowAt: indexPath) }
         if final { manager.find(songs: [playlist.songs[indexPath.row]]) }
@@ -79,6 +81,7 @@ class PlaylistDelegate: BrowseDelegate {
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.textLabel?.text = "no songs"
             cell.detailTextLabel?.text = "tap + to add a song"
+            cell.selectionStyle = .none
             return cell
         case false:
         let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
@@ -106,7 +109,7 @@ class PlaylistDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
         
         switch editingStyle {
-        case .insert: q.manager?.find(song: playlist.songs[indexPath.row])
+        case .insert: Alerts.queue(song: playlist.songs[indexPath.row])
         case .delete:
             playlist.songs.remove(at: indexPath.row)
             manager.controller.playlist = playlist

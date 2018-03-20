@@ -9,6 +9,9 @@
 import Foundation
 
 struct Queue: Codable {
+    var owner: String
+    var listeners: [String]
+    
     var radio: Bool
     var voting: Bool
     var requestsonly: Bool
@@ -16,11 +19,13 @@ struct Queue: Codable {
     
     var queue: [Song]
     var history: [Song]
+    var requests: [Song]
     var current: Song?
     
-    var listeners: [String]
-    
     init() {
+        owner = ""
+        listeners = []
+        
         radio = false
         voting = false
         requestsonly = false
@@ -28,7 +33,6 @@ struct Queue: Codable {
         
         queue = []
         history = []
-        
-        listeners = []
+        requests = []
     }
 }

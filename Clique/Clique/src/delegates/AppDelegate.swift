@@ -36,6 +36,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 //        let _ = LibraryManager.sharedInstance()
 //        let _ = QueueManager.sharedInstance()
         
+        //TODO: provision()
+        
         window?.tintColor = UIColor.orange
                 
         return true
@@ -83,6 +85,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Called when the application is about to terminate. Save data if appropriate. See also applicationDidEnterBackground:.
         // Saves changes in the application's managed object context before the application terminates.
         //self.saveContext()
+        
+        //TODO: Media.stop()
     }
     
     

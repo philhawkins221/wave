@@ -12,7 +12,7 @@ class QueueViewController: UIViewController {
     
     //MARK: - outlets
 
-    @IBOutlet weak var profilebar: ProfileBar!
+    @IBOutlet weak var profilebar: ProfileBar?
     
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var historybutton: UIBarButtonItem!
@@ -26,7 +26,7 @@ class QueueViewController: UIViewController {
     var user = Identity.me
     var fill: Playlist?
     
-    var timer = Timer()
+    weak var timer = Timer()
     
     //MARK: - lifecycle stack
     
@@ -34,7 +34,7 @@ class QueueViewController: UIViewController {
         super.viewDidLoad()
         
         refresh()
-        
+                        
         NavigationControllerStyleGuide.enforce(on: navigationController)
         TabBarControllerStyleGuide.enforce(on: tabBarController)
         
@@ -45,14 +45,16 @@ class QueueViewController: UIViewController {
         //NotificationCenter.default.addObserver(self, selector: #selector(self.advance), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
     }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if manager?.client().me() ?? false { table.setEditing(true, animated: false) }
+    }
+    
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
         refresh()
-        
-        if manager?.client().me() ?? false {
-            table.setEditing(true, animated: true)
-        }
         
         if let selected = table.indexPathForSelectedRow {
             table.deselectRow(at: selected, animated: true)
@@ -64,7 +66,7 @@ class QueueViewController: UIViewController {
     
     override func viewDidDisappear(_ animated: Bool) {
         super.viewDidDisappear(animated)
-        timer.invalidate()
+        timer?.invalidate()
     }
     
     override func didReceiveMemoryWarning() {

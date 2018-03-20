@@ -46,7 +46,8 @@ class NowPlayingViewController: UIViewController {
         waves.videoURL = Bundle.main.url(forResource: "waves", withExtension: "mp4")
         waves.shouldLoop = true
         
-        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
+        //let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
+        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, mode: AVAudioSessionModeDefault, routeSharingPolicy: .longForm, options: .mixWithOthers)
         waves.playVideo()
     }
     

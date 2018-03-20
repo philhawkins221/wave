@@ -21,7 +21,7 @@ class BrowseViewController: UIViewController {
     //MARK: - properties
     
     var manager: BrowseManager?
-    let search = UISearchController(searchResultsController: nil)
+    var search = UISearchController(searchResultsController: nil)
     
     var adding = false
     var final = false
@@ -47,7 +47,7 @@ class BrowseViewController: UIViewController {
         super.viewDidLoad()
         
         refresh()
-        
+                        
         NavigationControllerStyleGuide.enforce(on: navigationController)
         TabBarControllerStyleGuide.enforce(on: tabBarController)
         
@@ -63,11 +63,12 @@ class BrowseViewController: UIViewController {
 
         addButton.isEnabled = false
         editButton.isEnabled = false
-        
-        if adding {
-            table.setEditing(true, animated: false)
-        }
+    }
     
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
+        if adding { table.setEditing(true, animated: false) }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -84,17 +85,25 @@ class BrowseViewController: UIViewController {
             table.deselectRow(at: selected, animated: true)
         }
         
-        if let delegate = manager?.delegate as? PlaylistDelegate {
-            switch delegate.playlist.library {
-            case "applemusic", "spotify": editButton.title = "Sync"
+        if mode == .playlist {
+            switch playlist.library {
+            case Catalogues.AppleMusic.rawValue, Catalogues.Spotify.rawValue: editButton.title = "Sync"
             default: break
             }
         }
         
-        if final && mode == .friends { //TODO: bad condition
-            search.isActive = true
-            search.searchBar.becomeFirstResponder()
+        if final && mode == .friends {
+            DispatchQueue.main.async { [unowned self] in
+                self.search.isActive = true
+            }
         }
+    }
+    
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
+        search.searchBar.resignFirstResponder()
+        search.isActive = false
     }
 
     override func didReceiveMemoryWarning() {
@@ -106,6 +115,7 @@ class BrowseViewController: UIViewController {
     
     func refresh() {
         manager = BrowseManager(to: self)
+        search.delegate = manager?.delegate
         search.searchResultsUpdater = manager?.delegate
         table.delegate = manager?.delegate
         table.dataSource = manager?.delegate
@@ -115,7 +125,7 @@ class BrowseViewController: UIViewController {
     //MARK: - actions
     
     @IBAction func edit(_ sender: Any) {
-        guard editButton.title != "Sync" else { return manager?.sync() ?? () }
+        guard editButton.title != "Sync" else { return Alerts.sync(playlist: (), on: self) }
         
         switch table.isEditing {
         case true:
@@ -134,14 +144,22 @@ class BrowseViewController: UIViewController {
     }
     
     //MARK: - navigation
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        switch mode {
+        case .library:
+            Alerts.add(playlist: (), on: self)
+            return false
+        case .browse, .friends, .playlist, .sync, .search, .catalog: return true
+        }
+    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
         guard let vc = segue.destination as? BrowseViewController else { return }
         
         switch mode {
         case .friends, .playlist: manager?.search(for: mode, on: vc)
-        case .library: break //TODO: add playlist alert
-        case .browse, .sync, .search, .catalog: break
+        case .browse, .library, .sync, .search, .catalog: break
         }
     }
 

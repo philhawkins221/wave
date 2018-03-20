@@ -20,11 +20,16 @@ let player = MPMusicPlayerController.systemMusicPlayer
 let scClientID = "2c9d9d500b26f5a1ae7661215c5b4e1c"
 let scClientSecret = "1745f37d41a47591147470a84acda2c5"
 
-//MARK: - base view controllers
+//MARK: - root view controllers
 
 var bro = BrowseViewController()
 var np = NowPlayingViewController()
 var q = QueueViewController()
+
+//MARK: - type aliases
+
+//typealias Library = [Playlist]
+//typealias UserID = String
 
 //MARK: - enumerations
 
@@ -168,6 +173,7 @@ extension UITableViewCell {
             imageView?.image!.draw(in: imageRect)
             imageView?.image! = UIGraphicsGetImageFromCurrentImageContext()!
             UIGraphicsEndImageContext()
+            indentationLevel = -4
         }
     }
 }

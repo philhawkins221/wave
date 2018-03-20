@@ -25,6 +25,8 @@ class SwipeController: SwipeableTabBarController {
         setDiagonalSwipe(enabled: true)
         
         provision()
+        //setTabBarSwipe(enabled: false)
+        //selectedViewController = viewControllers?[2]
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -48,10 +50,10 @@ class SwipeController: SwipeableTabBarController {
         let qnav = controllers[2] as! UINavigationController
         q = qnav.visibleViewController as! QueueViewController
         
-        selectedViewController = controllers[startindex]
+        bro.user = Identity.me
+        q.user = Identity.me
         
-        //bro.refresh()
-        //q.refresh()
+        selectedViewController = controllers[startindex]
         
         provisioned = true
     }

@@ -20,6 +20,8 @@ protocol StyleGuide {
 struct NavigationControllerStyleGuide: StyleGuide {
     
     static func enforce(on controller: UINavigationController?) {
+        UILabel.appearance(whenContainedInInstancesOf: [UINavigationBar.self]).textColor = UIColor.white
+
         if #available(iOS 8.2, *) {
             controller?.navigationBar.titleTextAttributes = [
                 NSAttributedStringKey.foregroundColor: UIColor.white,

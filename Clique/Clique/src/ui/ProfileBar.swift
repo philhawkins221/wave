@@ -45,7 +45,7 @@ class ProfileBar: UIView {
         create()
     }
     
-    //MARK: - actions
+    //MARK: - factory
     
     private func create() {
         Bundle.main.loadNibNamed("ProfileBar", owner: self, options: nil)
@@ -58,6 +58,8 @@ class ProfileBar: UIView {
         profpic.layer.cornerRadius = profpic.frame.size.width / 2
         profpic.clipsToBounds = true
     }
+    
+    //MARK: - actions
     
     func manage(profile: User) {
         client = profile
@@ -129,22 +131,7 @@ class ProfileBar: UIView {
     
     @IBAction func usernametap(_ sender: Any) {
         guard let client = client else { return }
-        
-        switch client.me() {
-        case true:
-            let alert = Alerts.textField(title: "", entry: client.username) { [unowned self] (action, alert) in
-                guard let name = alert.textFields?.first?.text else { return }
-                var replacement = client.clone()
-                replacement.username = name
-                
-                CliqueAPI.update(user: replacement)
-                self.display(username: name)
-            }
-            
-            controller.present(alert, animated: true)
-            
-        case false: break
-        }
+        if client.me() { Alerts.rename(user: self, on: controller) }
     }
     
     @IBAction func openclose(_ sender: Any) {

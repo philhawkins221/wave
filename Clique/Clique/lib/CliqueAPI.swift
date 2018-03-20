@@ -10,12 +10,21 @@ import Foundation
 
 struct CliqueAPI {
     
-    static func find(user id: String?) -> User? {
-        guard let id = id else { return nil }
+    static func new(user: User) -> User? {
+        let endpoint = Endpoints.Clique.newpoint
+        let parameters = Web.parameterize(user: user)
         
+        if let response = Web.call(.post, to: endpoint, with: parameters) {
+            return try? JSONDecoder().decode(User.self, from: response.rawData())
+        }
+        
+        return nil
+    }
+    
+    static func find(user id: String) -> User? {
         let endpoint = Endpoints.Clique.findpoint(id)
         
-        if let response = Web.call(.get, to: endpoint, with: nil) {
+        if let response = Web.call(.get, to: endpoint) {
             return try? JSONDecoder().decode(User.self, from: response.rawData())
         }
         
@@ -24,9 +33,9 @@ struct CliqueAPI {
     
     static func search(user username: String) -> [User] {
         var results = [User]()
-        let endpoint = Endpoints.Clique.searchpoint
+        let endpoint = Endpoints.Clique.allpoint
         
-        if let response = Web.call(.get, to: endpoint, with: nil) {
+        if let response = Web.call(.get, to: endpoint) {
             let users = response.array ?? []
             for user in users {
                 if let result = try? JSONDecoder().decode(User.self, from: user.rawData()) {
@@ -40,97 +49,111 @@ struct CliqueAPI {
         return results
     }
     
-    static func add(song: Song, to user: User?) {
-        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
-        
-        let endpoint = Endpoints.Clique.addpoint(user.id)
-        let parameters = Web.parameterize(song: song)
-        
-        let _ = Web.call(.put, to: endpoint, with: parameters)
-    }
-    
-    static func advance(queue user: User?) -> Song? {
-        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
-        
-        let endpoint = Endpoints.Clique.advancepoint(user.id)
-        
-        if let response = Web.call(.put, to: endpoint, with: nil) {
-            return try? JSONDecoder().decode(Song.self, from: response.rawData())
-        }
-        
-        return nil
-    }
-    
-    static func play(song: Song, for user: User?) {
-        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
-        
+    static func play(song: Song, for user: User) {
         let endpoint = Endpoints.Clique.playpoint(user.id)
         let parameters = Web.parameterize(song: song)
         
         let _ = Web.send(.put, to: endpoint, with: parameters)
     }
     
-    static func stop(user: User?) {
-        //TODO: stop - set current to null
+    static func stop(user: User) {
+        let endpoint = Endpoints.Clique.playpoint(user.id)
+        //TODO: stop
     }
     
-    static func vote(song: Song, _ direction: Vote, for user: User?) {
-        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
+    static func advance(queue user: User) -> Song? {
+        let endpoint = Endpoints.Clique.advancepoint(user.id)
         
+        if let response = Web.call(.get, to: endpoint, with: nil) {
+            return try? JSONDecoder().decode(Song.self, from: response.rawData())
+        }
+        
+        return nil
+    }
+    
+    static func vote(song: Song, _ direction: Vote, for user: User) {
         let endpoint = Endpoints.Clique.votepoint(user.id, direction)
         let parameters = Web.parameterize(song: song)
         
         let _ = Web.send(.put, to: endpoint, with: parameters)
     }
     
-    static func update(user replacement: User?) {
-        guard let replacement = replacement else {
-            fatalError(ManagementError.unidentifiedUser.rawValue)
-        }
+    static func add(song: Song, to user: User) {
+        let endpoint = Endpoints.Clique.add.songpoint(user.id)
+        let parameters = Web.parameterize(song: song)
         
+        let _ = Web.call(.put, to: endpoint, with: parameters)
+    }
+    
+    static func add(friend: String, to user: User) {
+        let endpoint = Endpoints.Clique.add.friendpoint(user.id)
+        let parameters: [String : Any] = ["id": friend]
+        
+        let _ = Web.call(.put, to: endpoint, with: parameters)
+    }
+    
+    static func update(user replacement: User) {
         let endpoint = Endpoints.Clique.update.userpoint(replacement.id)
         let parameters = Web.parameterize(user: replacement)
         
         let _ = Web.call(.put, to: endpoint, with: parameters)
     }
     
-    static func update(queue user: User?, with replacement: Queue) {
-        guard let user = user else {
-            fatalError(ManagementError.unidentifiedUser.rawValue)
-        }
-        
-        let endpoint = Endpoints.Clique.update.queuepoint(user.id)
+    static func update(queue replacement: Queue) {
+        let endpoint = Endpoints.Clique.update.queuepoint(replacement.owner)
         let parameters = Web.parameterize(queue: replacement)
         
         let _ = Web.call(.post, to: endpoint, with: parameters)
     }
     
-    static func update(library user: User?, with replacement: [Playlist]) {
-        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
-        
+    static func update(library user: User, with replacement: [Playlist]) {
         let endpoint = Endpoints.Clique.update.librarypoint(user.id)
         let parameters: [String : Any] = ["library": replacement.map { Web.parameterize(playlist: $0) }]
         
         let _ = Web.call(.put, to: endpoint, with: parameters)
     }
     
-    static func new(user: User) -> User? {
-        let endpoint = Endpoints.Clique.newpoint
-        let parameters = Web.parameterize(user: user)
+    static func update(playlist user: User, with replacement: Playlist) {
+        let endpoint = Endpoints.Clique.update.playlistpoint(user.id)
+        let parameters = Web.parameterize(playlist: replacement)
         
-        if let response = Web.call(.post, to: endpoint, with: parameters) {
-            return try? JSONDecoder().decode(User.self, from: response.rawData())
-        }
-        
-        return nil
+        let _ = Web.call(.put, to: endpoint, with: parameters)
     }
     
-    static func delete(user: User?) {
-        guard let user = user else { fatalError(ManagementError.unidentifiedUser.rawValue) }
+    static func update(applemusic user: User, to status: Bool) {
+        let endpoint = Endpoints.Clique.update.applemusicpoint(user.id)
+        let parameters: [String : Any] = ["value": status]
         
-        let endpoint = Endpoints.Clique.deletepoint(user.id)
+        let _ = Web.call(.put, to: endpoint, with: parameters)
+    }
+    
+    static func update(spotify user: User, to status: Bool) {
+        let endpoint = Endpoints.Clique.update.spotifypoint(user.id)
+        let parameters: [String : Any] = ["value": status]
         
-        let _ = Web.call(.delete, to: endpoint, with: nil)
+        let _ = Web.call(.put, to: endpoint, with: parameters)
+    }
+    
+    static func update(voting user: User, to status: Bool) {
+        let endpoint = Endpoints.Clique.update.votingpoint(user.id)
+        let parameters: [String : Any] = ["value": status]
+        
+        let _ = Web.call(.put, to: endpoint, with: parameters)
+    }
+    
+    static func delete(user: User) {
+        let endpoint = Endpoints.Clique.delete.userpoint(user.id)
+        let _ = Web.call(.delete, to: endpoint)
+    }
+    
+    static func delete(playlist: Playlist, for user: User) {
+        let endpoint = Endpoints.Clique.delete.playlistpoint(user.id)
+        let _ = Web.call(.delete, to: endpoint)
+    }
+    
+    static func delete(friend: String, for user: User) {
+        let endpoint = Endpoints.Clique.delete.friendpoint(user.id)
+        let _ = Web.call(.delete, to: endpoint)
     }
     
 }

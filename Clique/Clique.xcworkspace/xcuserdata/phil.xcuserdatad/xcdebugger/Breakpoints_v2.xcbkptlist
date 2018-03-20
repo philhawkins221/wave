@@ -2,4 +2,54 @@
 <Bucket
    type = "0"
    version = "2.0">
+   <Breakpoints>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Clique/src/managers/BrowseManager.swift"
+            timestampString = "543179134.094992"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "136"
+            endingLineNumber = "136"
+            landmarkName = "sync(playlist:)"
+            landmarkType = "7">
+            <Locations>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "default argument 0 of Clique.BrowseManager.sync(playlist: Swift.Optional&lt;Clique.Playlist&gt;) -&gt; ()"
+                  moduleName = "Clique"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phil/Documents/xcode/clique/ubiquitous-journey/Clique/Clique/src/managers/BrowseManager.swift"
+                  timestampString = "543086283.276597"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "129"
+                  endingLineNumber = "129"
+                  offsetFromSymbolStart = "8">
+               </Location>
+               <Location
+                  shouldBeEnabled = "No"
+                  ignoreCount = "0"
+                  continueAfterRunningActions = "No"
+                  symbolName = "Clique.BrowseManager.sync(playlist: Swift.Optional&lt;Clique.Playlist&gt;) -&gt; ()"
+                  moduleName = "Clique"
+                  usesParentBreakpointCondition = "Yes"
+                  urlString = "file:///Users/phil/Documents/xcode/clique/ubiquitous-journey/Clique/Clique/src/managers/BrowseManager.swift"
+                  timestampString = "543086283.278877"
+                  startingColumnNumber = "9223372036854775807"
+                  endingColumnNumber = "9223372036854775807"
+                  startingLineNumber = "130"
+                  endingLineNumber = "130"
+                  offsetFromSymbolStart = "768">
+               </Location>
+            </Locations>
+         </BreakpointContent>
+      </BreakpointProxy>
+   </Breakpoints>
 </Bucket>

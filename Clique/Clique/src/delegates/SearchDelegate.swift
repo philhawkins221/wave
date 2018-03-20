@@ -188,7 +188,7 @@ class SearchDelegate: BrowseDelegate {
         if searching { super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
         
         switch editingStyle {
-        case .insert: q.manager?.find(song: songs[indexPath.row])
+        case .insert: Alerts.queue(song: songs[indexPath.row])
         case .delete, .none: break
         }
     }

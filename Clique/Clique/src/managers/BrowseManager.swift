@@ -34,14 +34,14 @@ struct BrowseManager {
         case .catalog: delegate = CatalogDelegate(to: self)
         }
         
-        controller.profilebar.manage(profile: user)
+        controller.profilebar?.manage(profile: user)
     }
     
     //MARK: - mutators
     
     func manage(user: User) {
         controller.user = user.id
-        controller.profilebar.manage(profile: user)
+        controller.profilebar?.manage(profile: user)
         
         update()
     }
@@ -57,7 +57,7 @@ struct BrowseManager {
     //MARK: - accessors
     
     func client() -> User {
-        var client = user.clone()
+        var client = user
         
         if !client.me() { client.library = client.library.filter { $0.social } }
         
@@ -67,16 +67,21 @@ struct BrowseManager {
     //MARK: - actions
     
     func add(songs: [Song]) {
-        var replacement = controller.playlist
-        replacement.songs.append(contentsOf: songs)
-        if controller.mode == .playlist { controller.playlist = replacement }
+        var playlist = controller.playlist
+        playlist.songs.append(contentsOf: songs)
+        if controller.mode == .playlist { controller.playlist = playlist }
         
-        add(playlist: replacement)
+        var replacement = user.library
+        if let i = replacement.index(of: playlist) { replacement[i] = playlist }
+        
+        update(with: replacement)
+        
+        //TODO: sync with apple music or spotify if needed
     }
     
     func add(playlist: Playlist) {
         var replacement = user.library
-        if let i = replacement.index(of: playlist) { replacement[i] = playlist }
+        replacement.append(playlist)
         
         update(with: replacement)
     }
@@ -90,7 +95,14 @@ struct BrowseManager {
     func search(for end: BrowseMode, on vc: BrowseViewController) {
         controller.end = end
         vc.final = true
-        vc.adding = controller.adding
+        vc.adding = false
+        
+        switch end {
+        case .playlist: vc.navigationItem.prompt = "adding songs to " + controller.playlist.name
+        case .friends: vc.navigationItem.prompt = "select a user to send a friend request"
+        case .browse, .library, .sync, .search, .catalog: break
+        }
+        
         vc.user = user.id
         vc.mode = .friends
     }
@@ -101,8 +113,8 @@ struct BrowseManager {
             for vc in controller.navigationController?.viewControllers as? [BrowseViewController] ?? [] {
                 if vc.final { continue }
                 
-                if vc.end == BrowseMode.friends && friend != nil ||
-                    vc.end == BrowseMode.playlist && songs != nil {
+                if (vc.end == .friends && friend != nil && songs == nil) ||
+                    (vc.end == .playlist && songs != nil && friend == nil) {
                     
                     vc.manager?.find(friend: friend, songs: songs)
                     Media.find()
@@ -134,6 +146,7 @@ struct BrowseManager {
         switch controller.playlist.library {
         case Catalogues.AppleMusic.rawValue:
             guard let playlist = Media.get(playlist: controller.playlist.id) else { return }
+            controller.playlist = playlist
             var replacement = user.library
             if let i = replacement.index(of: playlist) { replacement[i] = playlist }
             update(with: replacement)
@@ -148,6 +161,7 @@ struct BrowseManager {
         
         vc.final = controller.final
         vc.adding = controller.adding
+        vc.navigationItem.prompt = controller.navigationItem.prompt
         vc.user = user
         vc.mode = .library
         controller.show(vc, sender: controller)
@@ -159,6 +173,7 @@ struct BrowseManager {
         
         vc.final = controller.final
         vc.adding = controller.adding
+        vc.navigationItem.prompt = controller.navigationItem.prompt
         vc.user = user.id
         vc.playlist = playlist
         vc.mode = .playlist
@@ -171,6 +186,7 @@ struct BrowseManager {
         
         vc.final = controller.final
         vc.adding = controller.adding
+        vc.navigationItem.prompt = controller.navigationItem.prompt
         vc.user = user.id
         vc.mode = .browse
         controller.show(vc, sender: controller)
@@ -182,6 +198,7 @@ struct BrowseManager {
         
         vc.final = controller.final
         vc.adding = controller.adding
+        vc.navigationItem.prompt = controller.navigationItem.prompt
         vc.user = user.id
         vc.mode = .sync
         controller.show(vc, sender: controller)
@@ -193,6 +210,7 @@ struct BrowseManager {
         
         vc.final = controller.final
         vc.adding = controller.adding
+        vc.navigationItem.prompt = controller.navigationItem.prompt
         vc.user = user.id
         vc.query = query
         vc.mode = .search
@@ -217,6 +235,7 @@ struct BrowseManager {
         
         vc.final = controller.final
         vc.adding = controller.adding
+        vc.navigationItem.prompt = controller.navigationItem.prompt
         vc.user = user.id
         vc.catalog = item
         vc.mode = .catalog

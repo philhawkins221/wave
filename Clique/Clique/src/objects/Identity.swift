@@ -12,32 +12,35 @@ struct Identity {
     
     //MARK: - properties
     
-    static var me: String! = UserDefaults.standard.string(forKey: "id")
-    static var friends: [String] = UserDefaults.standard.stringArray(forKey: "friends") ?? []
-    static var applemusic: Bool = UserDefaults.standard.bool(forKey: "applemusic")
-    static var spotify: Bool = UserDefaults.standard.bool(forKey: "spotify")
+    static var me: String = UserDefaults.standard.string(forKey: "id") ?? ""
+    static var friends = [String]()
+    static var applemusic = false
+    static var spotify = false
     
     //MARK: - actions
     
     static func wave() {
         if UserDefaults.standard.string(forKey: "id") != nil { return }
-        let new = User("anonymous",
-                       id: "",
-                       queue: Queue(),
-                       library: [],
-                       applemusic: false,
-                       spotify: false)
+        let new = User(
+            "anonymous",
+            id: "",
+            friends: [],
+            requests: [],
+            queue: Queue(),
+            library: [],
+            applemusic: false,
+            spotify: false
+        )
         
-        me = CliqueAPI.new(user: new)!.id
+        guard let me = CliqueAPI.new(user: new) else { return }
         //TODO: what to do if this is nil
-        
-        UserDefaults.standard.set(me, forKey: "id")
-        UserDefaults.standard.set(friends, forKey: "friends")
+        //perhaps wave should return bool
+        self.me = me.id
+        UserDefaults.standard.set(me.id, forKey: "id")
     }
     
-    static func connect(applemusic status: Bool) {
+    static func connect(applemusic status: Bool) { //TODO: update clique api
         applemusic = status
-        UserDefaults.standard.set(status, forKey: "applemusic")
         
         if var replacement = CliqueAPI.find(user: me) {
             replacement.applemusic = applemusic
@@ -45,9 +48,8 @@ struct Identity {
         }
     }
     
-    static func connect(spotify status: Bool) {
+    static func connect(spotify status: Bool) { //TODO: update clique api
         spotify = status
-        UserDefaults.standard.set(status, forKey: "spotify")
         
         if var replacement = CliqueAPI.find(user: me) {
             replacement.spotify = spotify
@@ -56,7 +58,7 @@ struct Identity {
     }
     
     static func update(with replacement: User? = nil) {
-        if let replacement = replacement, replacement.id == me {
+        if let replacement = replacement, replacement.me() {
             CliqueAPI.update(user: replacement)
         }
     }

@@ -38,6 +38,7 @@ class LibraryDelegate: BrowseDelegate {
         
         switch indexPath.section {
         case 0: manager.view(songs: ())
+        case 1 where library.isEmpty: tableView.deselectRow(at: indexPath, animated: true)
         case 1: manager.view(playlist: library[indexPath.row])
         default: break
         }
@@ -52,7 +53,7 @@ class LibraryDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         if searching { return super.tableView(tableView, editingStyleForRowAt: indexPath) }
         
-        return indexPath.section == 0 ? .none : .delete
+        return indexPath.section == 1 ? .delete : .none
     }
     
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
@@ -76,7 +77,10 @@ class LibraryDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         if searching { return super.tableView(tableView, numberOfRowsInSection: section) }
         
-        return section == 0 ? 1 : library.count
+        switch library.isEmpty {
+        case true: return 1
+        case false: return section == 0 ? 1 : library.count
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
@@ -85,8 +89,14 @@ class LibraryDelegate: BrowseDelegate {
         switch indexPath.section {
         case 0:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = "All Songs"
+            cell.textLabel?.text = "all songs"
             cell.accessoryType = .disclosureIndicator
+            return cell
+        case 1 where library.isEmpty:
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+            cell.textLabel?.text = "no playlists"
+            cell.detailTextLabel?.text = "tap + to add a playlist"
+            cell.selectionStyle = .none
             return cell
         case 1:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
@@ -110,7 +120,13 @@ class LibraryDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
         if searching { return super.tableView(tableView, canEditRowAt: indexPath) }
         
-        return indexPath.section != 0 //== 0 ? false : manager.client().me()
+        switch indexPath.section {
+        case _ where adding: return false
+        case 0: return false
+        case 1 where library.isEmpty: return false
+        case 1: return manager.client().me()
+        default: return false
+        }
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
@@ -128,7 +144,7 @@ class LibraryDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         if searching { return super.tableView(tableView, canMoveRowAt: indexPath) }
         
-        return indexPath.section != 0 //== 0 ? false : manager.client().me()
+        return indexPath.section == 0 ? false : manager.client().me()
     }
     
     override func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {

@@ -29,14 +29,14 @@ struct QueueManager {
         case .history: delegate = HistoryDelegate(to: self)
         }
         
-        controller.profilebar.manage(profile: user)
+        controller.profilebar?.manage(profile: user)
     }
     
     //MARK: - mutators
     
     func manage(user: User) {
         controller.user = user.id
-        controller.profilebar.manage(profile: user)
+        controller.profilebar?.manage(profile: user)
         
         update()
     }
@@ -52,7 +52,7 @@ struct QueueManager {
     //MARK: - accessors
     
     func client() -> User {
-        var client = user.clone()
+        var client = user
         if client.queue.voting { client.queue.queue.sort(by: { $0.votes > $1.votes }) }
         
         return client
@@ -96,6 +96,8 @@ struct QueueManager {
         guard let controller = controller as? BrowseViewController else { return }
         
         controller.adding = true
+        controller.final = false
+        controller.navigationItem.prompt = "adding song to queue"
         controller.user = Identity.me
         controller.mode = .friends
     }

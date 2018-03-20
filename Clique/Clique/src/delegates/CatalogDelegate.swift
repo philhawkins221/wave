@@ -173,7 +173,7 @@ class CatalogDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
         
         switch editingStyle {
-        case .insert: q.manager?.find(song: songs[indexPath.row])
+        case .insert: Alerts.queue(song: songs[indexPath.row])
         case .none, .delete: break
         }
     }

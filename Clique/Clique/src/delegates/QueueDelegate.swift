@@ -180,7 +180,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
             cell.set(song: fill!.songs[indexPath.row])
-            cell.voteslabel.text = ""
+            cell.voteslabel.text = nil
             return cell
         default: return UITableViewCell()
         }
@@ -215,7 +215,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             switch editingStyle {
             case .delete:
                 queue.queue.remove(at: indexPath.row)
-                tableView.deleteRows(at: [indexPath], with: .automatic)
+                if !queue.queue.isEmpty { tableView.deleteRows(at: [indexPath], with: .automatic) }
                 manager.update(with: queue)
             case .insert: break
             case .none: break
@@ -230,7 +230,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 fill!.songs.remove(at: indexPath.row)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
                 queue.queue.append(added)
-                tableView.insertRows(at: [IndexPath(row: queue.queue.count - 1, section: 1)], with: .automatic)
+                if !queue.queue.isEmpty { tableView.insertRows(at: [IndexPath(row: queue.queue.count - 1, section: 1)], with: .automatic) }
             case .delete: break
             case .none: break
             }

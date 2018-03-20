@@ -9,7 +9,7 @@
 import Foundation
 import MediaPlayer
 
-class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMediaPickerControllerDelegate, UISearchResultsUpdating {
+class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMediaPickerControllerDelegate, UISearchControllerDelegate, UISearchResultsUpdating {
 
     //MARK: - properties
     
@@ -18,6 +18,8 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     var searching: Bool { return manager.controller.search.isActive }
     var adding: Bool { return manager.controller.adding }
     var final: Bool { return manager.controller.final }
+    
+    var editing = false
     
     private var songs = [[Song]](repeating: [], count: 27)
     var list = [Song]()
@@ -237,8 +239,8 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         case .insert:
             
             switch searching {
-            case true: q.manager?.find(song: results[indexPath.row])
-            case false: q.manager?.find(song: songs[indexPath.section][indexPath.row])
+            case true: Alerts.queue(song: results[indexPath.row])
+            case false: Alerts.queue(song: songs[indexPath.section][indexPath.row])
             }
             
         case .delete: break
@@ -252,11 +254,22 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     
     func tableView(_ tableView: UITableView, moveRowAt sourceIndexPath: IndexPath, to destinationIndexPath: IndexPath) {}
     
+    //MARK: - search delegate stack
+    
+    func willPresentSearchController(_ searchController: UISearchController) {
+        if manager.controller.table.isEditing { editing = true }
+        if editing { manager.controller.table.setEditing(false, animated: true) }
+    }
+    
+    func willDismissSearchController(_ searchController: UISearchController) {
+        if editing { manager.controller.table.setEditing(true, animated: true) }
+        editing = false
+        searchController.searchBar.resignFirstResponder()
+    }
+    
     //MARK: - search results updater stack
     
     func updateSearchResults(for searchController: UISearchController) {
-        manager.controller.table.setEditing(false, animated: true)
-        
         guard let query = manager.controller.search.searchBar.text?.lowercased() else { return }
         results.removeAll()
         

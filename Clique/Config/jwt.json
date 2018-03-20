@@ -1,0 +1,7 @@
+{
+    "signer": {
+        "type": "esdca",
+        "algorithm": "es256",
+        "key": "MIGTAgEAMBMGByqGSM49AgEGCCqGSM49AwEHBHkwdwIBAQQgdnfVozRuwpyrGhd4WBYOcRN1zMDk27Xyytp6isYYmMqgCgYIKoZIzj0DAQehRANCAAQ9BiiyjAyxjS6+wDfsxrNNTLqqhjvhptXoGahZEApf/oN7B1k1X7mfnOemV5kxKU1k1bSOUdqqH6uMYZ9AqjRC"
+    }
+}

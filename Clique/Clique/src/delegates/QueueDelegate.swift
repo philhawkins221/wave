@@ -216,7 +216,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             case .delete:
                 queue.queue.remove(at: indexPath.row)
                 if !queue.queue.isEmpty { tableView.deleteRows(at: [indexPath], with: .automatic) }
-                manager.update(with: queue)
+                manager.update(queue: queue)
             case .insert: break
             case .none: break
             }
@@ -253,7 +253,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             let mover = queue.queue[sourceIndexPath.row]
             queue.queue.remove(at: sourceIndexPath.row)
             queue.queue.insert(mover, at: destinationIndexPath.row)
-            manager.update(with: queue)
+            manager.update(queue: queue)
         case 2:
             let mover = fill!.songs[sourceIndexPath.row]
             fill!.songs.remove(at: sourceIndexPath.row)

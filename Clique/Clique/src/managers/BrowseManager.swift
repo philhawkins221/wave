@@ -46,12 +46,18 @@ struct BrowseManager {
         update()
     }
     
-    func update(with replacement: [Playlist]? = nil) {
-        if let replacement = replacement {
-            CliqueAPI.update(library: user, with: replacement)
-        }
-        
+    func update() {
         controller.refresh()
+    }
+    
+    func update(library replacement: [Playlist]) {
+        CliqueAPI.update(library: user, with: replacement)
+        update()
+    }
+    
+    func update(playlist replacement: Playlist) {
+        CliqueAPI.update(playlist: user, with: replacement)
+        update()
     }
     
     //MARK: - accessors
@@ -71,22 +77,19 @@ struct BrowseManager {
         playlist.songs.append(contentsOf: songs)
         if controller.mode == .playlist { controller.playlist = playlist }
         
-        var replacement = user.library
-        if let i = replacement.index(of: playlist) { replacement[i] = playlist }
-        
-        update(with: replacement)
+        update(playlist: playlist)
         
         //TODO: sync with apple music or spotify if needed
     }
     
     func add(playlist: Playlist) {
-        var replacement = user.library
-        replacement.append(playlist)
-        
-        update(with: replacement)
+        update(playlist: playlist)
     }
     
-    //TODO: mutating func add(friend: String)
+    func add(friend: String) {
+        CliqueAPI.add(friend: friend, to: user)
+        update()
+    }
     
     func play(playlist: Playlist, at index: Int) {
         q.manager?.play(playlist: playlist, at: index)
@@ -147,9 +150,7 @@ struct BrowseManager {
         case Catalogues.AppleMusic.rawValue:
             guard let playlist = Media.get(playlist: controller.playlist.id) else { return }
             controller.playlist = playlist
-            var replacement = user.library
-            if let i = replacement.index(of: playlist) { replacement[i] = playlist }
-            update(with: replacement)
+            update(playlist: playlist)
         case Catalogues.Spotify.rawValue: break //TODO: spotify sync
         default: break
         }

@@ -41,12 +41,28 @@ struct QueueManager {
         update()
     }
     
-    func update(with replacement: Queue? = nil) {
-        if let replacement = replacement {
-            CliqueAPI.update(queue: user, with: replacement)
-        }
-        
+    func update() {
         controller.refresh()
+    }
+    
+    func update(queue replacement: Queue) {
+        CliqueAPI.update(queue: replacement)
+        update()
+    }
+    
+    func update(applemusic status: Bool) {
+        CliqueAPI.update(applemusic: user, to: status)
+        update()
+    }
+    
+    func update(spotify status: Bool) {
+        CliqueAPI.update(spotify: user, to: status)
+        update()
+    }
+    
+    func update(voting status: Bool) {
+        CliqueAPI.update(voting: user, to: status)
+        update()
     }
     
     //MARK: - accessors

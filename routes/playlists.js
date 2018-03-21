@@ -75,7 +75,9 @@ exports.newUser = function(req, res) {
             if (err) {
                 res.send({'error': 'An error has occurred'});
             } else {
-                result.ops[0].id = result.ops[0]._id;
+                var id = result.ops[0]._id.$oid;
+                result.ops[0].id = id;
+                result.ops[0].queue.owner = id;
                 console.log('Success: ' +JSON.stringify(result));
                 res.send(result.ops[0]);
                 collection.save(result.ops[0]);
@@ -92,16 +94,19 @@ exports.updatePlaylist = function(req, res) {
             if (err) {
                 res.send({'error': 'An error has occurred'});
             } else {
+                console.log("updatePlaylist: found user " + id);
                 var replaced = false;
                 for (var i = 0; i < user.library.length; i++) {
                     if ((replacement.id == user.library[i].id && replacement.owner == user.library[i].owner) && replacement.library == user.library[i].library) {
                         user.library[i] = replacement;
                         replaced = true;
+                        console.log("updatePlaylist: made replacement");
                         break;
                     }
                 }
                 if (!replaced) {
                     user.library.push(replacement);
+                    console.log("updatePlaylist: not found, adding playlist");
                 }
                 collection.save(user);
             }
@@ -117,9 +122,11 @@ exports.deletePlaylist = function(req, res) {
             if (err) {
                 res.send({'error': 'An error has occurred'});
             } else {
+                console.log("deletePlaylist: found user " + id);
                 for (var i = 0; i < user.library.length; i++) {
                     if ((deleted.id == user.library[i].id && deleted.owner == user.library[i].owner) && deleted.library == user.library[i].library) {
                         user.library.splice(i, 1);
+                        console.log("deletePlaylist: deleted playlist");
                         break;
                     }
                 }
@@ -133,7 +140,7 @@ exports.addFriend = function(req, res) {
     var id = req.params.id;
     var friend = req.body.id;
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {"friends": friend} }, function(err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {"friends": friend} }, function(err, user) {
             if (err) {
                 res.send({'error': 'An error has occurred'});
             } else {

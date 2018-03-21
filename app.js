@@ -29,6 +29,7 @@ app.put('/playlists/:id/update-library', playlist.updateLibrary); //loadSongs
 app.put('/playlists/:id/update-playlist', playlist.updatePlaylist);
 app.put('/playlists/:id/update-applemusic', playlist.updateAppleMusic); //updateAppleMusicStatus
 app.put('/playlists/:id/update-spotify', playlist.updateSpotify); //updateSpotifyStatus
+app.put('/playlists/:id/update-username', playlist.updateUsername);
 app.put('/playlists/:id/update-voting', playlist.updateVoting); //updateVotingStatus
 
 app.delete('/playlists/:id', playlist.deleteUser); //deletePlaylist

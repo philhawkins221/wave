@@ -109,6 +109,7 @@ exports.updatePlaylist = function(req, res) {
                     console.log("updatePlaylist: not found, adding playlist");
                 }
                 collection.save(user);
+                res.send(user);
             }
         });
     });
@@ -131,6 +132,7 @@ exports.deletePlaylist = function(req, res) {
                     }
                 }
                 collection.save(user);
+                res.send(user);
             }
         });
     });
@@ -165,6 +167,7 @@ exports.deleteFriend = function(req, res) {
                     }
                 }
                 collection.save(user);
+                res.send(user);
             }
         });
     });
@@ -273,6 +276,7 @@ exports.updateAppleMusic = function(req, res) {
             } else {
                 result.applemusic = set;
                 collection.save(result);
+                res.send(result);
             }
         });
     });
@@ -290,6 +294,7 @@ exports.updateSpotify = function(req, res) {
             } else {
                 result.spotify = set;
                 collection.save(result);
+                res.send(result);
             }
         });
     });
@@ -307,6 +312,7 @@ exports.updateVoting = function(req, res) {
             } else {
                 result.queue.voting = set;
                 collection.save(result);
+                res.send(result);
             }
         });
     });

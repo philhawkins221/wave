@@ -11,22 +11,29 @@ app.use(body_parser.urlencoded({
     extended: true
 }));
 
-app.get('/playlists', playlist.findAll);
-app.get('/playlists/:id', playlist.findById);
-app.post('/playlists', playlist.addPlaylist);
-app.put('/playlists/:id/markSongAsPlayed', playlist.markSongAsPlayed);
-app.put('/playlists/:id/changeSong', playlist.updatePlaylistSong);
-app.put('/playlists/:id', playlist.updatePlaylist);
-app.put('/playlists/:id/loadSongs', playlist.loadSongs);
-app.put('/playlists/:id/addSong', playlist.addSong);
-app.put('/playlists/:id/upvote', playlist.upvote);
-app.put('/playlists/:id/downvote', playlist.downvote);
-app.delete('/playlists/:id', playlist.deletePlaylist);
+app.post('/playlists', playlist.newUser); //addPlaylist
+app.get('/playlists/:id', playlist.findUser); //findById
+app.get('/playlists/search', playlist.searchUsers);
+app.get('/playlists', playlist.getAllUsers); //findAll
+app.put('/playlists/:id/add-friend', playlist.addFriend);
 
-app.post('/playlists/:id/updateClique', playlist.updateClique);
-app.post('/playlists/:id/updateAppleMusicStatus', playlist.updateAppleMusicStatus);
-app.post('/playlists/:id/updateSpotifyStatus', playlist.updateSpotifyStatus);
-app.post('/playlists/:id/updateVotingStatus', playlist.updateVotingStatus);
+app.put('/playlists/:id/play', playlist.playSong); //updatePlaylistSong
+app.put('/playlists/:id/queue', playlist.addSong); //addSong
+app.get('/playlists/:id/advance', playlist.advanceQueue); //markSongAsPlayed
+app.put('/playlists/:id/upvote', playlist.upvoteSong); //upvote
+app.put('/playlists/:id/downvote', playlist.downvoteSong); //downvote
+
+app.put('/playlists/:id', playlist.updateUser); //updatePlaylist
+app.put('/playlists/:id/update-queue', playlist.updateQueue); //updateClique
+app.put('/playlists/:id/update-library', playlist.updateLibrary); //loadSongs
+app.put('/playlists/:id/update-playlist', playlist.updatePlaylist);
+app.put('/playlists/:id/update-applemusic', playlist.updateAppleMusic); //updateAppleMusicStatus
+app.put('/playlists/:id/update-spotify', playlist.updateSpotify); //updateSpotifyStatus
+app.put('/playlists/:id/update-voting', playlist.updateVoting); //updateVotingStatus
+
+app.delete('/playlists/:id', playlist.deleteUser); //deletePlaylist
+app.delete('/playlists/:id/delete-playlist', playlist.deletePlaylist);
+app.delete('/playlists/:id/delete-friend', playlist.deleteFriend);
 
 
 var port = process.env.PORT || 8080;

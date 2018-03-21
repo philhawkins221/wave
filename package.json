@@ -7,10 +7,11 @@
     "body-parser": "^1.14.2",
     "bson": "^0.4.21",
     "express": "^4.13.4",
+    "mongodb": "^3.0.4",
     "morgan": "^1.6.1",
     "multer": "^1.1.0"
   },
   "engines": {
-	"node": "4.4.0"
+    "node": "4.4.0"
   }
 }

@@ -1,12 +1,13 @@
-var mongo = require('mongodb');
+var mongo = require('mongodb').MongoClient;
 var BSON = require('bson').BSONPure;
 
-var Server = mongo.Server,
-    Db = mongo.Db
+//var Server = mongo.Server,
+    //Db = mongo.Db
 
 var database;
 var uri = 'mongodb://heroku_71lpgxj4:udtrdpud8ppp7ohr160r00gqnt@ds015289.mlab.com:15289/heroku_71lpgxj4';
-mongo.MongoClient.connect(uri, function(err, db) {
+//mongo.MongoClient.connect(uri, function(err, db) {
+mongo.connect(uri, function (err, db) {
     if (err) throw err;
     db.open(function(err, dbase) {
         if (!err) {
@@ -23,22 +24,8 @@ mongo.MongoClient.connect(uri, function(err, db) {
 
 });
 
-//var server = new Server('localhost', 27017, {auto_reconnect: true});
-//db = new Db('playlistdb', server);
 
-//db.open(function(err, db) {
-   // if (!err) {
-     //   console.log("Connected to CS279 project database");
-       // db.collection('playlists', {strict:true}, function(err, collection) {
-         //   if (err) {
-           //     console.log("The playlists collection doesn't exist. Creating it with simple data...");
-             //   populateDB();
-           // }
-       // });
-   // }
-//});
-
-exports.findById = function(req, res) {
+exports.findUser = function(req, res) {
     var id = req.params.id;
     console.log('Retrieving playlist: ' + id);
     database.collection('playlists', {strict: true}, function(err, collection) {
@@ -56,7 +43,7 @@ exports.findById = function(req, res) {
     });
 };
 
-exports.findAll = function(req, res) {
+exports.getAllUsers = function(req, res) {
     database.collection('playlists', function(err, collection) {
         collection.find().toArray(function(err, items) {
             res.send(items);
@@ -64,8 +51,21 @@ exports.findAll = function(req, res) {
     });
 };
 
-//may need revision for id
-exports.addPlaylist = function(req, res) {
+exports.searchUsers = function(req, res) {
+    var query = req.body.query;
+    database.collection('playlists', function(err, collection) {
+        collection.find().toArray(function(err, users) {
+            var results = [];
+            for (var i = 0; i < users.length; i++) {
+                if (results.length >= 25) { break }
+                if (users[i].indexOf(query) != -1) { results.push(users[i]) }
+            }
+            res.send(results);
+        });
+    });
+}
+
+exports.newUser = function(req, res) {
     var playlist = req.body;
     console.log('Adding playlist: ' + JSON.stringify(playlist));
     database.collection('playlists', function(err, collection) {
@@ -84,6 +84,85 @@ exports.addPlaylist = function(req, res) {
 
 exports.updatePlaylist = function(req, res) {
     var id = req.params.id;
+    var replacement = req.body;
+    database.collection('playlists', function(err, collection) {
+        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
+            if (err) {
+                res.send({'error': 'An error has occurred'});
+            } else {
+                var replaced = false;
+                for (var i = 0; i < user.library.length; i++) {
+                    if ((replacement.id == user.library[i].id && replacement.owner == user.library[i].owner) && replacement.library == user.library[i].library) {
+                        user.library[i] = replacement;
+                        replaced = true;
+                        break;
+                    }
+                }
+                if (!replaced) {
+                    user.library.push(replacement);
+                }
+                collection.save(user);
+            }
+        });
+    });
+}
+
+exports.deletePlaylist = function(req, res) {
+    var id = req.params.id;
+    var deleted = req.body;
+    database.collection('playlists', function(err, collection) {
+        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
+            if (err) {
+                res.send({'error': 'An error has occurred'});
+            } else {
+                for (var i = 0; i < user.library.length; i++) {
+                    if ((replacement.id == user.library[i].id && replacement.owner == user.library[i].owner) && replacement.library == user.library[i].library) {
+                        user.library.splice(i, 1);
+                        break;
+                    }
+                }
+                collection.save(user);
+            }
+        });
+    });
+}
+
+exports.addFriend = function(req, res) {
+    var id = req.params.id;
+    var friend = req.body.id;
+    database.collection('playlists', function(err, collection) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {"friends": friend} }, function(err, result) {
+            if (err) {
+                res.send({'error': 'An error has occurred'});
+            } else {
+                res.send(user);
+            }
+        });
+    });
+}
+
+exports.deleteFriend = function(req, res) {
+    var id = req.params.id;
+    var deleted = req.body.id;
+    database.collection('playlists', function(err, collection) {
+        collection.findOne({'_id':new BSON.ObjectID(id)}, function(err, user) {
+            if (err) {
+                res.send({'error': 'An error has occurred'});
+            } else {
+                for (var i = 0; i < user.friends.length; i++) {
+                    if (deleted == user.friends[i]) {
+                        user.friends.splice(i, 1);
+                        break;
+                    }
+                }
+                collection.save(user);
+            }
+        });
+    });
+}
+
+exports.updateUser = function(req, res) {
+    var id = req.params.id;
     var playlist = req.body;
     console.log('Updating playlist: ' + id);
     console.log(JSON.stringify(playlist));
@@ -101,7 +180,7 @@ exports.updatePlaylist = function(req, res) {
     });
 }
 
-exports.updatePlaylistSong = function(req, res) {
+exports.playSong = function(req, res) {
     var id = req.params.id;
     var song = req.body;
     console.log('Updating current song: ' + id);
@@ -119,6 +198,7 @@ exports.updatePlaylistSong = function(req, res) {
 
     });
 }
+
 exports.addSong = function(req, res) {
     var id = req.params.id;
     var song = req.body;
@@ -137,7 +217,8 @@ exports.addSong = function(req, res) {
         });
     });
 }
-exports.loadSongs = function(req, res) {
+
+exports.updateLibrary = function(req, res) {
     var id = req.params.id;
     var library = req.body.library;
     console.log(req.body.library);
@@ -153,19 +234,8 @@ exports.loadSongs = function(req, res) {
         });
     });
 }
-//Array in json looks like : {"songList":[
-//    {
-//        "name": "Step",
-//        "artist": "Vampire Weekend"
-//    },
-//    {
-//        "name": "Stressed Out",
-//        "artist": "Twenty One Pilots"
-//    }
-//    ]
-//    }
 
-exports.updateClique = function(req, res) {
+exports.updateQueue = function(req, res) {
     var id = req.params.id;
     var queue = req.body;
     console.log('Updating playlist ' + id);
@@ -176,13 +246,13 @@ exports.updateClique = function(req, res) {
                 res.send({'error':'An error has occured'});
             } else {
                 console.log('Clique ' + id + ' updated');
-                res.send(newList);
+                res.send(result);
             }
         });
     });
 }
 
-exports.updateAppleMusicStatus = function(req, res) {
+exports.updateAppleMusic = function(req, res) {
     var id = req.params.id;
     var set = req.body.value;
     console.log('changing Apple Music status of ' + id + ' to ' + set);
@@ -199,7 +269,7 @@ exports.updateAppleMusicStatus = function(req, res) {
     });
 }
 
-exports.updateSpotifyStatus = function(req, res) {
+exports.updateSpotify = function(req, res) {
     var id = req.params.id;
     var set = req.body.value;
     console.log('changing Spotify status of ' + id + ' to ' + set);
@@ -216,7 +286,7 @@ exports.updateSpotifyStatus = function(req, res) {
     });
 }
 
-exports.updateVotingStatus = function(req, res) {
+exports.updateVoting = function(req, res) {
     var id = req.params.id;
     var set = req.body.value;
     console.log('changing voting status of ' + id + ' to ' + set);
@@ -234,7 +304,7 @@ exports.updateVotingStatus = function(req, res) {
 }
 
 //may need revision for empty
-exports.markSongAsPlayed = function(req, res) {
+exports.advanceQueue = function(req, res) {
     var id = req.params.id;
     var found = false;
     database.collection('playlists', function(err, collection) {
@@ -243,7 +313,7 @@ exports.markSongAsPlayed = function(req, res) {
                 console.log('Error finding playlist');
                 res.send(err);
             } else {
-                var next;
+                var next = null;
                 if (result.queue.voting) {
                     var topvotes = Number.NEGATIVE_INFINITY;
                     var index = 0;
@@ -269,7 +339,7 @@ exports.markSongAsPlayed = function(req, res) {
     });
 }
 
-exports.upvote = function(req, res) {
+exports.upvoteSong = function(req, res) {
     var id = req.params.id;
     var song = req.body;
     var found = false;
@@ -301,7 +371,7 @@ exports.upvote = function(req, res) {
     });
 }
 
-exports.downvote = function(req, res) {
+exports.downvoteSong = function(req, res) {
     var id = req.params.id;
     var song = req.body;
     var found = false;
@@ -332,7 +402,8 @@ exports.downvote = function(req, res) {
         });
     });
 }
-exports.deletePlaylist = function(req, res) {
+
+exports.deleteUser = function(req, res) {
     var id = req.params.id;
     console.log('Deleting playlist: ' + id);
     database.collection('playlists', function(err, collection) {
@@ -346,6 +417,7 @@ exports.deletePlaylist = function(req, res) {
         });
     });
 }
+
 
 var populateDB = function() {
 

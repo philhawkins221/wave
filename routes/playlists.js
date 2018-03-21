@@ -118,7 +118,7 @@ exports.deletePlaylist = function(req, res) {
                 res.send({'error': 'An error has occurred'});
             } else {
                 for (var i = 0; i < user.library.length; i++) {
-                    if ((replacement.id == user.library[i].id && replacement.owner == user.library[i].owner) && replacement.library == user.library[i].library) {
+                    if ((deleted.id == user.library[i].id && deleted.owner == user.library[i].owner) && deleted.library == user.library[i].library) {
                         user.library.splice(i, 1);
                         break;
                     }

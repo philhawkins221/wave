@@ -75,7 +75,7 @@ exports.newUser = function(req, res) {
             if (err) {
                 res.send({'error': 'An error has occurred'});
             } else {
-                var id = result.ops[0]._id.$oid;
+                var id = result.insertedIds.0;
                 result.ops[0].id = id;
                 result.ops[0].queue.owner = id;
                 console.log('Success: ' +JSON.stringify(result));

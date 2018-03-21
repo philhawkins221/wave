@@ -7,8 +7,9 @@ var BSON = require('bson').BSONPure;
 var database;
 var uri = 'mongodb://heroku_71lpgxj4:udtrdpud8ppp7ohr160r00gqnt@ds015289.mlab.com:15289/heroku_71lpgxj4';
 //mongo.MongoClient.connect(uri, function(err, db) {
-mongo.connect(uri, function (err, db) {
+mongo.connect(uri, function (err, database) {
     if (err) throw err;
+    var db = database.db('heroku_71lpgxj4');
     db.open(function(err, dbase) {
         if (!err) {
             database = db;

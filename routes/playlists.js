@@ -268,7 +268,7 @@ exports.updateUsername = function(req, res) {
     var id = req.params.id;
     var name = req.body.name;
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {username: name} }, function err, result) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {username: name} }, function (err, result) {
             if (err) {
                 console.log('Error updating Clique: ' + err);
                 res.send({'error':'An error has occured'});

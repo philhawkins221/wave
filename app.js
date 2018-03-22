@@ -23,6 +23,10 @@ app.get('/playlists/:id/advance', playlist.advanceQueue); //markSongAsPlayed
 app.put('/playlists/:id/upvote', playlist.upvoteSong); //upvote
 app.put('/playlists/:id/downvote', playlist.downvoteSong); //downvote
 
+app.put('/playlists/:id/request-friend', playlist.requestFriend);
+app.put('/playlists/:id/request-song', playlist.requestSong);
+app.put('playlists/:id/listen', playlists.listenUser);
+
 app.put('/playlists/:id', playlist.updateUser); //updatePlaylist
 app.put('/playlists/:id/update-queue', playlist.updateQueue); //updateClique
 app.put('/playlists/:id/update-library', playlist.updateLibrary); //loadSongs

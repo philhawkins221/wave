@@ -25,7 +25,7 @@ app.put('/playlists/:id/downvote', playlist.downvoteSong); //downvote
 
 app.put('/playlists/:id/request-friend', playlist.requestFriend);
 app.put('/playlists/:id/request-song', playlist.requestSong);
-app.put('playlists/:id/listen', playlists.listenUser);
+app.put('playlists/:id/listen', playlist.listenUser);
 
 app.put('/playlists/:id', playlist.updateUser); //updatePlaylist
 app.put('/playlists/:id/update-queue', playlist.updateQueue); //updateClique

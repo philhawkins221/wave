@@ -24,6 +24,9 @@ class ProfileBar: UIView {
     var controller = UIViewController()
     var client: User?
     
+    var optionscontainer: UIView?
+    var options: OptionsTableViewController?
+    
     enum Message: String {
         case generic = "start a wave"
         case peopleListening
@@ -72,9 +75,9 @@ class ProfileBar: UIView {
             display(subline: .nowPlaying)
         } else if profile.queue.current != nil && profile.queue.listeners.count > 1 {
             display(subline: .peopleListening)
+        } else {
+            display(subline: .generic)
         }
-        
-        display(subline: .generic)
     }
     
     func display(username: String) {
@@ -135,6 +138,16 @@ class ProfileBar: UIView {
     }
     
     @IBAction func openclose(_ sender: Any) {
+        Options.assess(for: controller)
+        options?.refresh()
+        
+        let height = NSLayoutConstraint(item: optionscontainer!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: CGFloat(Options.height))
+        optionscontainer?.addConstraint(height)
+
+        optionscontainer?.isHidden = !(optionscontainer?.isHidden ?? true)
+        //TODO: animate options
+        if optionscontainer?.isHidden ?? true { opencloselabel.setTitle("⬆️", for: .normal) }
+        else { opencloselabel.setTitle("⬇️", for: .normal) }
     }
     
     /*

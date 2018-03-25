@@ -26,6 +26,10 @@ var bro = BrowseViewController()
 var np = NowPlayingViewController()
 var q = QueueViewController()
 
+//MARK: - general manager
+
+var gm: GeneralManager? { return np.manager }
+
 //MARK: - type aliases
 
 //typealias Library = [Playlist]
@@ -64,6 +68,34 @@ enum ProfileController {
     case browse
     case nowplaying
     case queue
+}
+
+enum Option {
+    case settings
+    case friendRequests
+    case checkFrequencies
+    case shareQueue
+    case shuffle
+    //case addQueuePlaylistToLibrary
+    case addFriend
+    case removeFriend
+    case addPlaylist
+    case removePlaylist
+    case joinQueue
+    case playPlaylist
+    case addPlaylistToLibrary
+    case sharePlaylist
+    case playAll
+    case playCatalog
+    case addCatalogToLibrary
+    case addHistoryPlaylist
+    
+    case stopSharing
+    case stopListening
+    case stopViewing
+    case stopSyncing
+    
+    case none
 }
 
 enum BrowseMode: String {

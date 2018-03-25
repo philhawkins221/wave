@@ -12,15 +12,24 @@ class FriendsDelegate: BrowseDelegate {
     
     //MARK: - properties
     
-    var friends = Identity.friends
+    var friends = [User]()
     
     //MARK: - actions
     
+    override func populate() {
+        super.populate()
+        
+        for friend in manager.client().friends {
+            if let found = CliqueAPI.find(user: friend) { friends.append(found) }
+        }
+    }
+    
     override func title() {
-        manager.controller.title = "Browse"
+        manager.controller.title = "browse"
         
         manager.controller.addButton.isEnabled = manager.client().me()
-        manager.controller.editButton.isEnabled = manager.client().me()
+        manager.controller.editButton.isEnabled = false //manager.client().me()
+        manager.controller.editButton.title = ""
     }
     
     //MARK: - table delegate stack
@@ -31,7 +40,7 @@ class FriendsDelegate: BrowseDelegate {
         switch indexPath.section {
         case 0: manager.view(user: Identity.me)
         case 1 where friends.isEmpty: tableView.deselectRow(at: indexPath, animated: true)
-        case 1: manager.view(user: friends[indexPath.row])
+        case 1: manager.view(user: friends[indexPath.row].id)
         default: break
         }
     }
@@ -43,7 +52,7 @@ class FriendsDelegate: BrowseDelegate {
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         if searching { return super.tableView(tableView, editingStyleForRowAt: indexPath) }
         
-        return .delete
+        return .none
     }
     
     //MARK: - table data source stack
@@ -73,7 +82,7 @@ class FriendsDelegate: BrowseDelegate {
         case 0:
             cell.textLabel?.text = "library"
             cell.accessoryType = .disclosureIndicator
-            cell.imageView?.image = UIImage(named: "clique 120.png")
+            cell.imageView?.image = #imageLiteral(resourceName: "clique 120.png")
             cell.setImageSize(to: 50)
             cell.imageView?.layer.cornerRadius = cell.frame.size.width / 2
             cell.imageView?.clipsToBounds = true
@@ -83,18 +92,12 @@ class FriendsDelegate: BrowseDelegate {
             cell.detailTextLabel?.text = "tap + to add a friend"
             cell.selectionStyle = .none
         case 1:
-            if let friend = CliqueAPI.find(user: friends[indexPath.row]) {
-                cell.textLabel?.text = "@" + friend.username
-                cell.accessoryType = .disclosureIndicator
-                cell.imageView?.image = UIImage(named: "clique 120.png")
-                cell.setImageSize(to: 50)
-                cell.imageView?.layer.cornerRadius = cell.frame.size.width / 2
-                cell.imageView?.clipsToBounds = true
-            } else {
-                cell.textLabel?.text = "deleted user"
-                cell.textLabel?.textColor = UIColor.gray
-                cell.accessoryType = .none
-            }
+            cell.textLabel?.text = "@" + friends[indexPath.row].username
+            cell.accessoryType = .disclosureIndicator
+            cell.imageView?.image = #imageLiteral(resourceName: "clique 120.png")
+            cell.setImageSize(to: 50)
+            cell.imageView?.layer.cornerRadius = cell.frame.size.width / 2
+            cell.imageView?.clipsToBounds = true
         default: break
         }
         
@@ -120,8 +123,10 @@ class FriendsDelegate: BrowseDelegate {
         
         switch editingStyle {
         case .delete:
+            manager.delete(friend: friends[indexPath.row], confirmed: false)
             friends.remove(at: indexPath.row)
-            //TODO: gm.unfriend(friends[indexPath.row])
+            if !friends.isEmpty { tableView.deleteRows(at: [indexPath], with: .automatic) }
+            manager.refresh()
         case .insert: break
         case .none: break
         }

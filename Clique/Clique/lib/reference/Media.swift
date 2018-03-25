@@ -47,6 +47,7 @@ struct Media {
     
     static func pause() {
         //TODO: pause
+        player.pause()
     }
     
     static func search(multiple: Bool, on controller: BrowseViewController) {

@@ -92,7 +92,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     }
     
     func title() {
-        manager.controller.title = "All Songs"
+        manager.controller.title = "all songs"
         
         manager.controller.addButton.isEnabled = false
         manager.controller.editButton.isEnabled = false
@@ -112,7 +112,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
             owner: manager.client().id,
             id: "",
             library: "",
-            name: "All Songs",
+            name: searching ? "search" : "library",
             social: true,
             songs: searching ? results : list
         )
@@ -124,9 +124,9 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
                 from: tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
             )
         case _ where adding: self.tableView(tableView, commit: .insert, forRowAt: indexPath)
-        case true where final: manager.find(songs: [results[indexPath.row]]); fallthrough
+        case true where final: manager.find(songs: [results[indexPath.row]])
         case true: manager.play(playlist: allsongs, at: indexPath.row)
-        case false where final: manager.find(songs: [songs[indexPath.section][indexPath.row]]); fallthrough
+        case false where final: manager.find(songs: [songs[indexPath.section][indexPath.row]])
         case false: manager.play(playlist: allsongs, at: list.index(of: songs[indexPath.section][indexPath.row]) ?? 0)
         }
     }
@@ -239,8 +239,8 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         case .insert:
             
             switch searching {
-            case true: Alerts.queue(song: results[indexPath.row])
-            case false: Alerts.queue(song: songs[indexPath.section][indexPath.row])
+            case true: q.manager?.find(song: results[indexPath.row], from: manager.controller, confirmed: q.manager?.client().me() ?? false)
+            case false: q.manager?.find(song: songs[indexPath.section][indexPath.row], from: manager.controller, confirmed: q.manager?.client().me() ?? false)
             }
             
         case .delete: break
@@ -258,7 +258,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     
     func willPresentSearchController(_ searchController: UISearchController) {
         if manager.controller.table.isEditing { editing = true }
-        if editing { manager.controller.table.setEditing(false, animated: true) }
+        if editing && !adding { manager.controller.table.setEditing(false, animated: true) }
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
@@ -288,11 +288,8 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         var songs = [Song]()
         for song in mediaItemCollection.items { songs.append(Media.virtualize(song: song)) }
         
-        if adding && !songs.isEmpty {
-            q.manager?.find(song: songs.first!)
-            return
-        }
-        if final { manager.find(songs: songs) }
+        if adding && !songs.isEmpty { return q.manager?.find(song: songs.first!, from: manager.controller, confirmed: q.manager?.client().me() ?? false) ?? () }
+        if final { return manager.find(songs: songs) }
         
         let selected = Playlist(
             owner: manager.client().id,

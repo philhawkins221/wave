@@ -25,7 +25,7 @@ class SyncDelegate: BrowseDelegate {
     }
     
     override func title() {
-        manager.controller.title = "Sync"
+        manager.controller.title = "sync"
         
         manager.controller.table.tableHeaderView = nil
         
@@ -43,8 +43,8 @@ class SyncDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         
         switch indexPath.section {
-        case 0 where !applemusic.isEmpty: manager.sync(playlist: applemusic[indexPath.row])
-        case 1: manager.sync(playlist: spotify![indexPath.row])
+        case 0 where !applemusic.isEmpty: manager.sync(new: applemusic[indexPath.row])
+        case 1: manager.sync(new: spotify![indexPath.row])
         default: tableView.deselectRow(at: indexPath, animated: true)
         }
     }

@@ -49,6 +49,13 @@
 		4A8F6001200FA90E00564EFE /* BrowseDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8F6000200FA90E00564EFE /* BrowseDelegate.swift */; };
 		4A9DE05520582657002EBA04 /* SearchDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9DE05420582657002EBA04 /* SearchDelegate.swift */; };
 		4A9DE05720588EE7002EBA04 /* CatalogDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A9DE05620588EE7002EBA04 /* CatalogDelegate.swift */; };
+		4AAB4C652065567700C882AD /* OptionsTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C642065567700C882AD /* OptionsTableViewCell.swift */; };
+		4AAB4C6C2067014E00C882AD /* OptionSet.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C6B2067014E00C882AD /* OptionSet.swift */; };
+		4AAB4C6E206701FC00C882AD /* Options.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C6D206701FC00C882AD /* Options.swift */; };
+		4AAB4C7220671C2500C882AD /* OptionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C7120671C2500C882AD /* OptionsDelegate.swift */; };
+		4AAB4C742067390B00C882AD /* OptionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C732067390B00C882AD /* OptionsManager.swift */; };
+		4AAB4C7620673D1800C882AD /* OptionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C7520673D1800C882AD /* OptionsTableViewController.swift */; };
+		4AAB4C7820674B1F00C882AD /* OptionsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C7720674B1F00C882AD /* OptionsContainer.swift */; };
 		4AAD8F3A20162D410090CE17 /* waves.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 4A0AA6242016277B0018E9CD /* waves.mp4 */; };
 		4AB840D11CD70640005FDB47 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB840D01CD70640005FDB47 /* MediaPlayer.framework */; };
 		4AC3C9F21C4ACCB700D5BCCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC3C9F11C4ACCB700D5BCCA /* AppDelegate.swift */; };
@@ -132,6 +139,13 @@
 		4A9DE05620588EE7002EBA04 /* CatalogDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogDelegate.swift; sourceTree = "<group>"; };
 		4AA5AA571D01F28D004B30FA /* NewCliqueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = NewCliqueViewController.swift; sourceTree = "<group>"; };
 		4AA798181C56ECBA00E211E7 /* LibraryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = LibraryViewController.swift; sourceTree = "<group>"; };
+		4AAB4C642065567700C882AD /* OptionsTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; name = OptionsTableViewCell.swift; path = Clique/lib/ui/OptionsTableViewCell.swift; sourceTree = SOURCE_ROOT; };
+		4AAB4C6B2067014E00C882AD /* OptionSet.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionSet.swift; sourceTree = "<group>"; };
+		4AAB4C6D206701FC00C882AD /* Options.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Options.swift; sourceTree = "<group>"; };
+		4AAB4C7120671C2500C882AD /* OptionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsDelegate.swift; sourceTree = "<group>"; };
+		4AAB4C732067390B00C882AD /* OptionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsManager.swift; sourceTree = "<group>"; };
+		4AAB4C7520673D1800C882AD /* OptionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsTableViewController.swift; sourceTree = "<group>"; };
+		4AAB4C7720674B1F00C882AD /* OptionsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsContainer.swift; sourceTree = "<group>"; };
 		4AB53C9E1CE289C2000E47A2 /* SpotifyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyViewController.swift; sourceTree = "<group>"; };
 		4AB840D01CD70640005FDB47 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		4AC3C9EE1C4ACCB700D5BCCA /* Clique.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clique.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -206,10 +220,9 @@
 		4A186DC120509FDB0091F8FF /* src */ = {
 			isa = PBXGroup;
 			children = (
-				4A186DC32050A03C0091F8FF /* ui */,
+				4A186DC32050A03C0091F8FF /* controllers */,
 				4A186DC42050A0500091F8FF /* managers */,
 				4A186DC52050A0580091F8FF /* delegates */,
-				4A186DC72050A0CE0091F8FF /* objects */,
 				4A186DCA2050A4390091F8FF /* protocols */,
 				4A186DC62050A0C50091F8FF /* xib */,
 				4A06C3021FD77C3B00E99FED /* legacy */,
@@ -232,18 +245,17 @@
 			path = bin;
 			sourceTree = "<group>";
 		};
-		4A186DC32050A03C0091F8FF /* ui */ = {
+		4A186DC32050A03C0091F8FF /* controllers */ = {
 			isa = PBXGroup;
 			children = (
+				4AAB4C7520673D1800C882AD /* OptionsTableViewController.swift */,
 				4A06C3091FDC8A0600E99FED /* NowPlayingViewController.swift */,
 				4A06C30B1FDC8B0000E99FED /* QueueViewController.swift */,
 				4A06C30D1FDC8BFD00E99FED /* BrowseViewController.swift */,
 				4A06C3111FDC928600E99FED /* SwipeController.swift */,
 				4A06C3071FD79D4B00E99FED /* ProfileBar.swift */,
-				4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */,
-				4A186DC82050A3C10091F8FF /* NowPlayingTableViewCell.swift */,
 			);
-			path = ui;
+			path = controllers;
 			sourceTree = "<group>";
 		};
 		4A186DC42050A0500091F8FF /* managers */ = {
@@ -252,6 +264,7 @@
 				4AEE14CE2013555700FC8D80 /* GeneralManager.swift */,
 				4A8F5FFE200FA90400564EFE /* BrowseManager.swift */,
 				4AF452EE1FE0E758007FCF8F /* QueueManager.swift */,
+				4AAB4C732067390B00C882AD /* OptionsManager.swift */,
 			);
 			path = managers;
 			sourceTree = "<group>";
@@ -269,6 +282,7 @@
 				4A186DBF205073FD0091F8FF /* SyncDelegate.swift */,
 				4A9DE05420582657002EBA04 /* SearchDelegate.swift */,
 				4A9DE05620588EE7002EBA04 /* CatalogDelegate.swift */,
+				4AAB4C7120671C2500C882AD /* OptionsDelegate.swift */,
 			);
 			path = delegates;
 			sourceTree = "<group>";
@@ -294,6 +308,7 @@
 				4A186DD12050A4B20091F8FF /* Playlist.swift */,
 				4A5495831FFC822500345CB1 /* User.swift */,
 				4A186DE52050AD660091F8FF /* Identity.swift */,
+				4AAB4C6B2067014E00C882AD /* OptionSet.swift */,
 			);
 			path = objects;
 			sourceTree = "<group>";
@@ -312,18 +327,40 @@
 		4A546CC62046521A003E284F /* lib */ = {
 			isa = PBXGroup;
 			children = (
+				4AAB4C662065614C00C882AD /* ui */,
+				4A186DC72050A0CE0091F8FF /* objects */,
+				4AAB4C632064B50800C882AD /* reference */,
+			);
+			path = lib;
+			sourceTree = "<group>";
+		};
+		4AAB4C632064B50800C882AD /* reference */ = {
+			isa = PBXGroup;
+			children = (
 				4A5495811FFB0E5A00345CB1 /* Global.swift */,
 				4A186DDB2050A6EE0091F8FF /* Media.swift */,
 				4A186DDD2050A7600091F8FF /* AppleMusicAPI.swift */,
 				4A186DDF2050A7B30091F8FF /* SpotifyAPI.swift */,
 				4A186DE12050A80E0091F8FF /* iTunesAPI.swift */,
+				4AAB4C6D206701FC00C882AD /* Options.swift */,
 				4A186DE32050A82D0091F8FF /* CliqueAPI.swift */,
 				4A186DD72050A6200091F8FF /* Web.swift */,
 				4A54957F1FFB0E5100345CB1 /* Endpoints.swift */,
 				4A8F5FF420063DEE00564EFE /* Alerts.swift */,
 				4AF452E31FDE1982007FCF8F /* StyleGuide.swift */,
 			);
-			path = lib;
+			path = reference;
+			sourceTree = "<group>";
+		};
+		4AAB4C662065614C00C882AD /* ui */ = {
+			isa = PBXGroup;
+			children = (
+				4AAB4C642065567700C882AD /* OptionsTableViewCell.swift */,
+				4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */,
+				4A186DC82050A3C10091F8FF /* NowPlayingTableViewCell.swift */,
+				4AAB4C7720674B1F00C882AD /* OptionsContainer.swift */,
+			);
+			path = ui;
 			sourceTree = "<group>";
 		};
 		4AC3C9E51C4ACCB700D5BCCA = {
@@ -561,7 +598,9 @@
 				4A8F5FF92009811900564EFE /* LibraryDelegate.swift in Sources */,
 				4A9DE05720588EE7002EBA04 /* CatalogDelegate.swift in Sources */,
 				4AFDA1F5205A0FD100C87E09 /* HistoryDelegate.swift in Sources */,
+				4AAB4C7820674B1F00C882AD /* OptionsContainer.swift in Sources */,
 				4A186DDC2050A6EE0091F8FF /* Media.swift in Sources */,
+				4AAB4C6E206701FC00C882AD /* Options.swift in Sources */,
 				4A06C3081FD79D4B00E99FED /* ProfileBar.swift in Sources */,
 				4A186DC92050A3C10091F8FF /* NowPlayingTableViewCell.swift in Sources */,
 				4A06C3121FDC928600E99FED /* SwipeController.swift in Sources */,
@@ -572,6 +611,7 @@
 				4A186DDA2050A6D40091F8FF /* Searching.swift in Sources */,
 				4A186DE62050AD660091F8FF /* Identity.swift in Sources */,
 				4AF452EF1FE0E758007FCF8F /* QueueManager.swift in Sources */,
+				4AAB4C6C2067014E00C882AD /* OptionSet.swift in Sources */,
 				4A8F6001200FA90E00564EFE /* BrowseDelegate.swift in Sources */,
 				4A5495821FFB0E5A00345CB1 /* Global.swift in Sources */,
 				4A186DE02050A7B30091F8FF /* SpotifyAPI.swift in Sources */,
@@ -584,10 +624,14 @@
 				4A8F5FFD200FA8F200564EFE /* FriendsDelegate.swift in Sources */,
 				4A186DD42050A4DD0091F8FF /* Artist.swift in Sources */,
 				4A9DE05520582657002EBA04 /* SearchDelegate.swift in Sources */,
+				4AAB4C652065567700C882AD /* OptionsTableViewCell.swift in Sources */,
 				4AC3C9FA1C4ACCB700D5BCCA /* Clique.xcdatamodeld in Sources */,
+				4AAB4C7220671C2500C882AD /* OptionsDelegate.swift in Sources */,
 				4A186DDE2050A7600091F8FF /* AppleMusicAPI.swift in Sources */,
+				4AAB4C742067390B00C882AD /* OptionsManager.swift in Sources */,
 				4AF452EB1FE0CCBF007FCF8F /* QueueDelegate.swift in Sources */,
 				4AEE14CF2013555700FC8D80 /* GeneralManager.swift in Sources */,
+				4AAB4C7620673D1800C882AD /* OptionsTableViewController.swift in Sources */,
 				4A186DCE2050A45E0091F8FF /* CatalogItem.swift in Sources */,
 				4AF452E41FDE1982007FCF8F /* StyleGuide.swift in Sources */,
 				4A186DD22050A4B20091F8FF /* Playlist.swift in Sources */,

@@ -57,7 +57,7 @@ class SearchDelegate: BrowseDelegate {
     }
     
     override func title() {
-        manager.controller.title = "Search"
+        manager.controller.title = "'" + query + "'"
         
         manager.controller.addButton.isEnabled = false
         manager.controller.editButton.isEnabled = false
@@ -69,20 +69,20 @@ class SearchDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         
         switch search {
-        case .users where final: manager.find(friend: users[indexPath.row].id); fallthrough
+        case .users where final: manager.find(friend: users[indexPath.row], confirmed: false)
         case .users: manager.view(user: users[indexPath.row].id)
         case .applemusic where indexPath.section == 0,
              .spotify where indexPath.section == 0: manager.view(catalog: artists[indexPath.row])
         case .applemusic where adding,
              .spotify where adding: self.tableView(tableView, commit: .insert, forRowAt: indexPath)
         case .applemusic where final,
-             .spotify where final: manager.find(songs: [songs[indexPath.row]]); fallthrough
+             .spotify where final: manager.find(songs: [songs[indexPath.row]])
         case .applemusic, .spotify:
             let playlist = Playlist(
                 owner: "",
                 id: "",
                 library: search == .applemusic ? Catalogues.AppleMusic.rawValue : Catalogues.Spotify.rawValue,
-                name: "Search",
+                name: "search",
                 social: false,
                 songs: songs
             )
@@ -123,10 +123,10 @@ class SearchDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, numberOfRowsInSection: section) }
         
         switch search {
-        case .users: return users.count
+        case .users: return users.isEmpty ? 1 : users.count
         case .applemusic where section == 0,
-             .spotify where section == 0: return artists.count
-        case .applemusic, .spotify: return songs.count
+             .spotify where section == 0: return artists.isEmpty ? 1 : artists.count
+        case .applemusic, .spotify: return songs.isEmpty ? 1 : songs.count
         case .none, .library: return 0
         }
     }
@@ -136,6 +136,10 @@ class SearchDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, cellForRowAt: indexPath) }
         
         switch search {
+        case .users where users.isEmpty:
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textLabel?.text = "no users found"
+            return cell
         case .users:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.textLabel?.text = "@" + users[indexPath.row].username
@@ -148,12 +152,22 @@ class SearchDelegate: BrowseDelegate {
                 cell.detailTextLabel?.text = "🔊" + current.artist.name + " - " + current.title
             } //TODO: set detail text label listening
             return cell
+            case .applemusic where indexPath.section == 0 && artists.isEmpty,
+                 .spotify where indexPath.section == 0 && artists.isEmpty:
+                let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+                cell.textLabel?.text = "no artists found"
+                return cell
         case .applemusic where indexPath.section == 0,
              .spotify where indexPath.section == 0:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             cell.textLabel?.text = artists[indexPath.row].name
             cell.accessoryType = .disclosureIndicator
             return cell
+            case .applemusic where songs.isEmpty,
+                 .spotify where songs.isEmpty:
+                let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+                cell.textLabel?.text = "no songs found"
+                return cell
         case .applemusic, .spotify:
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
             cell.set(song: songs[indexPath.row])
@@ -179,7 +193,7 @@ class SearchDelegate: BrowseDelegate {
         case .applemusic where indexPath.section == 0,
              .spotify where indexPath.section == 0:
             return false
-        case .applemusic, .spotify: return true
+        case .applemusic, .spotify: return !songs.isEmpty
         case .none, .library: return false
         }
     }
@@ -188,7 +202,7 @@ class SearchDelegate: BrowseDelegate {
         if searching { super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
         
         switch editingStyle {
-        case .insert: Alerts.queue(song: songs[indexPath.row])
+        case .insert: q.manager?.find(song: songs[indexPath.row], from: manager.controller, confirmed: q.manager?.client().me() ?? false)
         case .delete, .none: break
         }
     }

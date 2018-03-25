@@ -12,7 +12,8 @@ class QueueViewController: UIViewController {
     
     //MARK: - outlets
 
-    @IBOutlet weak var profilebar: ProfileBar?
+    @IBOutlet weak var profilebar: ProfileBar!
+    @IBOutlet weak var options: UIView!
     
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var historybutton: UIBarButtonItem!
@@ -26,6 +27,7 @@ class QueueViewController: UIViewController {
     var user = Identity.me
     var fill: Playlist?
     
+    let refreshcontrol = UIRefreshControl()
     weak var timer = Timer()
     
     //MARK: - lifecycle stack
@@ -40,6 +42,16 @@ class QueueViewController: UIViewController {
         
         table.tintColor = UIColor.orange
         table.canCancelContentTouches = false
+        
+        profilebar.controller = self
+        
+        refreshcontrol.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        
+        if #available(iOS 10.0, *) {
+            table.refreshControl = refreshcontrol
+        } else {
+            table.backgroundView = refreshcontrol
+        }
                 
         //TODO: timer and notifications
         //NotificationCenter.default.addObserver(self, selector: #selector(self.advance), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
@@ -76,11 +88,13 @@ class QueueViewController: UIViewController {
     
     //MARK: - tasks
     
-    func refresh() {
+    @objc func refresh() {
         manager = QueueManager(to: self)
         table.delegate = manager?.delegate
         table.dataSource = manager?.delegate
         table.reloadData()
+        
+        refreshcontrol.endRefreshing()
     }
     
     //MARK: - navigation
@@ -89,6 +103,10 @@ class QueueViewController: UIViewController {
         switch segue.identifier ?? "" {
         case "search": manager?.search(on: segue.destination)
         case "history": manager?.view(history: segue.destination)
+        case "options":
+            guard let vc = segue.destination as? OptionsTableViewController else { return }
+            profilebar.options = vc
+            profilebar.optionscontainer = options
         default: break
         }
     }

@@ -34,43 +34,10 @@ struct BrowseManager {
         case .catalog: delegate = CatalogDelegate(to: self)
         }
         
-        controller.profilebar?.manage(profile: user)
+        controller.profilebar.manage(profile: user)
     }
     
-    //MARK: - mutators
-    
-    func manage(user: User) {
-        controller.user = user.id
-        controller.profilebar?.manage(profile: user)
-        
-        update()
-    }
-    
-    func update() {
-        controller.refresh()
-    }
-    
-    func update(library replacement: [Playlist]) {
-        CliqueAPI.update(library: user, with: replacement)
-        update()
-    }
-    
-    func update(playlist replacement: Playlist) {
-        CliqueAPI.update(playlist: user, with: replacement)
-        update()
-    }
-    
-    //MARK: - accessors
-    
-    func client() -> User {
-        var client = user
-        
-        if !client.me() { client.library = client.library.filter { $0.social } }
-        
-        return client
-    }
-    
-    //MARK: - actions
+    //MARK: - tasks
     
     func add(songs: [Song]) {
         var playlist = controller.playlist
@@ -86,13 +53,92 @@ struct BrowseManager {
         update(playlist: playlist)
     }
     
-    func add(friend: String) {
-        CliqueAPI.add(friend: friend, to: user)
-        update()
+    func add(friend: User) {
+        gm?.add(friend: friend.id)
+        refresh()
+    }
+    
+    func client() -> User {
+        var client = user
+        if !client.me() { client.library = client.library.filter { $0.social } }
+        
+        return client
+    }
+    
+    func delete(friend: User, confirmed: Bool) {
+        guard confirmed else { return Alerts.delete(friend: friend, on: controller) }
+        
+        gm?.delete(friend: friend.id)
+        refresh()
+    }
+    
+    func delete(playlist: Playlist) {
+        CliqueAPI.delete(playlist: playlist, for: user.id)
+        refresh()
+    }
+
+    func find(friend: User, confirmed: Bool) {
+        guard confirmed else { return Alerts.add(friend: friend, on: controller) }
+        
+        if controller.final {
+            
+            for vc in controller.navigationController?.viewControllers as? [BrowseViewController] ?? [] {
+                if vc.final { continue }
+                
+                if vc.end == .friends {
+                    
+                    vc.manager?.find(friend: friend, confirmed: confirmed)
+                    print("put it in my but ooo put it in good")
+                    Media.find()
+                    controller.navigationController?.popToViewController(vc, animated: true)
+                    
+                    return
+                }
+            }
+            
+            return
+        }
+        
+        controller.search.isActive = false
+        add(friend: friend)
+    }
+    
+    func find(songs: [Song]) {
+        if controller.final {
+            
+            for vc in controller.navigationController?.viewControllers as? [BrowseViewController] ?? [] {
+                if vc.final { continue }
+                
+                if vc.end == .playlist {
+                    
+                    vc.manager?.find(songs: songs)
+                    Media.find()
+                    controller.navigationController?.popToViewController(vc, animated: true)
+                    
+                    return
+                }
+            }
+            
+            return
+        }
+        
+        controller.search.isActive = false
+        add(songs: songs)
+    }
+    
+    func manage(user: User) {
+        controller.user = user.id
+        controller.profilebar?.manage(profile: user)
+        
+        refresh()
     }
     
     func play(playlist: Playlist, at index: Int) {
         q.manager?.play(playlist: playlist, at: index)
+    }
+    
+    func refresh() {
+        controller.refresh()
     }
     
     func search(for end: BrowseMode, on vc: BrowseViewController) {
@@ -109,42 +155,15 @@ struct BrowseManager {
         vc.user = user.id
         vc.mode = .friends
     }
-    
-    func find(friend: String? = nil, songs: [Song]? = nil) {
-        if controller.final {
-            
-            for vc in controller.navigationController?.viewControllers as? [BrowseViewController] ?? [] {
-                if vc.final { continue }
-                
-                if (vc.end == .friends && friend != nil && songs == nil) ||
-                    (vc.end == .playlist && songs != nil && friend == nil) {
-                    
-                    vc.manager?.find(friend: friend, songs: songs)
-                    Media.find()
-                    controller.navigationController?.popToViewController(vc, animated: true)
-                    
-                    return
-                }
-            }
-            
-            return
-        }
-        
-        controller.search.isActive = false
-        
-        if let friend = friend {} //TODO: add(friend: friend)
-        if let songs = songs { add(songs: songs) }
+
+    func sync(new playlist: Playlist) {
+        add(playlist: playlist)
+        controller.navigationController?.popViewController(animated: true)
     }
     
-    func sync(playlist: Playlist? = nil) {
-        if let playlist = playlist {
-            add(playlist: playlist)
-            controller.navigationController?.popViewController(animated: true)
-            
-            return
-        }
-        
+    func sync(confirmed: Bool) {
         guard controller.mode == .playlist else { return }
+        guard confirmed else { return Alerts.sync(playlist: (), on: controller) }
         
         switch controller.playlist.library {
         case Catalogues.AppleMusic.rawValue:
@@ -156,6 +175,16 @@ struct BrowseManager {
         }
     }
     
+    func update(library replacement: [Playlist]) {
+        CliqueAPI.update(library: user.id, with: replacement)
+        refresh()
+    }
+    
+    func update(playlist replacement: Playlist) {
+        CliqueAPI.update(playlist: user.id, with: replacement)
+        refresh()
+    }
+
     func view(user: String) {
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
         else { return }

@@ -37,7 +37,7 @@ class PlaylistDelegate: BrowseDelegate {
         
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         if adding { return self.tableView(tableView, commit: .insert, forRowAt: indexPath) }
-        if final { manager.find(songs: [playlist.songs[indexPath.row]]) }
+        if final { return manager.find(songs: [playlist.songs[indexPath.row]]) }
         
         manager.play(playlist: playlist, at: indexPath.row)
     }
@@ -109,15 +109,11 @@ class PlaylistDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
         
         switch editingStyle {
-        case .insert: Alerts.queue(song: playlist.songs[indexPath.row])
+        case .insert: q.manager?.find(song: playlist.songs[indexPath.row], from: manager.controller, confirmed: q.manager?.client().me() ?? false)
         case .delete:
             playlist.songs.remove(at: indexPath.row)
             manager.controller.playlist = playlist
-            var replacement: [Playlist]? = manager.client().library
-            if let i = replacement?.index(of: playlist) { replacement![i] = playlist }
-            else { replacement = nil }
-            
-            manager.update(with: replacement)
+            manager.update(playlist: playlist)
         case .none: break
         }
     }
@@ -136,12 +132,7 @@ class PlaylistDelegate: BrowseDelegate {
         playlist.songs.remove(at: sourceIndexPath.row)
         playlist.songs.insert(mover, at: destinationIndexPath.row)
         
-        var replacement: [Playlist]! = manager.client().library
-        
-        if let i = replacement.index(of: playlist) { replacement[i] = playlist }
-        else { replacement = nil }
-        
-        manager.update(with: replacement)
+        manager.update(playlist: playlist)
     }
     
 }

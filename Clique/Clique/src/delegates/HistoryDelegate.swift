@@ -22,7 +22,7 @@ class HistoryDelegate: QueueDelegate {
     }
     
     override func title() {
-        manager.controller.title = "History"
+        manager.controller.title = "history"
         
         manager.controller.addbutton.isEnabled = false
         manager.controller.historybutton.isEnabled = false

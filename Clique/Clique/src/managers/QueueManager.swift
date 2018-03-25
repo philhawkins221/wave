@@ -29,43 +29,22 @@ struct QueueManager {
         case .history: delegate = HistoryDelegate(to: self)
         }
         
-        controller.profilebar?.manage(profile: user)
+        controller.profilebar.manage(profile: user)
     }
     
-    //MARK: - mutators
+    //MARK: - tasks
+
+    func add(song: Song) {
+        //TODO: request if reqestsonly
+        CliqueAPI.add(song: song, to: user.id)
+    }
     
-    func manage(user: User) {
-        controller.user = user.id
-        controller.profilebar?.manage(profile: user)
+    func advance() {
+        player.pause()
+        if let next = CliqueAPI.advance(queue: user.id) { play(song: next) }
+        else { play() } //TODO: might not be right
         
-        update()
     }
-    
-    func update() {
-        controller.refresh()
-    }
-    
-    func update(queue replacement: Queue) {
-        CliqueAPI.update(queue: replacement)
-        update()
-    }
-    
-    func update(applemusic status: Bool) {
-        CliqueAPI.update(applemusic: user, to: status)
-        update()
-    }
-    
-    func update(spotify status: Bool) {
-        CliqueAPI.update(spotify: user, to: status)
-        update()
-    }
-    
-    func update(voting status: Bool) {
-        CliqueAPI.update(voting: user, to: status)
-        update()
-    }
-    
-    //MARK: - accessors
     
     func client() -> User {
         var client = user
@@ -74,38 +53,40 @@ struct QueueManager {
         return client
     }
     
-    //MARK: - actions
-    
-    func add(song: Song) {
-        if user.me() {
-            CliqueAPI.add(song: song, to: user)
-        } else {
-            //TODO: alert
-        }
-    }
-    
-    func advance() {
-        player.pause()
-        if let next = CliqueAPI.advance(queue: user) { play(song: next) }
-        else { play() } //might not be right
+    func find(song: Song, from controller: BrowseViewController, confirmed: Bool) {
+        guard confirmed else { return Alerts.queue(song: song, on: controller) }
         
+        add(song: song)
+        Media.find()
+        self.controller.navigationController?.popToViewController(self.controller, animated: true)
     }
     
+    func manage(user: User) {
+        controller.user = user.id
+        controller.profilebar?.manage(profile: user)
+        
+        refresh()
+    }
+
     func play() {
         print("queue is empty")
         //TODO: play
-    }
-    
-    func play(song: Song) {
-        CliqueAPI.play(song: song, for: user)
-        Media.play(song: song)
     }
     
     func play(playlist: Playlist, at index: Int) {
         play(song: playlist.songs[index])
         controller.fill = playlist
         
-        update()
+        refresh()
+    }
+    
+    func play(song: Song) {
+        CliqueAPI.play(song: song, for: user.id)
+        Media.play(song: song)
+    }
+    
+    func refresh() {
+        controller.refresh()
     }
     
     func search(on controller: UIViewController) {
@@ -118,11 +99,18 @@ struct QueueManager {
         controller.mode = .friends
     }
     
-    func find(song: Song) {
-        add(song: song)
-        
-        Media.find()
-        controller.navigationController?.popToViewController(controller, animated: true)
+    func update(queue replacement: Queue) {
+        CliqueAPI.update(queue: replacement)
+        refresh()
+    }
+    
+    func update(requests replacement: [Song]) {
+        CliqueAPI.request(song: replacement, to: user.id)
+    }
+    
+    func update(voting status: Bool) {
+        CliqueAPI.update(voting: user.id, to: status)
+        refresh()
     }
     
     func view(history controller: UIViewController) {
@@ -133,7 +121,7 @@ struct QueueManager {
     }
     
     func vote(song: Song, _ direction: Vote) {
-        CliqueAPI.vote(song: song, direction, for: user)
+        CliqueAPI.vote(song: song, direction, for: user.id)
     }
 
 }

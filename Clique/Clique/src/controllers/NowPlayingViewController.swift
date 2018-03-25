@@ -16,6 +16,7 @@ class NowPlayingViewController: UIViewController {
     //MARK: - outlets
     
     @IBOutlet weak var profilebar: ProfileBar!
+    @IBOutlet weak var options: UIView!
     
     @IBOutlet weak var waves: ASPVideoPlayerView!
     
@@ -35,6 +36,13 @@ class NowPlayingViewController: UIViewController {
     
     //MARK: - lifecycle stack
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        manager = GeneralManager(to: self)
+        profilebar.controller = self
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
@@ -47,20 +55,14 @@ class NowPlayingViewController: UIViewController {
         waves.shouldLoop = true
         
         //let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
-        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, mode: AVAudioSessionModeDefault, routeSharingPolicy: .longForm, options: .mixWithOthers)
+        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, mode: AVAudioSessionModeDefault, options: .mixWithOthers)
         waves.playVideo()
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        manager?.update()
-    }
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
-
-        manager = GeneralManager(to: self)
+        refresh()
     }
 
     override func didReceiveMemoryWarning() {
@@ -68,29 +70,41 @@ class NowPlayingViewController: UIViewController {
         // Dispose of any resources that can be recreated.
     }
     
-    //MARK: - helper methods
+    //MARK: - tasks
     
-    //MARK: - storyboard actions
+    func refresh() {
+        manager = GeneralManager(to: self)
+    }
+    
+    //MARK: - actions
     
     @IBAction func rewind(_ sender: Any) {
     }
     
     @IBAction func playpause(_ sender: Any) {
         playpausebutton?.setPaused(!(playpausebutton?.isPaused ?? true), animated: true)
+        
+        return playpausebutton.isPaused ? Media.pause() : Media.play()
     }
     
     @IBAction func fastforward(_ sender: Any) {
     }
     
     //MARK: - navigation
+    
+    override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
+        return true
+    }
 
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
- 
-    override func unwind(for unwindSegue: UIStoryboardSegue, towardsViewController subsequentVC: UIViewController) {
-        
+        switch segue.identifier ?? "" {
+        case "options":
+            guard let vc = segue.destination as? OptionsTableViewController else { return }
+            print("NowPlayingViewController preparing for options segue")
+            profilebar.options = vc
+            profilebar.optionscontainer = options
+        default: break
+        }
     }
 
 }

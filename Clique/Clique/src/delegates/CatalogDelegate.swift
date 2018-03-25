@@ -71,7 +71,7 @@ class CatalogDelegate: BrowseDelegate {
             )
             manager.view(playlist: playlist)
         case is Artist: manager.view(catalog: albums[indexPath.row])
-        case is Album where final: manager.find(songs: [songs[indexPath.row]]); fallthrough
+        case is Album where final: manager.find(songs: [songs[indexPath.row]])
         case is Album where adding: self.tableView(tableView, commit: .insert, forRowAt: indexPath)
         case let album as Album:
             let playlist = Playlist(
@@ -173,7 +173,7 @@ class CatalogDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, commit: editingStyle, forRowAt: indexPath) }
         
         switch editingStyle {
-        case .insert: Alerts.queue(song: songs[indexPath.row])
+        case .insert: q.manager?.find(song: songs[indexPath.row], from: manager.controller, confirmed: q.manager?.client().me() ?? false)
         case .none, .delete: break
         }
     }

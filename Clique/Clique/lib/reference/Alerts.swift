@@ -41,7 +41,15 @@ struct Alerts {
         return alert
     }
     
-    //MARK: - tasks
+    //MARK: - alerts
+    
+    static func add(friend: User, on controller: BrowseViewController) {
+        let alert = confirm(title: "add friend", message: "@" + friend.username + " will be able to see your queue") { _ in
+            controller.manager?.find(friend: friend, confirmed: true)
+        }
+        
+        controller.present(alert, animated: true)
+    }
     
     static func add(playlist: Void, on controller: BrowseViewController) {
         let alert = UIAlertController(title: "add playlist", message: "add a playlist to your library", preferredStyle: .alert)
@@ -84,38 +92,49 @@ struct Alerts {
         controller.present(alert, animated: true)
     }
     
-    static func sync(playlist: Void, on controller: BrowseViewController) {
-        controller.dismiss(animated: true)
-        
-        let alert = confirm(title: "sync " + controller.playlist.name, message: "update all songs in playlist") { _ in
-            controller.manager?.sync()
+    static func delete(friend: User, on controller: BrowseViewController) {
+        let alert = confirm(title: "unfriend", message: "@" + friend.username + " will not be able to see your queue") { _ in
+            controller.manager?.delete(friend: friend, confirmed: true)
         }
         
         controller.present(alert, animated: true)
     }
     
-    static func queue(song: Song) {
-        q.dismiss(animated: true)
-        if q.manager?.client().me() ?? false { return q.manager!.find(song: song) }
+    static func sync(playlist: Void, on controller: BrowseViewController) {
+        controller.dismiss(animated: true)
         
-        let alert = confirm(title: "add song", message: "add " + song.title + " to the queue") { _ in
-            q.manager?.find(song: song)
+        let alert = confirm(title: "sync " + controller.playlist.name, message: "update all songs in playlist") { _ in
+            controller.manager?.sync(confirmed: true)
         }
         
-        q.present(alert, animated: true)
+        controller.present(alert, animated: true)
     }
     
-    static func rename(user profile: ProfileBar, on controller: UIViewController) {
-        guard var replacement = profile.client else { return }
-        
-        let alert = input(title: "", entry: replacement.username) { (action, alert) in
-            guard let name = alert.textFields?.first?.text else { return }
-            replacement.username = name
-            
-            CliqueAPI.update(user: replacement)
-            profile.display(username: name)
+    static func queue(song: Song, on controller: BrowseViewController) {
+        let alert = confirm(title: "add song", message: "\"" + song.title + "\" will be added to the queue") { _ in
+            q.manager?.find(song: song, from: controller, confirmed: true)
         }
         
+        controller.dismiss(animated: true)
+        controller.present(alert, animated: true)
+    }
+    
+    static func rename(user profile: ProfileBar, on controller: UIViewController, retry: Bool = false) {
+        guard let user = profile.client else { return }
+        
+        let alert = input(title: "", entry: user.username) { (action, alert) in
+            guard let name = alert.textFields?.first?.text else { return }
+            if name == user.username { return }
+            
+            let matches = CliqueAPI.search(user: name, strict: true)
+            
+            if matches.isEmpty {
+                CliqueAPI.update(username: user.id, to: name)
+                profile.display(username: name)
+            } else { rename(user: profile, on: controller, retry: true) }
+        }
+        
+        if retry { alert.message = "that name is already taken" }
         controller.present(alert, animated: true)
     }
     

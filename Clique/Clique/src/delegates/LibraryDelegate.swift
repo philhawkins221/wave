@@ -25,7 +25,7 @@ class LibraryDelegate: BrowseDelegate {
     }
     
     override func title() {
-        manager.controller.title = "Library"
+        manager.controller.title = "library"
         
         manager.controller.addButton.isEnabled = manager.client().me()
         manager.controller.editButton.isEnabled = manager.client().me()
@@ -134,9 +134,10 @@ class LibraryDelegate: BrowseDelegate {
         
         switch editingStyle {
         case .delete:
+            let deleted = library[indexPath.row]
             library.remove(at: indexPath.row)
             tableView.deleteRows(at: [indexPath], with: .automatic)
-            manager.update(with: library)
+            manager.delete(playlist: deleted)
         case .none, .insert: break
         }
     }
@@ -153,7 +154,7 @@ class LibraryDelegate: BrowseDelegate {
         let mover = library[sourceIndexPath.row]
         library.remove(at: sourceIndexPath.row)
         library.insert(mover, at: destinationIndexPath.row)
-        manager.update(with: library)
+        manager.update(library: library)
     }
 
 }

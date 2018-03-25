@@ -17,6 +17,7 @@ class BrowseViewController: UIViewController {
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var addButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
+    @IBOutlet weak var options: UIView!
     
     //MARK: - properties
     
@@ -32,14 +33,8 @@ class BrowseViewController: UIViewController {
     var end: BrowseMode?
     
     var user = Identity.me
-    var playlist = Playlist(
-        owner: "",
-        id: "",
-        library: "",
-        name: "",
-        social: false,
-        songs: []
-    )
+    var playlist = Playlist()
+    
     
     //MARK: - lifecycle stack
     
@@ -63,6 +58,8 @@ class BrowseViewController: UIViewController {
 
         addButton.isEnabled = false
         editButton.isEnabled = false
+        
+        profilebar.controller = self
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -87,7 +84,7 @@ class BrowseViewController: UIViewController {
         
         if mode == .playlist {
             switch playlist.library {
-            case Catalogues.AppleMusic.rawValue, Catalogues.Spotify.rawValue: editButton.title = "Sync"
+            case Catalogues.AppleMusic.rawValue, Catalogues.Spotify.rawValue: editButton.title = "sync"
             default: break
             }
         }
@@ -125,41 +122,51 @@ class BrowseViewController: UIViewController {
     //MARK: - actions
     
     @IBAction func edit(_ sender: Any) {
-        guard editButton.title != "Sync" else { return Alerts.sync(playlist: (), on: self) }
+        guard editButton.title != "sync" else { return Alerts.sync(playlist: (), on: self) }
         
         switch table.isEditing {
         case true:
             table.setEditing(false, animated: true)
-            editButton.title = "Edit"
+            editButton.title = "edit"
             addButton.isEnabled = true
         case false:
             table.setEditing(true, animated: true)
-            editButton.title = "Done"
+            editButton.title = "done"
             addButton.isEnabled = false
         }
-    }
-    
-    @IBAction func add(_ sender: Any) {
-        //TODO: add
     }
     
     //MARK: - navigation
     
     override func shouldPerformSegue(withIdentifier identifier: String, sender: Any?) -> Bool {
-        switch mode {
-        case .library:
-            Alerts.add(playlist: (), on: self)
-            return false
-        case .browse, .friends, .playlist, .sync, .search, .catalog: return true
+        switch identifier {
+        case "search": return true
+        case "add":
+            switch mode {
+            case .library:
+                Alerts.add(playlist: (), on: self)
+                return false
+            case .browse, .friends, .playlist, .sync, .search, .catalog: return true
+            }
+        default: return true
         }
     }
-
+    
     override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        guard let vc = segue.destination as? BrowseViewController else { return }
-        
-        switch mode {
-        case .friends, .playlist: manager?.search(for: mode, on: vc)
-        case .browse, .library, .sync, .search, .catalog: break
+        switch segue.identifier ?? "" {
+            
+        case "add", "search":
+            guard let vc = segue.destination as? BrowseViewController else { return }
+            switch mode {
+            case .friends, .playlist: manager?.search(for: mode, on: vc)
+            case .browse, .library, .sync, .search, .catalog: break
+            }
+            
+        case "options":
+            guard let vc = segue.destination as? OptionsTableViewController else { return }
+            profilebar.options = vc
+            profilebar.optionscontainer = options
+        default: break
         }
     }
 

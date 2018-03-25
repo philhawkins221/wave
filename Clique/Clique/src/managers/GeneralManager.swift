@@ -13,7 +13,6 @@ struct GeneralManager {
     //MARK: - properties
     
     private var user: User
-    private var friends = Identity.friends
     var controller: NowPlayingViewController
     var display: Song?
     
@@ -25,37 +24,29 @@ struct GeneralManager {
         self.user = found
         self.controller = controller
         
-        update()
-    }
-    
-    //MARK: - mutators
-    
-    mutating func manage(user: User) {
-        self.user = user
+        display = user.queue.current
+        nowplaying()
+        
         controller.profilebar.manage(profile: user)
     }
     
-    mutating func manage(display: Song?) {
-        self.display = display
+    //MARK: - tasks
+    
+    func add(friend: String) {
+        CliqueAPI.add(friend: friend, to: user.id)
     }
     
-    mutating func update(with replacement: User? = nil) {
-        if let replacement = replacement {
-            CliqueAPI.update(user: replacement)
-        }
-        
-        refresh()
+    func connect(applemusic status: Bool) {
+        CliqueAPI.update(applemusic: user.id, to: status)
     }
     
-    private mutating func refresh() {
-        guard let found = CliqueAPI.find(user: user.id) else { return }
-        
-        manage(user: found)
-        manage(display: user.queue.current)
-        nowplaying()
+    func connect(spotify status: Bool) {
+        CliqueAPI.update(spotify: user.id, to: status)
     }
     
-    //MARK: - actions
+    func delete(friend: String) {
+        CliqueAPI.delete(friend: friend, for: user.id)
+    }
     
     func nowplaying() {
         guard let song = display else { return notplaying() }
@@ -64,7 +55,8 @@ struct GeneralManager {
         controller.songlabel.isHidden = false
         controller.artistlabel.isHidden = false
         controller.albumlabel.isHidden = false
-        if user.me() {
+        
+        if q.manager?.client().me() ?? false {
             controller.rewindbutton.isHidden = false
             controller.fastforwardbutton.isHidden = false
         } else {
@@ -103,4 +95,9 @@ struct GeneralManager {
         
         controller.profilebar.display(subline: .generic)
     }
+    
+    func refresh() {
+        controller.refresh()
+    }
+    
 }

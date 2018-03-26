@@ -231,6 +231,20 @@ exports.updateSongRequests = function(req, res) {
 
 exports.listenUser = function(req, res) {
     var id = req.params.id;
+    var listener = req.body.id;
+    database.collection('playlists', function(err, collection) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {"queue.listeners": listener} }, function(err, user) {
+            if (err) {
+                res.send({'error': 'An error has occurred'});
+            } else {
+                res.send(listener);
+            }
+        });
+    });
+}
+
+exports.updateListeners = function(req, res) {
+    var id = req.params.id;
     var replacement = req.body.replacement;
     database.collection('playlists', function(err, collection) {
         collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {"queue.listeners": replacement} }, function(err, user) {

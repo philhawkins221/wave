@@ -173,7 +173,35 @@ exports.deleteFriend = function(req, res) {
     });
 }
 
-exports.requestFriend = function(req, res) {
+exports.sendFriendRequest = function(req, res) {
+    var id = req.params.id;
+    var request = req.body;
+    database.collection('playlists', function(err, collection) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {"requests": request} }, function(err, user) {
+            if (err) {
+                res.send({'error': 'An error has occurred'});
+            } else {
+                res.send(request);
+            }
+        });
+    });
+}
+
+exports.sendSongRequest = function(req, res) {
+    var id = req.params.id;
+    var request = req.body;
+    database.collection('playlists', function(err, collection) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $push: {"queue.requests": request} }, function(err, user) {
+            if (err) {
+                res.send({'error': 'An error has occurred'});
+            } else {
+                res.send(request);
+            }
+        });
+    });
+}
+
+exports.updateFriendRequests = function(req, res) {
     var id = req.params.id;
     var replacement = req.body.replacement;
     database.collection('playlists', function(err, collection) {
@@ -187,7 +215,7 @@ exports.requestFriend = function(req, res) {
     });
 }
 
-exports.requestSong = function(req, res) {
+exports.updateSongRequests = function(req, res) {
     var id = req.params.id;
     var replacement = req.body.replacement;
     database.collection('playlists', function(err, collection) {

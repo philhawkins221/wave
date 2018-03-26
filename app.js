@@ -23,8 +23,8 @@ app.get('/playlists/:id/advance', playlist.advanceQueue); //markSongAsPlayed
 app.put('/playlists/:id/upvote', playlist.upvoteSong); //upvote
 app.put('/playlists/:id/downvote', playlist.downvoteSong); //downvote
 
-app.put('/playlists/:id/request-friend', playlist.requestFriend);
-app.put('/playlists/:id/request-song', playlist.requestSong);
+app.put('/playlists/:id/request-friend', playlist.sendFriendRequest);
+app.put('/playlists/:id/request-song', playlist.sendSongRequest);
 app.put('playlists/:id/listen', playlist.listenUser);
 
 app.put('/playlists/:id', playlist.updateUser); //updatePlaylist
@@ -35,6 +35,8 @@ app.put('/playlists/:id/update-applemusic', playlist.updateAppleMusic); //update
 app.put('/playlists/:id/update-spotify', playlist.updateSpotify); //updateSpotifyStatus
 app.put('/playlists/:id/update-username', playlist.updateUsername);
 app.put('/playlists/:id/update-voting', playlist.updateVoting); //updateVotingStatus
+app.put('/playlists/:id/update-requests', playlist.updateFriendRequests);
+app.put('/playlists/:id/update-song-requests', playlist.updateSongRequests);
 
 app.delete('/playlists/:id', playlist.deleteUser); //deletePlaylist
 app.delete('/playlists/:id/delete-playlist', playlist.deletePlaylist);

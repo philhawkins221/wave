@@ -37,6 +37,7 @@ app.put('/playlists/:id/update-username', playlist.updateUsername);
 app.put('/playlists/:id/update-voting', playlist.updateVoting); //updateVotingStatus
 app.put('/playlists/:id/update-requests', playlist.updateFriendRequests);
 app.put('/playlists/:id/update-song-requests', playlist.updateSongRequests);
+app.put('/playlists/:id/update-listeners', playlist.updateListeners);
 
 app.delete('/playlists/:id', playlist.deleteUser); //deletePlaylist
 app.delete('/playlists/:id/delete-playlist', playlist.deletePlaylist);

@@ -62,6 +62,11 @@ struct QueueManager {
     }
     
     func manage(user: User) {
+        guard user.me() || user.queue.listeners.contains(Identity.me) else {
+            if let me = CliqueAPI.find(user: Identity.me) { manage(user: me) }
+            return
+        }
+        
         controller.user = user.id
         controller.profilebar?.manage(profile: user)
         
@@ -99,13 +104,22 @@ struct QueueManager {
         controller.mode = .friends
     }
     
+    func shuffle(enabled: Bool = true) {
+        controller.shuffle = enabled
+        refresh()
+    }
+    
+    func stop() {
+        //TODO: stop
+    }
+    
     func update(queue replacement: Queue) {
         CliqueAPI.update(queue: replacement)
         refresh()
     }
     
     func update(requests replacement: [Song]) {
-        CliqueAPI.request(song: replacement, to: user.id)
+        CliqueAPI.update(songRequests: replacement, for: user.id)
     }
     
     func update(voting status: Bool) {

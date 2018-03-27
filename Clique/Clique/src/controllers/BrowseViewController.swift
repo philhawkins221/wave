@@ -13,11 +13,12 @@ class BrowseViewController: UIViewController {
     //MARK: - outlets
     
     @IBOutlet weak var profilebar: ProfileBar!
+    @IBOutlet weak var options: UIView!
+    @IBOutlet weak var optionscover: UIView!
     
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var addButton: UIBarButtonItem!
     @IBOutlet weak var editButton: UIBarButtonItem!
-    @IBOutlet weak var options: UIView!
     
     //MARK: - properties
     
@@ -66,6 +67,7 @@ class BrowseViewController: UIViewController {
         super.viewWillAppear(animated)
         
         if adding { table.setEditing(true, animated: false) }
+        if mode == .friends { table.setEditing(false, animated: false) }
     }
     
     override func viewDidAppear(_ animated: Bool) {
@@ -78,9 +80,7 @@ class BrowseViewController: UIViewController {
             editButton.isEnabled = false
         }
         
-        if let selected = table.indexPathForSelectedRow {
-            table.deselectRow(at: selected, animated: true)
-        }
+        if let selected = table.indexPathForSelectedRow { table.deselectRow(at: selected, animated: true) }
         
         if mode == .playlist {
             switch playlist.library {
@@ -88,6 +88,8 @@ class BrowseViewController: UIViewController {
             default: break
             }
         }
+        
+        if !(manager?.client().me() ?? true) { editButton.title = "" }
         
         if final && mode == .friends {
             DispatchQueue.main.async { [unowned self] in
@@ -101,6 +103,8 @@ class BrowseViewController: UIViewController {
         
         search.searchBar.resignFirstResponder()
         search.isActive = false
+        
+        if mode == .friends { table.setEditing(false, animated: false) }
     }
 
     override func didReceiveMemoryWarning() {
@@ -166,6 +170,8 @@ class BrowseViewController: UIViewController {
             guard let vc = segue.destination as? OptionsTableViewController else { return }
             profilebar.options = vc
             profilebar.optionscontainer = options
+            profilebar.optionscover = optionscover
+            vc.profilebar = profilebar
         default: break
         }
     }

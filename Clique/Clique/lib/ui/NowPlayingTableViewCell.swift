@@ -13,8 +13,9 @@ class NowPlayingTableViewCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    init(song: Song?) {
-        super.init(style: .subtitle, reuseIdentifier: nil)
+    @IBOutlet weak var creditlabel: UILabel!
+    
+    func set(song: Song?) {
         
         if let song = song {
             textLabel?.text = song.title
@@ -29,8 +30,16 @@ class NowPlayingTableViewCell: UITableViewCell {
                 imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "genericart.png"))
             }
             
+            var sender: User? = nil
+            if song.sender != "" && song.sender != Identity.me { sender = CliqueAPI.find(user: song.sender) }
+            if sender != nil { creditlabel.text = "from: @" + sender!.username }
+            else { creditlabel.text = nil }
+            
             setImageSize(to: 100)
         } else {
+            textLabel?.text = nil
+            detailTextLabel?.text = nil
+            creditlabel.text = nil
             imageView?.image = UIImage(named: "genericart.png")
             setImageSize(to: 100)
             accessoryType = .none
@@ -38,3 +47,4 @@ class NowPlayingTableViewCell: UITableViewCell {
         backgroundColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
     }
 }
+

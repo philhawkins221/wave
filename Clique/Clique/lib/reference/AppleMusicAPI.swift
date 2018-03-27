@@ -25,7 +25,8 @@ struct AppleMusicAPI: Searching {
             }
             
             for song in songs {
-                results.append(Song(
+                results.append(
+                    Song(
                     id: song["id"].string ?? "",
                     library: Catalogues.AppleMusic.rawValue,
                     title: song["attributes"]["name"].string ?? "",
@@ -33,9 +34,10 @@ struct AppleMusicAPI: Searching {
                         id: results.first is Artist ? (results.first as? Artist)?.id ?? "" : "",
                         library: Catalogues.AppleMusic.rawValue,
                         name: song["attributes"]["artistName"].string ?? ""),
+                    sender: "",
                     artwork: song["attributes"]["artwork"]["url"].string ?? "",
-                    votes: 0)
-                )
+                    votes: 0
+                ))
             }
             
         }
@@ -57,8 +59,10 @@ struct AppleMusicAPI: Searching {
                 artist: Artist(id: match["relationships"]["artists"]["data"][0]["id"].string ?? "",
                                library: Catalogues.AppleMusic.rawValue,
                                name: match["attributes"]["artistName"].string ?? ""),
+                sender: song.sender,
                 artwork: match["attributes"]["artwork"]["url"].string ?? "",
-                votes: 0)
+                votes: 0
+            )
         }
         
         return nil
@@ -107,8 +111,10 @@ struct AppleMusicAPI: Searching {
                     artist: Artist(id: song["relationships"]["artists"]["data"][0]["id"].string ?? "",
                                    library: Catalogues.AppleMusic.rawValue,
                                    name: song["attributes"]["artistName"].string ?? ""),
+                    sender: "",
                     artwork: song["attributes"]["artwork"]["url"].string ?? "",
-                    votes: 0))
+                    votes: 0
+                ))
             }
         }
         
@@ -129,8 +135,10 @@ struct AppleMusicAPI: Searching {
                     id: "",
                     library: "",
                     name: song["attributes"]["artistName"].string ?? ""),
+                sender: "",
                 artwork: song["attributes"]["artwork"]["url"].string ?? "",
-                votes: 0)
+                votes: 0
+            )
         }
         
         return nil

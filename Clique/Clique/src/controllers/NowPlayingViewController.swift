@@ -17,6 +17,7 @@ class NowPlayingViewController: UIViewController {
     
     @IBOutlet weak var profilebar: ProfileBar!
     @IBOutlet weak var options: UIView!
+    @IBOutlet weak var optionscover: UIView!
     
     @IBOutlet weak var waves: ASPVideoPlayerView!
     
@@ -33,6 +34,8 @@ class NowPlayingViewController: UIViewController {
     //MARK: - properties
     
     var manager: GeneralManager?
+    
+    var frequencies = [User]()
     
     //MARK: - lifecycle stack
     
@@ -103,6 +106,8 @@ class NowPlayingViewController: UIViewController {
             print("NowPlayingViewController preparing for options segue")
             profilebar.options = vc
             profilebar.optionscontainer = options
+            profilebar.optionscover = optionscover
+            vc.profilebar = profilebar
         default: break
         }
     }

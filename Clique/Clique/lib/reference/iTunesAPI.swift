@@ -24,6 +24,7 @@ struct iTunesAPI {
                     id: "",
                     library: Catalogues.Library.rawValue,
                     name: match["artistName"].string ?? ""),
+                sender: song.sender,
                 artwork: match["artworkUrl60"].string ?? "",
                 votes: 0)
         }

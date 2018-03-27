@@ -19,7 +19,6 @@
 		4A179AFE1D00C64100B6EE20 /* spotify logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */; };
 		4A179AFF1D00C64100B6EE20 /* youtube logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AFB1D00C64100B6EE20 /* youtube logo.png */; };
 		4A186DC0205073FD0091F8FF /* SyncDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A186DBF205073FD0091F8FF /* SyncDelegate.swift */; };
-		4A186DC92050A3C10091F8FF /* NowPlayingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A186DC82050A3C10091F8FF /* NowPlayingTableViewCell.swift */; };
 		4A186DCC2050A4550091F8FF /* LibraryItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A186DCB2050A4550091F8FF /* LibraryItem.swift */; };
 		4A186DCE2050A45E0091F8FF /* CatalogItem.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A186DCD2050A45E0091F8FF /* CatalogItem.swift */; };
 		4A186DD02050A46F0091F8FF /* WaveManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A186DCF2050A46F0091F8FF /* WaveManager.swift */; };
@@ -40,6 +39,7 @@
 		4A5495841FFC822500345CB1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495831FFC822500345CB1 /* User.swift */; };
 		4A5495861FFC854800345CB1 /* Queue.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495851FFC854800345CB1 /* Queue.swift */; };
 		4A5A5B681CE1685A00BD2F5F /* Spotify.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A5A5B671CE1685A00BD2F5F /* Spotify.framework */; };
+		4A5A72C5206998200031BDC1 /* NowPlayingTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5A72C3206998200031BDC1 /* NowPlayingTableViewCell.swift */; };
 		4A7D6C971CDFB22300ADDDA1 /* SystemConfiguration.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */; };
 		4A8F5FF520063DEE00564EFE /* Alerts.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8F5FF420063DEE00564EFE /* Alerts.swift */; };
 		4A8F5FF92009811900564EFE /* LibraryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A8F5FF82009811900564EFE /* LibraryDelegate.swift */; };
@@ -56,6 +56,7 @@
 		4AAB4C742067390B00C882AD /* OptionsManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C732067390B00C882AD /* OptionsManager.swift */; };
 		4AAB4C7620673D1800C882AD /* OptionsTableViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C7520673D1800C882AD /* OptionsTableViewController.swift */; };
 		4AAB4C7820674B1F00C882AD /* OptionsContainer.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C7720674B1F00C882AD /* OptionsContainer.swift */; };
+		4AAB4C7A20696C3C00C882AD /* Request.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AAB4C7920696C3C00C882AD /* Request.swift */; };
 		4AAD8F3A20162D410090CE17 /* waves.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 4A0AA6242016277B0018E9CD /* waves.mp4 */; };
 		4AB840D11CD70640005FDB47 /* MediaPlayer.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AB840D01CD70640005FDB47 /* MediaPlayer.framework */; };
 		4AC3C9F21C4ACCB700D5BCCA /* AppDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AC3C9F11C4ACCB700D5BCCA /* AppDelegate.swift */; };
@@ -74,6 +75,7 @@
 		4AF452EB1FE0CCBF007FCF8F /* QueueDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */; };
 		4AF452EF1FE0E758007FCF8F /* QueueManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452EE1FE0E758007FCF8F /* QueueManager.swift */; };
 		4AF452F11FE0E8C3007FCF8F /* Song.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AF452F01FE0E8C3007FCF8F /* Song.swift */; };
+		4AFCA12920699D9E00B626BF /* NowPlayingTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4AFCA12720699D9E00B626BF /* NowPlayingTableViewCell.xib */; };
 		4AFDA1F5205A0FD100C87E09 /* HistoryDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AFDA1F4205A0FD100C87E09 /* HistoryDelegate.swift */; };
 		9957A368FB2B39D6834B6673 /* Pods_Clique.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = ED9D40512C31A8AE09B7542F /* Pods_Clique.framework */; };
 /* End PBXBuildFile section */
@@ -96,7 +98,6 @@
 		4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "spotify logo.jpg"; sourceTree = "<group>"; };
 		4A179AFB1D00C64100B6EE20 /* youtube logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youtube logo.png"; sourceTree = "<group>"; };
 		4A186DBF205073FD0091F8FF /* SyncDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SyncDelegate.swift; sourceTree = "<group>"; };
-		4A186DC82050A3C10091F8FF /* NowPlayingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingTableViewCell.swift; sourceTree = "<group>"; };
 		4A186DCB2050A4550091F8FF /* LibraryItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = LibraryItem.swift; sourceTree = "<group>"; };
 		4A186DCD2050A45E0091F8FF /* CatalogItem.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = CatalogItem.swift; sourceTree = "<group>"; };
 		4A186DCF2050A46F0091F8FF /* WaveManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = WaveManager.swift; sourceTree = "<group>"; };
@@ -123,6 +124,7 @@
 		4A5A5B671CE1685A00BD2F5F /* Spotify.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; path = Spotify.framework; sourceTree = "<group>"; };
 		4A5A5B691CE16A6700BD2F5F /* Clique-Bridging-Header.h */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.c.h; path = "Clique-Bridging-Header.h"; sourceTree = "<group>"; };
 		4A5A5B6A1CE2434E00BD2F5F /* SettingsViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SettingsViewController.swift; sourceTree = "<group>"; };
+		4A5A72C3206998200031BDC1 /* NowPlayingTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = NowPlayingTableViewCell.swift; sourceTree = "<group>"; };
 		4A5ECD6D1D106E9200C1F702 /* CliqueSongTableViewCell.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqueSongTableViewCell.swift; sourceTree = "<group>"; };
 		4A67C2A01CFE750B00C1D331 /* SVGPlayButton.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SVGPlayButton.framework; path = "Pods/../build/Debug-iphoneos/SVGPlayButton.framework"; sourceTree = "<group>"; };
 		4A7D6C961CDFB22300ADDDA1 /* SystemConfiguration.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = SystemConfiguration.framework; path = System/Library/Frameworks/SystemConfiguration.framework; sourceTree = SDKROOT; };
@@ -146,6 +148,7 @@
 		4AAB4C732067390B00C882AD /* OptionsManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsManager.swift; sourceTree = "<group>"; };
 		4AAB4C7520673D1800C882AD /* OptionsTableViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsTableViewController.swift; sourceTree = "<group>"; };
 		4AAB4C7720674B1F00C882AD /* OptionsContainer.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = OptionsContainer.swift; sourceTree = "<group>"; };
+		4AAB4C7920696C3C00C882AD /* Request.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Request.swift; sourceTree = "<group>"; };
 		4AB53C9E1CE289C2000E47A2 /* SpotifyViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SpotifyViewController.swift; sourceTree = "<group>"; };
 		4AB840D01CD70640005FDB47 /* MediaPlayer.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = MediaPlayer.framework; path = System/Library/Frameworks/MediaPlayer.framework; sourceTree = SDKROOT; };
 		4AC3C9EE1C4ACCB700D5BCCA /* Clique.app */ = {isa = PBXFileReference; explicitFileType = wrapper.application; includeInIndex = 0; path = Clique.app; sourceTree = BUILT_PRODUCTS_DIR; };
@@ -168,6 +171,7 @@
 		4AF452EA1FE0CCBF007FCF8F /* QueueDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueDelegate.swift; sourceTree = "<group>"; };
 		4AF452EE1FE0E758007FCF8F /* QueueManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueManager.swift; sourceTree = "<group>"; };
 		4AF452F01FE0E8C3007FCF8F /* Song.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Song.swift; sourceTree = "<group>"; };
+		4AFCA12720699D9E00B626BF /* NowPlayingTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = NowPlayingTableViewCell.xib; sourceTree = "<group>"; };
 		4AFCD3511CEFB09600E5E9B1 /* AppleMusicViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AppleMusicViewController.swift; sourceTree = "<group>"; };
 		4AFCD3531CEFB17D00E5E9B1 /* SoundcloudViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SoundcloudViewController.swift; sourceTree = "<group>"; };
 		4AFDA1F4205A0FD100C87E09 /* HistoryDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HistoryDelegate.swift; sourceTree = "<group>"; };
@@ -290,6 +294,7 @@
 		4A186DC62050A0C50091F8FF /* xib */ = {
 			isa = PBXGroup;
 			children = (
+				4AFCA12720699D9E00B626BF /* NowPlayingTableViewCell.xib */,
 				4A06C3031FD7888C00E99FED /* wave.storyboard */,
 				4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */,
 				4A06C3051FD7978E00E99FED /* ProfileBar.xib */,
@@ -309,6 +314,7 @@
 				4A5495831FFC822500345CB1 /* User.swift */,
 				4A186DE52050AD660091F8FF /* Identity.swift */,
 				4AAB4C6B2067014E00C882AD /* OptionSet.swift */,
+				4AAB4C7920696C3C00C882AD /* Request.swift */,
 			);
 			path = objects;
 			sourceTree = "<group>";
@@ -356,8 +362,8 @@
 			isa = PBXGroup;
 			children = (
 				4AAB4C642065567700C882AD /* OptionsTableViewCell.swift */,
+				4A5A72C3206998200031BDC1 /* NowPlayingTableViewCell.swift */,
 				4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */,
-				4A186DC82050A3C10091F8FF /* NowPlayingTableViewCell.swift */,
 				4AAB4C7720674B1F00C882AD /* OptionsContainer.swift */,
 			);
 			path = ui;
@@ -492,6 +498,7 @@
 				4A179AFD1D00C64100B6EE20 /* soundcloud logo.gif in Resources */,
 				4AC3C9FC1C4ACCB700D5BCCA /* Assets.xcassets in Resources */,
 				4A179AFC1D00C64100B6EE20 /* apple music logo.jpg in Resources */,
+				4AFCA12920699D9E00B626BF /* NowPlayingTableViewCell.xib in Resources */,
 				4A06C3061FD7978E00E99FED /* ProfileBar.xib in Resources */,
 				4AC3EF391C7E65800013EEFF /* player with youtube helper in Resources */,
 				4ADF95E51D026D6800E0CD19 /* clique 120.png in Resources */,
@@ -593,6 +600,7 @@
 				4A06C30C1FDC8B0000E99FED /* QueueViewController.swift in Sources */,
 				4A5495801FFB0E5100345CB1 /* Endpoints.swift in Sources */,
 				4A186DE22050A80E0091F8FF /* iTunesAPI.swift in Sources */,
+				4A5A72C5206998200031BDC1 /* NowPlayingTableViewCell.swift in Sources */,
 				4A186DCC2050A4550091F8FF /* LibraryItem.swift in Sources */,
 				4A186DD02050A46F0091F8FF /* WaveManager.swift in Sources */,
 				4A8F5FF92009811900564EFE /* LibraryDelegate.swift in Sources */,
@@ -602,7 +610,6 @@
 				4A186DDC2050A6EE0091F8FF /* Media.swift in Sources */,
 				4AAB4C6E206701FC00C882AD /* Options.swift in Sources */,
 				4A06C3081FD79D4B00E99FED /* ProfileBar.swift in Sources */,
-				4A186DC92050A3C10091F8FF /* NowPlayingTableViewCell.swift in Sources */,
 				4A06C3121FDC928600E99FED /* SwipeController.swift in Sources */,
 				4A186DE42050A82D0091F8FF /* CliqueAPI.swift in Sources */,
 				4A8F5FFF200FA90400564EFE /* BrowseManager.swift in Sources */,
@@ -623,6 +630,7 @@
 				4A186DD62050A4FC0091F8FF /* Album.swift in Sources */,
 				4A8F5FFD200FA8F200564EFE /* FriendsDelegate.swift in Sources */,
 				4A186DD42050A4DD0091F8FF /* Artist.swift in Sources */,
+				4AAB4C7A20696C3C00C882AD /* Request.swift in Sources */,
 				4A9DE05520582657002EBA04 /* SearchDelegate.swift in Sources */,
 				4AAB4C652065567700C882AD /* OptionsTableViewCell.swift in Sources */,
 				4AC3C9FA1C4ACCB700D5BCCA /* Clique.xcdatamodeld in Sources */,

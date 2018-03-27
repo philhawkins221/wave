@@ -94,6 +94,13 @@ struct CliqueAPI {
         let _ = Web.call(.put, to: endpoint, with: parameters)
     }
     
+    static func add(listener: String, to user: String) {
+        let endpoint = Endpoints.Clique.add.listenerpoint(user)
+        let parameters: [String : Any] = ["id": listener]
+        
+        let _ = Web.call(.put, to: endpoint, with: parameters)
+    }
+    
     static func delete(user: String) {
         let endpoint = Endpoints.Clique.delete.userpoint(user)
         let _ = Web.call(.delete, to: endpoint)
@@ -113,18 +120,39 @@ struct CliqueAPI {
         let _ = Web.call(.delete, to: endpoint, with: parameters)
     }
     
-    static func request(friend replacement: [String], to user: String) {
-        let endpoint = Endpoints.Clique.request.friendpoint(user)
+    static func request(friend request: Request) {
+        let endpoint = Endpoints.Clique.request.friendpoint(request.receiver)
+        let parameters = Web.parameterize(request: request)
+        
+        Web.send(.put, to: endpoint, with: parameters)
+    }
+    
+    static func request(song request: Song, to user: String) {
+        let endpoint = Endpoints.Clique.request.songpoint(user)
+        let parameters = Web.parameterize(song: request)
+        
+        Web.send(.put, to: endpoint, with: parameters)
+    }
+    
+    static func update(friendRequests replacement: [Request], for user: String) {
+        let endpoint = Endpoints.Clique.update.requestspoint(user)
+        let parameters: [String : Any] = ["replacement": replacement.map { Web.parameterize(request: $0) }]
+        
+        Web.send(.put, to: endpoint, with: parameters)
+    }
+    
+    static func update(songRequests replacement: [Song], for user: String) {
+        let endpoint = Endpoints.Clique.update.songrequestspoint(user)
         let parameters: [String : Any] = ["replacement": replacement]
         
         Web.send(.put, to: endpoint, with: parameters)
     }
     
-    static func request(song replacement: [Song], to user: String) {
-        let endpoint = Endpoints.Clique.request.songpoint(user)
+    static func update(listeners replacement: [String], for user: String) {
+        let endpoint = Endpoints.Clique.update.listenerspoint(user)
         let parameters: [String : Any] = ["replacement": replacement]
         
-        Web.send(.put, to: endpoint, with: parameters)
+        let _ = Web.call(.put, to: endpoint, with: parameters)
     }
     
     static func update(user replacement: User) {

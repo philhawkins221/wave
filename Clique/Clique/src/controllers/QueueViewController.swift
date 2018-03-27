@@ -14,6 +14,7 @@ class QueueViewController: UIViewController {
 
     @IBOutlet weak var profilebar: ProfileBar!
     @IBOutlet weak var options: UIView!
+    @IBOutlet weak var optionscover: UIView!
     
     @IBOutlet weak var table: UITableView!
     @IBOutlet weak var historybutton: UIBarButtonItem!
@@ -26,6 +27,8 @@ class QueueViewController: UIViewController {
     var mode: QueueMode = .queue
     var user = Identity.me
     var fill: Playlist?
+    var shuffle = false
+    var shuffled: Playlist?
     
     let refreshcontrol = UIRefreshControl()
     weak var timer = Timer()
@@ -107,6 +110,8 @@ class QueueViewController: UIViewController {
             guard let vc = segue.destination as? OptionsTableViewController else { return }
             profilebar.options = vc
             profilebar.optionscontainer = options
+            profilebar.optionscover = optionscover
+            vc.profilebar = profilebar
         default: break
         }
     }

@@ -131,7 +131,7 @@ class CatalogDelegate: BrowseDelegate {
         switch item {
         case is Artist where indexPath.section == 0:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = "All Songs"
+            cell.textLabel?.text = "all songs"
             cell.accessoryType = .disclosureIndicator
             return cell
         case is Artist:

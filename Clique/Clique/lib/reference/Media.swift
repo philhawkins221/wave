@@ -14,6 +14,8 @@ struct Media {
     static var searcher = UIViewController()
     
     static func play(song: Song? = nil) {
+        
+        
         //TODO: where to end generating notifications?
         player.endGeneratingPlaybackNotifications()
         
@@ -108,6 +110,7 @@ struct Media {
                 id: String(song.artistPersistentID),
                 library: Catalogues.Library.rawValue,
                 name: song.artist ?? ""),
+            sender: "",
             artwork: "",
             votes: 0
         )
@@ -119,7 +122,7 @@ struct Media {
             id: String(playlist.persistentID),
             library: source.rawValue,
             name: playlist.name ?? "",
-            social: false,
+            social: true,
             songs: playlist.items.map { virtualize(song: $0) }
         )
     }

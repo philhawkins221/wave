@@ -14,6 +14,8 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     var manager: OptionsManager
     
+    var controller: UIViewController? { return manager.profilebar?.controller }
+    
     var options = [Option]()
     var stop: Option = .none
     
@@ -28,12 +30,14 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     //MARK: - table delegate stack
     
     func tableView(_ tableView: UITableView, heightForRowAt indexPath: IndexPath) -> CGFloat {
-        return 45
+        return 60
     }
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        if tableView.cellForRow(at: indexPath)?.isSelected ?? false
-            { tableView.deselectRow(at: indexPath, animated: false) }
+        if indexPath.section == 0, manager.selections.contains(indexPath.row) {
+            guard let i = manager.selections.index(of: indexPath.row) else { return }
+            manager.selections.remove(at: i)
+        }
         
         switch indexPath.section {
         case 0: manager.execute(options[indexPath.row])
@@ -62,6 +66,13 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
+    func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
+        let view = UIView()
+        view.backgroundColor = UIColor.clear
+        
+        return view
+    }
+    
     //MARK: - table data source stack
     
     func numberOfSections(in tableView: UITableView) -> Int {
@@ -79,8 +90,8 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
-            let selected = tableView.cellForRow(at: indexPath)?.isSelected ?? false
+            let cell = tableView.dequeueReusableCell(withIdentifier: "options") ?? UITableViewCell(style: .subtitle, reuseIdentifier: nil)
+            let selected = manager.selections.contains(indexPath.row)
             let selectedview = UIView()
             selectedview.backgroundColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
             cell.textLabel?.font = UIFont.boldSystemFont(ofSize: 15)
@@ -92,6 +103,24 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             cell.separatorInset = UIEdgeInsets.zero
             cell.layoutMargins = UIEdgeInsets.zero
             
+            if indexPath.row == 0 {
+                let top = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: UIRectCorner(rawValue: UIRectCorner.RawValue(UInt8(UIRectCorner.topLeft.rawValue) | UInt8(UIRectCorner.topRight.rawValue))), cornerRadii: CGSize(width: 10, height: 10))
+                let layer = CAShapeLayer()
+                
+                layer.frame = cell.bounds
+                layer.path = top.cgPath
+                cell.layer.mask = layer
+            }
+            
+            if indexPath.row == options.count - 1 {
+                let bottom = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: UIRectCorner(rawValue: UIRectCorner.RawValue(UInt8(UIRectCorner.bottomLeft.rawValue) | UInt8(UIRectCorner.bottomRight.rawValue))), cornerRadii: CGSize(width: 10, height: 10))
+                let layer = CAShapeLayer()
+                
+                layer.frame = cell.bounds
+                layer.path = bottom.cgPath
+                cell.layer.mask = layer
+            }
+            
             switch options[indexPath.row] {
             case .settings:
                 cell.textLabel?.text = "settings"
@@ -99,25 +128,40 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .friendRequests:
+                let requests = CliqueAPI.find(user: Identity.me)?.requests ?? []
+                let count = requests.count.description
                 cell.textLabel?.text = "friend requests"
-                cell.detailTextLabel?.text = nil //TODO: gm requests
-                cell.detailTextLabel?.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+                cell.detailTextLabel?.text =
+                    requests.count > 1 ?
+                        count + " new requests" :
+                        requests.count > 0 ?
+                            "from: @" + (CliqueAPI.find(user: requests.first!.sender)?.username ?? "") :
+                            nil
+                if requests.count > 0 { cell.detailTextLabel?.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1) }
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .checkFrequencies:
+                let frequencies = gm?.controller.frequencies ?? []
                 cell.textLabel?.text = "check frequencies"
-                cell.detailTextLabel?.text = "see who is sharing" //TODO: gm check frequencies
-                //cell.detailTextLabel?.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+                cell.detailTextLabel?.text =
+                    frequencies.isEmpty ?
+                        "see who is sharing" :
+                        frequencies.count > 1 ?
+                            frequencies.count.description + " friends sharing" :
+                            "@" + frequencies.first!.username + " is sharing"
+                if !frequencies.isEmpty { cell.detailTextLabel?.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1) }
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .shareQueue:
-                cell.textLabel?.text = "share queue"
+                let listeners = q.manager?.client().queue.listeners.count ?? 0
+                cell.textLabel?.text = listeners > 0 ? listeners == 1 ? listeners.description + " person listening" : listeners.description + " people listening" : "share queue"
                 cell.detailTextLabel?.text = "invite a friend to the queue"
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .shuffle:
                 cell.textLabel?.text = "shuffle " + (q.manager?.delegate?.fill.name ?? "")
                 cell.detailTextLabel?.text = selected ? "playing songs in random order" : "playing songs in playlist order"
+                cell.accessoryType = .none
                 return cell
             case .addFriend:
                 cell.textLabel?.text = "add friend"
@@ -137,26 +181,45 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .joinQueue:
+                guard let controller = controller as? BrowseViewController,
+                      let user = controller.manager?.client().username else { return cell }
                 cell.textLabel?.text = "join queue"
+                cell.detailTextLabel?.text = "listen with @" + user
+                cell.accessoryType = .none
+                return cell
+            case .addUser:
+                guard let controller = controller as? BrowseViewController else { return cell }
+                cell.textLabel?.text = "add friend"
+                switch controller.manager?.client().username {
+                case .some(let user): cell.detailTextLabel?.text = "send @" + user + " a friend request"
+                case nil: cell.detailTextLabel?.text = "send this user a friend request"
+                }
+                cell.accessoryType = .none
                 return cell
             case .playPlaylist:
                 cell.textLabel?.text = "play"
+                cell.accessoryType = .none
                 return cell
             case .addPlaylistToLibrary:
                 cell.textLabel?.text = "add playlist to library"
+                cell.accessoryType = .none
                 return cell
             case .sharePlaylist:
                 cell.textLabel?.text = selected ? "sharing playlist" : "share playlist"
                 cell.detailTextLabel?.text = selected ? "others can view and add this playlist" : "only you can view this playlist"
+                cell.accessoryType = .none
                 return cell
             case .playAll:
                 cell.textLabel?.text = "play all"
+                cell.accessoryType = .none
                 return cell
             case .playCatalog:
                 cell.textLabel?.text = "play"
+                cell.accessoryType = .none
                 return cell
             case .addCatalogToLibrary:
                 cell.textLabel?.text = "add to library"
+                cell.accessoryType = .none
                 return cell
             case .addHistoryPlaylist:
                 cell.textLabel?.text = "new playlist from history"
@@ -166,7 +229,7 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             }
             
         case 1:
-            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            let cell = tableView.dequeueReusableCell(withIdentifier: "stop") ?? UITableViewCell(style: .default, reuseIdentifier: nil)
             let selectedview = UIView()
             selectedview.backgroundColor = #colorLiteral(red: 0.7450980544, green: 0.1568627506, blue: 0.07450980693, alpha: 1)
             cell.textLabel?.font = UIFont.systemFont(ofSize: 20)
@@ -174,6 +237,14 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             cell.textLabel?.textColor = #colorLiteral(red: 1.0, green: 1.0, blue: 1.0, alpha: 1.0)
             cell.backgroundColor = #colorLiteral(red: 0.9254902005, green: 0.2352941185, blue: 0.1019607857, alpha: 1)
             cell.selectedBackgroundView = selectedview
+            
+            let all = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 10)
+            let layer = CAShapeLayer()
+            
+            layer.frame = cell.bounds
+            layer.path = all.cgPath
+            cell.layer.mask = layer
+            cell.setNeedsDisplay()
             
             switch stop {
             case .stopSharing:
@@ -189,7 +260,7 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 cell.textLabel?.text = "stop syncing"
                 return cell
             case .settings, .friendRequests, .checkFrequencies, .shareQueue, .shuffle
-                , .addFriend, .removeFriend, .addPlaylist, .removePlaylist, .joinQueue, .playPlaylist, .addPlaylistToLibrary, .sharePlaylist, .playAll, .playCatalog, .addCatalogToLibrary, .addHistoryPlaylist, .none:
+                , .addFriend, .removeFriend, .addPlaylist, .removePlaylist, .joinQueue, .addUser, .playPlaylist, .addPlaylistToLibrary, .sharePlaylist, .playAll, .playCatalog, .addCatalogToLibrary, .addHistoryPlaylist, .none:
                 return cell
             }
             

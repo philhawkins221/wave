@@ -8,8 +8,6 @@
 
 import Foundation
 
-//MARK: - song class
-
 struct Song: Equatable, Codable, CatalogItem, LibraryItem {
     
     let id: String
@@ -17,6 +15,7 @@ struct Song: Equatable, Codable, CatalogItem, LibraryItem {
     let title: String
     let artist: Artist
     //let album: String
+    let sender: String
     var artwork: String
     var votes: Int
     

@@ -16,10 +16,15 @@ class QueueSongTableViewCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
-    func set(song: Song) {    
+    func set(song: Song, voting: Bool = false, credit: Bool = false) {
+        
+        var sender: User? = nil
+        if credit && song.sender != "" && song.sender != Identity.me { sender = CliqueAPI.find(user: song.sender) }
+            
         textLabel?.text = song.title
-        detailTextLabel?.text = song.artist.name
-        voteslabel.text = song.votes.description
+        detailTextLabel?.text = sender == nil ? song.artist.name : "from: @" + sender!.username
+        detailTextLabel?.textColor = sender == nil ? #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+        voteslabel.text = voting ? song.votes.description : nil
         accessoryType = .none
         
         if song.library == Catalogues.Library.rawValue {

@@ -64,6 +64,7 @@ struct Web {
             "library": song.library,
             "title": song.title,
             "artist": parameterize(artist: song.artist),
+            "sender": song.sender,
             "artwork": song.artwork,
             "votes": song.votes
         ]
@@ -102,6 +103,13 @@ struct Web {
             "name": playlist.name,
             "social": playlist.social,
             "songs": playlist.songs.map { parameterize(song: $0) }
+        ]
+    }
+    
+    static func parameterize(request: Request) -> [String : Any] {
+        return [
+            "sender": request.sender,
+            "receiver": request.receiver
         ]
     }
     

@@ -25,15 +25,62 @@ class ProfileBar: UIView {
     var client: User?
     
     var optionscontainer: UIView?
+    var optionscover: UIView?
     var options: OptionsTableViewController?
     
-    enum Message: String {
-        case generic = "start a wave"
+    enum Message {
+        case generic
         case peopleListening
         case nowPlaying
         case requests
+        case frequencies
+        case viewing
         case listening
-        case createUsername = "tap to change"
+        case listeningTo
+        case createUsername
+    }
+    
+    var message: Message {
+        guard let client = client else { return .generic }
+        
+        switch client.me() {
+        case true:
+            if client.username == "anonymous" { return .createUsername }
+            
+            switch controller {
+            case is NowPlayingViewController:
+                if (q.manager?.client().me() ?? false) && client.queue.listeners.count > 0 {
+                    return .peopleListening
+                } else if !(q.manager?.client().me() ?? true) && q.manager?.client().queue.current != nil {
+                    return .listeningTo
+                } else if gm?.check(requests: ()) ?? false {
+                    return .requests
+                } else if gm?.display != nil {
+                    return .nowPlaying
+                } else if (gm?.controller.frequencies ?? []).count > 0 {
+                    return .frequencies
+                } else {
+                    return .generic
+                }
+            case is BrowseViewController, is QueueViewController:
+                if (q.manager?.client().me() ?? false) && client.queue.listeners.count > 0 {
+                    return .peopleListening
+                } else if !(q.manager?.client().me() ?? true) && q.manager?.client().queue.current != nil {
+                    return .listening
+                } else if gm?.display != nil {
+                    return .nowPlaying
+                } else {
+                    return .generic
+                }
+            default: return .generic
+            }
+        case false:
+            switch controller {
+            case is BrowseViewController: return .viewing
+            case is QueueViewController: return .listening
+            default: return .generic
+            }
+        }
     }
     
     //MARK: - initializers
@@ -69,6 +116,7 @@ class ProfileBar: UIView {
         
         display(username: profile.username)
         
+        
         if profile.username == "anonymous" && profile.me() {
             display(subline: .createUsername)
         } else if profile.queue.current != nil && profile.queue.listeners.count < 2 {
@@ -78,6 +126,8 @@ class ProfileBar: UIView {
         } else {
             display(subline: .generic)
         }
+        
+        display(subline: message)
     }
     
     func display(username: String) {
@@ -87,47 +137,37 @@ class ProfileBar: UIView {
     }
     
     func display(subline: Message) {
-        let execute: () -> ()
+        var message = String()
         
         switch subline {
-        case .generic:
-            execute = { [unowned self] in
-                self.sublinelabel.text = Message.generic.rawValue
-            }
-            
         case .peopleListening:
-            if let client = client {
-                execute = { [unowned self] in self.sublinelabel.text = client.queue.listeners.count.description + " people listening" }
-            } else {
-                execute = { [unowned self] in self.sublinelabel.text = "0 people listening" }
-            }
-                
+            let listeners = client?.queue.listeners.count ?? 0
+            message = listeners > 1 ? listeners.description + " people listening" : listeners.description + " person listening"
         case .nowPlaying:
-            if let current = client?.queue.current {
-                execute = { [unowned self] in self.sublinelabel.text = "🔊" + current.artist.name + " - " + current.title }
-            } else {
-                display(subline: .generic)
-                execute = { return }
-            }
-                
-        case .requests: execute = { return }
-            
+            guard let current = client?.queue.current else { return }
+            message = "🔊" + current.artist.name + " - " + current.title
+        case .frequencies:
+            let frequencies = gm?.controller.frequencies ?? []
+            let count = frequencies.count.description
+            message = frequencies.count > 1 ? count + " people sharing" : "@" + (frequencies.first?.username ?? "") + " is sharing"
+        case .requests:
+            let requests = client?.requests.count ?? 0
+            message = requests > 1 ? requests.description + " new requests" : requests.description + " new request"
         case .createUsername:
-            execute = { [unowned self] in self.sublinelabel.text = Message.createUsername.rawValue }
-            
+            message = "tap to change"
+        case .viewing:
+            message = "viewing"
         case .listening:
-            if let leader = q.manager?.client(), !leader.me() {
-                execute = { [unowned self] in self.sublinelabel.text = "listening to @" + leader.username }
-            } else if let leader = q.manager?.client(), leader.me() {
-                display(subline: .nowPlaying)
-                execute = { return }
-            } else {
-                display(subline: .generic)
-                execute = { return }
-            }
+            message = "listening"
+        case .listeningTo:
+            guard let leader = q.manager?.client() else { return }
+            message = "listening to @" + leader.username
+        case .generic: message = "start a wave"
         }
         
-        DispatchQueue.main.async { execute() }
+        DispatchQueue.main.async { [weak self] in
+            self?.sublinelabel.text = message
+        }
     }
     
     //MARK: - storyboard actions
@@ -138,16 +178,58 @@ class ProfileBar: UIView {
     }
     
     @IBAction func openclose(_ sender: Any) {
-        Options.assess(for: controller)
-        options?.refresh()
+        switch opencloselabel.title(for: .normal) ?? "" {
+        case "⬆️":
+            Options.assess(for: controller)
+            
+            let tap = UITapGestureRecognizer(target: self, action: #selector(openclose(_:)))
+            let height = NSLayoutConstraint(item: optionscontainer!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: CGFloat(Options.height))
+            let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+            blur.frame = optionscover?.bounds ?? CGRect()
+            blur.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+            
+            options?.refresh()
+            optionscontainer?.addConstraint(height)
+            optionscover?.addGestureRecognizer(tap)
+            
+            if !UIAccessibilityIsReduceTransparencyEnabled() { optionscover?.addSubview(blur) }
+            else { optionscover?.backgroundColor = .white }
+            
+            optionscover?.alpha = 0
+            optionscontainer?.alpha = 0
+            
+            let center = optionscontainer?.center ?? CGPoint()
+            optionscontainer?.center = CGPoint(x: center.x, y: center.y + 50)
+            
+            optionscover?.isHidden = false
+            optionscontainer?.isHidden = false
+            
+            UIView.animate(withDuration: 0.15) { [weak self] in
+                self?.optionscover?.alpha = 0.8
+                self?.optionscontainer?.alpha = 0.9
+                self?.optionscontainer?.center = center
+            }
+            
+            opencloselabel.setTitle("⬇️", for: .normal)
         
-        let height = NSLayoutConstraint(item: optionscontainer!, attribute: NSLayoutAttribute.height, relatedBy: NSLayoutRelation.equal, toItem: nil, attribute: NSLayoutAttribute.notAnAttribute, multiplier: 1, constant: CGFloat(Options.height))
-        optionscontainer?.addConstraint(height)
-
-        optionscontainer?.isHidden = !(optionscontainer?.isHidden ?? true)
-        //TODO: animate options
-        if optionscontainer?.isHidden ?? true { opencloselabel.setTitle("⬆️", for: .normal) }
-        else { opencloselabel.setTitle("⬇️", for: .normal) }
+        case "⬇️":
+            optionscontainer?.removeConstraints(optionscontainer!.constraints)
+            UIView.animate(withDuration: 0.15, animations: { [weak self] in
+                self?.controller.view.layoutIfNeeded()
+                self?.optionscover?.alpha = 0
+                self?.optionscontainer?.alpha = 0
+            },
+            completion: { [weak self] _ in
+                self?.optionscover?.isHidden = true
+                self?.optionscontainer?.isHidden = true
+                if let tap = self?.optionscover?.gestureRecognizers?.first {
+                    self?.optionscover?.removeGestureRecognizer(tap)
+                }
+            })
+            
+            opencloselabel.setTitle("⬆️", for: .normal)
+        default: break
+        }
     }
     
     /*

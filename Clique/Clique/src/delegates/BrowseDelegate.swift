@@ -19,6 +19,17 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     var adding: Bool { return manager.controller.adding }
     var final: Bool { return manager.controller.final }
     
+    var all: Playlist {
+        return Playlist(
+            owner: manager.client().id,
+            id: "",
+            library: "",
+            name: searching ? "search" : "library",
+            social: true,
+            songs: searching ? results : list
+        )
+    }
+    
     var editing = false
     
     private var songs = [[Song]](repeating: [], count: 27)

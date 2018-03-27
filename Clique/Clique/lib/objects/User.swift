@@ -13,13 +13,13 @@ struct User: Codable, Equatable {
     var username: String
     let id: String
     var friends: [String]
-    var requests: [String]
+    var requests: [Request]
     var queue: Queue
     var library: [Playlist]
     var applemusic: Bool
     var spotify: Bool
     
-    init(_ username: String, id: String, friends: [String], requests: [String], queue: Queue, library: [Playlist], applemusic: Bool, spotify: Bool) {
+    init(_ username: String, id: String, friends: [String], requests: [Request], queue: Queue, library: [Playlist], applemusic: Bool, spotify: Bool) {
         self.username = username
         self.id = id
         self.friends = friends

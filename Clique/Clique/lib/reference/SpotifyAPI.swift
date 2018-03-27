@@ -19,7 +19,7 @@ struct SpotifyAPI: Searching {
             let artists = response["artists"]["items"].array ?? []
             
             for song in songs {
-                results.append(Song(
+                results.append( Song(
                     id: song["id"].string ?? "",
                     library: Catalogues.AppleMusic.rawValue,
                     title: song["attributes"]["name"].string ?? "",
@@ -27,9 +27,10 @@ struct SpotifyAPI: Searching {
                         id: song["artists"][0]["id"].string ?? "",
                         library: Catalogues.Spotify.rawValue,
                         name: song["attributes"]["artistName"].string ?? ""),
+                    sender: "",
                     artwork: song["attributes"]["artwork"]["url"].string ?? "",
-                    votes: 0)
-                )
+                    votes: 0
+                ))
             }
             
             for artist in artists {
@@ -75,7 +76,8 @@ struct SpotifyAPI: Searching {
             let songs = response["items"].array ?? []
             
             for song in songs {
-                result.append(Song(
+                result.append(
+                    Song(
                     id: song["id"].string ?? "",
                     library: Catalogues.Spotify.rawValue,
                     title: song["name"].string ?? "",
@@ -83,8 +85,10 @@ struct SpotifyAPI: Searching {
                         id: song["artists"]["id"].string ?? "",
                         library: Catalogues.Spotify.rawValue,
                         name: song["artists"][0]["name"].string ?? ""),
+                    sender: "",
                     artwork: album.artwork,
-                    votes: 0))
+                    votes: 0
+                ))
             }
         }
         
@@ -117,7 +121,8 @@ struct SpotifyAPI: Searching {
             let songs = response["tracks"].array ?? []
             
             for song in songs {
-                results.append(Song(
+                results.append(
+                    Song(
                     id: song["id"].string ?? "",
                     library: Catalogues.Spotify.rawValue,
                     title: song["name"].string ?? "",
@@ -125,8 +130,10 @@ struct SpotifyAPI: Searching {
                         id: song["artists"][0]["id"].string ?? "",
                         library: Catalogues.Spotify.rawValue,
                         name: song["artists"][0]["name"].string ?? ""),
+                    sender: "",
                     artwork: song["album"]["images"][0]["url"].string ?? "",
-                    votes: 0))
+                    votes: 0
+                ))
             }
         }
         

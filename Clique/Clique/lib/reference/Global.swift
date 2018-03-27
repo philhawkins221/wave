@@ -82,6 +82,7 @@ enum Option {
     case addPlaylist
     case removePlaylist
     case joinQueue
+    case addUser
     case playPlaylist
     case addPlaylistToLibrary
     case sharePlaylist
@@ -119,6 +120,11 @@ enum SearchMode {
 enum QueueMode {
     case queue
     case history
+}
+
+enum Requests: String {
+    case friend = "friend"
+    case song = "song"
 }
 
 enum Sorting {

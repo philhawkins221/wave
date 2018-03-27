@@ -54,7 +54,7 @@ struct BrowseManager {
     }
     
     func add(friend: User) {
-        gm?.add(friend: friend.id)
+        gm?.add(friend: friend)
         refresh()
     }
     
@@ -148,12 +148,18 @@ struct BrowseManager {
         
         switch end {
         case .playlist: vc.navigationItem.prompt = "adding songs to " + controller.playlist.name
-        case .friends: vc.navigationItem.prompt = "select a user to send a friend request"
+        case .friends: vc.navigationItem.prompt = "sending friend request"
         case .browse, .library, .sync, .search, .catalog: break
         }
         
         vc.user = user.id
         vc.mode = .friends
+    }
+    
+    func share(playlist enabled: Bool = true) {
+        guard controller.mode == .playlist else { return }
+        controller.playlist.social = enabled
+        update(playlist: controller.playlist)
     }
 
     func sync(new playlist: Playlist) {

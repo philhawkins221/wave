@@ -44,6 +44,19 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         
         if !me { queuerows = -1 }
         if queue.queue.isEmpty { queuerows = 1 }
+        
+        
+        
+        switch manager.controller.shuffle {
+        case true where manager.controller.fill == manager.controller.shuffled:
+            fill = manager.controller.shuffled ?? Playlist()
+        case true:
+            manager.controller.shuffled = manager.controller.fill
+            manager.controller.shuffled?.songs.shuffle()
+            fill = manager.controller.shuffled ?? Playlist()
+        case false:
+            fill = manager.controller.fill ?? Playlist()
+        }
     }
     
     func title() {
@@ -248,7 +261,10 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
         switch indexPath.section {
         case 0:
-            return NowPlayingTableViewCell(song: queue.current)
+            tableView.register(UINib(nibName: "NowPlayingTableViewCell", bundle: nil), forCellReuseIdentifier: "np")
+            let cell = tableView.dequeueReusableCell(withIdentifier: "np") as! NowPlayingTableViewCell
+            cell.set(song: queue.current)
+            return cell
         case 1 where queue.queue.isEmpty:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.textLabel?.text = "no songs"
@@ -264,7 +280,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 1:
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
-            cell.set(song: queue.queue[indexPath.row])
+            cell.set(song: queue.queue[indexPath.row], voting: true, credit: true)
             return cell
         case 2 where indexPath.row == requestrows, 3 where indexPath.row == radiorows:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
@@ -275,14 +291,12 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 2:
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
-            cell.set(song: queue.requests[indexPath.row])
-            cell.voteslabel.text = nil
+            cell.set(song: queue.requests[indexPath.row], credit: true)
             return cell
         case 3:
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
             cell.set(song: radio.songs[indexPath.row])
-            cell.voteslabel.text = nil
             return cell
         case 4:
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")

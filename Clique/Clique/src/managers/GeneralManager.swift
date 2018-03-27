@@ -12,7 +12,7 @@ struct GeneralManager {
     
     //MARK: - properties
     
-    private var user: User
+    private var me: User
     var controller: NowPlayingViewController
     var display: Song?
     
@@ -21,31 +21,58 @@ struct GeneralManager {
     init?(to controller: NowPlayingViewController) {
         guard let found = CliqueAPI.find(user: Identity.me) else { return nil }
         
-        self.user = found
+        self.me = found
         self.controller = controller
         
-        display = user.queue.current
+        display = me.queue.current
         nowplaying()
         
-        controller.profilebar.manage(profile: user)
+        controller.profilebar.manage(profile: me)
+        check(frequencies: ())
     }
     
     //MARK: - tasks
     
-    func add(friend: String) {
-        CliqueAPI.add(friend: friend, to: user.id)
+    func add(friend: User) {
+        CliqueAPI.add(friend: friend.id, to: me.id)
+        CliqueAPI.request(friend: Request(sender: me.id, receiver: friend.id))
+    }
+    
+    func check(frequencies: Void, cached: Bool = true) {
+        let user = cached ? self.me : CliqueAPI.find(user: self.me.id) ?? self.me
+        var frequencies = [User]()
+        
+        for friend in user.friends {
+            guard let friend = CliqueAPI.find(user: friend) else { continue }
+            if friend.queue.current != nil { frequencies.append(friend) }
+        }
+        
+        controller.frequencies = frequencies
+    }
+    
+    func check(requests: Void, cached: Bool = true) -> Bool {
+        return cached ? me.requests.isEmpty : !(CliqueAPI.find(user: me.id)?.requests.isEmpty ?? true)
     }
     
     func connect(applemusic status: Bool) {
-        CliqueAPI.update(applemusic: user.id, to: status)
+        CliqueAPI.update(applemusic: me.id, to: status)
     }
     
     func connect(spotify status: Bool) {
-        CliqueAPI.update(spotify: user.id, to: status)
+        CliqueAPI.update(spotify: me.id, to: status)
     }
     
     func delete(friend: String) {
-        CliqueAPI.delete(friend: friend, for: user.id)
+        CliqueAPI.delete(friend: friend, for: me.id)
+    }
+    
+    func listen(to user: String) {
+        guard let user = CliqueAPI.find(user: user) else { return }
+        
+        q.manager?.stop()
+        CliqueAPI.add(listener: me.id, to: user.id)
+        q.manager?.manage(user: user)
+        //TODO: swipe to q
     }
     
     func nowplaying() {
@@ -78,7 +105,6 @@ struct GeneralManager {
             controller.artworkimage.af_setImage(withURL: url, placeholderImage: UIImage(named: "genericart.png"))
         }
         
-        controller.profilebar.display(subline: .nowPlaying)
     }
     
     private func notplaying() {
@@ -98,6 +124,19 @@ struct GeneralManager {
     
     func refresh() {
         controller.refresh()
+    }
+    
+    func stop(listening: Void) {
+        guard let leader = q.manager?.client() else { return }
+        let replacement = leader.queue.listeners.filter { $0 != Identity.me }
+        CliqueAPI.update(listeners: replacement, for: leader.id)
+        q.manager?.manage(user: me)
+        gm?.notplaying()
+    }
+    
+    func stop(sharing: Void) {
+        CliqueAPI.update(listeners: [], for: Identity.me)
+        q.manager?.stop()
     }
     
 }

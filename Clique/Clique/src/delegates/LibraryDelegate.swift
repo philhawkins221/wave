@@ -101,9 +101,21 @@ class LibraryDelegate: BrowseDelegate {
         case 1:
             let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.textLabel?.text = library[indexPath.row].name
-            let count = library[indexPath.row].songs.count
-            cell.detailTextLabel?.text = count == 1 ? count.description + " song" : count.description + " songs"
             cell.accessoryType = .disclosureIndicator
+            
+            let me = manager.client().me()
+            switch library[indexPath.row].library {
+            case Catalogues.AppleMusic.rawValue where me:
+                cell.detailTextLabel?.text = "from: Apple Music"
+                cell.detailTextLabel?.textColor = #colorLiteral(red: 0.5736985803, green: 0.3841053247, blue: 1, alpha: 1)
+            case Catalogues.Spotify.rawValue where me:
+                cell.detailTextLabel?.text = "from: Spotify"
+                cell.detailTextLabel?.textColor = #colorLiteral(red: 0.1182995066, green: 0.8422558904, blue: 0.3786807954, alpha: 1)
+            default:
+                let count = library[indexPath.row].songs.count
+                cell.detailTextLabel?.text = count == 1 ? count.description + " song" : count.description + " songs"
+                cell.detailTextLabel?.textColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1)
+            }
             return cell
         default: return UITableViewCell()
         }

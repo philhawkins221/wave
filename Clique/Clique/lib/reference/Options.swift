@@ -18,10 +18,11 @@ struct Options {
         
         switch controller {
         case is NowPlayingViewController:
-            let sharing = (q.manager?.client().me() ?? false) && !(q.manager?.delegate?.queue.listeners.isEmpty ?? true)
-            let listening = q.manager?.client().me() ?? false
+            let sharing = (q.manager?.client().me() ?? false) && q.manager?.client().queue.current != nil
+            let listening = !(q.manager?.client().me() ?? true)
             options.options = [.settings, .friendRequests, .checkFrequencies]
             options.stop = sharing ? .stopSharing : listening ? .stopListening : nil
+        
         case let controller as BrowseViewController:
             let me = controller.manager?.client().me() ?? false
             switch controller.mode {
@@ -34,7 +35,9 @@ struct Options {
             case .library where me:
                 options.options = [.settings, .addPlaylist, .removePlaylist]
             case .library:
-                options.options = [.settings, .joinQueue]
+                guard let me = CliqueAPI.find(user: Identity.me),
+                      let client = controller.manager?.client() else { return }
+                options.options = me.friends.contains(client.id) ? [.settings, .joinQueue] : [.settings, .addUser]
                 options.stop = .stopViewing
             case .playlist where me:
                 options.options = [.settings, .playPlaylist, .sharePlaylist]
@@ -42,6 +45,7 @@ struct Options {
                 options.options = [.settings, .playPlaylist, .addPlaylistToLibrary]
                 options.stop = .stopViewing
             case .sync:
+                options.options = [.settings]
                 options.stop = .stopSyncing
             case .search:
                 options.options = [.settings]
@@ -72,8 +76,8 @@ struct Options {
         }
         
         self.options = options
-        height = options.options.count * 45
-        if options.stop != nil { height += 65 }
+        height = options.options.count * 60
+        if options.stop != nil { height += 80 }
     }
     
 }

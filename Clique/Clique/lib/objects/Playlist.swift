@@ -16,7 +16,7 @@ struct Playlist: Equatable, Codable, LibraryItem {
     var social: Bool
     var songs: [Song]
     
-    init(owner: String = "", id: String = "", library: String = "", name: String = "", social: Bool = false, songs: [Song] = []) {
+    init(owner: String = "", id: String = "", library: String = "", name: String = "", social: Bool = true, songs: [Song] = []) {
         self.owner = owner
         self.id = id
         self.library = library

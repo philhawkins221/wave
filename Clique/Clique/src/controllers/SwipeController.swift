@@ -24,6 +24,8 @@ class SwipeController: SwipeableTabBarController {
         setSwipeAnimation(type: SwipeAnimationType.none)
         setDiagonalSwipe(enabled: true)
         
+        swipe = self
+        
         provision()
         //setTabBarSwipe(enabled: false)
         //selectedViewController = viewControllers?[2]

@@ -25,6 +25,7 @@ class QueueSongTableViewCell: UITableViewCell {
         detailTextLabel?.text = sender == nil ? song.artist.name : "from: @" + sender!.username
         detailTextLabel?.textColor = sender == nil ? #colorLiteral(red: 0, green: 0, blue: 0, alpha: 1) : #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
         voteslabel.text = voting ? song.votes.description : nil
+        voteslabel.alpha = voting ? 0.9 : 0
         accessoryType = .none
         
         if song.library == Catalogues.Library.rawValue {

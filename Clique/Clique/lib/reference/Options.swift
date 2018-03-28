@@ -63,11 +63,12 @@ struct Options {
                 options.options = [.settings, .shareQueue, .shuffle]
                 options.stop = sharing ? .stopSharing : nil
             case .queue:
-                options.options = [.settings] //, .addQueuePlaylistToLibrary]
+                options.options = [.settings, .addSong] //, .addQueuePlaylistToLibrary]
                 options.stop = .stopListening
             case .history:
                 options.options = [.settings, .addHistoryPlaylist]
                 options.stop = me ? nil : .stopListening
+            case .listeners: break //TODO: new options
             }
             
         case _ where options.stop == nil: break //TODO: smart stop

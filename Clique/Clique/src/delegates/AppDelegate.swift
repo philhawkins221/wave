@@ -20,6 +20,11 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
 
     var window: UIWindow?
     
+    internal func applicationDidFinishLaunching(_ application: UIApplication) {
+        //UITableViewCell.show()
+        //UITableView.hide()
+    }
+    
     private func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
         // Override point for customization after application launch.
         

@@ -22,6 +22,8 @@ let scClientSecret = "1745f37d41a47591147470a84acda2c5"
 
 //MARK: - root view controllers
 
+var swipe: SwipeController?
+
 var bro = BrowseViewController()
 var np = NowPlayingViewController()
 var q = QueueViewController()
@@ -76,7 +78,7 @@ enum Option {
     case checkFrequencies
     case shareQueue
     case shuffle
-    //case addQueuePlaylistToLibrary
+    case addSong
     case addFriend
     case removeFriend
     case addPlaylist
@@ -120,6 +122,7 @@ enum SearchMode {
 enum QueueMode {
     case queue
     case history
+    case listeners
 }
 
 enum Requests: String {
@@ -213,5 +216,51 @@ extension UITableViewCell {
             UIGraphicsEndImageContext()
             indentationLevel = -4
         }
+    }
+}
+
+extension UITableViewCell {
+    @objc func showRowActions(_ arg1: Bool = true) { print("ding dong") }
+    
+    class func show() {
+        //guard self === UITableViewCell.self else { return }
+        
+        struct Inner {
+            static let i: Void = {
+                let hiddenString = String(":noitamrifnoCeteleDgniwohStes_".reversed())
+                let originalSelector = NSSelectorFromString(hiddenString)
+                let swizzledSelector = #selector(showRowActions(_:))
+                let originalMethod = class_getInstanceMethod(UITableViewCell.self, originalSelector)
+                let swizzledMethod = class_getInstanceMethod(UITableViewCell.self, swizzledSelector)
+                class_addMethod(UITableViewCell.self, originalSelector, method_getImplementation(swizzledMethod!), method_getTypeEncoding(swizzledMethod!))
+                method_exchangeImplementations(originalMethod!, swizzledMethod!)
+                print("swizzled")
+            }()
+        }
+        
+        let _ = Inner.i
+    }
+}
+
+extension UITableView {
+    @objc func hideRowActions(_ arg1: Bool = false) {}
+    
+    class func hide() {
+        //guard self === UITableViewCell.self else { return }
+        
+        struct Inner {
+            static let i: () = {
+                let hiddenString = String(":eteleDdiDwoReteleDoTepiwSdne_".reversed())
+                let originalSelector = NSSelectorFromString(hiddenString)
+                let swizzledSelector = #selector(hideRowActions(_:))
+                let originalMethod = class_getInstanceMethod(UITableView.self, originalSelector)
+                let swizzledMethod = class_getInstanceMethod(UITableView.self, swizzledSelector)
+                class_addMethod(UITableView.self, originalSelector, method_getImplementation(swizzledMethod!), method_getTypeEncoding(swizzledMethod!))
+                method_exchangeImplementations(originalMethod!, swizzledMethod!)
+                print("swizzled")
+            }()
+        }
+        
+        let _ = Inner.i
     }
 }

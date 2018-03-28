@@ -103,16 +103,21 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             cell.separatorInset = UIEdgeInsets.zero
             cell.layoutMargins = UIEdgeInsets.zero
             
-            if indexPath.row == 0 {
+            if indexPath.row == 0 && indexPath.row == options.count - 1 {
+                let all = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 10)
+                let layer = CAShapeLayer()
+                
+                layer.frame = cell.bounds
+                layer.path = all.cgPath
+                cell.layer.mask = layer
+            } else if indexPath.row == 0 {
                 let top = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: UIRectCorner(rawValue: UIRectCorner.RawValue(UInt8(UIRectCorner.topLeft.rawValue) | UInt8(UIRectCorner.topRight.rawValue))), cornerRadii: CGSize(width: 10, height: 10))
                 let layer = CAShapeLayer()
                 
                 layer.frame = cell.bounds
                 layer.path = top.cgPath
                 cell.layer.mask = layer
-            }
-            
-            if indexPath.row == options.count - 1 {
+            } else if indexPath.row == options.count - 1 {
                 let bottom = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: UIRectCorner(rawValue: UIRectCorner.RawValue(UInt8(UIRectCorner.bottomLeft.rawValue) | UInt8(UIRectCorner.bottomRight.rawValue))), cornerRadii: CGSize(width: 10, height: 10))
                 let layer = CAShapeLayer()
                 
@@ -162,6 +167,12 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 cell.textLabel?.text = "shuffle " + (q.manager?.delegate?.fill.name ?? "")
                 cell.detailTextLabel?.text = selected ? "playing songs in random order" : "playing songs in playlist order"
                 cell.accessoryType = .none
+                return cell
+            case .addSong:
+                let requestsonly = q.manager?.client().queue.requestsonly ?? false
+                cell.textLabel?.text = requestsonly ? "request song" : "add song"
+                cell.detailTextLabel?.text = requestsonly ? "request a song" : "add a song to the queue"
+                cell.accessoryType = .disclosureIndicator
                 return cell
             case .addFriend:
                 cell.textLabel?.text = "add friend"
@@ -244,7 +255,6 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             layer.frame = cell.bounds
             layer.path = all.cgPath
             cell.layer.mask = layer
-            cell.setNeedsDisplay()
             
             switch stop {
             case .stopSharing:
@@ -260,7 +270,7 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 cell.textLabel?.text = "stop syncing"
                 return cell
             case .settings, .friendRequests, .checkFrequencies, .shareQueue, .shuffle
-                , .addFriend, .removeFriend, .addPlaylist, .removePlaylist, .joinQueue, .addUser, .playPlaylist, .addPlaylistToLibrary, .sharePlaylist, .playAll, .playCatalog, .addCatalogToLibrary, .addHistoryPlaylist, .none:
+                , .addSong, .addFriend, .removeFriend, .addPlaylist, .removePlaylist, .joinQueue, .addUser, .playPlaylist, .addPlaylistToLibrary, .sharePlaylist, .playAll, .playCatalog, .addCatalogToLibrary, .addHistoryPlaylist, .none:
                 return cell
             }
             

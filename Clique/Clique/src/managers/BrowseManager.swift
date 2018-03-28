@@ -34,7 +34,7 @@ struct BrowseManager {
         case .catalog: delegate = CatalogDelegate(to: self)
         }
         
-        controller.profilebar.manage(profile: user)
+        controller.profilebar.manage(profile: found)
     }
     
     //MARK: - tasks
@@ -128,8 +128,6 @@ struct BrowseManager {
     
     func manage(user: User) {
         controller.user = user.id
-        controller.profilebar?.manage(profile: user)
-        
         refresh()
     }
     

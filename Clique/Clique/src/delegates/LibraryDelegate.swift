@@ -103,12 +103,16 @@ class LibraryDelegate: BrowseDelegate {
             cell.textLabel?.text = library[indexPath.row].name
             cell.accessoryType = .disclosureIndicator
             
+            let owner = CliqueAPI.find(user: library[indexPath.row].owner)
             let me = manager.client().me()
             switch library[indexPath.row].library {
-            case Catalogues.AppleMusic.rawValue where me:
+            case _ where !(owner?.me() ?? true) && owner?.id ?? "" != manager.controller.user:
+                cell.detailTextLabel?.text = "from: @" + owner!.username
+                cell.detailTextLabel?.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            case Catalogues.AppleMusic.rawValue where me && owner?.me() ?? false:
                 cell.detailTextLabel?.text = "from: Apple Music"
                 cell.detailTextLabel?.textColor = #colorLiteral(red: 0.5736985803, green: 0.3841053247, blue: 1, alpha: 1)
-            case Catalogues.Spotify.rawValue where me:
+            case Catalogues.Spotify.rawValue where me && owner?.me() ?? false:
                 cell.detailTextLabel?.text = "from: Spotify"
                 cell.detailTextLabel?.textColor = #colorLiteral(red: 0.1182995066, green: 0.8422558904, blue: 0.3786807954, alpha: 1)
             default:

@@ -111,11 +111,17 @@ struct Alerts {
     }
     
     static func queue(song: Song, on controller: BrowseViewController) {
-        let alert = confirm(title: "add song", message: "\"" + song.title + "\" will be added to the queue") { _ in
+        let leader = q.manager?.client()
+        let requestsonly = leader?.queue.requestsonly ?? false
+        let title = requestsonly ? "request song" : "add song"
+        let message = song.title + " by " + song.artist.name + (requestsonly ?
+            " will be added to requests" :
+            " will be added to to the queue")
+        let alert = confirm(title: title, message: message) { _ in
             q.manager?.find(song: song, from: controller, confirmed: true)
         }
         
-        controller.dismiss(animated: true)
+        //controller.dismiss(animated: true)
         controller.present(alert, animated: true)
     }
     

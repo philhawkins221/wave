@@ -143,7 +143,7 @@ struct CliqueAPI {
     
     static func update(songRequests replacement: [Song], for user: String) {
         let endpoint = Endpoints.Clique.update.songrequestspoint(user)
-        let parameters: [String : Any] = ["replacement": replacement]
+        let parameters: [String : Any] = ["replacement": replacement.map { Web.parameterize(song: $0) }]
         
         Web.send(.put, to: endpoint, with: parameters)
     }

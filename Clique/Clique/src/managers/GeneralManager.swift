@@ -14,7 +14,7 @@ struct GeneralManager {
     
     private var me: User
     var controller: NowPlayingViewController
-    var display: Song?
+    var display: Song? { return q.manager?.client().queue.current }
     
     //MARK: - initializers
     
@@ -24,7 +24,6 @@ struct GeneralManager {
         self.me = found
         self.controller = controller
         
-        display = me.queue.current
         nowplaying()
         
         controller.profilebar.manage(profile: me)
@@ -131,12 +130,13 @@ struct GeneralManager {
         let replacement = leader.queue.listeners.filter { $0 != Identity.me }
         CliqueAPI.update(listeners: replacement, for: leader.id)
         q.manager?.manage(user: me)
-        gm?.notplaying()
+        notplaying()
     }
     
     func stop(sharing: Void) {
         CliqueAPI.update(listeners: [], for: Identity.me)
         q.manager?.stop()
+        notplaying()
     }
     
 }

@@ -54,9 +54,18 @@ struct OptionsManager {
         case .settings: break
         case .friendRequests: break
         case .checkFrequencies: break
-        case .shareQueue: break
+            
+        case .shareQueue:
+            disappear()
+            guard let controller = profilebar?.controller as? QueueViewController else { return }
+            controller.manager?.view(listeners: ())
         
         case .shuffle: q.manager?.shuffle(enabled: !q.shuffle)
+            
+        case .addSong:
+            disappear()
+            guard let controller = profilebar?.controller as? QueueViewController else { return }
+            controller.performSegue(withIdentifier: "search", sender: controller)
         
         case .addFriend:
             disappear()
@@ -146,6 +155,8 @@ struct OptionsManager {
         case .addCatalogToLibrary: break
         case .none: break
         }
+        
+        profilebar?.display(subline: profilebar?.message ?? .generic)
     }
     
 }

@@ -19,6 +19,9 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     var fill = Playlist()
     var radio = Playlist()
     
+    var editing: Bool { return manager.controller.edit }
+    var requestsonly: Bool { return queue.requestsonly }
+    
     var queuerows = 5
     var requestrows = 3
     var radiorows = 3
@@ -42,10 +45,9 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         queue = client.queue
         me = client.me()
         
-        if !me { queuerows = -1 }
+        if (!me && requestsonly && queue.requests.isEmpty) || editing { queuerows = Int.max }
+        if editing { manager.controller.setTabBarSwipe(enabled: false) }
         if queue.queue.isEmpty { queuerows = 1 }
-        
-        
         
         switch manager.controller.shuffle {
         case true where manager.controller.fill == manager.controller.shuffled:
@@ -59,9 +61,12 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         }
     }
     
-    func title() {
-        manager.controller.addbutton.isEnabled = manager.client().me()
-        manager.controller.historybutton.isEnabled = manager.client().me()
+    func title() {}
+    
+    @objc func edit() {
+        manager.controller.edit = !manager.controller.edit
+        manager.controller.setTabBarSwipe(enabled: !manager.controller.edit)
+        manager.refresh()
     }
 
     //MARK: - table delegate stack
@@ -82,6 +87,9 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 1 where indexPath.row == queuerows:
             queuerows += 5
             tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+        case 1:
+            tableView.hideRowActions()
+            tableView.cellForRow(at: indexPath)?.showRowActions() //TODO: tap to vote
         case 2 where indexPath.row == requestrows: break //TODO: manager.view(requests: ())
         case 3 where indexPath.row == radiorows: break //TODO: manager.view(radio: ())
         case 2, 3, 4: break //TODO: manager.play
@@ -91,7 +99,8 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         switch indexPath.section {
-        case 1 where !queue.queue.isEmpty && indexPath.row != queuerows:
+        case 1 where !queue.queue.isEmpty && indexPath.row != queuerows,
+             2 where indexPath.row != requestrows:
             
             let up = UITableViewRowAction(style: .default, title: "+") { [unowned self] (action, indexpath) in
                 let song = self.queue.queue[indexPath.row]
@@ -144,17 +153,36 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     }
     
     func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        let view = UITableViewHeaderFooterView()
-        TableHeaderStyleGuide.enforce(on: view)
         
-        return view
+        switch section {
+        case 1, 4:
+            tableView.register(UINib(nibName: "QueueHeaderTableViewCell", bundle: nil), forCellReuseIdentifier: "queue")
+            let view = tableView.dequeueReusableCell(withIdentifier: "queue") as! QueueHeaderTableViewCell
+            let client = manager.client()
+            
+            view.titlelabel.text = self.tableView(tableView, titleForHeaderInSection: section)
+            if !client.me() && client.queue.requestsonly { 
+                view.editlabel.text = nil
+            } else {
+                view.edit.addTarget(self, action: #selector(edit), for: .touchUpInside)
+                if editing {
+                    view.editlabel.text = "editing"
+                    view.contentView.backgroundColor = UIColor.orange
+                }
+            }
+            return view.contentView
+        default:
+            let view = UITableViewHeaderFooterView()
+            TableHeaderStyleGuide.enforce(on: view)
+            return view
+        }
     }
     
     func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
         switch indexPath.section {
-        case 1 where me && indexPath.row != queuerows: return .delete
+        case 1 where editing && indexPath.row != queuerows: return .delete
         case 2 where indexPath.row != requestrows,
-             3 where indexPath.row != radiorows,
+             3 where indexPath.row != radiorows && me,
              4: return .insert
         default: return .none
         }
@@ -166,25 +194,20 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {
         
-//        if proposedDestinationIndexPath.section == sourceIndexPath.section {
-//            return proposedDestinationIndexPath
-//        } else if proposedDestinationIndexPath.section < sourceIndexPath.section {
-//            return IndexPath(row: 0, section: sourceIndexPath.section)
-//        } else if proposedDestinationIndexPath.section > sourceIndexPath.section {
-//            var approvedDestinationIndexPath = proposedDestinationIndexPath
-//            approvedDestinationIndexPath.section = sourceIndexPath.section
-//            switch sourceIndexPath.section {
-//            case 1: approvedDestinationIndexPath.row = queuerows
-//            case 2, 3: approvedDestinationIndexPath.row = 3
-//            case 4: approvedDestinationIndexPath.row = fill.songs.count - 1
-//            default: break
-//            }
-//            return approvedDestinationIndexPath
-//        } else {
-//            return sourceIndexPath
-//        }
-        
         switch sourceIndexPath.section {
+        case 1 where editing || queuerows == -1:
+            var approvedDestinationIndexPath = proposedDestinationIndexPath
+            if proposedDestinationIndexPath.section < 1 {
+                approvedDestinationIndexPath.section = 1
+                approvedDestinationIndexPath.row = 0
+            } else if proposedDestinationIndexPath.section > 1 {
+                approvedDestinationIndexPath.section = 1
+                approvedDestinationIndexPath.row = queue.queue.count
+            } else if proposedDestinationIndexPath.row > queue.queue.count {
+                approvedDestinationIndexPath.row = queue.queue.count
+            }
+            return approvedDestinationIndexPath
+            
         case 1:
             var approvedDestinationIndexPath = proposedDestinationIndexPath
             if proposedDestinationIndexPath.section < 1 {
@@ -197,6 +220,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 approvedDestinationIndexPath.row = queuerows
             }
             return approvedDestinationIndexPath
+        
         case 2:
             var approvedDestinationIndexPath = proposedDestinationIndexPath
             if proposedDestinationIndexPath.section < 2 {
@@ -209,6 +233,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 approvedDestinationIndexPath.row = requestrows
             }
             return approvedDestinationIndexPath
+       
         case 3:
             var approvedDestinationIndexPath = proposedDestinationIndexPath
             if proposedDestinationIndexPath.section < 3 {
@@ -221,6 +246,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 approvedDestinationIndexPath.row = radiorows
             }
             return approvedDestinationIndexPath
+        
         case 4:
             var approvedDestinationIndexPath = proposedDestinationIndexPath
             if proposedDestinationIndexPath.section < 4 {
@@ -231,6 +257,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 approvedDestinationIndexPath.row = fill.songs.count - 1
             }
             return approvedDestinationIndexPath
+        
         default: return sourceIndexPath
         }
     }
@@ -238,14 +265,13 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     //MARK: - table data source stack
     
     func numberOfSections(in tableView: UITableView) -> Int {
-        return me ? 5 : 2
+        return me ? 5 : requestsonly ? 3 : 2
     }
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 0: return 1
         case 1 where queue.queue.isEmpty: return 1
-        case 1 where !me: return queue.queue.count
         case 1: return queue.queue.count <= queuerows ? queue.queue.count : queuerows + 1
         case 2:
             if queue.requests.count < requestrows { requestrows = queue.requests.count }
@@ -280,7 +306,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 1:
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
-            cell.set(song: queue.queue[indexPath.row], voting: true, credit: true)
+            cell.set(song: queue.queue[indexPath.row], voting: true, credit: me)
             return cell
         case 2 where indexPath.row == requestrows, 3 where indexPath.row == radiorows:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
@@ -291,7 +317,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 2:
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
-            cell.set(song: queue.requests[indexPath.row], credit: true)
+            cell.set(song: queue.requests[indexPath.row], voting: true, credit: me)
             return cell
         case 3:
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
@@ -326,8 +352,8 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         switch indexPath.section {
         case 0: return false
         case 1 where indexPath.row == queuerows: return false
-        case 1: return queue.queue.isEmpty ? false : me || queue.listeners.contains(Identity.me)
-        case 2 where indexPath.row == requestrows,
+        case 1: return !queue.queue.isEmpty
+        case 2 where indexPath.row == requestrows || !me,
              3 where indexPath.row == radiorows: return false
         case 2, 3, 4: return true
         default: return false
@@ -337,51 +363,47 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
         switch indexPath.section {
         case 1:
-            
             switch editingStyle {
             case .delete:
                 queue.queue.remove(at: indexPath.row)
-                tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
+                if queue.queue.isEmpty { tableView.deleteRows(at: [indexPath], with: .automatic) }
                 manager.update(queue: queue)
             case .insert, .none: break
             }
             
         case 2:
-            
             switch editingStyle {
             case .insert:
                 let added = queue.requests[indexPath.row]
+                queue.requests.remove(at: indexPath.row)
                 manager.update(requests: queue.requests)
                 manager.add(song: added)
-                queue.requests.remove(at: indexPath.row)
-                queue.queue.append(added)
                 tableView.reloadSections(IndexSet(integer: 2), with: .automatic)
+                queue.queue.append(added)
                 tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
             case .delete, .none: break
             }
             
         case 3:
-            
             switch editingStyle {
             case .insert:
                 let added = radio.songs[indexPath.row]
                 manager.add(song: added)
                 radio.songs.remove(at: indexPath.row)
-                queue.queue.append(added)
                 tableView.reloadSections(IndexSet(integer: 3), with: .automatic)
+                queue.queue.append(added)
                 tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
             case .delete, .none: break
             }
             
         case 4:
-            
             switch editingStyle {
             case .insert:
                 let added = fill.songs[indexPath.row]
                 manager.add(song: added)
                 fill.songs.remove(at: indexPath.row)
-                queue.queue.append(added)
                 tableView.deleteRows(at: [indexPath], with: .automatic)
+                queue.queue.append(added)
                 tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
             case .delete, .none: break
             }
@@ -393,11 +415,12 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {
         switch indexPath.section {
         case 0: return false
-        case 1 where indexPath.row == queuerows: return false
-        case 1: return queue.queue.isEmpty ? false : !queue.voting && (me || queue.listeners.contains(Identity.me))
-        case 2 where indexPath.row == requestrows,
+        case 1 where indexPath.row == queuerows: return editing
+        case 1: return queue.queue.isEmpty ? false : !queue.voting && editing
+        case 2 where indexPath.row == requestrows || !me,
              3 where indexPath.row == radiorows: return false
-        case 2, 3, 4: return true
+        //case 2, 3, 4: return true
+        case 4: return editing
         default: return false
         }
     }
@@ -421,6 +444,10 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             let mover = fill.songs[sourceIndexPath.row]
             fill.songs.remove(at: sourceIndexPath.row)
             fill.songs.insert(mover, at: destinationIndexPath.row)
+            if manager.controller.shuffle {
+                manager.controller.shuffled?.songs.remove(at: sourceIndexPath.row)
+                manager.controller.shuffled?.songs.insert(mover, at: destinationIndexPath.row)
+            }
         default: break
         }
     }

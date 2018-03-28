@@ -269,11 +269,13 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     
     func willPresentSearchController(_ searchController: UISearchController) {
         if manager.controller.table.isEditing { editing = true }
-        if editing && !adding { manager.controller.table.setEditing(false, animated: true) }
+        if editing && !adding { manager.controller.table.setEditing(false, animated: false) }
+        else { manager.controller.table.setEditing(true, animated: false) }
     }
     
     func willDismissSearchController(_ searchController: UISearchController) {
-        if editing { manager.controller.table.setEditing(true, animated: true) }
+        if self is FriendsDelegate { manager.controller.table.setEditing(false, animated: false) }
+        else if editing { manager.controller.table.setEditing(true, animated: true) }
         editing = false
         searchController.searchBar.resignFirstResponder()
     }

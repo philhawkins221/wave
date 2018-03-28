@@ -14,6 +14,9 @@
 		4A06C30C1FDC8B0000E99FED /* QueueViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A06C30B1FDC8B0000E99FED /* QueueViewController.swift */; };
 		4A06C30E1FDC8BFD00E99FED /* BrowseViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A06C30D1FDC8BFD00E99FED /* BrowseViewController.swift */; };
 		4A06C3121FDC928600E99FED /* SwipeController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A06C3111FDC928600E99FED /* SwipeController.swift */; };
+		4A0A046B206ABA2F00A5FC0D /* QueueHeaderTableViewCell.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0A0469206ABA2F00A5FC0D /* QueueHeaderTableViewCell.swift */; };
+		4A0A046C206ABA2F00A5FC0D /* QueueHeaderTableViewCell.xib in Resources */ = {isa = PBXBuildFile; fileRef = 4A0A046A206ABA2F00A5FC0D /* QueueHeaderTableViewCell.xib */; };
+		4A0A046E206B496E00A5FC0D /* ListenersDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0A046D206B496E00A5FC0D /* ListenersDelegate.swift */; };
 		4A179AFC1D00C64100B6EE20 /* apple music logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AF81D00C64100B6EE20 /* apple music logo.jpg */; };
 		4A179AFD1D00C64100B6EE20 /* soundcloud logo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AF91D00C64100B6EE20 /* soundcloud logo.gif */; };
 		4A179AFE1D00C64100B6EE20 /* spotify logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */; };
@@ -90,6 +93,9 @@
 		4A06C30D1FDC8BFD00E99FED /* BrowseViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = BrowseViewController.swift; sourceTree = "<group>"; };
 		4A06C3101FDC8F6500E99FED /* EZSwipeController.framework */ = {isa = PBXFileReference; explicitFileType = wrapper.framework; path = EZSwipeController.framework; sourceTree = BUILT_PRODUCTS_DIR; };
 		4A06C3111FDC928600E99FED /* SwipeController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SwipeController.swift; sourceTree = "<group>"; };
+		4A0A0469206ABA2F00A5FC0D /* QueueHeaderTableViewCell.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = QueueHeaderTableViewCell.swift; sourceTree = "<group>"; };
+		4A0A046A206ABA2F00A5FC0D /* QueueHeaderTableViewCell.xib */ = {isa = PBXFileReference; lastKnownFileType = file.xib; path = QueueHeaderTableViewCell.xib; sourceTree = "<group>"; };
+		4A0A046D206B496E00A5FC0D /* ListenersDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ListenersDelegate.swift; sourceTree = "<group>"; };
 		4A0AA6242016277B0018E9CD /* waves.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = waves.mp4; path = "/Users/phil/Documents/xcode/clique/ubiquitous-journey/Clique/Clique/bin/waves.mp4"; sourceTree = "<absolute>"; };
 		4A16BEDC1CAC3BC60089997F /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		4A16BEDE1CAC3BD40089997F /* YTViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTViewController.swift; sourceTree = "<group>"; };
@@ -228,7 +234,6 @@
 				4A186DC42050A0500091F8FF /* managers */,
 				4A186DC52050A0580091F8FF /* delegates */,
 				4A186DCA2050A4390091F8FF /* protocols */,
-				4A186DC62050A0C50091F8FF /* xib */,
 				4A06C3021FD77C3B00E99FED /* legacy */,
 			);
 			path = src;
@@ -252,8 +257,8 @@
 		4A186DC32050A03C0091F8FF /* controllers */ = {
 			isa = PBXGroup;
 			children = (
-				4AAB4C7520673D1800C882AD /* OptionsTableViewController.swift */,
 				4A06C3091FDC8A0600E99FED /* NowPlayingViewController.swift */,
+				4AAB4C7520673D1800C882AD /* OptionsTableViewController.swift */,
 				4A06C30B1FDC8B0000E99FED /* QueueViewController.swift */,
 				4A06C30D1FDC8BFD00E99FED /* BrowseViewController.swift */,
 				4A06C3111FDC928600E99FED /* SwipeController.swift */,
@@ -287,6 +292,7 @@
 				4A9DE05420582657002EBA04 /* SearchDelegate.swift */,
 				4A9DE05620588EE7002EBA04 /* CatalogDelegate.swift */,
 				4AAB4C7120671C2500C882AD /* OptionsDelegate.swift */,
+				4A0A046D206B496E00A5FC0D /* ListenersDelegate.swift */,
 			);
 			path = delegates;
 			sourceTree = "<group>";
@@ -298,6 +304,7 @@
 				4A06C3031FD7888C00E99FED /* wave.storyboard */,
 				4AF452E71FE0CAAE007FCF8F /* QueueSongTableViewCell.xib */,
 				4A06C3051FD7978E00E99FED /* ProfileBar.xib */,
+				4A0A046A206ABA2F00A5FC0D /* QueueHeaderTableViewCell.xib */,
 				4AC3C9FD1C4ACCB700D5BCCA /* LaunchScreen.storyboard */,
 			);
 			path = xib;
@@ -334,6 +341,7 @@
 			isa = PBXGroup;
 			children = (
 				4AAB4C662065614C00C882AD /* ui */,
+				4A186DC62050A0C50091F8FF /* xib */,
 				4A186DC72050A0CE0091F8FF /* objects */,
 				4AAB4C632064B50800C882AD /* reference */,
 			);
@@ -364,6 +372,7 @@
 				4AAB4C642065567700C882AD /* OptionsTableViewCell.swift */,
 				4A5A72C3206998200031BDC1 /* NowPlayingTableViewCell.swift */,
 				4AF452E61FE0CAAE007FCF8F /* QueueSongTableViewCell.swift */,
+				4A0A0469206ABA2F00A5FC0D /* QueueHeaderTableViewCell.swift */,
 				4AAB4C7720674B1F00C882AD /* OptionsContainer.swift */,
 			);
 			path = ui;
@@ -503,6 +512,7 @@
 				4AC3EF391C7E65800013EEFF /* player with youtube helper in Resources */,
 				4ADF95E51D026D6800E0CD19 /* clique 120.png in Resources */,
 				4A06C3041FD7888C00E99FED /* wave.storyboard in Resources */,
+				4A0A046C206ABA2F00A5FC0D /* QueueHeaderTableViewCell.xib in Resources */,
 				4A179AFE1D00C64100B6EE20 /* spotify logo.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;
@@ -603,6 +613,7 @@
 				4A5A72C5206998200031BDC1 /* NowPlayingTableViewCell.swift in Sources */,
 				4A186DCC2050A4550091F8FF /* LibraryItem.swift in Sources */,
 				4A186DD02050A46F0091F8FF /* WaveManager.swift in Sources */,
+				4A0A046E206B496E00A5FC0D /* ListenersDelegate.swift in Sources */,
 				4A8F5FF92009811900564EFE /* LibraryDelegate.swift in Sources */,
 				4A9DE05720588EE7002EBA04 /* CatalogDelegate.swift in Sources */,
 				4AFDA1F5205A0FD100C87E09 /* HistoryDelegate.swift in Sources */,
@@ -610,6 +621,7 @@
 				4A186DDC2050A6EE0091F8FF /* Media.swift in Sources */,
 				4AAB4C6E206701FC00C882AD /* Options.swift in Sources */,
 				4A06C3081FD79D4B00E99FED /* ProfileBar.swift in Sources */,
+				4A0A046B206ABA2F00A5FC0D /* QueueHeaderTableViewCell.swift in Sources */,
 				4A06C3121FDC928600E99FED /* SwipeController.swift in Sources */,
 				4A186DE42050A82D0091F8FF /* CliqueAPI.swift in Sources */,
 				4A8F5FFF200FA90400564EFE /* BrowseManager.swift in Sources */,

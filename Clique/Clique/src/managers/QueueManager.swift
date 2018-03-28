@@ -19,7 +19,11 @@ struct QueueManager {
     //MARK: - initializers
     
     init?(to controller: QueueViewController) {
-        guard let found = CliqueAPI.find(user: controller.user) else { return nil }
+        guard var found = CliqueAPI.find(user: controller.user) else { return nil }
+        if !(found.me() || found.queue.listeners.contains(Identity.me)) {
+            if let me = CliqueAPI.find(user: Identity.me) { found = me }
+            else { return nil }
+        }
         
         self.user = found
         self.controller = controller
@@ -27,6 +31,7 @@ struct QueueManager {
         switch controller.mode {
         case .queue: delegate = QueueDelegate(to: self)
         case .history: delegate = HistoryDelegate(to: self)
+        case .listeners: delegate = ListenersDelegate(to: self)
         }
         
         controller.profilebar.manage(profile: user)
@@ -35,8 +40,11 @@ struct QueueManager {
     //MARK: - tasks
 
     func add(song: Song) {
-        //TODO: request if reqestsonly
-        CliqueAPI.add(song: song, to: user.id)
+        var song = song
+        if song.sender == "" { song.sender = Identity.me }
+        return user.queue.requestsonly && !user.me() ?
+            CliqueAPI.request(song: song, to: user.id) :
+            CliqueAPI.add(song: song, to: user.id)
     }
     
     func advance() {
@@ -62,14 +70,13 @@ struct QueueManager {
     }
     
     func manage(user: User) {
+        guard let user = CliqueAPI.find(user: user.id) else { return }
         guard user.me() || user.queue.listeners.contains(Identity.me) else {
             if let me = CliqueAPI.find(user: Identity.me) { manage(user: me) }
             return
         }
         
         controller.user = user.id
-        controller.profilebar?.manage(profile: user)
-        
         refresh()
     }
 
@@ -99,7 +106,7 @@ struct QueueManager {
         
         controller.adding = true
         controller.final = false
-        controller.navigationItem.prompt = "adding song to queue"
+        controller.navigationItem.prompt = !user.me() && user.queue.requestsonly ? "requesting song" : "adding song to queue"
         controller.user = Identity.me
         controller.mode = .friends
     }
@@ -113,25 +120,42 @@ struct QueueManager {
         //TODO: stop
     }
     
-    func update(queue replacement: Queue) {
+    func update(listeners replacement: [String], refresh: Bool = true) {
+        CliqueAPI.update(listeners: replacement, for: user.id)
+        if refresh { self.refresh() }
+    }
+    
+    func update(queue replacement: Queue, refresh: Bool = true) {
         CliqueAPI.update(queue: replacement)
-        refresh()
+        if refresh { self.refresh() }
     }
     
-    func update(requests replacement: [Song]) {
+    func update(requests replacement: [Song], refresh: Bool = false) {
         CliqueAPI.update(songRequests: replacement, for: user.id)
+        if refresh { self.refresh() }
     }
     
-    func update(voting status: Bool) {
+    func update(voting status: Bool, refresh: Bool = true) {
         CliqueAPI.update(voting: user.id, to: status)
-        refresh()
+        if refresh { self.refresh() }
     }
+    
     
     func view(history controller: UIViewController) {
         guard let controller = controller as? QueueViewController else { return }
         
         controller.user = user.id
         controller.mode = .history
+    }
+    
+    func view(listeners: Void) {
+        guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.q.rawValue) as? QueueViewController
+            else { return }
+        
+        vc.user = user.id
+        vc.mode = .listeners
+        
+        controller.show(vc, sender: self)
     }
     
     func vote(song: Song, _ direction: Vote) {

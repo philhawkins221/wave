@@ -66,6 +66,8 @@ class NowPlayingViewController: UIViewController {
         super.viewDidAppear(animated)
         
         refresh()
+        
+        swipe?.setDiagonalSwipe(enabled: true)
     }
 
     override func didReceiveMemoryWarning() {

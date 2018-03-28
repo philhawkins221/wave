@@ -27,6 +27,7 @@ class QueueViewController: UIViewController {
     var mode: QueueMode = .queue
     var user = Identity.me
     var fill: Playlist?
+    var edit = false
     var shuffle = false
     var shuffled: Playlist?
     
@@ -48,7 +49,8 @@ class QueueViewController: UIViewController {
         
         profilebar.controller = self
         
-        refreshcontrol.addTarget(self, action: #selector(refresh), for: .valueChanged)
+        refreshcontrol.addTarget(self, action: #selector(manualRefresh), for: .valueChanged)
+        refreshcontrol.attributedTitle = NSAttributedString(string: "pull to refresh")
         
         if #available(iOS 10.0, *) {
             table.refreshControl = refreshcontrol
@@ -56,18 +58,22 @@ class QueueViewController: UIViewController {
             table.backgroundView = refreshcontrol
         }
                 
-        //TODO: timer and notifications
+        //TODO: notifications
         //NotificationCenter.default.addObserver(self, selector: #selector(self.advance), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        if manager?.client().me() ?? false { table.setEditing(true, animated: false) }
+        table.setEditing(
+            (manager?.client().me() ?? false) || !(manager?.client().queue.requestsonly ?? true),
+            animated: false)
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
+        
+        swipe?.setDiagonalSwipe(enabled: false)
         
         refresh()
         
@@ -75,13 +81,15 @@ class QueueViewController: UIViewController {
             table.deselectRow(at: selected, animated: true)
         }
         
-        //timer = Timer.scheduledTimer(withTimeInterval: 5, repeats: true, block: { [unowned self] _ in self.manager?.update() })
-        //timer = Timer.scheduledTimer(timeInterval: 5, target: self, selector: #selector(self.update), userInfo: nil, repeats: true)
+        timer?.invalidate()
+        timer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true) { [unowned self] _ in self.refresh() }
     }
     
-    override func viewDidDisappear(_ animated: Bool) {
-        super.viewDidDisappear(animated)
+    override func viewWillDisappear(_ animated: Bool) {
+        super.viewWillDisappear(animated)
+        
         timer?.invalidate()
+        edit = false
     }
     
     override func didReceiveMemoryWarning() {
@@ -91,12 +99,19 @@ class QueueViewController: UIViewController {
     
     //MARK: - tasks
     
+    @objc func manualRefresh() {
+        edit = false
+        refresh()
+    }
+    
     @objc func refresh() {
+        setTabBarSwipe(enabled: !edit)
+        
         manager = QueueManager(to: self)
         table.delegate = manager?.delegate
         table.dataSource = manager?.delegate
         table.reloadData()
-        
+                
         refreshcontrol.endRefreshing()
     }
     

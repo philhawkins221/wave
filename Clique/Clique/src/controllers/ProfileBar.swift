@@ -66,7 +66,7 @@ class ProfileBar: UIView {
                 if (q.manager?.client().me() ?? false) && client.queue.listeners.count > 0 {
                     return .peopleListening
                 } else if !(q.manager?.client().me() ?? true) && q.manager?.client().queue.current != nil {
-                    return .listening
+                    return controller is QueueViewController ? .listening : .listeningTo
                 } else if gm?.display != nil {
                     return .nowPlaying
                 } else {
@@ -115,18 +115,6 @@ class ProfileBar: UIView {
         client = profile
         
         display(username: profile.username)
-        
-        
-        if profile.username == "anonymous" && profile.me() {
-            display(subline: .createUsername)
-        } else if profile.queue.current != nil && profile.queue.listeners.count < 2 {
-            display(subline: .nowPlaying)
-        } else if profile.queue.current != nil && profile.queue.listeners.count > 1 {
-            display(subline: .peopleListening)
-        } else {
-            display(subline: .generic)
-        }
-        
         display(subline: message)
     }
     

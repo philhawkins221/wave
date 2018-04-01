@@ -18,6 +18,7 @@ app.get('/playlists', playlist.getAllUsers); //findAll
 app.put('/playlists/:id/add-friend', playlist.addFriend);
 
 app.put('/playlists/:id/play', playlist.playSong); //updatePlaylistSong
+app.get('/playlists/:id/stop', playlist.stopSong);
 app.put('/playlists/:id/queue', playlist.addSong); //addSong
 app.get('/playlists/:id/advance', playlist.advanceQueue); //markSongAsPlayed
 app.put('/playlists/:id/upvote', playlist.upvoteSong); //upvote

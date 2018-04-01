@@ -291,8 +291,22 @@ exports.playSong = function(req, res) {
                 res.send(song);
             }
         });
-
     });
+}
+
+exports.stopSong = function(req, res) {
+    var id = req.params.id;
+    database.collection('playlists', function(err, collection) {
+        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {"queue.current": null} }, function(err, result) {
+            if (err) {
+                console.log('Error updating playlist: ' + err);
+                res.send({'error':'An error has occurred'});
+            } else {
+                console.log('' + result + ' documents(s) updated');
+                res.send(result);
+            }
+        });
+    });    
 }
 
 exports.addSong = function(req, res) {

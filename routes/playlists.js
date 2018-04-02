@@ -440,28 +440,33 @@ exports.advanceQueue = function(req, res) {
             if (err) {
                 console.log('Error finding playlist');
                 res.send(err);
-            } else {
-                var next = null;
-                if (result.queue.voting) {
-                    var topvotes = Number.NEGATIVE_INFINITY;
-                    var index = 0;
-                    var nextindex = -1;
-                    result.queue.queue.forEach(function(song) {
-                        if (song.votes > topvotes) {
-                            next = song;
-                            nextindex = index;
-                        }
-                        index++;
-                    });
-                    if (nextindex > -1) { result.queue.queue.splice(nextindex, 1); }
-                } else {
-                    next = result.queue.queue[0];
-                    result.queue.queue.splice(0, 1);
-                }
-                result.queue.history.push(result.queue.current);
-                result.queue.current = next;
+            } else if (result.queue.queue.length == 0) {
+                result.queue.current = null;
                 collection.save(result);
-                res.send(next);
+                res.send(null);
+            } else {
+                if (result.queue.voting) {
+                    var next = result.queue.queue[0];
+                    var index = 0;
+                    for (var i = 0; i < result.queue.queue.length; i++) {
+                        if (result.queue.queue[i].votes > next.votes) {
+                            next = result.queue.queue;
+                            index = i;
+                        }
+                    }
+                    result.queue.queue.splice(index, 1);
+                    result.queue.history.push(result.queue.current);
+                    result.queue.current = next;
+                    collection.save(result);
+                    res.send(next);
+                } else {
+                    var next = result.queue.queue[0];
+                    result.queue.queue.splice(0, 1);
+                    result.queue.history.push(result.queue.current);
+                    result.queue.current = next;
+                    collection.save(result);
+                    res.send(next);
+                }
             }
         });
     });

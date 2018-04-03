@@ -288,7 +288,7 @@ exports.playSong = function(req, res) {
                 res.send(err);
             } else {
                 var last = result.queue.current;
-                if last != null { result.queue.history.push(last) }
+                if (last != null) { result.queue.history.push(last) }
                 result.queue.current = song;
                 collection.save(result);
                 res.send(song);

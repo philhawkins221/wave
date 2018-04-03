@@ -282,12 +282,15 @@ exports.playSong = function(req, res) {
     console.log('Updating current song: ' + id);
     console.log(JSON.stringify(song));
     database.collection('playlists', function(err, collection) {
-        collection.updateOne({'_id':new BSON.ObjectID(id)}, { $set: {"queue.current": song} }, function(err, result) {
+        collection.findOne({'_id': new BSON.ObjectID(id)}, function(err, result) {
             if (err) {
-                console.log('Error updating playlist: ' + err);
-                res.send({'error':'An error has occurred'});
+                console.log('Error finding playlist');
+                res.send(err);
             } else {
-                console.log('' + result + ' documents(s) updated');
+                var last = result.queue.current;
+                if last != null { result.queue.history.push(last) }
+                result.queue.current = song;
+                collection.save(result);
                 res.send(song);
             }
         });
@@ -455,15 +458,15 @@ exports.advanceQueue = function(req, res) {
                         }
                     }
                     result.queue.queue.splice(index, 1);
-                    result.queue.history.push(result.queue.current);
-                    result.queue.current = next;
+                    //result.queue.history.push(result.queue.current);
+                    //result.queue.current = next;
                     collection.save(result);
                     res.send(next);
                 } else {
                     var next = result.queue.queue[0];
                     result.queue.queue.splice(0, 1);
-                    result.queue.history.push(result.queue.current);
-                    result.queue.current = next;
+                    //result.queue.history.push(result.queue.current);
+                    //result.queue.current = next;
                     collection.save(result);
                     res.send(next);
                 }

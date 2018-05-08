@@ -113,7 +113,7 @@ struct QueueManager {
     }
 
     func play() {
-        guard user.me() else { return } //TODO: inform stop listening, every play
+        guard user.me() else { return }
         guard let user = CliqueAPI.find(user: user.id) else { return }
         
         if Media.playing && player.playbackState == .paused {
@@ -163,7 +163,11 @@ struct QueueManager {
     func play(radio: Void) {} //TODO: play radio
     
     func play(song: Song) {
-        guard user.me() else { return }
+        guard user.me() else {
+            gm?.stop(listening: ())
+            play(song: song)
+            return
+        }
         CliqueAPI.play(song: song, for: user.id)
         
         Media.stop()

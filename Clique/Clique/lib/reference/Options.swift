@@ -69,12 +69,12 @@ struct Options {
             case .history:
                 options.options = [.settings, .addHistoryPlaylist]
                 options.stop = me ? nil : .stopListening
-            case .listeners: break //TODO: new options
-            case .requests: break
-            case .radio: break
+            case .listeners, .requests, .radio:
+                let client = q.manager?.client()
+                let sharing = (client?.me() ?? false) && (client?.queue.current != nil || !(client?.queue.listeners.isEmpty ?? true))
+                options.options = [.settings]
+                options.stop = sharing ? .stopSharing : nil
             }
-            
-        case _ where options.stop == nil: break //TODO: smart stop
             
         default: break
         }

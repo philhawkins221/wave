@@ -25,7 +25,7 @@ struct Alerts {
     }
     
     private static func inform(title: String? = nil, messsage: String? = nil) -> UIAlertController {
-        let alert = UIAlertController(title: title, message: title, preferredStyle: .alert)
+        let alert = UIAlertController(title: title, message: messsage, preferredStyle: .alert)
         
         alert.addAction(UIAlertAction(title: "ok", style: .cancel))
         alert.view.tintColor = UIColor.orange
@@ -126,17 +126,26 @@ struct Alerts {
     }
     
     static func inform(_ event: Inform, about user: User? = nil) {
-        var title = ""
+        let username = user == nil ? "user " : "@" + user!.username + " "
         var message = ""
         
         switch event {
-        case .userNotFound: break
-        case .doNotDisturb: break
+        case .userNotFound: message = "this user could not be found"
+        case .doNotDisturb: message = "do not disturb"
         case .noAccount: break
         case .stopListening: break
-        case .notFriends: break
-        case .canNotQueueSong: break
+        case .notFriends: message = username + "must add you to their friends before you can see their queue"
+        case .canNotQueueSong: message = "song could not be added to the queue"
         }
+        
+        guard let selected = swipe?.selectedViewController else { return }
+        var controller: UIViewController? = nil
+        
+        if let selected = selected as? UINavigationController { controller = selected.topViewController }
+        while let presented = selected.presentedViewController { controller = presented }
+
+        let alert = inform(title: "", messsage: message)
+        controller?.present(alert, animated: true)
     }
     
     static func invite(friend: User, on controller: QueueViewController) {

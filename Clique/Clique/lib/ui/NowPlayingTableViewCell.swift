@@ -23,15 +23,19 @@ class NowPlayingTableViewCell: UITableViewCell {
             textLabel?.font = UIFont.systemFont(ofSize: 18, weight: .light)
             accessoryType = .none
             
-            if song.library == Catalogues.Library.rawValue {
-                imageView?.image = Media.get(artwork: song.id) ?? UIImage(named: "genericart.png")
+            
+            let placeholder = #imageLiteral(resourceName: "genericart.png")
+            
+            if let url = URL(string: song.artwork) {
+                imageView?.af_setImage(withURL: url, placeholderImage: placeholder)
+            } else if let url = URL(string: iTunesAPI.match(song)?.artwork ?? "") {
+                imageView?.af_setImage(withURL: url, placeholderImage: placeholder)
             } else {
-                let url = URL(string: song.artwork) ?? URL(string: "/")!
-                imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "genericart.png"))
+                imageView?.image = placeholder
             }
             
             var sender: User? = nil
-            if song.sender != "" && song.sender != Identity.me { sender = CliqueAPI.find(user: song.sender) }
+            if song.sender != "" && song.sender != q.user { sender = CliqueAPI.find(user: song.sender) }
             if sender != nil { creditlabel.text = "from: @" + sender!.username }
             else { creditlabel.text = nil }
             

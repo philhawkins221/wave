@@ -51,9 +51,9 @@ class ProfileBar: UIView {
             case is NowPlayingViewController:
                 if (q.manager?.client().me() ?? false) && client.queue.listeners.count > 0 {
                     return .peopleListening
-                } else if !(q.manager?.client().me() ?? true) && q.manager?.client().queue.current != nil {
+                } else if !(q.manager?.client().me() ?? true) {
                     return .listeningTo
-                } else if gm?.check(requests: ()) ?? false {
+                } else if gm?.check(requests: (), cached: false) ?? false {
                     return .requests
                 } else if gm?.display != nil {
                     return .nowPlaying
@@ -65,7 +65,7 @@ class ProfileBar: UIView {
             case is BrowseViewController, is QueueViewController:
                 if (q.manager?.client().me() ?? false) && client.queue.listeners.count > 0 {
                     return .peopleListening
-                } else if !(q.manager?.client().me() ?? true) && q.manager?.client().queue.current != nil {
+                } else if !(q.manager?.client().me() ?? true) {
                     return controller is QueueViewController ? .listening : .listeningTo
                 } else if gm?.display != nil {
                     return .nowPlaying

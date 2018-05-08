@@ -152,7 +152,7 @@ class LibraryDelegate: BrowseDelegate {
         case .delete:
             let deleted = library[indexPath.row]
             library.remove(at: indexPath.row)
-            tableView.deleteRows(at: [indexPath], with: .automatic)
+            if !library.isEmpty { tableView.deleteRows(at: [indexPath], with: .automatic) }
             manager.delete(playlist: deleted)
         case .none, .insert: break
         }

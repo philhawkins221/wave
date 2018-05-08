@@ -13,4 +13,5 @@ struct Album: CatalogItem {
     let library: String
     let name: String
     let artwork: String
+    let year: String
 }

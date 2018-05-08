@@ -22,7 +22,7 @@ class BrowseViewController: UIViewController {
     
     //MARK: - properties
     
-    var manager: BrowseManager?
+    lazy var manager: BrowseManager? = wave()
     var search = UISearchController(searchResultsController: nil)
     
     var adding = false
@@ -42,7 +42,7 @@ class BrowseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        refresh()
+        //refresh()
                         
         NavigationControllerStyleGuide.enforce(on: navigationController)
         TabBarControllerStyleGuide.enforce(on: tabBarController)
@@ -120,7 +120,14 @@ class BrowseViewController: UIViewController {
         search.searchResultsUpdater = manager?.delegate
         table.delegate = manager?.delegate
         table.dataSource = manager?.delegate
+        
         table.reloadData()
+        table.isHidden = false
+    }
+    
+    func wave() -> BrowseManager? {
+        let manager = BrowseManager(to: bro)
+        return manager
     }
     
     //MARK: - actions

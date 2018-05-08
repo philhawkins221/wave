@@ -33,7 +33,7 @@ class SearchDelegate: BrowseDelegate {
         switch search {
         case .users: users = CliqueAPI.search(user: query)
         case .applemusic:
-            let results = AppleMusicAPI.search(query)
+            let results = iTunesAPI.search(query)
             
             for item in results {
                 switch item {
@@ -71,6 +71,7 @@ class SearchDelegate: BrowseDelegate {
         switch search {
         case .users where final: manager.find(friend: users[indexPath.row], confirmed: false)
         case .users: manager.view(user: users[indexPath.row].id)
+        
         case .applemusic where indexPath.section == 0,
              .spotify where indexPath.section == 0: manager.view(catalog: artists[indexPath.row])
         case .applemusic where adding,
@@ -145,12 +146,17 @@ class SearchDelegate: BrowseDelegate {
             cell.textLabel?.text = "@" + users[indexPath.row].username
             cell.accessoryType = .disclosureIndicator
             cell.imageView?.image = UIImage(named: "clique 120.png")
-            cell.setImageSize(to: 50)
-            cell.imageView?.layer.cornerRadius = cell.frame.size.width / 2
+            cell.setImageSize(to: 40)
+            cell.imageView?.layer.cornerRadius = cell.imageView!.frame.size.width / 2
             cell.imageView?.clipsToBounds = true
-            if let current = users[indexPath.row].queue.current {
+            cell.detailTextLabel?.textColor = UIColor.black
+            if users[indexPath.row].id != users[indexPath.row].queue.owner {
+                let username = CliqueAPI.find(user: users[indexPath.row].queue.owner)?.username
+                cell.detailTextLabel?.text = username == nil ? "listening" : "listening to @" + username!
+                cell.detailTextLabel?.textColor = UIColor.orange
+            } else if let current = users[indexPath.row].queue.current {
                 cell.detailTextLabel?.text = "🔊" + current.artist.name + " - " + current.title
-            } //TODO: set detail text label listening
+            }
             return cell
             case .applemusic where indexPath.section == 0 && artists.isEmpty,
                  .spotify where indexPath.section == 0 && artists.isEmpty:
@@ -170,7 +176,7 @@ class SearchDelegate: BrowseDelegate {
                 return cell
         case .applemusic, .spotify:
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
-            cell.set(song: songs[indexPath.row])
+            cell.set(song: songs[indexPath.row], artwork: true)
             cell.voteslabel.text = nil
             return cell
         case .none, .library: return UITableViewCell()

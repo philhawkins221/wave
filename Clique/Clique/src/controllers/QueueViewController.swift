@@ -16,20 +16,21 @@ class QueueViewController: UIViewController {
     @IBOutlet weak var options: UIView!
     @IBOutlet weak var optionscover: UIView!
     
-    @IBOutlet weak var table: UITableView!
+    @IBOutlet weak var table: UITableView?
     @IBOutlet weak var historybutton: UIBarButtonItem!
     @IBOutlet weak var addbutton: UIBarButtonItem!
     
     //MARK: - properties
     
-    var manager: QueueManager?
+    lazy var manager: QueueManager? = wave()
     
     var mode: QueueMode = .queue
     var user = Identity.me
     var fill: Playlist?
     var edit = false
-    var shuffle = false
     var shuffled: Playlist?
+    var radio: Playlist?
+    var listeners = [String : String]()
     
     let refreshcontrol = UIRefreshControl()
     weak var timer = Timer()
@@ -39,23 +40,23 @@ class QueueViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        refresh()
+        //refresh()
                         
         NavigationControllerStyleGuide.enforce(on: navigationController)
         TabBarControllerStyleGuide.enforce(on: tabBarController)
         
-        table.tintColor = UIColor.orange
-        table.canCancelContentTouches = false
+        table?.tintColor = UIColor.orange
+        table?.canCancelContentTouches = false
         
-        profilebar.controller = self
+        profilebar?.controller = self
         
         refreshcontrol.addTarget(self, action: #selector(manualRefresh), for: .valueChanged)
         refreshcontrol.attributedTitle = NSAttributedString(string: "pull to refresh")
         
         if #available(iOS 10.0, *) {
-            table.refreshControl = refreshcontrol
+            table?.refreshControl = refreshcontrol
         } else {
-            table.backgroundView = refreshcontrol
+            table?.backgroundView = refreshcontrol
         }
                 
         //TODO: notifications
@@ -65,7 +66,7 @@ class QueueViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        table.setEditing(
+        table?.setEditing(
             (manager?.client().me() ?? false) || !(manager?.client().queue.requestsonly ?? true),
             animated: false)
     }
@@ -77,12 +78,12 @@ class QueueViewController: UIViewController {
         
         refresh()
         
-        if let selected = table.indexPathForSelectedRow {
-            table.deselectRow(at: selected, animated: true)
+        if let selected = table?.indexPathForSelectedRow {
+            table?.deselectRow(at: selected, animated: true)
         }
         
         timer?.invalidate()
-        timer = Timer.scheduledTimer(withTimeInterval: 20, repeats: true) { [unowned self] _ in self.refresh() }
+        timer = mode == .queue ? Timer.scheduledTimer(withTimeInterval: 20, repeats: true) { [unowned self] _ in self.refresh() } : nil
     }
     
     override func viewWillDisappear(_ animated: Bool) {
@@ -108,11 +109,19 @@ class QueueViewController: UIViewController {
         setTabBarSwipe(enabled: !edit)
         
         manager = QueueManager(to: self)
-        table.delegate = manager?.delegate
-        table.dataSource = manager?.delegate
-        table.reloadData()
+        table?.delegate = manager?.delegate
+        table?.dataSource = manager?.delegate
+        table?.reloadData()
                 
         refreshcontrol.endRefreshing()
+        gm?.refresh()
+        
+        table?.isHidden = false
+    }
+    
+    func wave() -> QueueManager? {
+        let manager = QueueManager(to: q)
+        return manager
     }
     
     //MARK: - navigation
@@ -123,9 +132,9 @@ class QueueViewController: UIViewController {
         case "history": manager?.view(history: segue.destination)
         case "options":
             guard let vc = segue.destination as? OptionsTableViewController else { return }
-            profilebar.options = vc
-            profilebar.optionscontainer = options
-            profilebar.optionscover = optionscover
+            profilebar?.options = vc
+            profilebar?.optionscontainer = options
+            profilebar?.optionscover = optionscover
             vc.profilebar = profilebar
         default: break
         }

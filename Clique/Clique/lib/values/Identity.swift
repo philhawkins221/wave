@@ -32,12 +32,23 @@ struct Identity {
             spotify: false
         )
         
-        guard let me = CliqueAPI.new(user: new) else { return print("Identity wave: poop") }
+        guard let me = CliqueAPI.new(user: new) else { return }
         //TODO: what to do if this is nil
         //perhaps wave should return bool
         print("Identity wave:", me)
         self.me = me.id
         UserDefaults.standard.set(me.id, forKey: "id")
+        
+        let likes = Playlist(
+            owner: me.id,
+            id: "0",
+            library: Catalogues.Library.rawValue,
+            name: "likes",
+            social: true,
+            songs: []
+        )
+        
+        CliqueAPI.update(playlist: me.id, with: likes)
     }
     
     static func update(with replacement: User? = nil) {

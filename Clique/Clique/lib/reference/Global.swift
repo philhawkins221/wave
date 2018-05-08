@@ -11,14 +11,18 @@ import MediaPlayer
 
 //MARK: - properties
 
-//let id: String = ""
-//let username: String = "anonymous"
 let searchlimit: Int = 25
 
 let player = MPMusicPlayerController.systemMusicPlayer
 
 let scClientID = "2c9d9d500b26f5a1ae7661215c5b4e1c"
 let scClientSecret = "1745f37d41a47591147470a84acda2c5"
+
+var spotifysession: SPTSession?
+var spotifyauth = SPTAuth.defaultInstance()
+let kClientId = "f1cd061f0eef478d9fb478d2da3340c2"
+let kCallbackURL = "clique-login://callback"
+let kTokenSwapURL = "http://localhost:1234/swap"
 
 //MARK: - root view controllers
 
@@ -101,6 +105,27 @@ enum Option {
     case none
 }
 
+enum Setting {
+    case applemusic
+    case spotify
+    
+    case sharing
+    
+    case donotdisturb
+    case requestsonly
+    case takerequests
+    
+    case voting
+    case radio
+    case shuffle
+    
+    case stopSharing
+    case stopListening
+    
+    case delete
+    case none
+}
+
 enum BrowseMode: String {
     case browse
     case friends
@@ -123,11 +148,28 @@ enum QueueMode {
     case queue
     case history
     case listeners
+    case requests
+    case radio
+}
+
+enum SettingsMode {
+    case general
+    case queue
+    case sharing
 }
 
 enum Requests: String {
     case friend = "friend"
     case song = "song"
+}
+
+enum Inform {
+    case userNotFound
+    case doNotDisturb
+    case noAccount
+    case stopListening
+    case notFriends
+    case canNotQueueSong
 }
 
 enum Sorting {
@@ -205,6 +247,24 @@ extension String {
     }
 }
 
+extension UIImage {
+    
+    func resizeImage(newWidth: CGFloat) -> UIImage {
+        
+        let scale = newWidth / size.width
+        let newHeight = size.height * scale
+        
+        UIGraphicsBeginImageContext(CGSize(width: newWidth, height: newHeight))
+        
+        
+        draw(in: CGRect(x: 0, y: 0,width: newWidth, height: newHeight))
+        let newImage = UIGraphicsGetImageFromCurrentImageContext()
+        UIGraphicsEndImageContext()
+        
+        return newImage!
+    }
+}
+
 extension UITableViewCell {
     func setImageSize(to size: CGFloat) {
         if imageView?.image != nil {
@@ -217,9 +277,7 @@ extension UITableViewCell {
             indentationLevel = -4
         }
     }
-}
-
-extension UITableViewCell {
+    
     @objc func showRowActions(_ arg1: Bool = true) { print("ding dong") }
     
     class func show() {

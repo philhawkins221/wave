@@ -14,7 +14,7 @@ import SwiftyJSON
 
 struct Web {
     
-    static func call(_ type: RequestMethod, to endpoint: String, with parameters: [String : Any]? = nil) -> JSON? {
+    static func call(_ type: RequestMethod, to endpoint: String, with parameters: [String : Any]? = nil, token: String? = nil) -> JSON? {
         
         print("calling", type.rawValue, "request to endpoint", endpoint)
         
@@ -27,8 +27,10 @@ struct Web {
         }
         
         var response: JSON? = nil
-        
-        let res = Alamofire.request(endpoint, method: method, parameters: parameters, encoding: JSONEncoding.prettyPrinted, headers: nil).responseJSON()
+        var headers: [String : String]? = nil
+        if let token = token { headers = ["Authorization": "Bearer \(token)"] }
+                
+        let res = Alamofire.request(endpoint, method: method, parameters: parameters, encoding: JSONEncoding.prettyPrinted, headers: headers).responseJSON()
         
         if let value = res.result.value {
             response = JSON(value)
@@ -126,13 +128,24 @@ struct Web {
         ]
     }
     
-    static func get(image url: String) -> UIImageView? {
+    static func get(artwork song: Song) -> String? {
+        let endpoint = Endpoints.Artwork.artpoint(song.title.addingFormEncoding() ?? "", song.artist.name.addingFormEncoding() ?? "")
+        if let response = call(.get, to: endpoint) {
+            let images = response["track"]["album"]["image"].array ?? []
+            return images.last?["#text"].string
+        }
+        
+        return nil
+    }
+    
+    static func get(image url: String, size: CGSize? = nil) -> UIImageView? {
         guard let location = URL(string: url) else { return nil }
+        let size = size ?? CGSize(width: 100, height: 100)
         let placeholder = UIImage(named: "genericart.png")
-        
         let image = UIImageView()
-        image.af_setImage(withURL: location, placeholderImage: placeholder)
+        let filter = AspectScaledToFitSizeFilter(size: size)
         
+        image.af_setImage(withURL: location, placeholderImage: placeholder, filter: filter)
         return image
     }
     

@@ -19,6 +19,8 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     var adding: Bool { return manager.controller.adding }
     var final: Bool { return manager.controller.final }
     
+    var searches = [SearchMode]()
+    
     var all: Playlist {
         return Playlist(
             owner: manager.client().id,
@@ -36,7 +38,6 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     var list = [Song]()
     var results = [Song]()
     var sort = Sorting.artist
-    var fields = (users: false, library: false, applemusic: false, spotify: false, count: 0)
     
     //MARK: - initializers
     
@@ -56,6 +57,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         songs = [[Song]](repeating: [], count: 27)
         list = [Song]()
         results = [Song]()
+        searches = [SearchMode]()
         
         for playlist in client.library {
             let uniques = playlist.songs.filter { !list.contains($0) }
@@ -88,18 +90,23 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
             }
         }
         
-        fields.users = true
-        fields.library = true //client.me()
-        fields.applemusic = client.applemusic
-        fields.spotify = client.spotify
+        searches.removeAll()
         
-        var count = 0
-        if fields.users { count += 1 }
-        if fields.library { count += 1 }
-        if fields.applemusic { count += 1 }
-        if fields.spotify { count += 1 }
+        switch adding {
+        case true:
+            guard let leader = q.manager?.client() else { fallthrough }
+            let streaming = leader.applemusic || leader.spotify
+            if streaming { searches.append(.users) }
+            if leader.me() || streaming { searches.append(.library) }
+            if streaming { searches.append(.applemusic) }
+        case false:
+            searches.append(.users)
+            if client.me() { searches.append(.library) }
+            
+            if client.applemusic { searches.append(.applemusic) }
+            else if client.spotify { searches.append(.spotify) }
+        }
         
-        fields.count = count
     }
     
     func title() {
@@ -130,10 +137,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         
         switch searching {
         case true where indexPath.section == 0:
-            manager.view(
-                search: manager.controller.search.searchBar.text ?? "",
-                from: tableView.cellForRow(at: indexPath)?.textLabel?.text ?? ""
-            )
+            manager.view(search: manager.controller.search.searchBar.text ?? "", from: searches[indexPath.row])
         case _ where adding: self.tableView(tableView, commit: .insert, forRowAt: indexPath)
         case true where final: manager.find(songs: [results[indexPath.row]])
         case true: manager.play(playlist: allsongs, at: indexPath.row)
@@ -182,8 +186,8 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         switch searching {
         case true where section == 0:
             switch manager.controller.search.searchBar.text {
-                case .some: return manager.controller.search.searchBar.text == "" ? 1 : fields.count
-                case nil: return fields.library ? 1 : 0
+                case .some: return searches.count
+                case nil: return 0
             }
         case true: return results.count
         case false: return songs[section].count
@@ -199,20 +203,18 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
             
             switch manager.controller.search.searchBar.text {
             case .some(let query):
-                var prompts = [String]()
                 
-                if fields.users && query != "" { prompts.append("search username @" + query + "...") }
-                if fields.library { prompts.append("search Device Library...") }
-                if fields.applemusic && query != "" { prompts.append("search Apple Music for '" + query + "'...") }
-                if fields.spotify && query != "" { prompts.append("search Spotify for '" + query + "'...")}
+                switch searches[indexPath.row] {
+                case .users: cell.textLabel?.text = "search username @" + query
+                case .library: cell.textLabel?.text = "search Device Library"
+                case .applemusic, .spotify: cell.textLabel?.text = "search for '" + query + "'"
+                case .none: break
+                }
                 
-                cell.textLabel?.text = prompts[indexPath.row]
-                cell.textLabel?.textColor = UIColor.orange
-                
-            case nil where fields.library: cell.textLabel?.text = "Search Device Library..."
-            default: break
+            case nil: break
             }
-            
+            cell.textLabel?.textColor = UIColor.orange
+            cell.accessoryType = .disclosureIndicator
             return cell
         case true:
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
@@ -308,7 +310,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
             owner: manager.client().id,
             id: "",
             library: "",
-            name: "Search",
+            name: "search",
             social: true,
             songs: songs
         )

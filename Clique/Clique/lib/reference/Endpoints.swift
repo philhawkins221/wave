@@ -32,6 +32,12 @@ struct Endpoints {
 
     }
     
+    struct Artwork {
+        static let artpoint = { (song, artist) in
+            "ws.audioscrobbler.com/2.0/?method=track.getInfo&track=" + song + "&artist=" + artist + "&api_key=826457ee44af558d7012efc826debf82&format=json"
+        }
+    }
+    
     struct Spotify {
         static let markets: [String : String] = ["United States" : "us"]
         static let market = markets["United States"] ?? ""
@@ -42,7 +48,7 @@ struct Endpoints {
         
         struct artists {
             static let point = { id in
-                "https://api.spotify.com/v1/artists/" + id + "&limit=" + searchlimit.description + "&market=" + market
+                "https://api.spotify.com/v1/artists/" + id
             }
             static let albumspoint = { id in
                 point(id) + "/albums&limit=" + searchlimit.description + "&market=" + market
@@ -55,17 +61,14 @@ struct Endpoints {
             }
         }
         
-        struct albums {
-            static let point = { id in
-                "https://api.spotify.com/v1/albums/" + id + "&limit=" + searchlimit.description + "&market=" + market
-            }
-            static let songspoint = { id in
-                point(id) + "/tracks&limit=50&market=" + market
-            }
+        static let albumspoint = { id in
+                "https://api.spotify.com/v1/albums/" + id + "/tracks&limit=" + searchlimit.description + "&market=" + market
         }
-        
         static let searchpoint = { (term: String) in
             "https://api.spotify.com/v1/search?q=" + term.addingFormEncoding()! + "&type=track,artist&limit=" + searchlimit.description + "&market=" + market
+        }
+        static let matchpoint = { (term: String) in
+            "https://api.spotify.com/v1/search?q=" + term.addingFormEncoding()! + "&type=track&limit=1&market=" + market
         }
     }
     
@@ -74,7 +77,19 @@ struct Endpoints {
         static let country = countries["United States"] ?? ""
         
         static let searchpoint = { (term: String) in
-            "https://itunes.apple.com/search?term=" + term.addingFormEncoding()! + "&media=music&entity=musicTrack,musicArtist&limit=1&country=" + country
+            "https://itunes.apple.com/search?term=" + term.addingFormEncoding()! + "&media=music&entity=song,musicArtist&isStreamable=true&limit=" + searchlimit.description + "&country=" + country
+        }
+        static let matchpoint = { (term: String) in
+            "https://itunes.apple.com/search?term=" + term.addingFormEncoding()! + "&media=music&entity=song&limit=1&country=" + country
+        }
+        static let artistpoint = { id in
+            "https://itunes.apple.com/lookup?id=" + id + "&entity=album&limit=" + searchlimit.description + "&country=" + country
+        }
+        static let albumpoint = { id in
+            "https://itunes.apple.com/lookup?id=" + id + "&entity=song&limit=" + searchlimit.description + "&country=" + country
+        }
+        static let songspoint = { id in
+            "https://itunes.apple.com/lookup?id=" + id + "&entity=song&limit=" + searchlimit.description + "&country=" + country
         }
     }
     
@@ -88,6 +103,9 @@ struct Endpoints {
         
         static let playpoint = { id in
             "http://clique2016.herokuapp.com/playlists/" + id + "/play"
+        }
+        static let stoppoint = { id in
+            "http://clique2016.herokuapp.com/playlists/" + id + "/stop"
         }
         static let listenpoint = { id in
             "http://clique2016.herokuapp.com/playlists/" + id + "/listen"

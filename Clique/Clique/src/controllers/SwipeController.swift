@@ -46,12 +46,16 @@ class SwipeController: SwipeableTabBarController {
         
         let controllers = viewControllers!
         
+        controllers.forEach { let _ = $0.view }
+        
         let bronav = controllers[0] as! UINavigationController
+        bronav.viewControllers.forEach { let _ = $0.view }
         bro = bronav.visibleViewController as! BrowseViewController
         np = controllers[1] as! NowPlayingViewController
         let qnav = controllers[2] as! UINavigationController
+        bronav.viewControllers.forEach { let _ = $0.view }
         q = qnav.visibleViewController as! QueueViewController
-        
+                
         bro.user = Identity.me
         q.user = Identity.me
         

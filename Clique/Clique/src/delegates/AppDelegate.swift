@@ -10,11 +10,6 @@ import UIKit
 import CoreData
 import MediaPlayer
 
-var spotifysession: SPTSession?
-let kClientId = "f1cd061f0eef478d9fb478d2da3340c2"
-let kCallbackURL = "clique-login://callback"
-let kTokenSwapURL = "http://localhost:1234/swap"
-
 @UIApplicationMain
 class AppDelegate: UIResponder, UIApplicationDelegate {
 
@@ -23,6 +18,14 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     internal func applicationDidFinishLaunching(_ application: UIApplication) {
         //UITableViewCell.show()
         //UITableView.hide()
+        
+//        let item = AVPlayerItem(url: URL(fileURLWithPath: "silence.mp3"))
+//
+//        Media.silence = AVQueuePlayer(items: [item])
+//        Media.loop = AVPlayerLooper(player: Media.silence!, templateItem: item)
+//        Media.silence?.allowsExternalPlayback = false
+//        Media.silence?.usesExternalPlaybackWhileExternalScreenIsActive = false
+        
     }
     
     private func application(application: UIApplication, didFinishLaunchingWithOptions launchOptions: [NSObject: AnyObject]?) -> Bool {
@@ -50,16 +53,18 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     
     func application(_ application: UIApplication, open url: URL, sourceApplication: String?, annotation: Any) -> Bool {
         // Ask SPTAuth if the URL given is a Spotify authentication callback
-        if (SPTAuth.defaultInstance().canHandle(url as URL! as URL!)) {
-            SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url as URL!, callback: { (error, session) -> Void in
+        if (SPTAuth.defaultInstance().canHandle(url)) {
+            SPTAuth.defaultInstance().handleAuthCallback(withTriggeredAuthURL: url, callback: { (error, session) -> Void in
                 print("spot")
                 if (error != nil) {
                     print("appdelegate: *** Auth error: \(String(describing: error))")
                     return
                 }
-                print("appdelegate: spotify authenticated successfully")
+                Spotify.authorization = session?.accessToken ?? ""
+                print("appdelegate: spotify authenticated successfully with token", Spotify.authorization)
+                Spotify.player?.login(with: session, callback: { _ in })
                 spotifysession = session
-                //self.playUsingSession(session)
+                Settings.spotify = true
             })
             
             return true
@@ -71,19 +76,24 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
     func applicationWillResignActive(_ application: UIApplication) {
         // Sent when the application is about to move from active to inactive state. This can occur for certain types of temporary interruptions (such as an incoming phone call or SMS message) or when the user quits the application and it begins the transition to the background state.
         // Use this method to pause ongoing tasks, disable timers, and throttle down OpenGL ES frame rates. Games should use this method to pause the game.
+        //q.manager?.stop()
+        q.timer = nil
     }
 
     func applicationDidEnterBackground(_ application: UIApplication) {
         // Use this method to release shared resources, save user data, invalidate timers, and store enough application state information to restore your application to its current state in case it is terminated later.
         // If your application supports background execution, this method is called instead of applicationWillTerminate: when the user quits.
+        q.timer = nil
     }
 
     func applicationWillEnterForeground(_ application: UIApplication) {
         // Called as part of the transition from the background to the inactive state; here you can undo many of the changes made on entering the background.
+        np.refresh()
     }
 
     func applicationDidBecomeActive(_ application: UIApplication) {
         // Restart any tasks that were paused (or not yet started) while the application was inactive. If the application was previously in the background, optionally refresh the user interface.
+        //np.refresh()
     }
 
     func applicationWillTerminate(_ application: UIApplication) {
@@ -91,7 +101,8 @@ class AppDelegate: UIResponder, UIApplicationDelegate {
         // Saves changes in the application's managed object context before the application terminates.
         //self.saveContext()
         
-        //TODO: Media.stop()
+        gm?.stop(listening: ())
+        gm?.stop(sharing: ())
     }
     
     

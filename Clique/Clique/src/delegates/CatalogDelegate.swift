@@ -28,13 +28,13 @@ class CatalogDelegate: BrowseDelegate {
         switch item {
         case let artist as Artist:
             switch artist.library {
-            case Catalogues.AppleMusic.rawValue: albums = AppleMusicAPI.get(albums: artist)
+            case Catalogues.AppleMusic.rawValue: albums = iTunesAPI.get(albums: artist)
             case Catalogues.Spotify.rawValue: albums = SpotifyAPI.get(albums: artist)
             default: break
             }
         case let album as Album:
             switch album.library {
-            case Catalogues.AppleMusic.rawValue: songs = AppleMusicAPI.get(songs: album)
+            case Catalogues.AppleMusic.rawValue: songs = iTunesAPI.get(songs: album)
             case Catalogues.Spotify.rawValue: songs = SpotifyAPI.get(songs: album)
             default: break
             }
@@ -60,7 +60,14 @@ class CatalogDelegate: BrowseDelegate {
         
         switch item {
         case let artist as Artist where indexPath.section == 0:
-            let songs = SpotifyAPI.get(top: artist)
+            var songs = [Song]()
+            
+            switch artist.library {
+            case Catalogues.AppleMusic.rawValue: songs = iTunesAPI.get(songs: artist)
+            case Catalogues.Spotify.rawValue: songs = SpotifyAPI.get(top: artist)
+            default: break
+            }
+            
             let playlist = Playlist(
                 owner: "",
                 id: "",
@@ -131,15 +138,16 @@ class CatalogDelegate: BrowseDelegate {
         switch item {
         case is Artist where indexPath.section == 0:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-            cell.textLabel?.text = "all songs"
+            cell.textLabel?.text = "top songs"
             cell.accessoryType = .disclosureIndicator
             return cell
         case is Artist:
-            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.textLabel?.text = albums[indexPath.row].name
+            cell.detailTextLabel?.text = albums[indexPath.row].year
             cell.accessoryType = .disclosureIndicator
             let url = URL(string: albums[indexPath.row].artwork) ?? URL(string: "/")!
-            cell.imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "bin/genericart.png"))
+            cell.imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "genericart.png"))
             cell.setImageSize(to: 45)
             return cell
         case is Album:

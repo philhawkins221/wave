@@ -50,7 +50,7 @@ class PlaylistDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, editingStyleForRowAt: indexPath) }
         if adding { return playlist.songs.isEmpty ? .none : .insert }
         
-        return playlist.songs.isEmpty ? .none : .delete
+        return playlist.songs.isEmpty || playlist.library != Catalogues.Library.rawValue ? .none : .delete
     }
     
     override func tableView(_ tableView: UITableView, targetIndexPathForMoveFromRowAt sourceIndexPath: IndexPath, toProposedIndexPath proposedDestinationIndexPath: IndexPath) -> IndexPath {

@@ -20,6 +20,12 @@
                 <rect key="frame" x="0.0" y="0.0" width="320" height="149.5"/>
                 <autoresizingMask key="autoresizingMask"/>
                 <subviews>
+                    <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="from: @" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e35-gk-ljy">
+                        <rect key="frame" x="16" y="101" width="288" height="15"/>
+                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
+                        <color key="textColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                        <nil key="highlightedColor"/>
+                    </label>
                     <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="Title" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" id="b2Y-m8-Kcy">
                         <rect key="frame" x="16" y="55" width="33.5" height="20.5"/>
                         <autoresizingMask key="autoresizingMask"/>
@@ -34,17 +40,11 @@
                         <nil key="textColor"/>
                         <nil key="highlightedColor"/>
                     </label>
-                    <label opaque="NO" multipleTouchEnabled="YES" contentMode="left" insetsLayoutMarginsFromSafeArea="NO" text="from: @" textAlignment="natural" lineBreakMode="tailTruncation" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="e35-gk-ljy">
-                        <rect key="frame" x="16" y="92" width="288" height="15"/>
-                        <fontDescription key="fontDescription" type="system" pointSize="12"/>
-                        <color key="textColor" red="1" green="0.57637232540000005" blue="0.0" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
-                        <nil key="highlightedColor"/>
-                    </label>
                 </subviews>
                 <constraints>
-                    <constraint firstItem="e35-gk-ljy" firstAttribute="leading" secondItem="HJQ-RG-Vz2" secondAttribute="leading" id="5kF-i8-aG2"/>
-                    <constraint firstItem="e35-gk-ljy" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="9cf-hF-Fpl"/>
-                    <constraint firstItem="e35-gk-ljy" firstAttribute="top" secondItem="b2Y-m8-Kcy" secondAttribute="bottom" constant="16.5" id="Q7B-5U-BGh"/>
+                    <constraint firstItem="e35-gk-ljy" firstAttribute="top" secondItem="HJQ-RG-Vz2" secondAttribute="bottom" constant="8" symbolic="YES" id="WkD-22-rTB"/>
+                    <constraint firstItem="e35-gk-ljy" firstAttribute="trailing" secondItem="H2p-sc-9uM" secondAttribute="trailingMargin" id="gER-O8-3ci"/>
+                    <constraint firstItem="e35-gk-ljy" firstAttribute="leading" secondItem="HJQ-RG-Vz2" secondAttribute="leading" id="m9Q-WV-O6U"/>
                 </constraints>
             </tableViewCellContentView>
             <viewLayoutGuide key="safeArea" id="njF-e1-oar"/>

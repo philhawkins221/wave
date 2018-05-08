@@ -87,8 +87,8 @@ class FriendsDelegate: BrowseDelegate {
             cell.textLabel?.text = "@" + manager.client().username
             cell.accessoryType = .disclosureIndicator
             cell.imageView?.image = #imageLiteral(resourceName: "clique 120.png")
-            cell.setImageSize(to: 50)
-            cell.imageView?.layer.cornerRadius = cell.frame.size.width / 2
+            cell.setImageSize(to: 40)
+            cell.imageView?.layer.cornerRadius = cell.imageView!.frame.size.width / 2
             cell.imageView?.clipsToBounds = true
         case 1 where friends.isEmpty:
             cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
@@ -99,8 +99,8 @@ class FriendsDelegate: BrowseDelegate {
             cell.textLabel?.text = "@" + friends[indexPath.row].username
             cell.accessoryType = .disclosureIndicator
             cell.imageView?.image = #imageLiteral(resourceName: "clique 120.png")
-            cell.setImageSize(to: 50)
-            cell.imageView?.layer.cornerRadius = cell.frame.size.width / 2
+            cell.setImageSize(to: 40)
+            cell.imageView?.layer.cornerRadius = cell.imageView!.frame.size.width / 2
             cell.imageView?.clipsToBounds = true
         default: break
         }

@@ -49,7 +49,7 @@ struct Options {
                 options.stop = .stopSyncing
             case .search:
                 options.options = [.settings]
-                options.stop = me ? nil : .stopViewing
+                options.stop = .stopViewing
             case .catalog:
                 options.options = [.settings, .playCatalog, .addCatalogToLibrary]
                 options.stop = me ? nil : .stopViewing
@@ -59,7 +59,8 @@ struct Options {
             let me = controller.manager?.client().me() ?? false
             switch controller.mode {
             case .queue where me:
-                let sharing = !(controller.manager?.delegate?.queue.listeners.isEmpty ?? true)
+                let client = q.manager?.client()
+                let sharing = (client?.me() ?? false) && (client?.queue.current != nil || !(client?.queue.listeners.isEmpty ?? true))
                 options.options = [.settings, .shareQueue, .shuffle]
                 options.stop = sharing ? .stopSharing : nil
             case .queue:
@@ -69,6 +70,8 @@ struct Options {
                 options.options = [.settings, .addHistoryPlaylist]
                 options.stop = me ? nil : .stopListening
             case .listeners: break //TODO: new options
+            case .requests: break
+            case .radio: break
             }
             
         case _ where options.stop == nil: break //TODO: smart stop

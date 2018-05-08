@@ -20,6 +20,7 @@ class NowPlayingViewController: UIViewController {
     @IBOutlet weak var optionscover: UIView!
     
     @IBOutlet weak var waves: ASPVideoPlayerView!
+    @IBOutlet weak var tuner: UIView!
     
     @IBOutlet weak var artworkimage: UIImageView!
     @IBOutlet weak var songlabel: UILabel!
@@ -36,6 +37,7 @@ class NowPlayingViewController: UIViewController {
     var manager: GeneralManager?
     
     var frequencies = [User]()
+    var tunercontroller: FrequencyTableViewController?
     
     //MARK: - lifecycle stack
     
@@ -44,12 +46,33 @@ class NowPlayingViewController: UIViewController {
         
         manager = GeneralManager(to: self)
         profilebar.controller = self
-    }
-    
-    override func viewWillAppear(_ animated: Bool) {
-        super.viewWillAppear(animated)
         
         TabBarControllerStyleGuide.enforce(on: tabBarController)
+        
+        let blur = UIVisualEffectView(effect: UIBlurEffect(style: .light))
+        blur.frame = artworkimage.bounds
+        blur.autoresizingMask = [.flexibleWidth, .flexibleHeight]
+        blur.alpha = 0.7
+        artworkimage.addSubview(blur)
+        
+        let maskLayer = CAGradientLayer()
+        maskLayer.frame = artworkimage.bounds
+        maskLayer.shadowRadius = 5
+        maskLayer.shadowPath = CGPath(roundedRect: artworkimage.bounds.insetBy(dx: 5, dy: 5), cornerWidth: 50, cornerHeight: 50, transform: nil)
+        maskLayer.shadowOpacity = 1
+        maskLayer.shadowOffset = CGSize.zero
+        maskLayer.shadowColor = UIColor.white.cgColor
+        artworkimage.layer.mask = maskLayer
+        
+        let all = UIBezierPath(roundedRect: tuner.bounds, cornerRadius: 20)
+        let layer = CAShapeLayer()
+        layer.frame = tuner.bounds
+        layer.path = all.cgPath
+        tuner.layer.mask = layer
+        
+        let delegate = FrequencyDelegate()
+        tunercontroller?.tableView.delegate = delegate
+        tunercontroller?.tableView.dataSource = delegate
         
         playpausebutton.tintColor = UIColor.orange
         playpausebutton.animationStyle = .split
@@ -59,6 +82,13 @@ class NowPlayingViewController: UIViewController {
         
         //let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
         let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, mode: AVAudioSessionModeDefault, options: .mixWithOthers)
+        try? AVAudioSession.sharedInstance().setActive(true)
+        AVAudioSession.sharedInstance()
+    }
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
+        
         waves.playVideo()
     }
     
@@ -66,8 +96,14 @@ class NowPlayingViewController: UIViewController {
         super.viewDidAppear(animated)
         
         refresh()
-        
         swipe?.setDiagonalSwipe(enabled: true)
+    }
+    
+    override func viewDidDisappear(_ animated: Bool) {
+        super.viewDidDisappear(animated)
+        
+        waves.pauseVideo()
+        gm?.hide(frequencies: ())
     }
 
     override func didReceiveMemoryWarning() {
@@ -77,6 +113,10 @@ class NowPlayingViewController: UIViewController {
     
     //MARK: - tasks
     
+    @objc func escape() {
+        manager?.hide(frequencies: ())
+    }
+    
     func refresh() {
         manager = GeneralManager(to: self)
     }
@@ -84,15 +124,24 @@ class NowPlayingViewController: UIViewController {
     //MARK: - actions
     
     @IBAction func rewind(_ sender: Any) {
+        gm?.retreat()
     }
     
     @IBAction func playpause(_ sender: Any) {
-        playpausebutton?.setPaused(!(playpausebutton?.isPaused ?? true), animated: true)
-        
-        return playpausebutton.isPaused ? Media.pause() : Media.play()
+        if q.manager?.client().queue.current == nil {
+            return gm?.view(frequencies: ()) ?? ()
+        }
+        q.refresh()
+        if playpausebutton.isPaused { q.manager?.play() }
+        else { q.manager?.pause() }
+        //q.refresh()
+        refresh()
     }
     
     @IBAction func fastforward(_ sender: Any) {
+        gm?.advance()
+        q.refresh()
+        refresh()
     }
     
     //MARK: - navigation
@@ -110,6 +159,10 @@ class NowPlayingViewController: UIViewController {
             profilebar.optionscontainer = options
             profilebar.optionscover = optionscover
             vc.profilebar = profilebar
+        case "tuner":
+            guard let vc = segue.destination as? FrequencyTableViewController else { return }
+            tunercontroller = vc
+            //vc.refresh()
         default: break
         }
     }

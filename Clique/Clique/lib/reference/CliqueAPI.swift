@@ -59,14 +59,14 @@ struct CliqueAPI {
     }
     
     static func stop(user: String) {
-        let endpoint = Endpoints.Clique.playpoint(user)
-        //TODO: stop
+        let endpoint = Endpoints.Clique.stoppoint(user)
+        let _ = Web.call(.get, to: endpoint)
     }
     
     static func advance(queue user: String) -> Song? {
         let endpoint = Endpoints.Clique.advancepoint(user)
         
-        if let response = Web.call(.get, to: endpoint, with: nil) {
+        if let response = Web.call(.get, to: endpoint) {
             return try? JSONDecoder().decode(Song.self, from: response.rawData())
         }
         

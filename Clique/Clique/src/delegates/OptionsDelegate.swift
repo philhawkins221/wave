@@ -158,9 +158,14 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .shareQueue:
+                let dnd = q.manager?.client().queue.donotdisturb ?? false
                 let listeners = q.manager?.client().queue.listeners.count ?? 0
                 cell.textLabel?.text = listeners > 0 ? listeners == 1 ? listeners.description + " person listening" : listeners.description + " people listening" : "share queue"
-                cell.detailTextLabel?.text = "invite a friend to the queue"
+                cell.detailTextLabel?.text = dnd ? "do not disturb enabled" : "invite a friend to the queue"
+                if dnd {
+                    cell.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+                    cell.selectionStyle = .none
+                }
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .shuffle:
@@ -180,22 +185,43 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .removeFriend:
+                guard let controller = controller as? BrowseViewController,
+                    let nofriends = controller.manager?.client().friends.isEmpty else { return cell }
+                if nofriends {
+                    cell.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+                    cell.selectionStyle = .none
+                }
                 cell.textLabel?.text = "remove friend"
+                cell.detailTextLabel?.text = nil
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .addPlaylist:
                 cell.textLabel?.text = "add playlist"
+                cell.detailTextLabel?.text = nil
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .removePlaylist:
+                guard let controller = controller as? BrowseViewController,
+                    let noplaylists = controller.manager?.client().library.isEmpty else { return cell }
+                if noplaylists {
+                    cell.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+                    cell.selectionStyle = .none
+                }
                 cell.textLabel?.text = "remove playlist"
+                cell.detailTextLabel?.text = nil
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .joinQueue:
                 guard let controller = controller as? BrowseViewController,
-                      let user = controller.manager?.client().username else { return cell }
-                cell.textLabel?.text = "join queue"
-                cell.detailTextLabel?.text = "listen with @" + user
+                      let client = controller.manager?.client() else { return cell }
+                let listening = !client.me() && client == q.manager?.client()
+                let dnd = client.queue.donotdisturb
+                cell.textLabel?.text = listening ? "leave queue" : "join queue"
+                cell.detailTextLabel?.text = dnd ? "do not disturb enabled" : listening ? " stop listening with @" + client.username : "listen with @" + client.username
+                if dnd {
+                    cell.backgroundColor = #colorLiteral(red: 0.8039215803, green: 0.8039215803, blue: 0.8039215803, alpha: 1)
+                    cell.selectionStyle = .none
+                }
                 cell.accessoryType = .none
                 return cell
             case .addUser:
@@ -209,10 +235,12 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 return cell
             case .playPlaylist:
                 cell.textLabel?.text = "play"
+                cell.detailTextLabel?.text = nil
                 cell.accessoryType = .none
                 return cell
             case .addPlaylistToLibrary:
                 cell.textLabel?.text = "add playlist to library"
+                cell.detailTextLabel?.text = nil
                 cell.accessoryType = .none
                 return cell
             case .sharePlaylist:
@@ -222,18 +250,22 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 return cell
             case .playAll:
                 cell.textLabel?.text = "play all"
+                cell.detailTextLabel?.text = nil
                 cell.accessoryType = .none
                 return cell
             case .playCatalog:
                 cell.textLabel?.text = "play"
+                cell.detailTextLabel?.text = nil
                 cell.accessoryType = .none
                 return cell
             case .addCatalogToLibrary:
                 cell.textLabel?.text = "add to library"
+                cell.detailTextLabel?.text = nil
                 cell.accessoryType = .none
                 return cell
             case .addHistoryPlaylist:
                 cell.textLabel?.text = "new playlist from history"
+                cell.detailTextLabel?.text = nil
                 cell.accessoryType = .disclosureIndicator
                 return cell
             case .stopSharing, .stopListening, .stopViewing, .stopSyncing, .none: return cell

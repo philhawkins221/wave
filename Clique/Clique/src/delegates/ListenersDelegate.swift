@@ -11,16 +11,24 @@ import Foundation
 class ListenersDelegate: QueueDelegate {
     
     var listeners = [User]()
+    var friends = [User]()
     
     //MARK: - actions
     
     override func populate() {
         super.populate()
         listeners.removeAll()
+        friends.removeAll()
+        
+        let client = manager.client()
+        for friend in client.friends {
+            if queue.listeners.contains(friend) { continue }
+            if let friend = CliqueAPI.find(user: friend) { friends.append(friend) }
+        }
         
         for listener in queue.listeners {
-            if let found = CliqueAPI.find(user: listener) {
-                listeners.append(found)
+            if let listener = CliqueAPI.find(user: listener) {
+                listeners.append(listener)
             }
         }
     }
@@ -39,68 +47,103 @@ class ListenersDelegate: QueueDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        switch indexPath.row {
-        case _ where indexPath.row == listeners.count && !listeners.isEmpty: break //TODO: add user
-        default: tableView.deselectRow(at: indexPath, animated: true)
-        }
+        let style = tableView.cellForRow(at: indexPath)?.editingStyle ?? .none
+        
+        return style == .none ?
+        tableView.deselectRow(at: indexPath, animated: true) :
+        self.tableView(tableView, commit: style, forRowAt: indexPath)
     }
     
     override func tableView(_ tableView: UITableView, editActionsForRowAt indexPath: IndexPath) -> [UITableViewRowAction]? {
         return nil
     }
     
+    func tableView(_ tableView: UITableView, titleForDeleteConfirmationButtonForRowAt indexPath: IndexPath) -> String? {
+        return "kick"
+    }
+    
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
+        let view = UITableViewHeaderFooterView()
+        TableHeaderStyleGuide.enforce(on: view)
+        
+        return view
+    }
+    
+    override func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
+        switch section {
+        case 1 where friends.isEmpty: return 0
+        default: return UITableViewAutomaticDimension
+        }
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
-        return indexPath.row == listeners.count ? .none : .delete
+        switch indexPath.section {
+        case 0 where !listeners.isEmpty: return .delete
+        case 1: return .insert
+        default: return .none
+        }
     }
     
     //MARK: - table data source stack
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 1
+        return 2
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
-        return listeners.isEmpty ? 2 : listeners.count + 1
+        switch section {
+        case 0: return listeners.isEmpty ? 1 : listeners.count
+        case 1: return friends.count
+        default: return 0
+        }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
-        let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
-        if listeners.isEmpty && indexPath.row == 0 {
+        switch indexPath.section {
+        case 0 where listeners.isEmpty && friends.isEmpty:
+            let cell = UITableViewCell(style: .subtitle, reuseIdentifier: nil)
             cell.textLabel?.text = "no listeners"
-            cell.textLabel?.textColor = UIColor.black
-            cell.accessoryType = .none
+            cell.detailTextLabel?.text = "add friends to share the queue"
             return cell
-        } else if listeners.isEmpty || indexPath.row == listeners.count {
-            cell.textLabel?.text = "invite friends"
-            cell.textLabel?.textColor = UIColor.orange
-            cell.accessoryType = .disclosureIndicator
+        case 0 where listeners.isEmpty:
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textLabel?.text = "no listeners"
             return cell
-        } else {
+        case 0:
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             cell.textLabel?.text = "@" + listeners[indexPath.row].username
-            cell.textLabel?.textColor = UIColor.black
-            cell.accessoryType = .none
             return cell
+        case 1:
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textLabel?.text = "@" + friends[indexPath.row].username
+            return cell
+        default: return UITableViewCell()
         }
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return nil
+        switch section {
+        case 0: return "friends listening:"
+        case 1: return "invite friends to the queue"
+        default: return nil
+        }
     }
     
     override func tableView(_ tableView: UITableView, canEditRowAt indexPath: IndexPath) -> Bool {
-        return indexPath.row != listeners.count && !listeners.isEmpty
+        return true
     }
     
     override func tableView(_ tableView: UITableView, commit editingStyle: UITableViewCellEditingStyle, forRowAt indexPath: IndexPath) {
-        listeners.remove(at: indexPath.row)
-        manager.update(listeners: listeners.map { $0.id })
-        if listeners.isEmpty { tableView.reloadData() }
-        else { tableView.reloadRows(at: [indexPath], with: .automatic) }
-        
+        switch editingStyle {
+        case .insert:
+            q.manager?.invite(friend: friends[indexPath.row])
+        case .delete:
+            listeners.remove(at: indexPath.row)
+            manager.update(listeners: listeners.map { $0.id })
+            if listeners.isEmpty { tableView.reloadData() }
+            else { tableView.reloadRows(at: [indexPath], with: .automatic) }
+        case .none: break
+        }
     }
     
     override func tableView(_ tableView: UITableView, canMoveRowAt indexPath: IndexPath) -> Bool {

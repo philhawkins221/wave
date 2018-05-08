@@ -33,7 +33,7 @@
                     <nil key="textColor"/>
                     <nil key="highlightedColor"/>
                 </label>
-                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clique 180.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ye9-Nv-DOP">
+                <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clique 120.png" translatesAutoresizingMaskIntoConstraints="NO" id="Ye9-Nv-DOP">
                     <rect key="frame" x="7" y="12" width="40" height="40"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="40" id="Xl3-i0-5eD"/>
@@ -44,7 +44,6 @@
                     <rect key="frame" x="310" y="0.0" width="65" height="65"/>
                     <constraints>
                         <constraint firstAttribute="width" constant="65" id="4mb-cE-ErG"/>
-                        <constraint firstAttribute="height" constant="65" id="RnL-ih-2fU"/>
                     </constraints>
                     <fontDescription key="fontDescription" type="system" pointSize="25"/>
                     <state key="normal" title="⬆️">
@@ -88,6 +87,6 @@
         </view>
     </objects>
     <resources>
-        <image name="clique 180.png" width="180" height="180"/>
+        <image name="clique 120.png" width="120" height="120"/>
     </resources>
 </document>

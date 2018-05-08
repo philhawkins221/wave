@@ -7,6 +7,7 @@
 //
 
 import Foundation
+//import AlamofireImage
 
 struct GeneralManager {
     
@@ -32,9 +33,15 @@ struct GeneralManager {
     
     //MARK: - tasks
     
-    func add(friend: User) {
-        CliqueAPI.add(friend: friend.id, to: me.id)
-        CliqueAPI.request(friend: Request(sender: me.id, receiver: friend.id))
+    func add(friend: String) {
+        CliqueAPI.add(friend: friend, to: me.id)
+        request(user: friend)
+    }
+    
+    func advance() {
+        guard q.manager?.client().me() ?? false else { return }
+        q.refresh()
+        q.manager?.advance()
     }
     
     func check(frequencies: Void, cached: Bool = true) {
@@ -43,7 +50,7 @@ struct GeneralManager {
         
         for friend in user.friends {
             guard let friend = CliqueAPI.find(user: friend) else { continue }
-            if friend.queue.current != nil { frequencies.append(friend) }
+            if friend.queue.current != nil && !friend.queue.donotdisturb { frequencies.append(friend) }
         }
         
         controller.frequencies = frequencies
@@ -54,10 +61,18 @@ struct GeneralManager {
     }
     
     func connect(applemusic status: Bool) {
+        if status, Settings.applemusic {
+            guard Media.authenticate() else { return }
+        }
+        
         CliqueAPI.update(applemusic: me.id, to: status)
     }
     
     func connect(spotify status: Bool) {
+        if status, Settings.spotify {
+            guard Spotify.authenticate() else { return }
+        }
+        
         CliqueAPI.update(spotify: me.id, to: status)
     }
     
@@ -65,17 +80,39 @@ struct GeneralManager {
         CliqueAPI.delete(friend: friend, for: me.id)
     }
     
-    func listen(to user: String) {
-        guard let user = CliqueAPI.find(user: user) else { return }
+    func hide(frequencies: Void) {
+        UIView.animate(withDuration: 0.15, delay: 0, animations: {
+            self.controller.tuner.alpha = 0
+        }, completion: { _ in
+            self.controller.tuner.isHidden = true
+            self.controller.optionscover.gestureRecognizers?.forEach { self.controller.optionscover.removeGestureRecognizer($0) }
+            self.controller.optionscover.isHidden = true
+        })
+    }
+    
+    func listen(to user: String, redirect: Bool = true) {
+        guard q.user != user else { return }
+        guard let user = CliqueAPI.find(user: user) else { return } //TODO: inform user not found
+        guard user.friends.contains(Identity.me) else { return } //TODO: inform not friends
+        guard !user.queue.donotdisturb else { return } //TODO: inform do not disturb
         
-        q.manager?.stop()
+        if let leader = q.manager?.client() {
+            if leader.me() { stop(sharing: ()) }
+            else { stop(listening: ()) }
+        }
         CliqueAPI.add(listener: me.id, to: user.id)
         q.manager?.manage(user: user)
-        //TODO: swipe to q
+        
+        guard redirect else { return }
+        bro.navigationController?.popToRootViewController(animated: true)
+        swipe?.selectedViewController = swipe?.viewControllers?[2]
+        controller.dismiss(animated: true)
     }
     
     func nowplaying() {
         guard let song = display else { return notplaying() }
+        //let filter = AspectScaledToFillSizeFilter(size: controller.artworkimage.frame.size)
+        let placeholder = #imageLiteral(resourceName: "genericart.png")
         
         controller.artworkimage.isHidden = false
         controller.songlabel.isHidden = false
@@ -91,19 +128,35 @@ struct GeneralManager {
         }
         
         controller.playpausebutton?.isHidden = false
-        controller.playpausebutton?.isPaused = false
+        controller.playpausebutton?.isPaused = Media.playing && Media.paused || !Media.playing && !Spotify.playing
         
         controller.songlabel.text = song.title
         controller.artistlabel.text = song.artist.name
         controller.albumlabel.text = nil
         
-        if song.library == Catalogues.Library.rawValue {
-            controller.artworkimage.image = Media.get(artwork: song.id) ?? UIImage(named: "genericart.png")
-        } else {
-            let url = URL(string: song.artwork) ?? URL(string: "/")!
-            controller.artworkimage.af_setImage(withURL: url, placeholderImage: UIImage(named: "genericart.png"))
+        controller.artworkimage.contentMode = .scaleAspectFit
+        
+        //TODO: artwork
+        /*let artwork = Web.get(artwork: song) ?? ""
+        if let url = URL(string: artwork) {
+            controller.artworkimage.af_setImage(withURL: url, placeholderImage: placeholder, imageTransition: UIImageView.ImageTransition.crossDissolve(0.2), runImageTransitionIfCached: false)
+        }*/
+        
+        if let url = URL(string: song.artwork) {
+            controller.artworkimage.af_setImage(withURL: url, placeholderImage: placeholder, imageTransition: UIImageView.ImageTransition.crossDissolve(0.2), runImageTransitionIfCached: false)
+        } else if let url = URL(string: iTunesAPI.match(song)?.artwork ?? "") {
+            controller.artworkimage.af_setImage(withURL: url, placeholderImage: placeholder, imageTransition: UIImageView.ImageTransition.crossDissolve(0.2), runImageTransitionIfCached: false)
         }
         
+        /*if URL(string: song.artwork) != nil {
+            let image = Web.get(image: song.artwork, size: controller.artworkimage.frame.size)
+            controller.artworkimage = image
+        } else if let match = iTunesAPI.match(song)?.artwork {
+            let image = Web.get(image: match, size: controller.artworkimage.frame.size)
+            controller.artworkimage = image
+        } else {
+            controller.artworkimage.image = #imageLiteral(resourceName: "genericart.png")
+        }*/
     }
     
     private func notplaying() {
@@ -125,18 +178,79 @@ struct GeneralManager {
         controller.refresh()
     }
     
+    func request(user: String) {
+        let request = Request(sender: me.id, receiver: user)
+        CliqueAPI.request(friend: request)
+    }
+    
+    func respond(to request: Request, confirmed: Bool = false, affirmed: Bool = false) {
+        guard request.receiver == Identity.me else { return }
+        guard confirmed else {
+            let friends = me.friends.contains(request.sender)
+            return Alerts.respond(to: request, on: gm?.controller.presentedViewController, friends: friends)
+        }
+        
+        if affirmed && me.friends.contains(request.sender) {
+            listen(to: request.sender)
+        } else if affirmed {
+            add(friend: request.sender)
+        }
+        
+        var replacement = me.requests
+        for i in replacement.indices {
+            if replacement[i].sender == request.sender {
+                replacement.remove(at: i)
+                break
+            }
+        }
+        CliqueAPI.update(friendRequests: replacement, for: Identity.me)
+        guard let social = controller.presentedViewController as? SocialViewController else { return }
+    }
+    
+    func retreat() {
+        guard q.manager?.client().me() ?? false else { return }
+        q.manager?.retreat()
+    }
+    
     func stop(listening: Void) {
         guard let leader = q.manager?.client() else { return }
         let replacement = leader.queue.listeners.filter { $0 != Identity.me }
         CliqueAPI.update(listeners: replacement, for: leader.id)
+        q.manager?.stop()
         q.manager?.manage(user: me)
-        notplaying()
+        q.profilebar?.display(subline: .generic)
+        controller.profilebar.display(subline: .generic)
+        refresh()
     }
     
     func stop(sharing: Void) {
         CliqueAPI.update(listeners: [], for: Identity.me)
         q.manager?.stop()
-        notplaying()
+        q.profilebar?.display(subline: .generic)
+        q.fill = nil
+        q.shuffled = nil
+        refresh()
+    }
+    
+    func view(frequencies: Void) {
+        check(frequencies: ())
+        
+        controller.tunercontroller?.refresh()
+        
+        let tap = UITapGestureRecognizer(target: controller, action: #selector(controller.escape))
+        controller.optionscover.addGestureRecognizer(tap)
+        
+        controller.tuner.alpha = 0
+        controller.optionscover.alpha = 1
+        controller.tuner.isHidden = false
+        controller.optionscover.isHidden = false
+        UIView.animate(withDuration: 0.15) {
+            self.controller.tuner.alpha = 1
+        }
+    }
+    
+    func voting(status: Bool) {
+        CliqueAPI.update(voting: Identity.me, to: status)
     }
     
 }

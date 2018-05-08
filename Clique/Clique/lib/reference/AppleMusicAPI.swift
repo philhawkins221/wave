@@ -46,7 +46,6 @@ struct AppleMusicAPI: Searching {
     }
     
     static func match(_ song: Song) -> Song? {
-        
         let term = song.artist.name + " " + song.title
         let endpoint = Endpoints.AppleMusic.matchpoint(term)
         
@@ -89,7 +88,9 @@ struct AppleMusicAPI: Searching {
                     id: album["id"].string ?? "",
                     library: Catalogues.AppleMusic.rawValue,
                     name: "",
-                    artwork: artwork))
+                    artwork: artwork,
+                    year: ""
+                ))
             }
         }
         

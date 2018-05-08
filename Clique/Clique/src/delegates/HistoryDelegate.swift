@@ -60,7 +60,7 @@ class HistoryDelegate: QueueDelegate {
         tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
         
         let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
-        cell.set(song: queue.queue[indexPath.row])
+        cell.set(song: queue.history[indexPath.row])
         return cell
     }
     

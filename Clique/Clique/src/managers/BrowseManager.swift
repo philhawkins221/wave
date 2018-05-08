@@ -54,7 +54,7 @@ struct BrowseManager {
     }
     
     func add(friend: User) {
-        gm?.add(friend: friend)
+        gm?.add(friend: friend.id)
         refresh()
     }
     
@@ -238,27 +238,18 @@ struct BrowseManager {
         controller.show(vc, sender: controller)
     }
     
-    func view(search query: String, from sender: String) {
+    func view(search query: String, from sender: SearchMode) {
+        guard sender != .library else { return Media.search(multiple: !controller.adding, on: controller) }
         guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
             else { return }
         
         vc.final = controller.final
         vc.adding = controller.adding
         vc.navigationItem.prompt = controller.navigationItem.prompt
-        vc.user = user.id
+        vc.user = Identity.me
         vc.query = query
         vc.mode = .search
-        
-        switch sender {
-        case _ where sender.contains("search username"): vc.searching = .users
-        case _ where sender.contains("search Device Library"):
-            vc.searching = .library
-            Media.search(multiple: !controller.adding, on: controller)
-            return
-        case _ where sender.contains("search Apple Music"): vc.searching = .applemusic
-        case _ where sender.contains("search Spotify"): vc.searching = .spotify
-        default: vc.searching = .none
-        }
+        vc.searching = sender
         
         controller.show(vc, sender: controller)
     }

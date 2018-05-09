@@ -113,6 +113,8 @@ struct GeneralManager {
         guard let song = display else { return notplaying() }
         let placeholder = #imageLiteral(resourceName: "genericart.png")
         
+        controller.waves.isHidden = true
+        
         controller.artworkimage.isHidden = false
         controller.songlabel.isHidden = false
         controller.artistlabel.isHidden = false
@@ -150,6 +152,7 @@ struct GeneralManager {
         controller.rewindbutton.isHidden = true
         controller.fastforwardbutton.isHidden = true
         
+        controller.waves.isHidden = false
         controller.playpausebutton?.isHidden = false
         controller.playpausebutton?.isPaused = true
         

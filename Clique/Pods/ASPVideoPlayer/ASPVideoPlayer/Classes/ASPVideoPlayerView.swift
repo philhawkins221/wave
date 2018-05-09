@@ -324,6 +324,7 @@ import AVFoundation
             seekToZero()
         }
 
+        videoPlayerLayer.player?.allowsExternalPlayback = false
         status = .playing
         videoPlayerLayer.player?.rate = 1.0
         startedVideo?()

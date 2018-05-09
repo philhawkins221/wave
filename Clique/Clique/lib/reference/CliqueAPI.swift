@@ -120,6 +120,16 @@ struct CliqueAPI {
         let _ = Web.call(.delete, to: endpoint, with: parameters)
     }
     
+    static func refresh(user id: String, on controller: UIViewController) -> User? {
+        let endpoint = Endpoints.Clique.findpoint(id)
+        
+        if let response = Web.call(.get, to: endpoint) {
+            return try? JSONDecoder().decode(User.self, from: response.rawData())
+        }
+        
+        return nil
+    }
+    
     static func request(friend request: Request) {
         let endpoint = Endpoints.Clique.request.friendpoint(request.receiver)
         let parameters = Web.parameterize(request: request)

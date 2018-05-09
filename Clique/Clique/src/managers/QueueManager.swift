@@ -113,10 +113,12 @@ struct QueueManager {
     }
 
     func play() {
-        guard user.me() else { return }
+        //guard user.me() else { return }
         guard let user = CliqueAPI.find(user: user.id) else { return }
         
-        if Media.playing && player.playbackState == .paused {
+        if !user.me(), let current = user.queue.current, let match = iTunesAPI.match(current) {
+            play(song: match)
+        } else if Media.playing && player.playbackState == .paused {
             Media.play()
         } else if Spotify.playing && Spotify.player?.isPlaying ?? false {
             Spotify.play()

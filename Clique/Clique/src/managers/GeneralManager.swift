@@ -111,7 +111,6 @@ struct GeneralManager {
     
     func nowplaying() {
         guard let song = display else { return notplaying() }
-        //let filter = AspectScaledToFillSizeFilter(size: controller.artworkimage.frame.size)
         let placeholder = #imageLiteral(resourceName: "genericart.png")
         
         controller.artworkimage.isHidden = false
@@ -136,31 +135,14 @@ struct GeneralManager {
         
         controller.artworkimage.contentMode = .scaleAspectFit
         
-        //TODO: artwork
-        /*let artwork = Web.get(artwork: song) ?? ""
-        if let url = URL(string: artwork) {
-            controller.artworkimage.af_setImage(withURL: url, placeholderImage: placeholder, imageTransition: UIImageView.ImageTransition.crossDissolve(0.2), runImageTransitionIfCached: false)
-        }*/
-        
         if let url = URL(string: song.artwork) {
             controller.artworkimage.af_setImage(withURL: url, placeholderImage: placeholder, imageTransition: UIImageView.ImageTransition.crossDissolve(0.2), runImageTransitionIfCached: false)
         } else if let url = URL(string: iTunesAPI.match(song)?.artwork ?? "") {
             controller.artworkimage.af_setImage(withURL: url, placeholderImage: placeholder, imageTransition: UIImageView.ImageTransition.crossDissolve(0.2), runImageTransitionIfCached: false)
         }
-        
-        /*if URL(string: song.artwork) != nil {
-            let image = Web.get(image: song.artwork, size: controller.artworkimage.frame.size)
-            controller.artworkimage = image
-        } else if let match = iTunesAPI.match(song)?.artwork {
-            let image = Web.get(image: match, size: controller.artworkimage.frame.size)
-            controller.artworkimage = image
-        } else {
-            controller.artworkimage.image = #imageLiteral(resourceName: "genericart.png")
-        }*/
     }
     
     private func notplaying() {
-        print("notplaying")
         controller.artworkimage.isHidden = true
         controller.songlabel.isHidden = true
         controller.artistlabel.isHidden = true
@@ -203,8 +185,8 @@ struct GeneralManager {
                 break
             }
         }
+        
         CliqueAPI.update(friendRequests: replacement, for: Identity.me)
-        guard let social = controller.presentedViewController as? SocialViewController else { return }
     }
     
     func retreat() {

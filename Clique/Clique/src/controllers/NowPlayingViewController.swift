@@ -80,8 +80,7 @@ class NowPlayingViewController: UIViewController {
         waves.videoURL = Bundle.main.url(forResource: "waves", withExtension: "mp4")
         waves.shouldLoop = true
         
-        //let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, with: .mixWithOthers)
-        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryPlayback, mode: AVAudioSessionModeDefault, options: .mixWithOthers)
+        let _ = try? AVAudioSession.sharedInstance().setCategory(AVAudioSessionCategoryAmbient, mode: AVAudioSessionModeDefault, options: .mixWithOthers)
         try? AVAudioSession.sharedInstance().setActive(true)
         AVAudioSession.sharedInstance()
     }
@@ -89,14 +88,16 @@ class NowPlayingViewController: UIViewController {
     override func viewWillAppear(_ animated: Bool) {
         super.viewWillAppear(animated)
         
-        waves.playVideo()
+        if !Media.playing { waves.playVideo() }
     }
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
-        refresh()
-        swipe?.setDiagonalSwipe(enabled: true)
+        DispatchQueue.global(qos: .background).async { [weak self] in
+            self?.refresh()
+            swipe?.setDiagonalSwipe(enabled: true)
+        }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -154,7 +155,6 @@ class NowPlayingViewController: UIViewController {
         switch segue.identifier ?? "" {
         case "options":
             guard let vc = segue.destination as? OptionsTableViewController else { return }
-            print("NowPlayingViewController preparing for options segue")
             profilebar.options = vc
             profilebar.optionscontainer = options
             profilebar.optionscover = optionscover

@@ -223,6 +223,8 @@ struct QueueManager {
     }
     
     func stop() {
+        np.waves.isHidden = false
+        
         if user.me() {
             //controller.fill = nil
             //controller.shuffled = nil

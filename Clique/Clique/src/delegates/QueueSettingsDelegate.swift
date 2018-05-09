@@ -82,13 +82,13 @@ class QueueSettingsDelegate: SettingsDelegate {
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return 0
-        case 1: return 1
-        case 2: return 3
-        case 3: return 2
-        case 4: return 1
-        case 5: return 2
-        case 6: return stop == .none ? 0 : 1
+        case 0: return 0 //
+        case 1: return 1 //do not disturb
+        case 2: return 3 //requests only, automatically take requests, voting
+        case 3: return 2 //wave radio, shuffle
+        case 4: return 1 //connect accounts
+        case 5: return connect.count //accounts
+        case 6: return stop == .none ? 0 : 1 //stop
         default: return 0
         }
     }

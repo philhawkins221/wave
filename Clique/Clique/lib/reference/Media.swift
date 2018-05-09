@@ -85,8 +85,8 @@ class Media: NSObject {
         default: break
         }
         
-        playing = true
         np.waves.isHidden = true
+        playing = true
         silence.play()
     }
     
@@ -103,8 +103,8 @@ class Media: NSObject {
         
         silence.replaceCurrentItem(with: nil)
         silence = AVQueuePlayer(items: [item])
-        silence.allowsExternalPlayback = false
-        silence.usesExternalPlaybackWhileExternalScreenIsActive = false
+        //silence.allowsExternalPlayback = false
+        //silence.usesExternalPlaybackWhileExternalScreenIsActive = false
         player.repeatMode = .none
         checks = -2
     }

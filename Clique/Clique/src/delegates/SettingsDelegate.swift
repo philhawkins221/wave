@@ -14,7 +14,7 @@ class SettingsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     var controller: SettingsViewController
     
-    let connect: [Setting] = [.applemusic, .spotify]
+    let connect: [Setting] = [.applemusic]
     var stop: Setting = .none
     var selections = [Bool]()
     var client: User?

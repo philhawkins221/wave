@@ -198,6 +198,8 @@ struct BrowseManager {
         vc.navigationItem.prompt = controller.navigationItem.prompt
         vc.user = user
         vc.mode = .library
+        
+        controller.dismiss(animated: true)
         controller.show(vc, sender: controller)
     }
     
@@ -211,6 +213,8 @@ struct BrowseManager {
         vc.user = user.id
         vc.playlist = playlist
         vc.mode = .playlist
+        
+        controller.dismiss(animated: true)
         controller.show(vc, sender: controller)
     }
     
@@ -223,6 +227,8 @@ struct BrowseManager {
         vc.navigationItem.prompt = controller.navigationItem.prompt
         vc.user = user.id
         vc.mode = .browse
+        
+        controller.dismiss(animated: true)
         controller.show(vc, sender: controller)
     }
     
@@ -235,6 +241,8 @@ struct BrowseManager {
         vc.navigationItem.prompt = controller.navigationItem.prompt
         vc.user = user.id
         vc.mode = .sync
+        
+        controller.dismiss(animated: true)
         controller.show(vc, sender: controller)
     }
     
@@ -251,6 +259,7 @@ struct BrowseManager {
         vc.mode = .search
         vc.searching = sender
         
+        controller.dismiss(animated: true)
         controller.show(vc, sender: controller)
     }
     
@@ -264,6 +273,8 @@ struct BrowseManager {
         vc.user = user.id
         vc.catalog = item
         vc.mode = .catalog
+        
+        controller.dismiss(animated: true)
         controller.show(vc, sender: controller)
     }
     

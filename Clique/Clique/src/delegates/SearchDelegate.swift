@@ -93,7 +93,11 @@ class SearchDelegate: BrowseDelegate {
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {
-        return nil
+        if searching { return super.tableView(tableView, viewForHeaderInSection: section) }
+        
+        let view = UITableViewHeaderFooterView()
+        TableHeaderStyleGuide.enforce(on: view)
+        return view
     }
     
     override func tableView(_ tableView: UITableView, editingStyleForRowAt indexPath: IndexPath) -> UITableViewCellEditingStyle {
@@ -184,7 +188,13 @@ class SearchDelegate: BrowseDelegate {
     }
     
     override func tableView(_ tableView: UITableView, titleForHeaderInSection section: Int) -> String? {
-        return nil
+        if searching { return super.tableView(tableView, titleForHeaderInSection: section) }
+        
+        switch section {
+        case 0: return "artists"
+        case 1: return "songs"
+        default: return nil
+        }
     }
     
     override func sectionIndexTitles(for tableView: UITableView) -> [String]? {

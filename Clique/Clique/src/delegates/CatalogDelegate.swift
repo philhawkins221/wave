@@ -147,7 +147,7 @@ class CatalogDelegate: BrowseDelegate {
             cell.detailTextLabel?.text = albums[indexPath.row].year
             cell.accessoryType = .disclosureIndicator
             let url = URL(string: albums[indexPath.row].artwork) ?? URL(string: "/")!
-            cell.imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "genericart.png"))
+            cell.imageView?.af_setImage(withURL: url, placeholderImage: UIImage(named: "songpic.png"))
             cell.setImageSize(to: 45)
             return cell
         case is Album:

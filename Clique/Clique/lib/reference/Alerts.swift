@@ -136,10 +136,11 @@ struct Alerts {
         case .stopListening: break
         case .notFriends: message = username + "must add you to their friends before you can see their queue"
         case .canNotQueueSong: message = "song could not be added to the queue"
+        case .noStreaming: message = "connect your Apple Music account to stream " + username
         }
         
         guard let selected = swipe?.selectedViewController else { return }
-        var controller: UIViewController? = nil
+        var controller: UIViewController? = selected
         
         if let selected = selected as? UINavigationController { controller = selected.topViewController }
         while let presented = selected.presentedViewController { controller = presented }

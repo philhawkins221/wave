@@ -38,6 +38,8 @@ class ProfileBar: UIView {
         case listening
         case listeningTo
         case createUsername
+        case streaming
+        case streamingUser
     }
     
     var message: Message {
@@ -51,20 +53,24 @@ class ProfileBar: UIView {
             case is NowPlayingViewController:
                 if (q.manager?.client().me() ?? false) && client.queue.listeners.count > 0 {
                     return .peopleListening
+                } else if !(q.manager?.client().me() ?? true) && Media.playing {
+                    return .streamingUser
                 } else if !(q.manager?.client().me() ?? true) {
                     return .listeningTo
                 } else if gm?.check(requests: (), cached: false) ?? false {
                     return .requests
-                } else if gm?.display != nil {
-                    return .nowPlaying
                 } else if (gm?.controller.frequencies ?? []).count > 0 {
                     return .frequencies
+                } else if gm?.display != nil {
+                    return .nowPlaying
                 } else {
                     return .generic
                 }
             case is BrowseViewController, is QueueViewController:
                 if (q.manager?.client().me() ?? false) && client.queue.listeners.count > 0 {
                     return .peopleListening
+                } else if !(q.manager?.client().me() ?? true) && Media.playing {
+                    return controller is QueueViewController ? .streaming : .streamingUser
                 } else if !(q.manager?.client().me() ?? true) {
                     return controller is QueueViewController ? .listening : .listeningTo
                 } else if gm?.display != nil {
@@ -77,6 +83,7 @@ class ProfileBar: UIView {
         case false:
             switch controller {
             case is BrowseViewController: return .viewing
+            case is QueueViewController where !(q.manager?.client().me() ?? true) && Media.playing: return .streaming
             case is QueueViewController: return .listening
             default: return .generic
             }
@@ -141,15 +148,16 @@ class ProfileBar: UIView {
         case .requests:
             let requests = client?.requests.count ?? 0
             message = requests > 1 ? requests.description + " new requests" : requests.description + " new request"
-        case .createUsername:
-            message = "tap to change"
-        case .viewing:
-            message = "viewing"
-        case .listening:
-            message = "listening"
+        case .createUsername: message = "tap to change"
+        case .viewing: message = "viewing"
+        case .listening: message = "listening"
         case .listeningTo:
             guard let leader = q.manager?.client() else { return }
             message = "listening to @" + leader.username
+        case .streaming: message = "streaming"
+        case .streamingUser:
+            guard let leader = q.manager?.client() else { return }
+            message = "streaming @" + leader.username
         case .generic: message = "start a wave"
         }
         

@@ -14,7 +14,9 @@ class Media: NSObject {
     
     static var clone = Media()
     static var playing = false
+    static var streaming = false
     static var paused = false
+    static var nowplaying: Song? = nil
     
     private static var advanced = false
     private static var checks = -2
@@ -57,6 +59,14 @@ class Media: NSObject {
         print("background: player status:", player.playbackState.rawValue)
         if playing, player.playbackState == .playing, advanced {
             advanced = false //open the gate
+        } else if streaming, !paused, !advanced {
+            print("background streaming")
+            q.refresh()
+            guard let current = q.manager?.client().queue.current else { return q.manager?.stop() ?? () }
+            if current != nowplaying {
+                advanced = true
+                q.manager?.play(song: current, streaming: streaming)
+            }
         } else if playing, !paused, player.playbackState == .paused, player.currentPlaybackTime == 0, !advanced {
             print("background advancing")
             advanced = true //close the gate
@@ -85,8 +95,10 @@ class Media: NSObject {
         default: break
         }
         
+        nowplaying = song
         np.waves.isHidden = true
         playing = true
+        streaming = !(q.manager?.client().me() ?? true)
         silence.play()
     }
     
@@ -122,6 +134,7 @@ class Media: NSObject {
     
     static func stop() {
         playing = false
+        streaming = false
         advanced = true
         if token != nil { silence.removeTimeObserver(token as Any) }
         //silence.currentItem?.removeObserver(clone, forKeyPath: "status")

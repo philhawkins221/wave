@@ -61,12 +61,12 @@ class FrequencyDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         return 0
     }
     
-    /*func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
-        return 60
-    }*/
+    func tableView(_ tableView: UITableView, heightForFooterInSection section: Int) -> CGFloat {
+        return frequencies.count == 1 ? np.tuner.frame.height - 60 : 0
+    }
     
     func tableView(_ tableView: UITableView, titleForFooterInSection section: Int) -> String? {
-        return "friends sharing"
+        return frequencies.count == 1 ? "no friends sharing" : nil
     }
     
     //MARK: - table data source stack

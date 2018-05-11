@@ -56,6 +56,7 @@ class NowPlayingViewController: UIViewController {
         artworkimage.addSubview(blur)
         
         let maskLayer = CAGradientLayer()
+        maskLayer.masksToBounds = true
         maskLayer.frame = artworkimage.bounds
         maskLayer.shadowRadius = 5
         maskLayer.shadowPath = CGPath(roundedRect: artworkimage.bounds.insetBy(dx: 5, dy: 5), cornerWidth: 50, cornerHeight: 50, transform: nil)
@@ -66,6 +67,7 @@ class NowPlayingViewController: UIViewController {
         
         let all = UIBezierPath(roundedRect: tuner.bounds, cornerRadius: 20)
         let layer = CAShapeLayer()
+        layer.masksToBounds = true
         layer.frame = tuner.bounds
         layer.path = all.cgPath
         tuner.layer.mask = layer
@@ -129,7 +131,7 @@ class NowPlayingViewController: UIViewController {
     }
     
     @IBAction func playpause(_ sender: Any) {
-        if q.manager?.client().queue.current == nil {
+        if q.manager?.client().queue.current == nil, q.manager?.client().queue.queue.isEmpty ?? false {
             return gm?.view(frequencies: ()) ?? ()
         }
         q.refresh()

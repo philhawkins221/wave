@@ -170,6 +170,7 @@ enum Inform {
     case stopListening
     case notFriends
     case canNotQueueSong
+    case noStreaming
 }
 
 enum Sorting {

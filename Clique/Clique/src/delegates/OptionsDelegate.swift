@@ -107,20 +107,23 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 let all = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 10)
                 let layer = CAShapeLayer()
                 
+                layer.masksToBounds = true
                 layer.frame = cell.bounds
                 layer.path = all.cgPath
                 cell.layer.mask = layer
             } else if indexPath.row == 0 {
-                let top = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: UIRectCorner(rawValue: UIRectCorner.RawValue(UInt8(UIRectCorner.topLeft.rawValue) | UInt8(UIRectCorner.topRight.rawValue))), cornerRadii: CGSize(width: 10, height: 10))
+                let top = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.topLeft, .topRight], cornerRadii: CGSize(width: 10, height: 10))
                 let layer = CAShapeLayer()
                 
+                layer.masksToBounds = true
                 layer.frame = cell.bounds
                 layer.path = top.cgPath
                 cell.layer.mask = layer
             } else if indexPath.row == options.count - 1 {
-                let bottom = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: UIRectCorner(rawValue: UIRectCorner.RawValue(UInt8(UIRectCorner.bottomLeft.rawValue) | UInt8(UIRectCorner.bottomRight.rawValue))), cornerRadii: CGSize(width: 10, height: 10))
+                let bottom = UIBezierPath(roundedRect: cell.bounds, byRoundingCorners: [.bottomLeft, .bottomRight], cornerRadii: CGSize(width: 10, height: 10))
                 let layer = CAShapeLayer()
                 
+                layer.masksToBounds = true
                 layer.frame = cell.bounds
                 layer.path = bottom.cgPath
                 cell.layer.mask = layer
@@ -284,6 +287,7 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             let all = UIBezierPath(roundedRect: cell.bounds, cornerRadius: 10)
             let layer = CAShapeLayer()
             
+            layer.masksToBounds = true
             layer.frame = cell.bounds
             layer.path = all.cgPath
             cell.layer.mask = layer

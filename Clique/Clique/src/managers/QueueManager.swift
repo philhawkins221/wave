@@ -113,11 +113,12 @@ struct QueueManager {
     }
 
     func play() {
-        //guard user.me() else { return }
         guard let user = CliqueAPI.find(user: user.id) else { return }
         
-        if !user.me(), let current = user.queue.current, let match = iTunesAPI.match(current) {
-            play(song: match)
+        if !user.me(), let current = user.queue.current {
+            if !Settings.applemusic { Alerts.inform(.noStreaming, about: user) }
+            else if current.library == Catalogues.AppleMusic.rawValue { play(song: current, streaming: true) }
+            else if let match = iTunesAPI.match(current) { play(song: match, streaming: true) }
         } else if Media.playing && player.playbackState == .paused {
             Media.play()
         } else if Spotify.playing && Spotify.player?.isPlaying ?? false {
@@ -126,7 +127,7 @@ struct QueueManager {
             advance()
         } else if Settings.takerequests && !user.queue.requests.isEmpty {
             var replacement = user.queue.requests
-            add(song: replacement.first!)
+            play(song: replacement.first!)
             replacement.remove(at: 0)
             update(requests: replacement)
         } else if Settings.shuffle && controller.shuffled?.songs.first != nil {
@@ -164,8 +165,8 @@ struct QueueManager {
     
     func play(radio: Void) {} //TODO: play radio
     
-    func play(song: Song) {
-        guard user.me() else {
+    func play(song: Song, streaming: Bool = false) {
+        guard user.me() || streaming else {
             gm?.stop(listening: ())
             play(song: song)
             return

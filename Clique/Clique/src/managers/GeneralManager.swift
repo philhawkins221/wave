@@ -91,7 +91,7 @@ struct GeneralManager {
     }
     
     func listen(to user: String, redirect: Bool = true) {
-        guard q.user != user else { return }
+        guard q.manager?.client().id != user else { return }
         guard let user = CliqueAPI.find(user: user) else { return Alerts.inform(.userNotFound) }
         guard user.friends.contains(Identity.me) else { return Alerts.inform(.notFriends, about: user) }
         guard !user.queue.donotdisturb else { return Alerts.inform(.doNotDisturb) }
@@ -100,7 +100,7 @@ struct GeneralManager {
             if leader.me() { stop(sharing: ()) }
             else { stop(listening: ()) }
         }
-        CliqueAPI.add(listener: me.id, to: user.id)
+        if !user.queue.listeners.contains(Identity.me) { CliqueAPI.add(listener: me.id, to: user.id) }
         q.manager?.manage(user: user)
         
         guard redirect else { return }

@@ -112,13 +112,14 @@ struct GeneralManager {
     func nowplaying() {
         guard let song = display else { return notplaying() }
         let placeholder = #imageLiteral(resourceName: "genericart.png")
+        controller.artworkimage.image = placeholder
         
         controller.waves.isHidden = true
         
         controller.artworkimage.isHidden = false
         controller.songlabel.isHidden = false
         controller.artistlabel.isHidden = false
-        controller.albumlabel.isHidden = false
+        controller.creditlabel.isHidden = false
         
         if q.manager?.client().me() ?? false {
             controller.rewindbutton.isHidden = false
@@ -133,7 +134,11 @@ struct GeneralManager {
         
         controller.songlabel.text = song.title
         controller.artistlabel.text = song.artist.name
-        controller.albumlabel.text = nil
+        
+        if song.sender == "1" { controller.creditlabel.text = "from: wave radio" }
+        else if song.sender != "", song.sender != Identity.me, let sender = CliqueAPI.find(user: song.sender)
+            { controller.creditlabel.text = "from: @" + sender.username }
+        else { controller.creditlabel.text = nil }
         
         controller.artworkimage.contentMode = .scaleAspectFit
         
@@ -148,7 +153,7 @@ struct GeneralManager {
         controller.artworkimage.isHidden = true
         controller.songlabel.isHidden = true
         controller.artistlabel.isHidden = true
-        controller.albumlabel.isHidden = true
+        controller.creditlabel.isHidden = true
         controller.rewindbutton.isHidden = true
         controller.fastforwardbutton.isHidden = true
         

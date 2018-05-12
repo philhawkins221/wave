@@ -25,7 +25,7 @@ class NowPlayingViewController: UIViewController {
     @IBOutlet weak var artworkimage: UIImageView!
     @IBOutlet weak var songlabel: UILabel!
     @IBOutlet weak var artistlabel: UILabel!
-    @IBOutlet weak var albumlabel: UILabel!
+    @IBOutlet weak var creditlabel: UILabel!
     
     @IBOutlet weak var buttonsview: UIView!
     @IBOutlet weak var rewindbutton: UIButton!

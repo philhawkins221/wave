@@ -39,7 +39,8 @@ class PlaylistDelegate: BrowseDelegate {
         if adding { return self.tableView(tableView, commit: .insert, forRowAt: indexPath) }
         if final { return manager.find(songs: [playlist.songs[indexPath.row]]) }
         
-        manager.play(playlist: playlist, at: indexPath.row)
+        //manager.play(playlist: playlist, at: indexPath.row)
+        Actions.view(song: indexPath.row, in: playlist, on: controller)
     }
     
     override func tableView(_ tableView: UITableView, viewForHeaderInSection section: Int) -> UIView? {

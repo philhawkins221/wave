@@ -15,6 +15,7 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
     
     var manager: BrowseManager
     
+    var controller: BrowseViewController { return manager.controller }
     var searching: Bool { return manager.controller.search.isActive }
     var adding: Bool { return manager.controller.adding }
     var final: Bool { return manager.controller.final }
@@ -140,8 +141,14 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
             manager.view(search: manager.controller.search.searchBar.text ?? "", from: searches[indexPath.row])
         case _ where adding: self.tableView(tableView, commit: .insert, forRowAt: indexPath)
         case true where final: manager.find(songs: [results[indexPath.row]])
+        case true: Actions.view(song: indexPath.row, in: allsongs, on: controller)
+        case true: Actions.view(song: results[indexPath.row], on: controller)
         case true: manager.play(playlist: allsongs, at: indexPath.row)
         case false where final: manager.find(songs: [songs[indexPath.section][indexPath.row]])
+        case false:
+            let index = list.index(of: songs[indexPath.section][indexPath.row]) ?? 0
+            Actions.view(song: index, in: allsongs, on: controller)
+        case false: Actions.view(song: songs[indexPath.section][indexPath.row], on: controller)
         case false: manager.play(playlist: allsongs, at: list.index(of: songs[indexPath.section][indexPath.row]) ?? 0)
         }
     }

@@ -46,6 +46,8 @@
 		4A186DE42050A82D0091F8FF /* CliqueAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A186DE32050A82D0091F8FF /* CliqueAPI.swift */; };
 		4A186DE62050AD660091F8FF /* Identity.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A186DE52050AD660091F8FF /* Identity.swift */; };
 		4A2B670C1C501AB700681F70 /* genericart.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A2B670B1C501AB700681F70 /* genericart.png */; };
+		4A42E6D420A72029006C1F5D /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A42E6D320A72029006C1F5D /* Actions.swift */; };
+		4A42E6D620A742DD006C1F5D /* ActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A42E6D520A742DD006C1F5D /* ActionsDelegate.swift */; };
 		4A5495801FFB0E5100345CB1 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A54957F1FFB0E5100345CB1 /* Endpoints.swift */; };
 		4A5495821FFB0E5A00345CB1 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495811FFB0E5A00345CB1 /* Global.swift */; };
 		4A5495841FFC822500345CB1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495831FFC822500345CB1 /* User.swift */; };
@@ -147,6 +149,8 @@
 		4A2D92321CBEE14400985FA8 /* HistoryViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = HistoryViewController.swift; sourceTree = "<group>"; };
 		4A3EBFE11C4F4E2D001BAA33 /* CliqueViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = CliqueViewController.swift; sourceTree = "<group>"; };
 		4A3EBFE31C500CF9001BAA33 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
+		4A42E6D320A72029006C1F5D /* Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
+		4A42E6D520A742DD006C1F5D /* ActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsDelegate.swift; sourceTree = "<group>"; };
 		4A4D60631D2EDF80009B6375 /* SavedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
 		4A54957F1FFB0E5100345CB1 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
 		4A5495811FFB0E5A00345CB1 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
@@ -333,6 +337,7 @@
 				4A9DE05420582657002EBA04 /* SearchDelegate.swift */,
 				4A9DE05620588EE7002EBA04 /* CatalogDelegate.swift */,
 				4AAB4C7120671C2500C882AD /* OptionsDelegate.swift */,
+				4A42E6D520A742DD006C1F5D /* ActionsDelegate.swift */,
 				4AAC71F520744E68004FEAE0 /* FrequencyDelegate.swift */,
 				4A09513B206C27E10093B5DB /* SettingsDelegate.swift */,
 				4AFF3BAD206C7A1C00912B3B /* QueueSettingsDelegate.swift */,
@@ -408,6 +413,7 @@
 				4A186DD72050A6200091F8FF /* Web.swift */,
 				4A54957F1FFB0E5100345CB1 /* Endpoints.swift */,
 				4A8F5FF420063DEE00564EFE /* Alerts.swift */,
+				4A42E6D320A72029006C1F5D /* Actions.swift */,
 				4AF452E31FDE1982007FCF8F /* StyleGuide.swift */,
 			);
 			path = reference;
@@ -681,6 +687,8 @@
 				4A09513A206C20150093B5DB /* SettingsViewController.swift in Sources */,
 				4A5495861FFC854800345CB1 /* Queue.swift in Sources */,
 				4AAC71F8207510C1004FEAE0 /* FrequencyTableViewController.swift in Sources */,
+				4A42E6D620A742DD006C1F5D /* ActionsDelegate.swift in Sources */,
+				4A42E6D420A72029006C1F5D /* Actions.swift in Sources */,
 				4A09513C206C27E10093B5DB /* SettingsDelegate.swift in Sources */,
 				4A5495841FFC822500345CB1 /* User.swift in Sources */,
 				4A186DDA2050A6D40091F8FF /* Searching.swift in Sources */,

@@ -39,6 +39,7 @@ class LibraryDelegate: BrowseDelegate {
         switch indexPath.section {
         case 0: manager.view(songs: ())
         case 1 where library.isEmpty: tableView.deselectRow(at: indexPath, animated: true)
+        case 1: Actions.view(playlist: library[indexPath.row], on: controller)
         case 1: manager.view(playlist: library[indexPath.row])
         default: break
         }

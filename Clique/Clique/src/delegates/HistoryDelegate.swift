@@ -35,6 +35,7 @@ class HistoryDelegate: QueueDelegate {
     }
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
+        Actions.view(song: history[indexPath.row], on: controller)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

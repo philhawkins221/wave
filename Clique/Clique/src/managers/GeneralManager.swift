@@ -202,6 +202,16 @@ struct GeneralManager {
         q.manager?.retreat()
     }
     
+    func send(song: Song, to user: User) {
+        guard !user.queue.donotdisturb, user.friends.contains(Identity.me) else { return }
+        var song = song
+        
+        song.sender = Identity.me
+        return user.queue.requestsonly && !user.me() ?
+            CliqueAPI.request(song: song, to: user.id) :
+            CliqueAPI.add(song: song, to: user.id)
+    }
+    
     func stop(listening: Void) {
         guard let leader = q.manager?.client() else { return }
         let replacement = leader.queue.listeners.filter { $0 != Identity.me }

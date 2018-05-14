@@ -89,6 +89,17 @@ class CatalogDelegate: BrowseDelegate {
                 social: false,
                 songs: songs
             )
+            Actions.view(song: indexPath.row, in: playlist, on: controller)
+        case is Album: Actions.view(song: songs[indexPath.row], on: controller)
+        case let album as Album:
+            let playlist = Playlist(
+                owner: "",
+                id: "",
+                library: album.library,
+                name: album.name,
+                social: false,
+                songs: songs
+            )
             manager.play(playlist: playlist, at: indexPath.row)
         default: break
         }

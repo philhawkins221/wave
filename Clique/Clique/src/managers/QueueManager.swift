@@ -148,7 +148,7 @@ struct QueueManager {
     }
     
     func play(playlist: Playlist, at index: Int) {
-        guard user.me(), index < playlist.songs.count else { return }
+        guard index < playlist.songs.count else { return }
         var playlist = playlist
         let next = playlist.songs[index]
         playlist.songs.remove(at: index)
@@ -197,6 +197,7 @@ struct QueueManager {
         }
         
         refresh()
+        gm?.refresh()
     }
     
     func refresh() {

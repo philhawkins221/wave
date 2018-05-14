@@ -126,6 +126,30 @@ enum Setting {
     case none
 }
 
+enum Action {
+    //playlist actions
+    case viewPlaylist
+    case playPlaylist
+    case addToLibrary
+    
+    //song actions
+    case playSong
+    case skipToSong
+    case addToLikes
+    case addToPlaylist
+    case upvote
+    case downvote
+    case addToQueue
+    case request
+    case send
+    case viewArtist
+    
+    //user actions
+    case viewUser
+    case addToFriends
+    case joinQueue
+}
+
 enum BrowseMode: String {
     case browse
     case friends

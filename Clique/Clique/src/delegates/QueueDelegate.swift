@@ -19,6 +19,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     var fill = Playlist()
     var radio = Playlist()
     
+    var controller: QueueViewController { return manager.controller }
     var editing: Bool { return manager.controller.edit }
     var requestsonly: Bool { return queue.requestsonly }
     
@@ -82,13 +83,21 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
-        case 0: break //TODO: swipe to now playing vc
+        case 0: swipe?.selectedViewController = swipe?.viewControllers?[1]
         case 1 where indexPath.row == queuerows:
             queuerows += 5
             tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
         case 1 where me && indexPath.row == queue.queue.count && !queue.queue.isEmpty: manager.delete(queue: ())
+        case 1: Actions.view(song: indexPath.row, in: queue, on: controller)
+        //case 1: Actions.view(song: queue.queue[indexPath.row], on: controller, queued: true)
         case 2 where indexPath.row == requestrows: manager.view(requests: ())
+        case 2: Actions.view(song: queue.requests[indexPath.row], on: controller)
         case 3 where indexPath.row == radiorows: manager.view(radio: ())
+        case 3: Actions.view(song: radio.songs[indexPath.row], on: controller)
+        case 4:
+            if Settings.shuffle, let song = q.shuffled?.songs[indexPath.row] { Actions.view(song: song, on: controller) }
+            else if let song = q.fill?.songs[indexPath.row] { Actions.view(song: song, on: controller) }
+        case 2, 3, 4: Actions.view(song: queue.queue[indexPath.row], on: controller)
         default: tableView.deselectRow(at: indexPath, animated: true)
         }
     }

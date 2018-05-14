@@ -40,6 +40,7 @@ class FriendsDelegate: BrowseDelegate {
         switch indexPath.section {
         case 0: manager.view(user: Identity.me)
         case 1 where friends.isEmpty: tableView.deselectRow(at: indexPath, animated: true)
+        case 1: Actions.view(user: friends[indexPath.row], on: controller)
         case 1: manager.view(user: friends[indexPath.row].id)
         default: break
         }

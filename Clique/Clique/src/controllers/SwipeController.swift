@@ -43,6 +43,7 @@ class SwipeController: SwipeableTabBarController {
         if provisioned { return }
         
         Identity.wave()
+        Settings.update()
         
         let controllers = viewControllers!
         

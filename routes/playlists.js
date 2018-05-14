@@ -449,14 +449,13 @@ exports.advanceQueue = function(req, res) {
                 res.send(null);
             } else {
                 if (result.queue.voting) {
-                    var next = result.queue.queue[0];
                     var index = 0;
                     for (var i = 0; i < result.queue.queue.length; i++) {
-                        if (result.queue.queue[i].votes > next.votes) {
-                            next = result.queue.queue;
+                        if (result.queue.queue[i].votes > result.queue.queue[index].votes) {
                             index = i;
                         }
                     }
+                    var next = result.queue.queue[index];
                     result.queue.queue.splice(index, 1);
                     //result.queue.history.push(result.queue.current);
                     //result.queue.current = next;
@@ -465,8 +464,6 @@ exports.advanceQueue = function(req, res) {
                 } else {
                     var next = result.queue.queue[0];
                     result.queue.queue.splice(0, 1);
-                    //result.queue.history.push(result.queue.current);
-                    //result.queue.current = next;
                     collection.save(result);
                     res.send(next);
                 }

@@ -53,8 +53,10 @@ struct Actions {
             case .request: title = "request"
             case .send: title = "send to a friend..."
             case .viewArtist: title = "view " + (song?.artist.name ?? "")
-            case .viewUser: title = "view library"
             case .addToFriends: title = "add friend"
+            case .viewUser:
+                let viewing = "@" == alert.title?.first
+                title = viewing ? "view library" : song == nil ? "view owner" : "view sender"
             case .joinQueue:
                 guard let user = user else { break }
                 let listening = !user.me() && user == q.manager?.client()
@@ -213,7 +215,7 @@ struct Actions {
         case .viewUser:
             switch controller {
             case let controller as BrowseViewController:
-                guard let user = user else { return }
+                guard let user = user else { return controller.manager?.view(user: song?.sender ?? playlist?.owner ?? "") ?? () }
                 controller.manager?.view(user: user.id)
             case let controller as QueueViewController:
                 guard let vc = controller.storyboard?.instantiateViewController(withIdentifier: VCid.bro.rawValue) as? BrowseViewController
@@ -222,7 +224,7 @@ struct Actions {
                 vc.final = false
                 vc.adding = false
                 vc.navigationItem.prompt = nil
-                vc.user = user?.id ?? song?.sender ?? ""
+                vc.user = user?.id ?? song?.sender ?? playlist?.owner ?? ""
                 vc.mode = .library
                 
                 //controller.dismiss(animated: true)
@@ -250,10 +252,12 @@ struct Actions {
         user = nil
         
         switch controller {
-        case is BrowseViewController:
+        case let controller as BrowseViewController:
             alert = playlist.owner == Identity.me ?
                 actions(.viewPlaylist, .playPlaylist) :
-                actions(.viewPlaylist, .playPlaylist, .addToLibrary)
+                controller.mode == .library && controller.user == Identity.me ?
+                    actions(.viewPlaylist, .playPlaylist, .viewUser) :
+                    actions(.viewPlaylist, .playPlaylist, .addToLibrary)
             
         default: return
         }
@@ -278,9 +282,9 @@ struct Actions {
         
         switch controller {
         case is BrowseViewController where requestsonly && me:
-            alert = actions(.playSong, .request, .addToLikes, .addToPlaylist, .send, .viewArtist)
+            alert = actions(.playSong, .request, .addToLikes, .addToPlaylist, .send)
         case is BrowseViewController:
-            alert = actions(.playSong, .addToQueue, .addToLikes, .addToPlaylist, .send, .viewArtist)
+            alert = actions(.playSong, .addToQueue, .addToLikes, .addToPlaylist, .send)
         default: return
         }
         
@@ -297,11 +301,11 @@ struct Actions {
         
         let leader = q.manager?.client()
         let me = leader?.me() ?? false
-        let collab = song!.sender != Identity.me && leader?.queue.listeners.contains(song!.sender) ?? false
+        let collab = song!.sender != Identity.me && leader?.friends.contains(song!.sender) ?? false
         
         switch controller {
         case is QueueViewController where me && collab:
-            alert = actions(.skipToSong, .addToLikes, .addToPlaylist, .upvote, .downvote, .send)
+            alert = actions(.skipToSong, .addToLikes, .addToPlaylist, .upvote, .downvote, .send, .viewUser)
         case is QueueViewController where me:
             alert = actions(.skipToSong, .addToLikes, .addToPlaylist, .upvote, .downvote, .send)
         case is QueueViewController:
@@ -325,7 +329,7 @@ struct Actions {
         let leader = q.manager?.client()
         let me = leader?.me() ?? false
         let requestsonly = leader?.queue.requestsonly ?? false
-        let collab = song.sender != Identity.me && leader?.queue.listeners.contains(song.sender) ?? false
+        let collab = song.sender != Identity.me && leader?.friends.contains(song.sender) ?? false
         
         switch controller {
         case is BrowseViewController where requestsonly && me:

@@ -188,7 +188,7 @@ struct OptionsManager {
             gm?.stop(listening: ())
             
         case .stopViewing, .stopSyncing:
-            switch profilebar?.controller {
+            switch profilebar?.controller.navigationController?.viewControllers.first {
             case is BrowseViewController: bro.navigationController?.popToRootViewController(animated: true)
             case is QueueViewController: q.navigationController?.popToRootViewController(animated: true)
             default: break

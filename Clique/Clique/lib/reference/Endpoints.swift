@@ -72,6 +72,19 @@ struct Endpoints {
         }
     }
     
+    struct Gracenote {
+        static let recommendpoint = { (seeds: [Song]) -> String in
+            var seedpoint = ""
+            for seed in seeds { seedpoint += ("(text_artist_" + (seed.artist.name.addingFormEncoding() ?? "") + ");") }
+            seedpoint.remove(at: seedpoint.indices.last!)
+            
+            return "https://c81551439.web.cddbp.net/webapi/json/1.0/radio/recommend?seed=" + seedpoint + "&return_count=" + searchlimit.description + "&max_tracks_per_artist=5&rotation=radio&user=" + gracenoteUserID + "&client=" + gracenoteClientID
+            
+            //(text_artist_velvet+underground);(text_artist_ramones)
+        }
+        static let registerpoint = "https://c81551439.web.cddbp.net/webapi/json/1.0/radio/register?client=" + gracenoteClientID
+    }
+    
     struct iTunes {
         static let countries: [String : String] = ["United States" : "us"]
         static let country = countries["United States"] ?? ""

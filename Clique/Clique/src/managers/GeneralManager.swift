@@ -136,7 +136,7 @@ struct GeneralManager {
         controller.artistlabel.text = song.artist.name
         
         if song.sender == "1" { controller.creditlabel.text = "from: wave radio" }
-        else if song.sender != "", song.sender != Identity.me, let sender = CliqueAPI.find(user: song.sender)
+        else if song.sender != "", song.sender != "1", song.sender != Identity.me, let sender = CliqueAPI.find(user: song.sender)
             { controller.creditlabel.text = "from: @" + sender.username }
         else { controller.creditlabel.text = nil }
         

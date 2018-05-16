@@ -269,7 +269,7 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             case .addHistoryPlaylist:
                 cell.textLabel?.text = "new playlist from history"
                 cell.detailTextLabel?.text = nil
-                cell.accessoryType = .disclosureIndicator
+                cell.accessoryType = .none
                 return cell
             case .stopSharing, .stopListening, .stopViewing, .stopSyncing, .none: return cell
             }

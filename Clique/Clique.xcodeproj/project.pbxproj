@@ -48,6 +48,8 @@
 		4A2B670C1C501AB700681F70 /* genericart.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A2B670B1C501AB700681F70 /* genericart.png */; };
 		4A42E6D420A72029006C1F5D /* Actions.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A42E6D320A72029006C1F5D /* Actions.swift */; };
 		4A42E6D620A742DD006C1F5D /* ActionsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A42E6D520A742DD006C1F5D /* ActionsDelegate.swift */; };
+		4A42E6D820AB0C17006C1F5D /* GracenoteAPI.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A42E6D720AB0C17006C1F5D /* GracenoteAPI.swift */; };
+		4A42E6DA20AB4ED5006C1F5D /* Single.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A42E6D920AB4ED5006C1F5D /* Single.swift */; };
 		4A5495801FFB0E5100345CB1 /* Endpoints.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A54957F1FFB0E5100345CB1 /* Endpoints.swift */; };
 		4A5495821FFB0E5A00345CB1 /* Global.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495811FFB0E5A00345CB1 /* Global.swift */; };
 		4A5495841FFC822500345CB1 /* User.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A5495831FFC822500345CB1 /* User.swift */; };
@@ -151,6 +153,8 @@
 		4A3EBFE31C500CF9001BAA33 /* PlayerViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = PlayerViewController.swift; sourceTree = "<group>"; };
 		4A42E6D320A72029006C1F5D /* Actions.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Actions.swift; sourceTree = "<group>"; };
 		4A42E6D520A742DD006C1F5D /* ActionsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = ActionsDelegate.swift; sourceTree = "<group>"; };
+		4A42E6D720AB0C17006C1F5D /* GracenoteAPI.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GracenoteAPI.swift; sourceTree = "<group>"; };
+		4A42E6D920AB4ED5006C1F5D /* Single.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Single.swift; sourceTree = "<group>"; };
 		4A4D60631D2EDF80009B6375 /* SavedViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = SavedViewController.swift; sourceTree = "<group>"; };
 		4A54957F1FFB0E5100345CB1 /* Endpoints.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Endpoints.swift; sourceTree = "<group>"; };
 		4A5495811FFB0E5A00345CB1 /* Global.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = Global.swift; sourceTree = "<group>"; };
@@ -365,6 +369,7 @@
 			children = (
 				4A5495851FFC854800345CB1 /* Queue.swift */,
 				4AF452F01FE0E8C3007FCF8F /* Song.swift */,
+				4A42E6D920AB4ED5006C1F5D /* Single.swift */,
 				4A186DD52050A4FC0091F8FF /* Album.swift */,
 				4A186DD32050A4DD0091F8FF /* Artist.swift */,
 				4A186DD12050A4B20091F8FF /* Playlist.swift */,
@@ -407,6 +412,7 @@
 				4A186DDD2050A7600091F8FF /* AppleMusicAPI.swift */,
 				4A186DDF2050A7B30091F8FF /* SpotifyAPI.swift */,
 				4A186DE12050A80E0091F8FF /* iTunesAPI.swift */,
+				4A42E6D720AB0C17006C1F5D /* GracenoteAPI.swift */,
 				4AAB4C6D206701FC00C882AD /* Options.swift */,
 				4A09513D206C32540093B5DB /* Settings.swift */,
 				4A186DE32050A82D0091F8FF /* CliqueAPI.swift */,
@@ -672,6 +678,7 @@
 				4A186DCC2050A4550091F8FF /* LibraryItem.swift in Sources */,
 				4A186DD02050A46F0091F8FF /* WaveManager.swift in Sources */,
 				4A0A046E206B496E00A5FC0D /* ListenersDelegate.swift in Sources */,
+				4A42E6DA20AB4ED5006C1F5D /* Single.swift in Sources */,
 				4A8F5FF92009811900564EFE /* LibraryDelegate.swift in Sources */,
 				4A9DE05720588EE7002EBA04 /* CatalogDelegate.swift in Sources */,
 				4AFDA1F5205A0FD100C87E09 /* HistoryDelegate.swift in Sources */,
@@ -699,6 +706,7 @@
 				4AAB4C6C2067014E00C882AD /* OptionSet.swift in Sources */,
 				4A8F6001200FA90E00564EFE /* BrowseDelegate.swift in Sources */,
 				4A5495821FFB0E5A00345CB1 /* Global.swift in Sources */,
+				4A42E6D820AB0C17006C1F5D /* GracenoteAPI.swift in Sources */,
 				4A186DE02050A7B30091F8FF /* SpotifyAPI.swift in Sources */,
 				4A06C30E1FDC8BFD00E99FED /* BrowseViewController.swift in Sources */,
 				4AF452E81FE0CAAE007FCF8F /* QueueSongTableViewCell.swift in Sources */,

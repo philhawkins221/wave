@@ -37,9 +37,16 @@ struct QueueManager {
         }
         
         controller.profilebar?.manage(profile: user)
+        
+        if user.me(), Settings.radio, controller.radio == nil { update(radio: ()) }
     }
     
     //MARK: - tasks
+    
+    func add(single: Single) {
+        guard let single = iTunesAPI.match(single) else { return }
+        add(song: single)
+    }
 
     func add(song: Song) {
         var song = song
@@ -137,10 +144,11 @@ struct QueueManager {
             play(song: controller.fill!.songs.first!)
             controller.fill?.songs.remove(at: 0)
             refresh()
-        } else if Settings.radio && q.radio != nil {
+        } else if Settings.radio && !q.radio.isEmpty {
             play(radio: ())
         } else if !user.library.isEmpty {
-            let random = user.library.shuffled()
+            var random = user.library.shuffled()
+            if Settings.shuffle { random[0].songs.shuffle() }
             play(playlist: random.first!, at: 0)
         } else {
             stop()
@@ -163,9 +171,24 @@ struct QueueManager {
         refresh()
     }
     
-    func play(radio: Void) {} //TODO: play radio
+    func play(radio: Void) {
+        guard let next = controller.radio.first else { return }
+        guard let single = iTunesAPI.match(next) else {
+            controller.radio.remove(at: 0)
+            play(radio: ())
+            return
+        }
+        
+        controller.radio.remove(at: 0)
+        play(song: single, radio: true)
+    }
     
-    func play(song: Song, streaming: Bool = false) {
+    func play(single: Single) {
+        guard let single = iTunesAPI.match(single) else { return } //TODO: inform
+        play(song: single, radio: true)
+    }
+    
+    func play(song: Song, streaming: Bool = false, radio: Bool = false) {
         guard user.me() || streaming else {
             gm?.stop(listening: ())
             play(song: song)
@@ -179,22 +202,16 @@ struct QueueManager {
         switch song.library {
         case Catalogues.Library.rawValue:
             Media.play(song: song)
-        case Catalogues.AppleMusic.rawValue where !user.applemusic:
-            guard let song = SpotifyAPI.match(song) else {
-                Settings.spotify = false
-                //TODO: inform update spotify
-                return
-            }
-            play(song: song)
         case Catalogues.AppleMusic.rawValue:
+            guard user.applemusic else { return } //TODO: inform
             Media.play(song: song)
-        case Catalogues.Spotify.rawValue where !user.spotify:
+        case Catalogues.Radio.rawValue:
             guard let song = iTunesAPI.match(song) else { return }
             play(song: song)
-        case Catalogues.Spotify.rawValue:
-            Spotify.play(song: song)
         default: return
         }
+        
+        if Settings.radio && !radio { update(radio: ()) }
         
         refresh()
         gm?.refresh()
@@ -246,6 +263,15 @@ struct QueueManager {
     func update(queue replacement: Queue, refresh: Bool = true) {
         CliqueAPI.update(queue: replacement)
         if refresh { self.refresh() }
+    }
+    
+    func update(radio: Void) {
+        DispatchQueue.global(qos: .background).async {
+            let count = self.user.queue.history.count < 5 ? self.user.queue.history.count : 5
+            let seeds = Array(self.user.queue.history.reversed().prefix(count))
+            
+            self.controller.radio = GracenoteAPI.recommend(from: seeds)
+        }
     }
     
     func update(requests replacement: [Song], refresh: Bool = false) {

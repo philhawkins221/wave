@@ -29,7 +29,7 @@ class QueueViewController: UIViewController {
     var fill: Playlist?
     var edit = false
     var shuffled: Playlist?
-    var radio: Playlist?
+    var radio = [Single]()
     var listeners = [String : String]()
     
     let refreshcontrol = UIRefreshControl()

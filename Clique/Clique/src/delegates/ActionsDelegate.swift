@@ -110,6 +110,7 @@ class ActionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             cell.textLabel?.text = listening ? "leave queue" : "join queue"
             cell.detailTextLabel?.text = dnd ? "do not disturb enabled" : listening ? " stop listening with @" + user.username : "listen with @" + user.username
             return cell
+        case .addSingleToQueue, .playSingle, .nowPlaying: return cell
         }
     }
     

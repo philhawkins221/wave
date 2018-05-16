@@ -16,10 +16,14 @@ class QueueSongTableViewCell: UITableViewCell {
         super.init(coder: aDecoder)
     }
     
+    func set(single: Single) {        
+        set(song: single.info)
+    }
+    
     func set(song: Song, voting: Bool = false, credit: Bool = false, artwork: Bool = false) {
         
         var sender = credit ? q.listeners[song.sender] : nil
-        if credit && sender == nil && song.sender != Identity.me && song.sender != "" {
+        if credit, sender == nil, song.sender != Identity.me, song.sender != "", song.sender != "1" {
             sender = CliqueAPI.find(user: song.sender)?.username
             if sender != nil { q.listeners[song.sender] = sender }
         }

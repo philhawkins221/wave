@@ -42,14 +42,15 @@ struct Actions {
             
             switch action {
             case .viewPlaylist: title = "view playlist"
-            case .playPlaylist, .playSong: title = "play"
+            case .playPlaylist, .playSong, .playSingle: title = "play"
             case .skipToSong: title = "skip to this song"
             case .addToLibrary: title = "add playlist to library"
             case .addToLikes: title = "add to likes"
             case .addToPlaylist: title = "add to a playlist..."
+            case .nowPlaying: title = "now playing"
             case .upvote: title = "+ upvote"
             case .downvote: title = "- downvote"
-            case .addToQueue: title = "add to queue"
+            case .addToQueue, .addSingleToQueue: title = "add to queue"
             case .request: title = "request"
             case .send: title = "send to a friend..."
             case .viewArtist: title = "view " + (song?.artist.name ?? "")
@@ -128,6 +129,8 @@ struct Actions {
         case .addToLibrary:
             guard let playlist = playlist else { return }
             CliqueAPI.update(playlist: Identity.me, with: playlist)
+        case .nowPlaying:
+            swipe?.selectedViewController = swipe?.viewControllers?[1]
         case .playSong:
             switch controller {
             case let controller as BrowseViewController:
@@ -145,7 +148,11 @@ struct Actions {
                 controller.manager?.play(song: song)
             default: return
             }
-        case .skipToSong:
+        case .playSingle:
+            guard let song = song else { return }
+            let single = Single(title: song.title, artist: song.artist.name)
+            q.manager?.play(single: single)
+            case .skipToSong:
             guard let song = song, var queue = q.manager?.client().queue else { return }
             while let next = queue.queue.first, song != next { queue.queue.remove(at: 0) }
             queue.queue.remove(at: 0)
@@ -191,6 +198,10 @@ struct Actions {
         case .addToQueue, .request:
             guard let song = song else { return }
             q.manager?.add(song: song)
+        case .addSingleToQueue:
+            guard let index = index, let controller = controller as? QueueViewController else { return }
+            q.manager?.add(single: q.radio[index])
+            q.radio.remove(at: index)
         case .send:
             guard let _ = song, let controller = controller else { return }
             let alert = friends()
@@ -239,6 +250,20 @@ struct Actions {
             if user == q.manager?.client() { gm?.stop(listening: ()) }
             else { gm?.listen(to: user.id) }
         }
+    }
+    
+    static func view(nowplaying song: Song, on controller: UIViewController) {
+        let alert: UIAlertController
+        
+        self.controller = controller
+        self.song = song
+        playlist = nil
+        queue = nil
+        index = nil
+        user = nil
+        
+        alert = actions(.nowPlaying, .addToLikes, .addToPlaylist)
+        controller.present(alert, animated: true)
     }
     
     static func view(playlist: Playlist, on controller: UIViewController) {
@@ -316,6 +341,20 @@ struct Actions {
         controller.present(alert, animated: true)
     }
     
+    static func view(single index: Int, on controller: UIViewController) {
+        let alert: UIAlertController
+        
+        self.controller = controller
+        self.song = q.radio[index].info
+        self.index = index
+        playlist = nil
+        queue = nil
+        user = nil
+        
+        alert = actions(.playSingle, .addSingleToQueue)
+        controller.present(alert, animated: true)
+    }
+    
     static func view(song: Song, on controller: UIViewController) {
         let alert: UIAlertController
         
@@ -342,7 +381,7 @@ struct Actions {
         case is QueueViewController where collab:
             alert = actions(.playSong, .addToQueue, .addToLikes, .addToPlaylist, .send, .viewUser)
         case is QueueViewController:
-            alert = actions(.playSong, .addToLikes, .addToPlaylist, .send)
+            alert = actions(.playSong, .addToQueue, .addToLikes, .addToPlaylist, .send)
             
         default: return
         }

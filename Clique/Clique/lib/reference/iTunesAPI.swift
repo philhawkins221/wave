@@ -47,6 +47,29 @@ struct iTunesAPI: Searching {
         return results
     }
     
+    static func match(_ single: Single) -> Song? {
+        let term = single.artist + " " + single.title
+        let endpoint = Endpoints.iTunes.matchpoint(term)
+        
+        if let response = Web.call(.get, to: endpoint, with: nil) {
+            let match = response["results"].array?.first ?? []
+            return Song(
+                id: (match["trackId"].int ?? 0).description,
+                library: Catalogues.AppleMusic.rawValue,
+                title: match["trackName"].string ?? "",
+                artist: Artist(
+                    id: (match["artistId"].int ?? 0).description,
+                    library: Catalogues.AppleMusic.rawValue,
+                    name: match["artistName"].string ?? ""),
+                sender: "1",
+                artwork: match["artworkUrl100"].string ?? "",
+                votes: 0
+            )
+        }
+        
+        return nil
+    }
+    
     static func match(_ song: Song) -> Song? {
         let term = song.artist.name + " " + song.title
         let endpoint = Endpoints.iTunes.matchpoint(term)
@@ -54,12 +77,12 @@ struct iTunesAPI: Searching {
         if let response = Web.call(.get, to: endpoint, with: nil) {
             let match = response["results"].array?.first ?? []
             return Song(
-                id: song.id,
-                library: Catalogues.Library.rawValue,
+                id: (match["trackId"].int ?? 0).description,
+                library: Catalogues.AppleMusic.rawValue,
                 title: match["trackName"].string ?? "",
                 artist: Artist(
-                    id: "",
-                    library: Catalogues.Library.rawValue,
+                    id: (match["artistId"].int ?? 0).description,
+                    library: Catalogues.AppleMusic.rawValue,
                     name: match["artistName"].string ?? ""),
                 sender: song.sender,
                 artwork: match["artworkUrl100"].string ?? "",

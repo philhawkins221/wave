@@ -24,6 +24,12 @@ let kClientId = "f1cd061f0eef478d9fb478d2da3340c2"
 let kCallbackURL = "clique-login://callback"
 let kTokenSwapURL = "http://localhost:1234/swap"
 
+let gracenoteClientID = "81551439-3AA3A5676BCCC908DEF78011FFDDF66E"
+var gracenoteUserID: String {
+    get { return UserDefaults.standard.string(forKey: "gracenote") ?? "" }
+    set { UserDefaults.standard.set(newValue, forKey: "gracenote") }
+}
+
 //MARK: - root view controllers
 
 var swipe: SwipeController?
@@ -47,6 +53,7 @@ enum Catalogues: String {
     case AppleMusic = "apple music"
     case Spotify = "spotify"
     case Library = "library"
+    case Radio = "radio"
 }
 
 enum RequestMethod: String {
@@ -133,13 +140,16 @@ enum Action {
     case addToLibrary
     
     //song actions
+    case nowPlaying
     case playSong
+    case playSingle
     case skipToSong
     case addToLikes
     case addToPlaylist
     case upvote
     case downvote
     case addToQueue
+    case addSingleToQueue
     case request
     case send
     case viewArtist

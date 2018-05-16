@@ -34,10 +34,11 @@ class NowPlayingTableViewCell: UITableViewCell {
                 imageView?.image = placeholder
             }
             
+            creditlabel.text = nil
             var sender: User? = nil
-            if song.sender != "" && song.sender != q.user { sender = CliqueAPI.find(user: song.sender) }
+            if song.sender == "1" { creditlabel.text = "from: wave radio" }
+            else if song.sender != "", song.sender != q.user { sender = CliqueAPI.find(user: song.sender) }
             if sender != nil { creditlabel.text = "from: @" + sender!.username }
-            else { creditlabel.text = nil }
             
             setImageSize(to: 100)
         } else {

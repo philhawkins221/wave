@@ -131,7 +131,7 @@ class NowPlayingViewController: UIViewController {
     }
     
     @IBAction func playpause(_ sender: Any) {
-        if q.manager?.client().queue.current == nil, q.manager?.client().queue.queue.isEmpty ?? false {
+        if q.manager?.client().queue.current == nil, q.manager?.client().queue.queue.isEmpty ?? false, !frequencies.isEmpty {
             return gm?.view(frequencies: ()) ?? ()
         }
         q.refresh()

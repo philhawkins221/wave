@@ -39,6 +39,7 @@ class RequestsDelegate: QueueDelegate {
             return manager.delete(requests: ())
         }
         
+        Actions.view(song: queue.requests[indexPath.row], on: controller)
         tableView.deselectRow(at: indexPath, animated: true)
     }
     

@@ -17,7 +17,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     var me: Bool = false
     var queue = Queue()
     var fill = Playlist()
-    var radio = Playlist()
+    var radio = [Single]()
     
     var controller: QueueViewController { return manager.controller }
     var editing: Bool { return manager.controller.edit }
@@ -55,6 +55,8 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             if let listener = CliqueAPI.find(user: $0) { q.listeners["id"] = listener.username }
         }
         
+        radio = manager.controller.radio
+        
         fill = Settings.shuffle ?
             manager.controller.shuffled ?? Playlist() :
             manager.controller.fill ?? Playlist()
@@ -83,7 +85,9 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
         switch indexPath.section {
-        case 0: swipe?.selectedViewController = swipe?.viewControllers?[1]
+        case 0:
+            guard let current = queue.current else { return tableView.deselectRow(at: indexPath, animated: true) }
+            Actions.view(nowplaying: current, on: controller)
         case 1 where indexPath.row == queuerows:
             queuerows += 5
             tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
@@ -93,7 +97,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 2 where indexPath.row == requestrows: manager.view(requests: ())
         case 2: Actions.view(song: queue.requests[indexPath.row], on: controller)
         case 3 where indexPath.row == radiorows: manager.view(radio: ())
-        case 3: Actions.view(song: radio.songs[indexPath.row], on: controller)
+        case 3: Actions.view(single: indexPath.row, on: controller)
         case 4:
             if Settings.shuffle, let song = q.shuffled?.songs[indexPath.row] { Actions.view(song: song, on: controller) }
             else if let song = q.fill?.songs[indexPath.row] { Actions.view(song: song, on: controller) }
@@ -140,6 +144,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 }
                 
                 delete.backgroundColor = UIColor.red
+                return [delete]
                 return [up, down, delete]
             }
             
@@ -151,7 +156,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
             case 2 where queue.requests.isEmpty,
-                 3 where radio.songs.isEmpty,
+                 3 where radio.isEmpty,
                  4 where fill.songs.isEmpty: return 0
         default: return UITableViewAutomaticDimension
         }
@@ -282,8 +287,8 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             if queue.requests.count < requestrows { requestrows = queue.requests.count }
             return queue.requests.isEmpty ? 0 : requestrows + 1
         case 3:
-            if radio.songs.count < radiorows { radiorows = radio.songs.count }
-            return radio.songs.isEmpty ? 0 : radiorows + 1
+            if radio.count < radiorows { radiorows = radio.count }
+            return radio.isEmpty ? 0 : radiorows + 1
         case 4: return fill.songs.count
         default: return 0
         }
@@ -333,7 +338,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 3:
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
             let cell = tableView.dequeueReusableCell(withIdentifier: "song") as! QueueSongTableViewCell
-            cell.set(song: radio.songs[indexPath.row])
+            cell.set(single: radio[indexPath.row])
             return cell
         case 4:
             tableView.register(UINib(nibName: "QueueSongTableViewCell", bundle: nil), forCellReuseIdentifier: "song")
@@ -398,12 +403,11 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 3:
             switch editingStyle {
             case .insert:
-                let added = radio.songs[indexPath.row]
-                manager.add(song: added)
-                radio.songs.remove(at: indexPath.row)
+                let added = radio[indexPath.row]
+                manager.add(single: added)
+                radio.remove(at: indexPath.row)
+                q.radio = radio
                 tableView.reloadSections(IndexSet(integer: 3), with: .automatic)
-                queue.queue.append(added)
-                tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
             case .delete, .none: break
             }
             
@@ -464,9 +468,9 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             queue.requests.remove(at: sourceIndexPath.row)
             queue.requests.insert(mover, at: destinationIndexPath.row)
         case 3:
-            let mover = radio.songs[sourceIndexPath.row]
-            radio.songs.remove(at: sourceIndexPath.row)
-            radio.songs.insert(mover, at: destinationIndexPath.row)
+            let mover = radio[sourceIndexPath.row]
+            radio.remove(at: sourceIndexPath.row)
+            radio.insert(mover, at: destinationIndexPath.row)
         case 4:
             let mover = fill.songs[sourceIndexPath.row]
             fill.songs.remove(at: sourceIndexPath.row)

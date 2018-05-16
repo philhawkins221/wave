@@ -77,7 +77,7 @@ class SettingsViewController: UIViewController {
     }
     
     func view(about: Void) {
-        guard let vc = storyboard?.instantiateViewController(withIdentifier: "about") else { return }
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "about") else { return }        
         show(vc, sender: self)
     }
     

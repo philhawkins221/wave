@@ -28,6 +28,7 @@ class HelpViewController: UIViewController {
     }
     
     func hide() {
+        ok?.setTitle("next", for: .normal)
         for help in helps { help.alpha = 0 }
         displayed = [false, false, false, false]
     }
@@ -55,12 +56,12 @@ class BrowseHelpViewController: HelpViewController {
     @IBOutlet weak var fourth: UILabel!
     @IBOutlet weak var button: UIButton!
     
-    override func viewDidLoad() {
+    override func viewWillAppear(_ animated: Bool) {
         helps = [first, second, third, fourth]
         ok = button
         
         brohelp = false
-        super.viewDidLoad()
+        super.viewWillAppear(animated)
     }
     
     @IBAction func next(_ sender: Any) {
@@ -78,13 +79,13 @@ class NowPlayingHelpViewController: HelpViewController {
     
     @IBOutlet weak var pp: RSPlayPauseButton!
     
-    override func viewDidLoad() {
+    override func viewWillAppear(_ animated: Bool) {
         helps = [first, second, third, fourth]
         ok = button
         pp.isPaused = true
         
         nphelp = false
-        super.viewDidLoad()
+        super.viewWillAppear(animated)
     }
     
     @IBAction func next(_ sender: Any) {
@@ -100,12 +101,12 @@ class QueueHelpViewController: HelpViewController {
     @IBOutlet weak var fourth: UILabel!
     @IBOutlet weak var button: UIButton!
     
-    override func viewDidLoad() {
+    override func viewWillAppear(_ animated: Bool) {
         helps = [first, second, third, fourth]
         ok = button
         
         qhelp = false
-        super.viewDidLoad()
+        super.viewWillAppear(animated)
     }
     
     @IBAction func next(_ sender: Any) {

@@ -73,6 +73,8 @@ class BrowseViewController: UIViewController {
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
         
+        swipe?.setDiagonalSwipe(enabled: false)
+        
         refresh()
         
         if adding || final {
@@ -96,6 +98,8 @@ class BrowseViewController: UIViewController {
                 self.search.isActive = true
             }
         }
+        
+        if brohelp, let vc = brohelpvc { present(vc, animated: true) }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

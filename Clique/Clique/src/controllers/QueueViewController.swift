@@ -84,6 +84,8 @@ class QueueViewController: UIViewController {
         
         timer?.invalidate()
         timer = mode == .queue ? Timer.scheduledTimer(withTimeInterval: 20, repeats: true) { [unowned self] _ in self.refresh() } : nil
+        
+        if qhelp, let vc = qhelpvc { present(vc, animated: true) }
     }
     
     override func viewWillDisappear(_ animated: Bool) {

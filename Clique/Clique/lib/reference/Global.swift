@@ -42,6 +42,16 @@ var q = QueueViewController()
 
 var gm: GeneralManager? { return np.manager }
 
+//MARK: - help view controllers
+
+var brohelp = false
+var nphelp = false
+var qhelp = false
+
+var brohelpvc = bro.storyboard?.instantiateViewController(withIdentifier: "brohelpvc")
+var nphelpvc = np.storyboard?.instantiateViewController(withIdentifier: "nphelpvc")
+var qhelpvc = q.storyboard?.instantiateViewController(withIdentifier: "qhelpvc")
+
 //MARK: - type aliases
 
 //typealias Library = [Playlist]

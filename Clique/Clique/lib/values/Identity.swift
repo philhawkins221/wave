@@ -31,7 +31,6 @@ struct Identity {
             applemusic: false,
             spotify: false
         )
-        
         guard let me = CliqueAPI.new(user: new) else { return }
         //TODO: what to do if this is nil
         //perhaps wave should return bool
@@ -47,8 +46,11 @@ struct Identity {
             social: true,
             songs: []
         )
-        
         CliqueAPI.update(playlist: me.id, with: likes)
+        
+        brohelp = true
+        nphelp = true
+        qhelp = true
     }
     
     static func update(with replacement: User? = nil) {

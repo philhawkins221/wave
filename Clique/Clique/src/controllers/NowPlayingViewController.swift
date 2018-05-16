@@ -100,6 +100,8 @@ class NowPlayingViewController: UIViewController {
             self?.refresh()
             swipe?.setDiagonalSwipe(enabled: true)
         }
+        
+        if nphelp, let vc = nphelpvc { present(vc, animated: true) }
     }
     
     override func viewDidDisappear(_ animated: Bool) {

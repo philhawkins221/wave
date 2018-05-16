@@ -67,6 +67,7 @@ class SettingsViewController: UIViewController {
         case .general: delegate = SettingsDelegate(to: self)
         case .queue: delegate = QueueSettingsDelegate(to: self)
         case .sharing: delegate = SharingDelegate(to: self)
+        case .help: delegate = HelpSettingsDelegate(to: self)
         }
         
         table.delegate = delegate

@@ -65,9 +65,9 @@ class SettingsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             Settings.update(connect[indexPath.row])
             selections[indexPath.row] = connect[indexPath.row] == .applemusic ? Settings.applemusic : Settings.spotify
             tableView.reloadRows(at: [indexPath], with: .none)
-        case 2 where indexPath.row == 0:
-            controller.view(settings: .sharing)
+        case 2 where indexPath.row == 0: controller.view(settings: .sharing)
         case 2 where indexPath.row == 1: controller.view(settings: .queue)
+        case 2 where indexPath.row == 2: controller.view(settings: .help)
         case 3 where stop == .delete: controller.kill()
         case 3: Settings.update(stop); fallthrough
         default: tableView.deselectRow(at: indexPath, animated: false)
@@ -99,10 +99,10 @@ class SettingsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
     
     func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
-        case 0: return 1
-        case 1: return connect.count
-        case 2: return 2
-        case 3: return stop == .none ? 0 : 1
+        case 0: return 1 //connect accounts
+        case 1: return connect.count //accounts
+        case 2: return 3 //share playlists, queue settings, help
+        case 3: return stop == .none ? 0 : 1 //stop
         default: return 0
         }
     }
@@ -166,6 +166,16 @@ class SettingsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 2 where indexPath.row == 1:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
             cell.textLabel?.text = "queue settings"
+            cell.textLabel?.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            cell.accessoryType = .disclosureIndicator
+            cell.preservesSuperviewLayoutMargins = false
+            cell.separatorInset = UIEdgeInsets.zero
+            cell.layoutMargins = UIEdgeInsets.zero
+            return cell
+            
+        case 2 where indexPath.row == 2:
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textLabel?.text = "help"
             cell.textLabel?.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
             cell.accessoryType = .disclosureIndicator
             cell.preservesSuperviewLayoutMargins = false

@@ -200,6 +200,7 @@ enum SettingsMode {
     case general
     case queue
     case sharing
+    case help
 }
 
 enum Requests: String {

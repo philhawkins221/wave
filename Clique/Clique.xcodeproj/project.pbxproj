@@ -27,6 +27,7 @@
 		4A0A0470206B693600A5FC0D /* SocialDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0A046F206B693600A5FC0D /* SocialDelegate.swift */; };
 		4A0A0472206B788C00A5FC0D /* SocialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0A0471206B788C00A5FC0D /* SocialViewController.swift */; };
 		4A0DE84020AC70DB00320507 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0DE83F20AC70DB00320507 /* HelpViewController.swift */; };
+		4A0DE84220AC82A100320507 /* HelpSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0DE84120AC82A100320507 /* HelpSettingsDelegate.swift */; };
 		4A179AFC1D00C64100B6EE20 /* apple music logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AF81D00C64100B6EE20 /* apple music logo.jpg */; };
 		4A179AFD1D00C64100B6EE20 /* soundcloud logo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AF91D00C64100B6EE20 /* soundcloud logo.gif */; };
 		4A179AFE1D00C64100B6EE20 /* spotify logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */; };
@@ -128,6 +129,7 @@
 		4A0A0471206B788C00A5FC0D /* SocialViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = SocialViewController.swift; sourceTree = "<group>"; };
 		4A0AA6242016277B0018E9CD /* waves.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = waves.mp4; path = "/Users/phil/Documents/xcode/clique/ubiquitous-journey/Clique/Clique/bin/waves.mp4"; sourceTree = "<absolute>"; };
 		4A0DE83F20AC70DB00320507 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
+		4A0DE84120AC82A100320507 /* HelpSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSettingsDelegate.swift; sourceTree = "<group>"; };
 		4A16BEDC1CAC3BC60089997F /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		4A16BEDE1CAC3BD40089997F /* YTViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTViewController.swift; sourceTree = "<group>"; };
 		4A179AF81D00C64100B6EE20 /* apple music logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "apple music logo.jpg"; sourceTree = "<group>"; };
@@ -349,6 +351,7 @@
 				4A09513B206C27E10093B5DB /* SettingsDelegate.swift */,
 				4AFF3BAD206C7A1C00912B3B /* QueueSettingsDelegate.swift */,
 				4AFF3BAF206CA4F300912B3B /* SharingDelegate.swift */,
+				4A0DE84120AC82A100320507 /* HelpSettingsDelegate.swift */,
 			);
 			path = delegates;
 			sourceTree = "<group>";
@@ -680,6 +683,7 @@
 				4A5A72C5206998200031BDC1 /* NowPlayingTableViewCell.swift in Sources */,
 				4A186DCC2050A4550091F8FF /* LibraryItem.swift in Sources */,
 				4A186DD02050A46F0091F8FF /* WaveManager.swift in Sources */,
+				4A0DE84220AC82A100320507 /* HelpSettingsDelegate.swift in Sources */,
 				4A0A046E206B496E00A5FC0D /* ListenersDelegate.swift in Sources */,
 				4A42E6DA20AB4ED5006C1F5D /* Single.swift in Sources */,
 				4A8F5FF92009811900564EFE /* LibraryDelegate.swift in Sources */,

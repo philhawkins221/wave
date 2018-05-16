@@ -1430,9 +1430,114 @@
             </objects>
             <point key="canvasLocation" x="1460" y="2460"/>
         </scene>
+        <!--about-->
+        <scene sceneID="oQa-Sx-84N">
+            <objects>
+                <viewController storyboardIdentifier="about" title="about" id="yK6-qb-Nrw" sceneMemberID="viewController">
+                    <view key="view" contentMode="scaleToFill" id="EeS-bO-6DU">
+                        <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                        <autoresizingMask key="autoresizingMask" widthSizable="YES" heightSizable="YES"/>
+                        <subviews>
+                            <scrollView clipsSubviews="YES" multipleTouchEnabled="YES" contentMode="scaleToFill" translatesAutoresizingMaskIntoConstraints="NO" id="6EU-8E-pg5">
+                                <rect key="frame" x="0.0" y="0.0" width="375" height="724"/>
+                                <subviews>
+                                    <label opaque="NO" userInteractionEnabled="NO" contentMode="left" horizontalHuggingPriority="251" verticalHuggingPriority="251" text="wave v2.0.1 Copyright © 2018 Phil Hawkins   powered by:" textAlignment="natural" lineBreakMode="tailTruncation" numberOfLines="6" baselineAdjustment="alignBaselines" adjustsFontSizeToFit="NO" translatesAutoresizingMaskIntoConstraints="NO" id="84s-dz-Qh0">
+                                        <rect key="frame" x="20" y="77" width="261" height="129"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="261" id="yqV-Vi-PTQ"/>
+                                        </constraints>
+                                        <fontDescription key="fontDescription" type="system" pointSize="14"/>
+                                        <color key="textColor" red="0.43529411759999997" green="0.4431372549" blue="0.47450980390000003" alpha="1" colorSpace="custom" customColorSpace="sRGB"/>
+                                        <nil key="highlightedColor"/>
+                                    </label>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="heroku logo.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="8Ii-xH-dBT">
+                                        <rect key="frame" x="20" y="433" width="235" height="69"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="69" id="Vt4-3w-vbC"/>
+                                            <constraint firstAttribute="width" constant="235" id="doY-NO-D5C"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="gracenote logo.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="u3x-aw-sZJ">
+                                        <rect key="frame" x="20" y="342" width="212" height="69"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="212" id="X5P-Fg-OvY"/>
+                                            <constraint firstAttribute="height" constant="69" id="eBg-tp-Ltw"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="mlab logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="fc8-QT-8tw">
+                                        <rect key="frame" x="20" y="264" width="137" height="69"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="137" id="C9X-Kk-2fY"/>
+                                            <constraint firstAttribute="height" constant="69" id="tYk-ID-skI"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="apple music logo.jpg" translatesAutoresizingMaskIntoConstraints="NO" id="S0u-LG-1eX">
+                                        <rect key="frame" x="20" y="192" width="69" height="69"/>
+                                        <constraints>
+                                            <constraint firstAttribute="width" constant="69" id="gtQ-Ls-FBj"/>
+                                            <constraint firstAttribute="height" constant="69" id="uMh-xF-Fte"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="clique 180.png" translatesAutoresizingMaskIntoConstraints="NO" id="xsx-Al-lPT">
+                                        <rect key="frame" x="20" y="44" width="50" height="50"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="50" id="DLw-sH-eVC"/>
+                                            <constraint firstAttribute="width" constant="50" id="Gwc-7a-wU4"/>
+                                        </constraints>
+                                    </imageView>
+                                    <imageView userInteractionEnabled="NO" contentMode="scaleToFill" horizontalHuggingPriority="251" verticalHuggingPriority="251" image="alamofire logo.png" translatesAutoresizingMaskIntoConstraints="NO" id="Y07-UL-ZJ6">
+                                        <rect key="frame" x="20" y="520" width="299" height="69"/>
+                                        <constraints>
+                                            <constraint firstAttribute="height" constant="69" id="eKI-Oc-9bR"/>
+                                        </constraints>
+                                    </imageView>
+                                </subviews>
+                                <constraints>
+                                    <constraint firstItem="xsx-Al-lPT" firstAttribute="leading" secondItem="84s-dz-Qh0" secondAttribute="leading" id="3bZ-hl-xLg"/>
+                                    <constraint firstItem="xsx-Al-lPT" firstAttribute="top" secondItem="6EU-8E-pg5" secondAttribute="top" constant="44" id="5Xh-dl-yKN"/>
+                                    <constraint firstItem="84s-dz-Qh0" firstAttribute="leading" secondItem="S0u-LG-1eX" secondAttribute="leading" id="GBz-t1-eFy"/>
+                                    <constraint firstItem="fc8-QT-8tw" firstAttribute="leading" secondItem="u3x-aw-sZJ" secondAttribute="leading" id="HoN-qy-ukI"/>
+                                    <constraint firstItem="u3x-aw-sZJ" firstAttribute="top" secondItem="fc8-QT-8tw" secondAttribute="bottom" constant="9" id="Lvt-5Y-kwY"/>
+                                    <constraint firstItem="8Ii-xH-dBT" firstAttribute="leading" secondItem="Y07-UL-ZJ6" secondAttribute="leading" id="ONW-v7-i1a"/>
+                                    <constraint firstItem="Y07-UL-ZJ6" firstAttribute="top" secondItem="8Ii-xH-dBT" secondAttribute="bottom" constant="18" id="Ofe-tq-c5N"/>
+                                    <constraint firstAttribute="trailing" secondItem="Y07-UL-ZJ6" secondAttribute="trailing" constant="56" id="Shr-2a-AkN"/>
+                                    <constraint firstItem="fc8-QT-8tw" firstAttribute="top" secondItem="S0u-LG-1eX" secondAttribute="bottom" constant="3" id="SiU-fh-lfV"/>
+                                    <constraint firstItem="u3x-aw-sZJ" firstAttribute="leading" secondItem="8Ii-xH-dBT" secondAttribute="leading" id="UPX-OW-vrB"/>
+                                    <constraint firstItem="S0u-LG-1eX" firstAttribute="leading" secondItem="fc8-QT-8tw" secondAttribute="leading" id="d6g-cc-Dnl"/>
+                                    <constraint firstAttribute="trailing" secondItem="84s-dz-Qh0" secondAttribute="trailing" constant="94" id="fO7-8R-LJM"/>
+                                    <constraint firstItem="xsx-Al-lPT" firstAttribute="leading" secondItem="6EU-8E-pg5" secondAttribute="leading" constant="20" id="gJH-v8-UMg"/>
+                                    <constraint firstItem="8Ii-xH-dBT" firstAttribute="top" secondItem="u3x-aw-sZJ" secondAttribute="bottom" constant="22" id="gec-8x-8pK"/>
+                                    <constraint firstItem="S0u-LG-1eX" firstAttribute="top" secondItem="xsx-Al-lPT" secondAttribute="bottom" constant="98" id="iAE-X9-Cud"/>
+                                    <constraint firstItem="84s-dz-Qh0" firstAttribute="top" secondItem="6EU-8E-pg5" secondAttribute="top" constant="77" id="la1-72-eGK"/>
+                                    <constraint firstAttribute="bottom" secondItem="Y07-UL-ZJ6" secondAttribute="bottom" constant="135" id="rZL-Zm-3Gf"/>
+                                    <constraint firstItem="fc8-QT-8tw" firstAttribute="top" secondItem="84s-dz-Qh0" secondAttribute="bottom" constant="58" id="wmO-wm-i8O"/>
+                                </constraints>
+                            </scrollView>
+                        </subviews>
+                        <color key="backgroundColor" white="1" alpha="1" colorSpace="custom" customColorSpace="genericGamma22GrayColorSpace"/>
+                        <constraints>
+                            <constraint firstAttribute="bottom" secondItem="6EU-8E-pg5" secondAttribute="bottom" id="Brv-3o-K0O"/>
+                            <constraint firstItem="6EU-8E-pg5" firstAttribute="leading" secondItem="EeS-bO-6DU" secondAttribute="leading" id="uEk-mP-7mp"/>
+                            <constraint firstItem="6EU-8E-pg5" firstAttribute="top" secondItem="K4j-kB-iaW" secondAttribute="top" id="vU4-Mx-Zic"/>
+                            <constraint firstAttribute="trailing" secondItem="6EU-8E-pg5" secondAttribute="trailing" id="yVi-kV-sOF"/>
+                        </constraints>
+                        <viewLayoutGuide key="safeArea" id="K4j-kB-iaW"/>
+                    </view>
+                    <simulatedNavigationBarMetrics key="simulatedTopBarMetrics" translucent="NO" prompted="NO"/>
+                </viewController>
+                <placeholder placeholderIdentifier="IBFirstResponder" id="Jb4-41-vaH" userLabel="First Responder" sceneMemberID="firstResponder"/>
+            </objects>
+            <point key="canvasLocation" x="1460" y="3215.7635467980299"/>
+        </scene>
     </scenes>
     <resources>
+        <image name="alamofire logo.png" width="546" height="121"/>
+        <image name="apple music logo.jpg" width="234" height="236"/>
+        <image name="clique 180.png" width="180" height="180"/>
         <image name="genericart.png" width="336" height="336"/>
+        <image name="gracenote logo.jpg" width="1253" height="403"/>
+        <image name="heroku logo.jpg" width="622" height="191"/>
+        <image name="mlab logo.png" width="1200" height="602"/>
     </resources>
     <inferredMetricsTieBreakers>
         <segue reference="81l-e6-Vnx"/>

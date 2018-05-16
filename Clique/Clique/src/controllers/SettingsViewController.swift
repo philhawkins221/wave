@@ -76,6 +76,11 @@ class SettingsViewController: UIViewController {
         table.reloadData()
     }
     
+    func view(about: Void) {
+        guard let vc = storyboard?.instantiateViewController(withIdentifier: "about") else { return }
+        show(vc, sender: self)
+    }
+    
     func view(settings: SettingsMode) {
         guard let vc = storyboard?.instantiateViewController(withIdentifier: "settings") as? SettingsViewController else { return }
         

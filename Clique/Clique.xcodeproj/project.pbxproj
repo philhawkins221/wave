@@ -28,6 +28,20 @@
 		4A0A0472206B788C00A5FC0D /* SocialViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0A0471206B788C00A5FC0D /* SocialViewController.swift */; };
 		4A0DE84020AC70DB00320507 /* HelpViewController.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0DE83F20AC70DB00320507 /* HelpViewController.swift */; };
 		4A0DE84220AC82A100320507 /* HelpSettingsDelegate.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4A0DE84120AC82A100320507 /* HelpSettingsDelegate.swift */; };
+		4A0DE84E20AC8C8000320507 /* spotify logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84420AC8C8000320507 /* spotify logo.jpg */; };
+		4A0DE84F20AC8C8000320507 /* silence.mp3 in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84520AC8C8000320507 /* silence.mp3 */; };
+		4A0DE85020AC8C8000320507 /* genericart.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84620AC8C8000320507 /* genericart.png */; };
+		4A0DE85120AC8C8000320507 /* waves.mp4 in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84720AC8C8000320507 /* waves.mp4 */; };
+		4A0DE85220AC8C8000320507 /* clique 120.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84820AC8C8000320507 /* clique 120.png */; };
+		4A0DE85320AC8C8000320507 /* apple music logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84920AC8C8000320507 /* apple music logo.jpg */; };
+		4A0DE85420AC8C8000320507 /* youtube logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84A20AC8C8000320507 /* youtube logo.png */; };
+		4A0DE85520AC8C8000320507 /* songpic.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84B20AC8C8000320507 /* songpic.png */; };
+		4A0DE85620AC8C8000320507 /* clique 180.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84C20AC8C8000320507 /* clique 180.png */; };
+		4A0DE85720AC8C8000320507 /* soundcloud logo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE84D20AC8C8000320507 /* soundcloud logo.gif */; };
+		4A0DE85C20AC8CD000320507 /* alamofire logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE85820AC8CCE00320507 /* alamofire logo.png */; };
+		4A0DE85D20AC8CD000320507 /* mlab logo.png in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE85920AC8CCF00320507 /* mlab logo.png */; };
+		4A0DE85E20AC8CD000320507 /* gracenote logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE85A20AC8CCF00320507 /* gracenote logo.jpg */; };
+		4A0DE85F20AC8CD000320507 /* heroku logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A0DE85B20AC8CCF00320507 /* heroku logo.jpg */; };
 		4A179AFC1D00C64100B6EE20 /* apple music logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AF81D00C64100B6EE20 /* apple music logo.jpg */; };
 		4A179AFD1D00C64100B6EE20 /* soundcloud logo.gif in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AF91D00C64100B6EE20 /* soundcloud logo.gif */; };
 		4A179AFE1D00C64100B6EE20 /* spotify logo.jpg in Resources */ = {isa = PBXBuildFile; fileRef = 4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */; };
@@ -130,6 +144,20 @@
 		4A0AA6242016277B0018E9CD /* waves.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; name = waves.mp4; path = "/Users/phil/Documents/xcode/clique/ubiquitous-journey/Clique/Clique/bin/waves.mp4"; sourceTree = "<absolute>"; };
 		4A0DE83F20AC70DB00320507 /* HelpViewController.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpViewController.swift; sourceTree = "<group>"; };
 		4A0DE84120AC82A100320507 /* HelpSettingsDelegate.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = HelpSettingsDelegate.swift; sourceTree = "<group>"; };
+		4A0DE84420AC8C8000320507 /* spotify logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "spotify logo.jpg"; sourceTree = "<group>"; };
+		4A0DE84520AC8C8000320507 /* silence.mp3 */ = {isa = PBXFileReference; lastKnownFileType = audio.mp3; path = silence.mp3; sourceTree = "<group>"; };
+		4A0DE84620AC8C8000320507 /* genericart.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = genericart.png; sourceTree = "<group>"; };
+		4A0DE84720AC8C8000320507 /* waves.mp4 */ = {isa = PBXFileReference; lastKnownFileType = file; path = waves.mp4; sourceTree = "<group>"; };
+		4A0DE84820AC8C8000320507 /* clique 120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 120.png"; sourceTree = "<group>"; };
+		4A0DE84920AC8C8000320507 /* apple music logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "apple music logo.jpg"; sourceTree = "<group>"; };
+		4A0DE84A20AC8C8000320507 /* youtube logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "youtube logo.png"; sourceTree = "<group>"; };
+		4A0DE84B20AC8C8000320507 /* songpic.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = songpic.png; sourceTree = "<group>"; };
+		4A0DE84C20AC8C8000320507 /* clique 180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 180.png"; sourceTree = "<group>"; };
+		4A0DE84D20AC8C8000320507 /* soundcloud logo.gif */ = {isa = PBXFileReference; lastKnownFileType = image.gif; path = "soundcloud logo.gif"; sourceTree = "<group>"; };
+		4A0DE85820AC8CCE00320507 /* alamofire logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "alamofire logo.png"; sourceTree = "<group>"; };
+		4A0DE85920AC8CCF00320507 /* mlab logo.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "mlab logo.png"; sourceTree = "<group>"; };
+		4A0DE85A20AC8CCF00320507 /* gracenote logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "gracenote logo.jpg"; sourceTree = "<group>"; };
+		4A0DE85B20AC8CCF00320507 /* heroku logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "heroku logo.jpg"; sourceTree = "<group>"; };
 		4A16BEDC1CAC3BC60089997F /* AddViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = AddViewController.swift; sourceTree = "<group>"; };
 		4A16BEDE1CAC3BD40089997F /* YTViewController.swift */ = {isa = PBXFileReference; fileEncoding = 4; lastKnownFileType = sourcecode.swift; path = YTViewController.swift; sourceTree = "<group>"; };
 		4A179AF81D00C64100B6EE20 /* apple music logo.jpg */ = {isa = PBXFileReference; lastKnownFileType = image.jpeg; path = "apple music logo.jpg"; sourceTree = "<group>"; };
@@ -271,6 +299,24 @@
 			path = legacy;
 			sourceTree = "<group>";
 		};
+		4A0DE84320AC8C8000320507 /* bin */ = {
+			isa = PBXGroup;
+			children = (
+				4A0DE84420AC8C8000320507 /* spotify logo.jpg */,
+				4A0DE84520AC8C8000320507 /* silence.mp3 */,
+				4A0DE84620AC8C8000320507 /* genericart.png */,
+				4A0DE84720AC8C8000320507 /* waves.mp4 */,
+				4A0DE84820AC8C8000320507 /* clique 120.png */,
+				4A0DE84920AC8C8000320507 /* apple music logo.jpg */,
+				4A0DE84A20AC8C8000320507 /* youtube logo.png */,
+				4A0DE84B20AC8C8000320507 /* songpic.png */,
+				4A0DE84C20AC8C8000320507 /* clique 180.png */,
+				4A0DE84D20AC8C8000320507 /* soundcloud logo.gif */,
+			);
+			name = bin;
+			path = Clique/bin;
+			sourceTree = SOURCE_ROOT;
+		};
 		4A186DC120509FDB0091F8FF /* src */ = {
 			isa = PBXGroup;
 			children = (
@@ -296,6 +342,10 @@
 				4A179AF91D00C64100B6EE20 /* soundcloud logo.gif */,
 				4AFF3BB8206ED2AD00912B3B /* silence.mp3 */,
 				4AB7433720712AE5006D9DD1 /* songpic.png */,
+				4A0DE85820AC8CCE00320507 /* alamofire logo.png */,
+				4A0DE85A20AC8CCF00320507 /* gracenote logo.jpg */,
+				4A0DE85B20AC8CCF00320507 /* heroku logo.jpg */,
+				4A0DE85920AC8CCF00320507 /* mlab logo.png */,
 			);
 			path = bin;
 			sourceTree = "<group>";
@@ -352,6 +402,7 @@
 				4AFF3BAD206C7A1C00912B3B /* QueueSettingsDelegate.swift */,
 				4AFF3BAF206CA4F300912B3B /* SharingDelegate.swift */,
 				4A0DE84120AC82A100320507 /* HelpSettingsDelegate.swift */,
+				4A0DE84320AC8C8000320507 /* bin */,
 			);
 			path = delegates;
 			sourceTree = "<group>";
@@ -564,7 +615,9 @@
 			isa = PBXResourcesBuildPhase;
 			buildActionMask = 2147483647;
 			files = (
+				4A0DE85520AC8C8000320507 /* songpic.png in Resources */,
 				4AB74336206EF10E006D9DD1 /* silence.mp3 in Resources */,
+				4A0DE85720AC8C8000320507 /* soundcloud logo.gif in Resources */,
 				4AAD8F3A20162D410090CE17 /* waves.mp4 in Resources */,
 				4AC3C9FF1C4ACCB700D5BCCA /* LaunchScreen.storyboard in Resources */,
 				4A2B670C1C501AB700681F70 /* genericart.png in Resources */,
@@ -572,16 +625,28 @@
 				4A179AFF1D00C64100B6EE20 /* youtube logo.png in Resources */,
 				4AF452E91FE0CAAE007FCF8F /* QueueSongTableViewCell.xib in Resources */,
 				4A179AFD1D00C64100B6EE20 /* soundcloud logo.gif in Resources */,
+				4A0DE85E20AC8CD000320507 /* gracenote logo.jpg in Resources */,
 				4AC3C9FC1C4ACCB700D5BCCA /* Assets.xcassets in Resources */,
+				4A0DE85020AC8C8000320507 /* genericart.png in Resources */,
+				4A0DE84F20AC8C8000320507 /* silence.mp3 in Resources */,
 				4AB7433820712AE6006D9DD1 /* songpic.png in Resources */,
 				4A179AFC1D00C64100B6EE20 /* apple music logo.jpg in Resources */,
 				4AFCA12920699D9E00B626BF /* NowPlayingTableViewCell.xib in Resources */,
 				4A06C3061FD7978E00E99FED /* ProfileBar.xib in Resources */,
+				4A0DE85220AC8C8000320507 /* clique 120.png in Resources */,
+				4A0DE85120AC8C8000320507 /* waves.mp4 in Resources */,
 				4AC3EF391C7E65800013EEFF /* player with youtube helper in Resources */,
+				4A0DE85C20AC8CD000320507 /* alamofire logo.png in Resources */,
+				4A0DE84E20AC8C8000320507 /* spotify logo.jpg in Resources */,
+				4A0DE85420AC8C8000320507 /* youtube logo.png in Resources */,
+				4A0DE85620AC8C8000320507 /* clique 180.png in Resources */,
+				4A0DE85F20AC8CD000320507 /* heroku logo.jpg in Resources */,
 				4ADF95E51D026D6800E0CD19 /* clique 120.png in Resources */,
 				4A06C3041FD7888C00E99FED /* wave.storyboard in Resources */,
+				4A0DE85D20AC8CD000320507 /* mlab logo.png in Resources */,
 				4A095142206C3BCB0093B5DB /* SettingsTableViewCell.xib in Resources */,
 				4A0A046C206ABA2F00A5FC0D /* QueueHeaderTableViewCell.xib in Resources */,
+				4A0DE85320AC8C8000320507 /* apple music logo.jpg in Resources */,
 				4A179AFE1D00C64100B6EE20 /* spotify logo.jpg in Resources */,
 			);
 			runOnlyForDeploymentPostprocessing = 0;

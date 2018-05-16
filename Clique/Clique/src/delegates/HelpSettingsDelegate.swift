@@ -13,7 +13,7 @@ class HelpSettingsDelegate: SettingsDelegate {
     //MARK: - table delegate stack
     
     override func tableView(_ tableView: UITableView, didSelectRowAt indexPath: IndexPath) {
-        
+        guard indexPath.section != 2 else { return controller.view(about: ()) }
         
         switch indexPath.row {
         case 0: controller.present(nphelpvc!, animated: true)
@@ -30,17 +30,29 @@ class HelpSettingsDelegate: SettingsDelegate {
     //MARK: - table data source stack
     
     override func numberOfSections(in tableView: UITableView) -> Int {
-        return 2
+        return 3
     }
     
     override func tableView(_ tableView: UITableView, numberOfRowsInSection section: Int) -> Int {
         switch section {
         case 1: return 3
+        case 2: return 1
         default: return 0
         }
     }
     
     override func tableView(_ tableView: UITableView, cellForRowAt indexPath: IndexPath) -> UITableViewCell {
+        guard indexPath.section != 2 else {
+            let cell = UITableViewCell(style: .default, reuseIdentifier: nil)
+            cell.textLabel?.text = "about wave"
+            cell.textLabel?.textColor = #colorLiteral(red: 1, green: 0.5763723254, blue: 0, alpha: 1)
+            cell.accessoryType = .disclosureIndicator
+            cell.preservesSuperviewLayoutMargins = false
+            cell.separatorInset = UIEdgeInsets.zero
+            cell.layoutMargins = UIEdgeInsets.zero
+            return cell
+        }
+        
         switch indexPath.row {
         case 0:
             let cell = UITableViewCell(style: .default, reuseIdentifier: nil)

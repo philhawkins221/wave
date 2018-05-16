@@ -14,9 +14,9 @@ class HelpViewController: UIViewController {
     var helps = [UIView]()
     var ok: UIButton?
     var displayed = [false, false, false, false]
-
-    override func viewDidLoad() {
-        super.viewDidLoad()
+    
+    override func viewWillAppear(_ animated: Bool) {
+        super.viewWillAppear(animated)
         
         hide()
     }
@@ -29,6 +29,7 @@ class HelpViewController: UIViewController {
     
     func hide() {
         for help in helps { help.alpha = 0 }
+        displayed = [false, false, false, false]
     }
     
     func reveal() {

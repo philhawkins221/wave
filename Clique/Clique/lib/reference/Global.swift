@@ -48,6 +48,8 @@ var brohelp = false
 var nphelp = false
 var qhelp = false
 
+var connecthelp = false
+
 var brohelpvc = bro.storyboard?.instantiateViewController(withIdentifier: "brohelpvc")
 var nphelpvc = np.storyboard?.instantiateViewController(withIdentifier: "nphelpvc")
 var qhelpvc = q.storyboard?.instantiateViewController(withIdentifier: "qhelpvc")
@@ -221,6 +223,18 @@ enum Inform {
 enum Sorting {
     case song
     case artist
+}
+
+enum QueueStatus {
+    case streaming
+    case paused
+    case queue
+    case requests
+    case shuffle
+    case fill
+    case radio
+    case library
+    case none
 }
 
 //MARK: - errors

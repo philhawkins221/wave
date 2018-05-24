@@ -76,6 +76,15 @@ struct Alerts {
         controller.present(alert, animated: true)
     }
     
+    static func connect(on controller: NowPlayingViewController) {
+        let alert = confirm(title: "connect Apple Music", message: "connect your Apple Music account to access your library, playlists, and the Apple Music catalog") { _ in
+            Settings.applemusic = true
+        }
+        connecthelp = false
+        
+        controller.present(alert, animated: true)
+    }
+    
     static func create(playlist: Void, on controller: BrowseViewController) {
         controller.dismiss(animated: true)
         

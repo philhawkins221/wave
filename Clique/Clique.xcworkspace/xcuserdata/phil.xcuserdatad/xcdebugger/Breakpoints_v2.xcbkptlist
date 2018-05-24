@@ -10,7 +10,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/controllers/ProfileBar.swift"
-            timestampString = "547948806.126335"
+            timestampString = "548817004.248737"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "176"
@@ -26,7 +26,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/controllers/BrowseViewController.swift"
-            timestampString = "548191071.284295"
+            timestampString = "548803585.335189"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "121"
@@ -176,7 +176,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/controllers/BrowseViewController.swift"
-            timestampString = "548191071.284391"
+            timestampString = "548803585.335518"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "154"
@@ -208,7 +208,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/controllers/BrowseViewController.swift"
-            timestampString = "548191071.284452"
+            timestampString = "548803585.335678"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "155"
@@ -304,7 +304,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/controllers/ProfileBar.swift"
-            timestampString = "547948806.128191"
+            timestampString = "548817004.250226"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "211"
@@ -320,13 +320,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/managers/QueueManager.swift"
-            timestampString = "548121194.396611"
+            timestampString = "548806495.224592"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "106"
             endingLineNumber = "106"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "delete(queue:confirmed:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -336,13 +336,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/delegates/QueueDelegate.swift"
-            timestampString = "548121194.39668"
+            timestampString = "548803585.3359261"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "428"
             endingLineNumber = "428"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "tableView(_:commit:forRowAt:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -352,13 +352,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/delegates/QueueDelegate.swift"
-            timestampString = "548121194.397019"
+            timestampString = "548803585.336025"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "286"
             endingLineNumber = "286"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "tableView(_:numberOfRowsInSection:)"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -368,13 +368,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/delegates/QueueDelegate.swift"
-            timestampString = "548121194.397265"
+            timestampString = "548803585.336224"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "282"
             endingLineNumber = "282"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "tableView(_:numberOfRowsInSection:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -416,13 +416,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/delegates/QueueDelegate.swift"
-            timestampString = "548121194.397509"
+            timestampString = "548803585.336332"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "283"
             endingLineNumber = "283"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "tableView(_:numberOfRowsInSection:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -527,22 +527,6 @@
             shouldBeEnabled = "No"
             ignoreCount = "0"
             continueAfterRunningActions = "No"
-            filePath = "Clique/src/managers/QueueManager.swift"
-            timestampString = "548121194.397857"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "122"
-            endingLineNumber = "122"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
             filePath = "Clique/lib/reference/Media.swift"
             timestampString = "547819473.061794"
             startingColumnNumber = "9223372036854775807"
@@ -592,29 +576,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/managers/QueueManager.swift"
-            timestampString = "548121194.398037"
-            startingColumnNumber = "9223372036854775807"
-            endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "123"
-            endingLineNumber = "123"
-            landmarkName = "unknown"
-            landmarkType = "0">
-         </BreakpointContent>
-      </BreakpointProxy>
-      <BreakpointProxy
-         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
-         <BreakpointContent
-            shouldBeEnabled = "No"
-            ignoreCount = "0"
-            continueAfterRunningActions = "No"
-            filePath = "Clique/src/managers/QueueManager.swift"
-            timestampString = "548121194.3981"
+            timestampString = "548806495.225119"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "191"
             endingLineNumber = "191"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "play(playlist:at:)"
+            landmarkType = "7">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -687,13 +655,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/delegates/QueueDelegate.swift"
-            timestampString = "548121194.398186"
+            timestampString = "548803585.336719"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "43"
             endingLineNumber = "43"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "populate()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -703,13 +671,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/delegates/QueueDelegate.swift"
-            timestampString = "548121194.398496"
+            timestampString = "548803585.336807"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "44"
             endingLineNumber = "44"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "populate()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -751,11 +719,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/delegates/FrequencyDelegate.swift"
-            timestampString = "547819473.062535"
+            timestampString = "548820135.286386"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "74"
-            endingLineNumber = "74"
+            startingLineNumber = "73"
+            endingLineNumber = "73"
             landmarkName = "numberOfSections(in:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -767,7 +735,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/delegates/FrequencyDelegate.swift"
-            timestampString = "547819473.062724"
+            timestampString = "548820135.286464"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "20"
@@ -815,11 +783,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/managers/GeneralManager.swift"
-            timestampString = "548121194.398827"
+            timestampString = "548820135.28651"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "239"
-            endingLineNumber = "239"
+            startingLineNumber = "258"
+            endingLineNumber = "258"
             landmarkName = "view(frequencies:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -895,11 +863,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/controllers/NowPlayingViewController.swift"
-            timestampString = "548191071.284863"
+            timestampString = "548820135.2866009"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "139"
-            endingLineNumber = "139"
+            startingLineNumber = "151"
+            endingLineNumber = "151"
             landmarkName = "playpause(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -911,11 +879,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/lib/reference/Actions.swift"
-            timestampString = "548121194.399111"
+            timestampString = "548820135.286647"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "121"
-            endingLineNumber = "121"
+            startingLineNumber = "127"
+            endingLineNumber = "127"
             landmarkName = "execute(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -927,11 +895,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/lib/reference/Alerts.swift"
-            timestampString = "548121194.399489"
+            timestampString = "548803585.337943"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "227"
-            endingLineNumber = "227"
+            startingLineNumber = "236"
+            endingLineNumber = "236"
             landmarkName = "rename(user:on:retry:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -943,11 +911,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/lib/reference/Actions.swift"
-            timestampString = "548121194.399543"
+            timestampString = "548820135.286953"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "319"
-            endingLineNumber = "319"
+            startingLineNumber = "325"
+            endingLineNumber = "325"
             landmarkName = "view(song:in:on:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -959,7 +927,7 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/lib/reference/Actions.swift"
-            timestampString = "548121194.399834"
+            timestampString = "548820135.287155"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "58"
@@ -975,11 +943,11 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/lib/reference/Actions.swift"
-            timestampString = "548121194.400086"
+            timestampString = "548820135.2873501"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
-            startingLineNumber = "226"
-            endingLineNumber = "226"
+            startingLineNumber = "232"
+            endingLineNumber = "232"
             landmarkName = "execute(_:)"
             landmarkType = "7">
          </BreakpointContent>
@@ -991,13 +959,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/managers/QueueManager.swift"
-            timestampString = "548121194.400313"
+            timestampString = "548806495.225732"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "174"
             endingLineNumber = "174"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "play()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1007,13 +975,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/managers/QueueManager.swift"
-            timestampString = "548121194.40037"
+            timestampString = "548806495.225924"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "play()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1023,13 +991,13 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/managers/QueueManager.swift"
-            timestampString = "548121194.400412"
+            timestampString = "548806495.226108"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "150"
             endingLineNumber = "150"
-            landmarkName = "unknown"
-            landmarkType = "0">
+            landmarkName = "play()"
+            landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -1039,12 +1007,28 @@
             ignoreCount = "0"
             continueAfterRunningActions = "No"
             filePath = "Clique/src/controllers/HelpViewController.swift"
-            timestampString = "548191071.285015"
+            timestampString = "548820135.287582"
             startingColumnNumber = "9223372036854775807"
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "36"
             endingLineNumber = "36"
             landmarkName = "reveal()"
+            landmarkType = "7">
+         </BreakpointContent>
+      </BreakpointProxy>
+      <BreakpointProxy
+         BreakpointExtensionID = "Xcode.Breakpoint.FileBreakpoint">
+         <BreakpointContent
+            shouldBeEnabled = "No"
+            ignoreCount = "0"
+            continueAfterRunningActions = "No"
+            filePath = "Clique/src/controllers/NowPlayingViewController.swift"
+            timestampString = "548820135.287626"
+            startingColumnNumber = "9223372036854775807"
+            endingColumnNumber = "9223372036854775807"
+            startingLineNumber = "141"
+            endingLineNumber = "141"
+            landmarkName = "playpause(_:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

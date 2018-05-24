@@ -80,6 +80,20 @@ struct GeneralManager {
         CliqueAPI.delete(friend: friend, for: me.id)
     }
     
+    func help() {
+        controller.helplabel.text = nil
+        
+        switch q.manager?.status ?? .none {
+        case .streaming where !Media.playing: controller.helplabel.text = "press play to start streaming"
+        default: return
+        }
+        
+        controller.helplabel.alpha = 0
+        controller.helplabel.isHidden = false
+        
+        UIView.animate(withDuration: 0.2) { self.controller.helplabel.alpha = 1 }
+    }
+    
     func hide(frequencies: Void) {
         UIView.animate(withDuration: 0.15, delay: 0, animations: {
             self.controller.tuner.alpha = 0
@@ -113,6 +127,7 @@ struct GeneralManager {
         guard let song = display else { return notplaying() }
         let placeholder = #imageLiteral(resourceName: "genericart.png")
         controller.artworkimage.image = placeholder
+        controller.helplabel.text = nil
         
         controller.waves.isHidden = true
         
@@ -147,6 +162,8 @@ struct GeneralManager {
         } else if let url = URL(string: iTunesAPI.match(song)?.artwork ?? "") {
             controller.artworkimage.af_setImage(withURL: url, placeholderImage: placeholder, imageTransition: UIImageView.ImageTransition.crossDissolve(0.2), runImageTransitionIfCached: false)
         }
+        
+        help()
     }
     
     private func notplaying() {
@@ -162,6 +179,8 @@ struct GeneralManager {
         controller.playpausebutton?.isPaused = true
         
         controller.profilebar.display(subline: .generic)
+        
+        help()
     }
     
     func refresh() {

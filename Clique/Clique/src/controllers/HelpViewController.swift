@@ -79,6 +79,12 @@ class NowPlayingHelpViewController: HelpViewController {
     
     @IBOutlet weak var pp: RSPlayPauseButton!
     
+    override func viewDidLoad() {
+        super.viewDidLoad()
+        
+        pp.animationStyle = .splitAndRotate
+    }
+    
     override func viewWillAppear(_ animated: Bool) {
         helps = [first, second, third, fourth]
         ok = button
@@ -86,6 +92,10 @@ class NowPlayingHelpViewController: HelpViewController {
         
         nphelp = false
         super.viewWillAppear(animated)
+    }
+    
+    @IBAction func tap(_ sender: Any) {
+        pp.setPaused(!pp.isPaused, animated: true)
     }
     
     @IBAction func next(_ sender: Any) {

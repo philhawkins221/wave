@@ -16,6 +16,30 @@ struct QueueManager {
     let controller: QueueViewController
     var delegate: QueueDelegate?
     
+    var status: QueueStatus {
+        guard let user = CliqueAPI.find(user: user.id) else { return .none }
+        
+        if !user.me(), let _ = user.queue.current {
+            return .streaming
+        } else if Media.playing && player.playbackState == .paused {
+            return .paused
+        } else if !user.queue.queue.isEmpty {
+            return .queue
+        } else if Settings.takerequests && !user.queue.requests.isEmpty {
+            return .requests
+        } else if Settings.shuffle && controller.shuffled?.songs.first != nil {
+            return .shuffle
+        } else if !Settings.shuffle && controller.fill?.songs.first != nil {
+            return .fill
+        } else if Settings.radio && !q.radio.isEmpty {
+            return .radio
+        } else if !user.library.isEmpty {
+            return .library
+        } else {
+            return .none
+        }
+    }
+    
     //MARK: - initializers
     
     init?(to controller: QueueViewController) {
@@ -38,7 +62,7 @@ struct QueueManager {
         
         controller.profilebar?.manage(profile: user)
         
-        if user.me(), Settings.radio, controller.radio == nil { update(radio: ()) }
+        if user.me(), Settings.radio, controller.radio.isEmpty { update(radio: ()) }
     }
     
     //MARK: - tasks
@@ -122,35 +146,35 @@ struct QueueManager {
     func play() {
         guard let user = CliqueAPI.find(user: user.id) else { return }
         
-        if !user.me(), let current = user.queue.current {
+        switch status {
+        case .streaming:
+            guard let current = user.queue.current else { return }
             if !Settings.applemusic { Alerts.inform(.noStreaming, about: user) }
             else if current.library == Catalogues.AppleMusic.rawValue { play(song: current, streaming: true) }
             else if let match = iTunesAPI.match(current) { play(song: match, streaming: true) }
-        } else if Media.playing && player.playbackState == .paused {
+        case .paused:
             Media.play()
-        } else if Spotify.playing && Spotify.player?.isPlaying ?? false {
-            Spotify.play()
-        } else if !user.queue.queue.isEmpty {
+        case .queue:
             advance()
-        } else if Settings.takerequests && !user.queue.requests.isEmpty {
+        case .requests:
             var replacement = user.queue.requests
             play(song: replacement.first!)
             replacement.remove(at: 0)
             update(requests: replacement)
-        } else if Settings.shuffle && controller.shuffled?.songs.first != nil {
+        case .shuffle:
             play(song: controller.shuffled!.songs.first!)
             controller.shuffled?.songs.remove(at: 0)
-        } else if !Settings.shuffle && controller.fill?.songs.first != nil {
+        case .fill:
             play(song: controller.fill!.songs.first!)
             controller.fill?.songs.remove(at: 0)
             refresh()
-        } else if Settings.radio && !q.radio.isEmpty {
+        case .radio:
             play(radio: ())
-        } else if !user.library.isEmpty {
+        case .library:
             var random = user.library.shuffled()
             if Settings.shuffle { random[0].songs.shuffle() }
             play(playlist: random.first!, at: 0)
-        } else {
+        case .none:
             stop()
         }
     }

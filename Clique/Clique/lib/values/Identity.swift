@@ -51,6 +51,8 @@ struct Identity {
         brohelp = true
         nphelp = true
         qhelp = true
+        
+        connecthelp = true
     }
     
     static func update(with replacement: User? = nil) {

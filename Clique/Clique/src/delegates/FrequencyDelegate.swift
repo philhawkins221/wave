@@ -52,8 +52,7 @@ class FrequencyDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         selection = -1
         tableView.reloadRows(at: [ip], with: .none)
         gm?.hide(frequencies: ())
-        if frequencies[indexPath.row].me() { gm?.stop(listening: ()) }
-        else { gm?.listen(to: frequencies[indexPath.row].id, redirect: false) }
+        gm?.listen(to: frequencies[indexPath.row].id, redirect: false)
         q.refresh()
     }
     

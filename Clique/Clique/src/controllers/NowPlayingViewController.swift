@@ -32,6 +32,8 @@ class NowPlayingViewController: UIViewController {
     @IBOutlet weak var playpausebutton: RSPlayPauseButton!
     @IBOutlet weak var fastforwardbutton: UIButton!
     
+    @IBOutlet weak var helplabel: UILabel!
+    
     //MARK: - properties
     
     var manager: GeneralManager?
@@ -77,7 +79,7 @@ class NowPlayingViewController: UIViewController {
         tunercontroller?.tableView.dataSource = delegate
         
         playpausebutton.tintColor = UIColor.orange
-        playpausebutton.animationStyle = .split
+        playpausebutton.animationStyle = .splitAndRotate
         
         waves.videoURL = Bundle.main.url(forResource: "waves", withExtension: "mp4")
         waves.shouldLoop = true
@@ -102,6 +104,7 @@ class NowPlayingViewController: UIViewController {
         }
         
         if nphelp, let vc = nphelpvc { present(vc, animated: true) }
+        else if connecthelp { Alerts.connect(on: self) }
     }
     
     override func viewDidDisappear(_ animated: Bool) {
@@ -133,6 +136,28 @@ class NowPlayingViewController: UIViewController {
     }
     
     @IBAction func playpause(_ sender: Any) {
+        guard playpausebutton.isPaused else {
+            q.manager?.pause()
+            playpausebutton.setPaused(true, animated: true)
+            return
+        }
+        
+        switch q.manager?.status ?? .none {
+        case .paused:
+            playpausebutton.setPaused(false, animated: true)
+            break
+        case .streaming, .queue, .requests, .shuffle, .fill: break
+        case _ where !frequencies.isEmpty: return gm?.view(frequencies: ()) ?? ()
+        case .radio, .library: break
+        case .none: return
+        }
+        
+        q.manager?.play()
+        q.refresh()
+        refresh()
+        
+        
+        /*
         if q.manager?.client().queue.current == nil, q.manager?.client().queue.queue.isEmpty ?? false, !frequencies.isEmpty {
             return gm?.view(frequencies: ()) ?? ()
         }
@@ -140,7 +165,7 @@ class NowPlayingViewController: UIViewController {
         if playpausebutton.isPaused { q.manager?.play() }
         else { q.manager?.pause() }
         //q.refresh()
-        refresh()
+        refresh()*/
     }
     
     @IBAction func fastforward(_ sender: Any) {

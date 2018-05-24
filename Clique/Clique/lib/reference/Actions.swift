@@ -68,6 +68,8 @@ struct Actions {
             alert.addAction(act)
         }
         
+        if alert.actions.count < 2 { alert.addAction(UIAlertAction(title: "continue", style: .default)) }
+        
         alert.addAction(UIAlertAction(title: "nevermind", style: .cancel))
         alert.view.tintColor = UIColor.orange
         
@@ -85,6 +87,8 @@ struct Actions {
                 gm?.send(song: song, to: friend)
             }
             
+            if alert.actions.count == 1 { alert.addAction(UIAlertAction(title: "continue", style: .default)) }
+            
             alert.addAction(act)
         }
         
@@ -99,7 +103,7 @@ struct Actions {
         guard let song = song, let me = bro.manager?.client() else { return alert }
         
         for playlist in me.library {
-            if playlist.owner != Identity.me { continue }
+            if playlist.owner != Identity.me || playlist.library != Catalogues.Library.rawValue { continue }
             
             let act = UIAlertAction(title: playlist.name, style: .default) { _ in
                 var playlist = playlist
@@ -109,6 +113,8 @@ struct Actions {
             
             alert.addAction(act)
         }
+        
+        if alert.actions.count == 1 { alert.addAction(UIAlertAction(title: "continue", style: .default)) }
         
         alert.addAction(UIAlertAction(title: "nevermind", style: .cancel))
         alert.view.tintColor = UIColor.orange

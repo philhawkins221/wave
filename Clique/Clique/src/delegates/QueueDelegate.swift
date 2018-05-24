@@ -92,7 +92,7 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             queuerows += 5
             tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
         case 1 where me && indexPath.row == queue.queue.count && !queue.queue.isEmpty: manager.delete(queue: ())
-        case 1: Actions.view(song: indexPath.row, in: queue, on: controller)
+        case 1 where !queue.queue.isEmpty: Actions.view(song: indexPath.row, in: queue, on: controller)
         //case 1: Actions.view(song: queue.queue[indexPath.row], on: controller, queued: true)
         case 2 where indexPath.row == requestrows: manager.view(requests: ())
         case 2: Actions.view(song: queue.requests[indexPath.row], on: controller)

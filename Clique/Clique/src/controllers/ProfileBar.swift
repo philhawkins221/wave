@@ -92,12 +92,12 @@ class ProfileBar: UIView {
     
     //MARK: - initializers
     
-    override init(frame: CGRect) { //editing in code
+    override init(frame: CGRect) {
         super.init(frame: frame)
         create()
     }
     
-    required init?(coder aDecoder: NSCoder) { //editing in interface builder
+    required init?(coder aDecoder: NSCoder) {
         super.init(coder: aDecoder)
         create()
     }
@@ -227,13 +227,5 @@ class ProfileBar: UIView {
         default: break
         }
     }
-    
-    /*
-    // Only override draw() if you perform custom drawing.
-    // An empty implementation adversely affects performance during animation.
-    override func draw(_ rect: CGRect) {
-        // Drawing code
-    }
-    */
 
 }

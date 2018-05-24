@@ -40,8 +40,6 @@ class QueueViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //refresh()
-                        
         NavigationControllerStyleGuide.enforce(on: navigationController)
         TabBarControllerStyleGuide.enforce(on: tabBarController)
         
@@ -58,9 +56,6 @@ class QueueViewController: UIViewController {
         } else {
             table?.backgroundView = refreshcontrol
         }
-                
-        //TODO: notifications
-        //NotificationCenter.default.addObserver(self, selector: #selector(self.advance), name: .MPMusicPlayerControllerNowPlayingItemDidChange, object: nil)
     }
     
     override func viewWillAppear(_ animated: Bool) {
@@ -93,11 +88,6 @@ class QueueViewController: UIViewController {
         
         timer?.invalidate()
         edit = false
-    }
-    
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //MARK: - tasks

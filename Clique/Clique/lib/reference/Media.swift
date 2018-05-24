@@ -29,9 +29,10 @@ class Media: NSObject {
     static func authenticate() -> Bool {
         switch SKCloudServiceController.authorizationStatus() {
         case .authorized: return true
-        case .denied: return false //TODO: inform access denied
+        case .denied, .restricted:
+            Alerts.inform(.noAccount)
+            return false
         case .notDetermined: break
-        case .restricted: return false
         }
         
         SKCloudServiceController.requestAuthorization { (status: SKCloudServiceAuthorizationStatus) in
@@ -115,8 +116,6 @@ class Media: NSObject {
         
         silence.replaceCurrentItem(with: nil)
         silence = AVQueuePlayer(items: [item])
-        //silence.allowsExternalPlayback = false
-        //silence.usesExternalPlaybackWhileExternalScreenIsActive = false
         player.repeatMode = .none
         checks = -2
     }
@@ -137,7 +136,6 @@ class Media: NSObject {
         streaming = false
         advanced = true
         if token != nil { silence.removeTimeObserver(token as Any) }
-        //silence.currentItem?.removeObserver(clone, forKeyPath: "status")
         silence.removeAllItems()
         token = nil
         player.stop()

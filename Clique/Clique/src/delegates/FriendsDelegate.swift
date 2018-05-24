@@ -28,7 +28,7 @@ class FriendsDelegate: BrowseDelegate {
         manager.controller.title = "browse"
         
         manager.controller.addButton.isEnabled = manager.client().me()
-        manager.controller.editButton.isEnabled = false //manager.client().me()
+        manager.controller.editButton.isEnabled = false
         manager.controller.editButton.title = ""
     }
     
@@ -41,7 +41,6 @@ class FriendsDelegate: BrowseDelegate {
         case 0: manager.view(user: Identity.me)
         case 1 where friends.isEmpty: tableView.deselectRow(at: indexPath, animated: true)
         case 1: Actions.view(user: friends[indexPath.row], on: controller)
-        case 1: manager.view(user: friends[indexPath.row].id)
         default: break
         }
     }

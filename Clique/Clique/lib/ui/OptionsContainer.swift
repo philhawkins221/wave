@@ -8,8 +8,4 @@
 
 import UIKit
 
-class OptionsContainer: UIView {
-    
-    
-
-}
+class OptionsContainer: UIView {}

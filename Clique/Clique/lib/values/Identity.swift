@@ -32,8 +32,6 @@ struct Identity {
             spotify: false
         )
         guard let me = CliqueAPI.new(user: new) else { return }
-        //TODO: what to do if this is nil
-        //perhaps wave should return bool
         print("Identity wave:", me)
         self.me = me.id
         UserDefaults.standard.set(me.id, forKey: "id")

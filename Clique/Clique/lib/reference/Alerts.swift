@@ -141,7 +141,7 @@ struct Alerts {
         switch event {
         case .userNotFound: message = "this user could not be found"
         case .doNotDisturb: message = "do not disturb"
-        case .noAccount: break
+        case .noAccount: message = "a valid Apple Music account could not be connected"
         case .stopListening: break
         case .notFriends: message = username + "must add you to their friends before you can see their queue"
         case .canNotQueueSong: message = "song could not be added to the queue"
@@ -220,7 +220,6 @@ struct Alerts {
             q.manager?.find(song: song, from: controller, confirmed: true)
         }
         
-        //controller.dismiss(animated: true)
         controller.present(alert, animated: true)
     }
     

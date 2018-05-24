@@ -48,16 +48,6 @@ class OptionsDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         tableView.reloadRows(at: [indexPath], with: .none)
     }
     
-    /*func tableView(_ tableView: UITableView, didDeselectRowAt indexPath: IndexPath) {
-        switch indexPath.section {
-        case 0: manager.execute(options[indexPath.row])
-        case 1: manager.execute(stop)
-        default: break
-        }
-        
-        tableView.reloadRows(at: [indexPath], with: .none)
-    }*/
-    
     func tableView(_ tableView: UITableView, heightForHeaderInSection section: Int) -> CGFloat {
         switch section {
         case 0: return 0

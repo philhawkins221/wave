@@ -21,7 +21,6 @@ class SyncDelegate: BrowseDelegate {
         super.populate()
         
         applemusic = Media.getAllPlaylists()
-        //TODO: spotify = SpotifyAPI.getAllPlaylists()
     }
     
     override func title() {

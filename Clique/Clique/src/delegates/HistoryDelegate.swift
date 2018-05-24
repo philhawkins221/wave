@@ -19,7 +19,6 @@ class HistoryDelegate: QueueDelegate {
     override func populate() {
         super.populate()
         history = manager.client().queue.history
-        //history.reverse()
     }
     
     override func title() {

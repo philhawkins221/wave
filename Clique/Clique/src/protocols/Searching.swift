@@ -9,6 +9,5 @@
 import Foundation
 
 protocol Searching {
-    static func search(_ term: String) -> [CatalogItem] //[Any]
-    //static func find(id: String) -> Song?
+    static func search(_ term: String) -> [CatalogItem]
 }

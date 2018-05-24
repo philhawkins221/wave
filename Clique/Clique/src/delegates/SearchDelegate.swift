@@ -71,7 +71,6 @@ class SearchDelegate: BrowseDelegate {
         switch search {
         case .users where final: manager.find(friend: users[indexPath.row], confirmed: false)
         case .users: Actions.view(user: users[indexPath.row], on: controller)
-        case .users: manager.view(user: users[indexPath.row].id)
         
         case .applemusic where indexPath.section == 0,
              .spotify where indexPath.section == 0: manager.view(catalog: artists[indexPath.row])
@@ -89,17 +88,6 @@ class SearchDelegate: BrowseDelegate {
                 songs: songs
             )
             Actions.view(song: indexPath.row, in: playlist, on: controller)
-        case .applemusic, .spotify: Actions.view(song: songs[indexPath.row], on: controller)
-        case .applemusic, .spotify:
-            let playlist = Playlist(
-                owner: "",
-                id: "",
-                library: search == .applemusic ? Catalogues.AppleMusic.rawValue : Catalogues.Spotify.rawValue,
-                name: "search",
-                social: false,
-                songs: songs
-            )
-            manager.play(playlist: playlist, at: indexPath.row)
         case .none, .library: break
         }
     }

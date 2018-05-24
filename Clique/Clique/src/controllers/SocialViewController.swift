@@ -30,7 +30,6 @@ class SocialViewController: UIViewController {
         
         profilebar.controller = self
         
-        //let delegate = SocialDelegate()
         table.delegate = delegate
         table.dataSource = delegate
         
@@ -42,11 +41,6 @@ class SocialViewController: UIViewController {
     
     override func viewDidAppear(_ animated: Bool) {
         super.viewDidAppear(animated)
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //MARK: - actions

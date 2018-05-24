@@ -93,7 +93,6 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
             tableView.reloadSections(IndexSet(integer: 1), with: .automatic)
         case 1 where me && indexPath.row == queue.queue.count && !queue.queue.isEmpty: manager.delete(queue: ())
         case 1 where !queue.queue.isEmpty: Actions.view(song: indexPath.row, in: queue, on: controller)
-        //case 1: Actions.view(song: queue.queue[indexPath.row], on: controller, queued: true)
         case 2 where indexPath.row == requestrows: manager.view(requests: ())
         case 2: Actions.view(song: queue.requests[indexPath.row], on: controller)
         case 3 where indexPath.row == radiorows: manager.view(radio: ())
@@ -101,7 +100,6 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 4:
             if Settings.shuffle, let song = q.shuffled?.songs[indexPath.row] { Actions.view(song: song, on: controller) }
             else if let song = q.fill?.songs[indexPath.row] { Actions.view(song: song, on: controller) }
-        case 2, 3, 4: Actions.view(song: queue.queue[indexPath.row], on: controller)
         default: tableView.deselectRow(at: indexPath, animated: true)
         }
     }
@@ -145,7 +143,6 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
                 
                 delete.backgroundColor = UIColor.red
                 return [delete]
-                return [up, down, delete]
             }
             
             return [up, down]
@@ -450,7 +447,6 @@ class QueueDelegate: NSObject, UITableViewDelegate, UITableViewDataSource {
         case 1: return queue.queue.isEmpty ? false : !queue.voting && editing
         case 2 where indexPath.row == requestrows || !me,
              3 where indexPath.row == radiorows: return false
-        //case 2, 3, 4: return true
         case 4: return editing
         default: return false
         }

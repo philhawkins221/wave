@@ -18,21 +18,20 @@ struct OptionsManager {
     
     var selections: [Int] {
         get {
-        var selections = [Int]()
-        Options.options.options.indices.forEach { i in
-            switch Options.options.options[i] {
-            case .shuffle: if Settings.shuffle { selections.append(i) }
-            case .sharePlaylist:
-                guard let controller = profilebar?.controller as? BrowseViewController else { break }
-                if controller.playlist.social { selections.append(i) }
-            default: break
-            }
-        }
-        return selections
-        } set {
-            //controller.refresh()
+            var selections = [Int]()
             
-        }
+            Options.options.options.indices.forEach { i in
+                switch Options.options.options[i] {
+                case .shuffle: if Settings.shuffle { selections.append(i) }
+                case .sharePlaylist:
+                    guard let controller = profilebar?.controller as? BrowseViewController else { break }
+                    if controller.playlist.social { selections.append(i) }
+                default: break
+                }
+            }
+            
+            return selections
+        } set {}
     }
         
     //MARK: - initializers
@@ -70,7 +69,7 @@ struct OptionsManager {
             profilebar?.controller.performSegue(withIdentifier: "social", sender: profilebar?.controller)
         
         case .checkFrequencies:
-            disappear() //TODO: disappear hides cover inappropriately here
+            disappear()
             gm?.view(frequencies: ())
             
         case .shareQueue:

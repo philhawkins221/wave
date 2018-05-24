@@ -35,7 +35,6 @@ class Spotify: NSObject, SPTAuthViewDelegate, SPTAudioStreamingDelegate, SPTAudi
             
             player?.delegate = clone
             
-            //guard let vc = SPTAuthViewController.authentication() else { return false }
             guard let url = SPTAuth.loginURL(forClientId: kClientId, withRedirectURL: URL(string: kCallbackURL), scopes: [SPTAuthStreamingScope], responseType: "token")
             else { return false }
             let vc = SFSafariViewController(url: url)
@@ -47,13 +46,7 @@ class Spotify: NSObject, SPTAuthViewDelegate, SPTAudioStreamingDelegate, SPTAudi
             player?.delegate = clone
             player?.login(with: spotifyauth!.session) { _ in }
             return true
-        } else { //TODO: session expired
-            /*SPTAuth.defaultInstance().renewSession(spotifysession, callback: {(error, session) in
-                if error == nil {
-                    spotifysession = session
-                    gm?.connect(spotify: true)
-                }
-            })*/
+        } else {
             spotifyauth?.session = nil
             Settings.spotify = false
             return false
@@ -70,19 +63,7 @@ class Spotify: NSObject, SPTAuthViewDelegate, SPTAudioStreamingDelegate, SPTAudi
             checks = 0
         }
         
-        print("background: player status:", player?.isPlaying)
-        /*
-        if playing, player?.isPlaying ?? false, advanced {
-            advanced = false //open the gate
-        } else if playing, player?.isPlaying ?? false, !advanced {
-            print("background advancing")
-            advanced = true //close the gate
-            q.manager?.advance()
-        } else if Media.playing, player?.isPlaying ?? false, !advanced {
-            advanced = true //close the gate
-            print("background advancing")
-            q.manager?.advance()
-        }*/
+        print("background: player status:", player?.isPlaying as Any)
     }
     
     static func pause() {
@@ -102,7 +83,6 @@ class Spotify: NSObject, SPTAuthViewDelegate, SPTAudioStreamingDelegate, SPTAudi
         player?.delegate = clone
         player?.playURIs([URL(string: song.id) as Any], from: 0) { _ in }
         playing = true
-        //silence.play()
     }
     
     static func prepare() {
@@ -113,7 +93,6 @@ class Spotify: NSObject, SPTAuthViewDelegate, SPTAudioStreamingDelegate, SPTAudi
         
         silence.replaceCurrentItem(with: nil)
         silence = AVQueuePlayer(items: [item])
-        //silence.allowsExternalPlayback = false
         silence.usesExternalPlaybackWhileExternalScreenIsActive = false
         player?.repeat = false
     }
@@ -121,7 +100,6 @@ class Spotify: NSObject, SPTAuthViewDelegate, SPTAudioStreamingDelegate, SPTAudi
     static func stop() {
         playing = false
         if token != nil { silence.removeTimeObserver(token as Any) }
-        //silence.currentItem?.removeObserver(clone, forKeyPath: "status")
         silence.pause()
         token = nil
         player?.delegate = nil

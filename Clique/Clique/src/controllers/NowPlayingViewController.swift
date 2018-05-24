@@ -113,11 +113,6 @@ class NowPlayingViewController: UIViewController {
         waves.pauseVideo()
         gm?.hide(frequencies: ())
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     //MARK: - tasks
     
@@ -156,16 +151,6 @@ class NowPlayingViewController: UIViewController {
         q.refresh()
         refresh()
         
-        
-        /*
-        if q.manager?.client().queue.current == nil, q.manager?.client().queue.queue.isEmpty ?? false, !frequencies.isEmpty {
-            return gm?.view(frequencies: ()) ?? ()
-        }
-        q.refresh()
-        if playpausebutton.isPaused { q.manager?.play() }
-        else { q.manager?.pause() }
-        //q.refresh()
-        refresh()*/
     }
     
     @IBAction func fastforward(_ sender: Any) {
@@ -191,7 +176,6 @@ class NowPlayingViewController: UIViewController {
         case "tuner":
             guard let vc = segue.destination as? FrequencyTableViewController else { return }
             tunercontroller = vc
-            //vc.refresh()
         default: break
         }
     }

@@ -54,11 +54,6 @@ var brohelpvc = bro.storyboard?.instantiateViewController(withIdentifier: "brohe
 var nphelpvc = np.storyboard?.instantiateViewController(withIdentifier: "nphelpvc")
 var qhelpvc = q.storyboard?.instantiateViewController(withIdentifier: "qhelpvc")
 
-//MARK: - type aliases
-
-//typealias Library = [Playlist]
-//typealias UserID = String
-
 //MARK: - enumerations
 
 enum Catalogues: String {
@@ -336,49 +331,5 @@ extension UITableViewCell {
             UIGraphicsEndImageContext()
             indentationLevel = -4
         }
-    }
-    
-    @objc func showRowActions(_ arg1: Bool = true) { print("ding dong") }
-    
-    class func show() {
-        //guard self === UITableViewCell.self else { return }
-        
-        struct Inner {
-            static let i: Void = {
-                let hiddenString = String(":noitamrifnoCeteleDgniwohStes_".reversed())
-                let originalSelector = NSSelectorFromString(hiddenString)
-                let swizzledSelector = #selector(showRowActions(_:))
-                let originalMethod = class_getInstanceMethod(UITableViewCell.self, originalSelector)
-                let swizzledMethod = class_getInstanceMethod(UITableViewCell.self, swizzledSelector)
-                class_addMethod(UITableViewCell.self, originalSelector, method_getImplementation(swizzledMethod!), method_getTypeEncoding(swizzledMethod!))
-                method_exchangeImplementations(originalMethod!, swizzledMethod!)
-                print("swizzled")
-            }()
-        }
-        
-        let _ = Inner.i
-    }
-}
-
-extension UITableView {
-    @objc func hideRowActions(_ arg1: Bool = false) {}
-    
-    class func hide() {
-        //guard self === UITableViewCell.self else { return }
-        
-        struct Inner {
-            static let i: () = {
-                let hiddenString = String(":eteleDdiDwoReteleDoTepiwSdne_".reversed())
-                let originalSelector = NSSelectorFromString(hiddenString)
-                let swizzledSelector = #selector(hideRowActions(_:))
-                let originalMethod = class_getInstanceMethod(UITableView.self, originalSelector)
-                let swizzledMethod = class_getInstanceMethod(UITableView.self, swizzledSelector)
-                class_addMethod(UITableView.self, originalSelector, method_getImplementation(swizzledMethod!), method_getTypeEncoding(swizzledMethod!))
-                method_exchangeImplementations(originalMethod!, swizzledMethod!)
-                print("swizzled")
-            }()
-        }
-        
-        let _ = Inner.i
     }
 }

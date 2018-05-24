@@ -27,8 +27,6 @@ class SwipeController: SwipeableTabBarController {
         swipe = self
         
         provision()
-        //setTabBarSwipe(enabled: false)
-        //selectedViewController = viewControllers?[2]
     }
     
     override func viewDidAppear(_ animated: Bool) {

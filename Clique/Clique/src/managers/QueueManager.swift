@@ -208,7 +208,7 @@ struct QueueManager {
     }
     
     func play(single: Single) {
-        guard let single = iTunesAPI.match(single) else { return } //TODO: inform
+        guard let single = iTunesAPI.match(single) else { return Alerts.inform(.canNotQueueSong) }
         play(song: single, radio: true)
     }
     
@@ -227,7 +227,7 @@ struct QueueManager {
         case Catalogues.Library.rawValue:
             Media.play(song: song)
         case Catalogues.AppleMusic.rawValue:
-            guard user.applemusic else { return } //TODO: inform
+            guard user.applemusic else { return Alerts.inform(.canNotQueueSong) }
             Media.play(song: song)
         case Catalogues.Radio.rawValue:
             guard let song = iTunesAPI.match(song) else { return }
@@ -246,7 +246,6 @@ struct QueueManager {
     }
     
     func retreat() {
-        //TODO: retreat
         if Media.playing {
             player.currentPlaybackTime = 0
         } else if Spotify.playing {
@@ -269,8 +268,6 @@ struct QueueManager {
         np.waves.isHidden = false
         
         if user.me() {
-            //controller.fill = nil
-            //controller.shuffled = nil
             CliqueAPI.stop(user: user.id)
         }
         Media.stop()

@@ -25,11 +25,6 @@ class OptionsTableViewController: UITableViewController {
         tableView.isScrollEnabled = false
         tableView.backgroundColor = #colorLiteral(red: 0, green: 0, blue: 0, alpha: 0)
     }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
-    }
     
     func refresh() {
         manager = OptionsManager(to: self, with: profilebar)
@@ -47,19 +42,6 @@ class OptionsTableViewController: UITableViewController {
         ]
         
         if Options.options.stop != nil { ends.append(IndexPath(row: 0, section: 1)) }
-        
-        //tableView.reloadRows(at: ends, with: .none)
     }
-
-   
-    /*
-    // MARK: - Navigation
-
-    // In a storyboard-based application, you will often want to do a little preparation before navigation
-    override func prepare(for segue: UIStoryboardSegue, sender: Any?) {
-        // Get the new view controller using segue.destinationViewController.
-        // Pass the selected object to the new view controller.
-    }
-    */
 
 }

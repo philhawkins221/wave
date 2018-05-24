@@ -144,7 +144,6 @@ struct Actions {
                 case .playlist, .browse, .search, .catalog,
                      _ where controller.manager?.delegate?.searching ?? false:
                     guard let playlist = playlist, let index = index else { return }
-                    //controller.dismiss(animated: true)
                     controller.manager?.play(playlist: playlist, at: index)
                     
                 default: return
@@ -205,7 +204,7 @@ struct Actions {
             guard let song = song else { return }
             q.manager?.add(song: song)
         case .addSingleToQueue:
-            guard let index = index, let controller = controller as? QueueViewController else { return }
+            guard let index = index, let _ = controller as? QueueViewController else { return }
             q.manager?.add(single: q.radio[index])
             q.radio.remove(at: index)
         case .send:
@@ -225,7 +224,6 @@ struct Actions {
                 vc.mode = .catalog
                 vc.catalog = song.artist
                 
-                //controller?.dismiss(animated: true)
                 controller?.show(vc, sender: controller)
             default: return
             }
@@ -244,7 +242,6 @@ struct Actions {
                 vc.user = user?.id ?? song?.sender ?? playlist?.owner ?? ""
                 vc.mode = .library
                 
-                //controller.dismiss(animated: true)
                 controller.show(vc, sender: controller)
             default: return
             }

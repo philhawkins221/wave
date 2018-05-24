@@ -45,8 +45,6 @@ struct BrowseManager {
         if controller.mode == .playlist { controller.playlist = playlist }
         
         update(playlist: playlist)
-        
-        //TODO: sync with apple music or spotify if needed
     }
     
     func add(playlist: Playlist) {
@@ -88,7 +86,6 @@ struct BrowseManager {
                 if vc.end == .friends {
                     
                     vc.manager?.find(friend: friend, confirmed: confirmed)
-                    print("put it in my but ooo put it in good")
                     Media.find()
                     controller.navigationController?.popToViewController(vc, animated: true)
                     
@@ -174,7 +171,7 @@ struct BrowseManager {
             guard let playlist = Media.get(playlist: controller.playlist.id) else { return }
             controller.playlist = playlist
             update(playlist: playlist)
-        case Catalogues.Spotify.rawValue: break //TODO: spotify sync
+        case Catalogues.Spotify.rawValue: break
         default: break
         }
     }

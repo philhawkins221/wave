@@ -42,8 +42,6 @@ class BrowseViewController: UIViewController {
     override func viewDidLoad() {
         super.viewDidLoad()
         
-        //refresh()
-                        
         NavigationControllerStyleGuide.enforce(on: navigationController)
         TabBarControllerStyleGuide.enforce(on: tabBarController)
         
@@ -109,11 +107,6 @@ class BrowseViewController: UIViewController {
         search.isActive = false
         
         if mode == .friends { table.setEditing(false, animated: false) }
-    }
-
-    override func didReceiveMemoryWarning() {
-        super.didReceiveMemoryWarning()
-        // Dispose of any resources that can be recreated.
     }
     
     //MARK: - tasks

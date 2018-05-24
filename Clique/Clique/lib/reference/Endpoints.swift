@@ -80,7 +80,6 @@ struct Endpoints {
             
             return "https://c81551439.web.cddbp.net/webapi/json/1.0/radio/recommend?seed=" + seedpoint + "&return_count=" + searchlimit.description + "&max_tracks_per_artist=5&rotation=radio&user=" + gracenoteUserID + "&client=" + gracenoteClientID
             
-            //(text_artist_velvet+underground);(text_artist_ramones)
         }
         static let registerpoint = "https://c81551439.web.cddbp.net/webapi/json/1.0/radio/register?client=" + gracenoteClientID
     }
@@ -201,36 +200,6 @@ struct Endpoints {
                 "http://clique2016.herokuapp.com/playlists/" + id + "/delete-friend"
             }
         }
-        
-        //get clique with id
-        //Alamofire.request(.GET, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/").responseJSON()
-        
-        //replace songlist with new list
-        //Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/updateClique", parameters: ["songList": newlist], encoding: .JSON)
-        
-        //mark upcoming song as played -- need to change to not take parameters?
-        //Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/markSongAsPlayed", parameters: p1, encoding: .JSON)
-        
-        //update current song
-        //Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/changeSong", parameters: p2, encoding: .JSON)
-        
-        //upvote -- need to change to id based
-        //Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/upvote", parameters: p, encoding: .JSON)
-        
-        //downvote -- need to change to id based
-        //Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/downvote", parameters: p, encoding: .JSON)
-        
-        //load songs into library
-        //Alamofire.request(.PUT, "http://clique2016.herokuapp.com/playlists/" + currentclique.id + "/loadSongs", parameters: newlib, encoding: .JSON).responseJSON { response in
-        //dispatch_async(dispatch_get_main_queue(), {
-        //self.table.reloadData()
-        //})
-        //}
-        
-        //create new user
-        //Alamofire.request(.POST, "http://clique2016.herokuapp.com/playlists/", parameters: newclique, encoding: .JSON)
-        //}
-        //load all playlists
-        //"http://clique2016.herokuapp.com/playlists"
     }
+    
 }

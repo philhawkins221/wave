@@ -14,7 +14,6 @@ struct Song: Equatable, Codable, CatalogItem, LibraryItem {
     let library: String
     let title: String
     let artist: Artist
-    //let album: String
     var sender: String
     var artwork: String
     var votes: Int

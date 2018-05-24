@@ -12,12 +12,21 @@ struct GeneralManager {
     
     //MARK: - properties
     
+    ///the end user's information (cached)
     private var me: User
+    ///the now playing view controller
     var controller: NowPlayingViewController
+    ///the song displaying now playing info, nil if no song currently playing
     var display: Song? { return q.manager?.client().queue.current }
     
     //MARK: - initializers
     
+    /**
+     initializes the general manager for now playing and pulls the end user from server with the end user identity. fails if a valid user cannot be found with the user id provided.
+     
+     - parameters:
+        - controller: the controller displaying the user's information
+     */
     init?(to controller: NowPlayingViewController) {
         guard let found = CliqueAPI.find(user: Identity.me) else { return nil }
         
@@ -32,17 +41,32 @@ struct GeneralManager {
     
     //MARK: - tasks
     
+    /**
+     add a given user to friends.
+     
+     - parameters:
+        - friend: the id of the user to add to friends
+    */
     func add(friend: String) {
         CliqueAPI.add(friend: friend, to: me.id)
         request(user: friend)
     }
     
+    ///tells the queue manager to advance.
+    ///- note: queue manager client must match end user identity
     func advance() {
         guard q.manager?.client().me() ?? false else { return }
         q.refresh()
         q.manager?.advance()
     }
     
+    /**
+     checks if any friends are sharing.
+     
+     - parameters:
+        - frequencies: _
+        - cached: if the manager should use the cached user information, default value is `true`
+    */
     func check(frequencies: Void, cached: Bool = true) {
         let user = cached ? self.me : CliqueAPI.find(user: self.me.id) ?? self.me
         var frequencies = [User]()
@@ -55,10 +79,23 @@ struct GeneralManager {
         controller.frequencies = frequencies
     }
     
+    /**
+     checks for new requests.
+     
+     - parameters:
+        - requests: _
+        - cached: if the manager should use the cached user information, default value is `true`
+     */
     func check(requests: Void, cached: Bool = true) -> Bool {
         return cached ? me.requests.isEmpty : !(CliqueAPI.find(user: me.id)?.requests.isEmpty ?? true)
     }
     
+    /**
+     sets the connected status for Apple Music.
+     
+     - parameters:
+        - status: if Apple Music is connected
+    */
     func connect(applemusic status: Bool) {
         if status, Settings.applemusic {
             guard Media.authenticate() else { return }
@@ -67,6 +104,12 @@ struct GeneralManager {
         CliqueAPI.update(applemusic: me.id, to: status)
     }
     
+    /**
+     sets the connected status for Spotify.
+     
+     - parameters:
+        - status: if Spotify is connected
+     */
     func connect(spotify status: Bool) {
         if status, Settings.spotify {
             guard Spotify.authenticate() else { return }
@@ -75,10 +118,17 @@ struct GeneralManager {
         CliqueAPI.update(spotify: me.id, to: status)
     }
     
+    /**
+     delete a user from friends.
+     
+     - parameters:
+        - friend: the user id of the friend to delete
+    */
     func delete(friend: String) {
         CliqueAPI.delete(friend: friend, for: me.id)
     }
     
+    ///determines display for the help label.
     func help() {
         controller.helplabel.text = nil
         
@@ -93,6 +143,12 @@ struct GeneralManager {
         UIView.animate(withDuration: 0.2) { self.controller.helplabel.alpha = 1 }
     }
     
+    /**
+     hides the tuner.
+     
+     - parameters:
+        - frequencies: _
+    */
     func hide(frequencies: Void) {
         UIView.animate(withDuration: 0.15, delay: 0, animations: {
             self.controller.tuner.alpha = 0
@@ -103,6 +159,13 @@ struct GeneralManager {
         })
     }
     
+    /**
+     join a given user's queue.
+     
+     - parameters:
+     - user: the id of the user to join
+     - redirect: if the swipe controller will automatically redirect to the queue, default value is `true`
+    */
     func listen(to user: String, redirect: Bool = true) {
         guard q.manager?.client().id != user else { return }
         guard let user = CliqueAPI.find(user: user) else { return Alerts.inform(.userNotFound) }
@@ -122,6 +185,7 @@ struct GeneralManager {
         controller.dismiss(animated: true)
     }
     
+    ///sets now playing display for current song.
     func nowplaying() {
         guard let song = display else { return notplaying() }
         let placeholder = #imageLiteral(resourceName: "genericart.png")
@@ -165,6 +229,7 @@ struct GeneralManager {
         help()
     }
     
+    ///sets now playing display when no song is playing.
     private func notplaying() {
         controller.artworkimage.isHidden = true
         controller.songlabel.isHidden = true
@@ -182,15 +247,32 @@ struct GeneralManager {
         help()
     }
     
+    ///updates the user's information from server.
+    ///- note: this manager will be deinitialized
     func refresh() {
         controller.refresh()
     }
     
+    /**
+     sends a friend request to a given user/invite to a friend.
+     
+     - parameters:
+        - user: the user id of the user receiving the request
+    */
     func request(user: String) {
         let request = Request(sender: me.id, receiver: user)
         CliqueAPI.request(friend: request)
     }
     
+    /**
+     opens a given request.
+     
+     - note: `request` receiver must match end user identity
+     - parameters:
+        - request: the request to open
+        - confirmed: if the task was confirmed by the end user, default value is `false`
+        - affirmed: if the request was accepted by the end user, default value is `false`
+    */
     func respond(to request: Request, confirmed: Bool = false, affirmed: Bool = false) {
         guard request.receiver == Identity.me else { return }
         guard confirmed else {
@@ -215,13 +297,24 @@ struct GeneralManager {
         CliqueAPI.update(friendRequests: replacement, for: Identity.me)
     }
     
+    ///tells the queue manager to retreat.
+    ///- note: the queue manager's client must match the end user identity
     func retreat() {
         guard q.manager?.client().me() ?? false else { return }
         q.manager?.retreat()
     }
     
+    /**
+     adds a given song to a given friend's queue.
+     
+     - note: `user` must contain the end user in their friends
+     - parameters:
+        - song: the song to add
+        - user: the user with the queue to add the song
+    */
     func send(song: Song, to user: User) {
-        guard !user.queue.donotdisturb, user.friends.contains(Identity.me) else { return }
+        guard user.friends.contains(Identity.me) else { return }
+        guard !user.queue.donotdisturb else { return Alerts.inform(.doNotDisturb) }
         var song = song
         
         song.sender = Identity.me
@@ -230,6 +323,12 @@ struct GeneralManager {
             CliqueAPI.add(song: song, to: user.id)
     }
     
+    /**
+     leaves the current queue and returns to the end user's queue.
+     
+     - parameters:
+        - listening: _
+    */
     func stop(listening: Void) {
         guard let leader = q.manager?.client() else { return }
         let replacement = leader.queue.listeners.filter { $0 != Identity.me }
@@ -241,6 +340,12 @@ struct GeneralManager {
         refresh()
     }
     
+    /**
+     stops playback and removes all listeners from queue.
+     
+     - parameters:
+        - sharing: _
+    */
     func stop(sharing: Void) {
         CliqueAPI.update(listeners: [], for: Identity.me)
         q.manager?.stop()
@@ -250,6 +355,12 @@ struct GeneralManager {
         refresh()
     }
     
+    /**
+     shows the tuner.
+     
+     - parameters:
+        - sharing: _
+     */
     func view(frequencies: Void) {
         check(frequencies: ())
         
@@ -267,6 +378,12 @@ struct GeneralManager {
         }
     }
     
+    /**
+     sets the voting status.
+     
+     - parameters:
+        - status: if voting is enabled
+     */
     func voting(status: Bool) {
         CliqueAPI.update(voting: Identity.me, to: status)
     }

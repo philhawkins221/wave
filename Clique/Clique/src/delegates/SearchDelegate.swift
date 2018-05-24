@@ -69,7 +69,7 @@ class SearchDelegate: BrowseDelegate {
         if searching { return super.tableView(tableView, didSelectRowAt: indexPath) }
         
         switch search {
-        case .users where final: manager.find(friend: users[indexPath.row], confirmed: false)
+        case .users where final: manager.find(friend: users[indexPath.row])
         case .users: Actions.view(user: users[indexPath.row], on: controller)
         
         case .applemusic where indexPath.section == 0,

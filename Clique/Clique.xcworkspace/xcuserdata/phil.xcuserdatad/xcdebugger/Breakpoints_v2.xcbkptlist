@@ -325,8 +325,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "106"
             endingLineNumber = "106"
-            landmarkName = "delete(queue:confirmed:)"
-            landmarkType = "7">
+            landmarkName = "QueueManager"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -581,8 +581,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "191"
             endingLineNumber = "191"
-            landmarkName = "play(playlist:at:)"
-            landmarkType = "7">
+            landmarkName = "QueueManager"
+            landmarkType = "14">
             <Locations>
                <Location
                   shouldBeEnabled = "No"
@@ -788,8 +788,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "258"
             endingLineNumber = "258"
-            landmarkName = "view(frequencies:)"
-            landmarkType = "7">
+            landmarkName = "GeneralManager"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -948,8 +948,8 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "174"
             endingLineNumber = "174"
-            landmarkName = "play()"
-            landmarkType = "7">
+            landmarkName = "QueueManager"
+            landmarkType = "14">
          </BreakpointContent>
       </BreakpointProxy>
       <BreakpointProxy
@@ -964,7 +964,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "149"
             endingLineNumber = "149"
-            landmarkName = "play()"
+            landmarkName = "delete(queue:confirmed:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>
@@ -980,7 +980,7 @@
             endingColumnNumber = "9223372036854775807"
             startingLineNumber = "150"
             endingLineNumber = "150"
-            landmarkName = "play()"
+            landmarkName = "delete(queue:confirmed:)"
             landmarkType = "7">
          </BreakpointContent>
       </BreakpointProxy>

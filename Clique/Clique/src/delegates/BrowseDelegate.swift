@@ -146,7 +146,6 @@ class BrowseDelegate: NSObject, UITableViewDelegate, UITableViewDataSource, MPMe
         case false:
             let index = list.index(of: songs[indexPath.section][indexPath.row]) ?? 0
             Actions.view(song: index, in: allsongs, on: controller)
-        case false: manager.play(playlist: allsongs, at: list.index(of: songs[indexPath.section][indexPath.row]) ?? 0)
         }
     }
     

@@ -133,7 +133,7 @@ class FriendsDelegate: BrowseDelegate {
         
         switch editingStyle {
         case .delete:
-            manager.delete(friend: friends[indexPath.row], confirmed: false)
+            manager.delete(friend: friends[indexPath.row])
             friends.remove(at: indexPath.row)
             if !friends.isEmpty { tableView.deleteRows(at: [indexPath], with: .automatic) }
             manager.refresh()

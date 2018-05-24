@@ -55,7 +55,7 @@ struct Settings {
             guard radio != oldValue,
                 var replacement = CliqueAPI.find(user: Identity.me)?.queue
             else { return }
-            
+            guard applemusic else { return Alerts.inform(.noAccount) }
             replacement.radio = radio
             CliqueAPI.update(queue: replacement)
         }

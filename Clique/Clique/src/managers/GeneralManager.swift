@@ -97,9 +97,8 @@ struct GeneralManager {
         - status: if Apple Music is connected
     */
     func connect(applemusic status: Bool) {
-        if status, Settings.applemusic {
-            guard Media.authenticate() else { return }
-        }
+        if status, Settings.applemusic { guard Media.authenticate() else { return } }
+        if !status, Settings.applemusic { Settings.radio = status }
         
         CliqueAPI.update(applemusic: me.id, to: status)
     }

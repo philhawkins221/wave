@@ -1,5 +1,6 @@
-# wave
+## wave
 the only live music sharing platform
+_ _ _
 
 <img src="promo.png">
 
@@ -12,4 +13,4 @@ the only live music sharing platform
 - listen with friends together
 - discover new music
 
-<img src="appstore.png" width="30" height="10">
+<img src="appstore.png" width="300" height="100">

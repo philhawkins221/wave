@@ -1,12 +1,11 @@
 # wave
 the only live music sharing platform
 
-<img width="414" height="736">![promo1](promo1.png?raw=true)</img>
+<img src="promo1.png" width="310" height="552">
+<img src="promo2.png" width="310" height="552">
 
-![promo2](promo2.png?raw=true)
 
-![promo3](promo3.png?raw=true)
-
-![promo4](promo4.png?raw=true)
+<img src="promo3.png" width="310" height="552">
+<img src="promo4.png" width="310" height="552">
 
 available now on the App Store

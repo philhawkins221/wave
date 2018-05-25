@@ -1,7 +1,7 @@
 # wave
 the only live music sharing platform
 
-![promo1](https://philhawkins221.github.com/ubiquitous-journey/wave pic 1.png?raw=true)
+![promo1](/wave\ pic\ 1.png?raw=true)
 
 ![promo2](wave\ pic\ 2.png?raw=true)
 

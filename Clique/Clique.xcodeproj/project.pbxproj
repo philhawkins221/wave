@@ -90,6 +90,7 @@
 		4AC3C9FC1C4ACCB700D5BCCA /* Assets.xcassets in Resources */ = {isa = PBXBuildFile; fileRef = 4AC3C9FB1C4ACCB700D5BCCA /* Assets.xcassets */; };
 		4AC3C9FF1C4ACCB700D5BCCA /* LaunchScreen.storyboard in Resources */ = {isa = PBXBuildFile; fileRef = 4AC3C9FD1C4ACCB700D5BCCA /* LaunchScreen.storyboard */; };
 		4AC3EF3B1C7E95970013EEFF /* AVFoundation.framework in Frameworks */ = {isa = PBXBuildFile; fileRef = 4AC3EF3A1C7E95970013EEFF /* AVFoundation.framework */; };
+		4AD3EE9920B772D8004321CF /* clique 1024.png in Resources */ = {isa = PBXBuildFile; fileRef = 4AD3EE9820B772D8004321CF /* clique 1024.png */; };
 		4ADF95E51D026D6800E0CD19 /* clique 120.png in Resources */ = {isa = PBXBuildFile; fileRef = 4ADF95E31D026D6800E0CD19 /* clique 120.png */; };
 		4ADF95E61D026D6800E0CD19 /* clique 180.png in Resources */ = {isa = PBXBuildFile; fileRef = 4ADF95E41D026D6800E0CD19 /* clique 180.png */; };
 		4AEE14CF2013555700FC8D80 /* GeneralManager.swift in Sources */ = {isa = PBXBuildFile; fileRef = 4AEE14CE2013555700FC8D80 /* GeneralManager.swift */; };
@@ -197,6 +198,7 @@
 		4AC3C9FE1C4ACCB700D5BCCA /* Base */ = {isa = PBXFileReference; lastKnownFileType = file.storyboard; name = Base; path = Base.lproj/LaunchScreen.storyboard; sourceTree = "<group>"; };
 		4AC3CA001C4ACCB700D5BCCA /* Info.plist */ = {isa = PBXFileReference; lastKnownFileType = text.plist.xml; path = Info.plist; sourceTree = "<group>"; };
 		4AC3EF3A1C7E95970013EEFF /* AVFoundation.framework */ = {isa = PBXFileReference; lastKnownFileType = wrapper.framework; name = AVFoundation.framework; path = System/Library/Frameworks/AVFoundation.framework; sourceTree = SDKROOT; };
+		4AD3EE9820B772D8004321CF /* clique 1024.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 1024.png"; sourceTree = "<group>"; };
 		4ADF95E31D026D6800E0CD19 /* clique 120.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 120.png"; sourceTree = "<group>"; };
 		4ADF95E41D026D6800E0CD19 /* clique 180.png */ = {isa = PBXFileReference; lastKnownFileType = image.png; path = "clique 180.png"; sourceTree = "<group>"; };
 		4AEE14CE2013555700FC8D80 /* GeneralManager.swift */ = {isa = PBXFileReference; lastKnownFileType = sourcecode.swift; path = GeneralManager.swift; sourceTree = "<group>"; };
@@ -250,6 +252,7 @@
 			children = (
 				4ADF95E31D026D6800E0CD19 /* clique 120.png */,
 				4ADF95E41D026D6800E0CD19 /* clique 180.png */,
+				4AD3EE9820B772D8004321CF /* clique 1024.png */,
 				4A2B670B1C501AB700681F70 /* genericart.png */,
 				4A179AF81D00C64100B6EE20 /* apple music logo.jpg */,
 				4A179AFA1D00C64100B6EE20 /* spotify logo.jpg */,
@@ -535,6 +538,7 @@
 				4A2B670C1C501AB700681F70 /* genericart.png in Resources */,
 				4ADF95E61D026D6800E0CD19 /* clique 180.png in Resources */,
 				4A179AFF1D00C64100B6EE20 /* youtube logo.png in Resources */,
+				4AD3EE9920B772D8004321CF /* clique 1024.png in Resources */,
 				4AF452E91FE0CAAE007FCF8F /* QueueSongTableViewCell.xib in Resources */,
 				4A179AFD1D00C64100B6EE20 /* soundcloud logo.gif in Resources */,
 				4A0DE85E20AC8CD000320507 /* gracenote logo.jpg in Resources */,

@@ -1,7 +1,7 @@
 # wave
 the only live music sharing platform
 
-![promo1](promo1.png?raw=true)
+<img width="414" height="736">![promo1](promo1.png?raw=true)</img>
 
 ![promo2](promo2.png?raw=true)
 

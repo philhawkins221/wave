@@ -1,11 +1,9 @@
 # wave
 the only live music sharing platform
 
-* stream unlimited music instantly
-* share custom playlists
-* see what music friends are listening to
-* send music to friends
-* listen with friends together
-* discover new music
+(/wave pic 1.png?raw=true)
+(/wave pic 2.png?raw=true)
+(/wave pic 3.png?raw=true)
+(/wave pic 4.png?raw=true)
 
 available now on the App Store

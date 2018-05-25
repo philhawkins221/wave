@@ -1,5 +1,4 @@
-<img src="wave.png" width="150" height="150">
-<br>
+<img src="wave.png" width="85" height="85">
 
 ### wave
 the only live music sharing platform

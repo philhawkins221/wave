@@ -1,4 +1,4 @@
-## wave
+### wave
 the only live music sharing platform
 _ _ _
 
